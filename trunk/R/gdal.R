@@ -69,9 +69,9 @@ setClass('GDALDriver', 'GDALMajorObject')
 
 setClass('GDALReadOnlyDataset', 'GDALMajorObject')
 
-setClass('GDALDataset', 'GDALMajorObject')
+setClass('GDALDataset', 'GDALReadOnlyDataset')
 
-setClass('GDALTransientDataset', 'GDALMajorObject')
+setClass('GDALTransientDataset', 'GDALDataset')
          
 setClass('GDALRasterBand', 'GDALMajorObject')
 
