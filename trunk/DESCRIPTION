@@ -3,7 +3,7 @@ Title: Bindings for the Geospatial Data Abstraction Library
 Description: Provides bindings to Frank Warmerdam's GDAL (>= 1.1.7) - this version with new-style classes.
 Version: 0.2-2
 Date: 2003-08-05
-Author: Timothy H. Keitt <Timothy.Keitt@StonyBrook.Edu>, for old-style version: Roger Bivand <Roger.Bivand@nhh.no>
+Author: Timothy H. Keitt <tkeitt@mail.utexas.edu>, for old-style version: Roger Bivand <Roger.Bivand@nhh.no>
 Maintainer: Roger Bivand <Roger.Bivand@nhh.no>
 License: GPL (version 2 or higher; see LICENSE)
 URL: http://www.r-project.org/
