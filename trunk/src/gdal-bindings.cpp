@@ -736,19 +736,14 @@ RGDAL_GetRasterData(SEXP sxpRasterBand,
   double noDataValue = pRasterBand->GetNoDataValue(&hasNoDataValue);
 
   int i;
-/*  SEXP NAval;
-  PROTECT(NAval=NEW_NUMERIC(1)); pc++;
-  NUMERIC_POINTER(NAval)[0] = noDataValue; */
 
   if (hasNoDataValue) {
-/*    setAttrib(sRStorage, install("NA.value"), NAval); */
 
     switch(uRType) {
 
     case INTSXP:
 
       for (i = 0; i < LENGTH(sRStorage); ++i)
-//	if ((double) abs(INTEGER(sRStorage)[i] - (int)noDataValue) < 1.0e-16) {
 	if (INTEGER(sRStorage)[i] == (int) noDataValue) {
 	  INTEGER(sRStorage)[i] = NA_INTEGER;
 	}
@@ -757,11 +752,31 @@ RGDAL_GetRasterData(SEXP sxpRasterBand,
 
     case REALSXP:
 
-      for (i = 0; i < LENGTH(sRStorage); ++i)
-//	if (fabs(REAL(sRStorage)[i] - noDataValue) < 1.0e-16) {
-	if (REAL(sRStorage)[i] == (double) ((float) noDataValue)) {
-	  REAL(sRStorage)[i] = NA_REAL;
-	}
+      switch(pRasterBand->GetRasterDataType()) {
+
+        case GDT_Float32:
+
+        for (i = 0; i < LENGTH(sRStorage); ++i)
+	  if (REAL(sRStorage)[i] == (double) ((float) noDataValue)) {
+	    REAL(sRStorage)[i] = NA_REAL;
+	  }
+	break;
+
+        case GDT_Float64:
+
+        for (i = 0; i < LENGTH(sRStorage); ++i)
+	  if (REAL(sRStorage)[i] == (double) (noDataValue)) {
+	    REAL(sRStorage)[i] = NA_REAL;
+	  }
+	break;
+
+        default:
+
+          error("Raster data type unknown\n");
+    
+        break;
+
+      }
 
       break;
 
