@@ -150,8 +150,9 @@ RGDAL_GetMetadata(SEXP sxpObj, SEXP sxpDomain) {
   PROTECT(sxpMetadata = allocVector(VECSXP, CSLCount(metadata)));
 
   PROTECT(sxpNames = allocVector(STRSXP, CSLCount(metadata)));
-
-  for (int i = 0; i < CSLCount(metadata); ++i) {
+  
+  int i;
+  for (i = 0; i < CSLCount(metadata); ++i) {
 
     const char *field = CSLGetField(metadata, i);
 
@@ -186,7 +187,8 @@ RGDAL_SetMetadata(SEXP sxpObj, SEXP sxpMetadataList) {
 
   if (isNull(sxpNames)) {
 
-    for (int i = 0; i < length(sxpMetadataList); ++i) {
+    int i;
+    for (i = 0; i < length(sxpMetadataList); ++i) {
      
       value = asString(VECTOR_ELT(sxpMetadataList, i));
       CSLAddString(metadata, value);
@@ -195,7 +197,8 @@ RGDAL_SetMetadata(SEXP sxpObj, SEXP sxpMetadataList) {
 
   } else {
 
-    for (int i = 0; i < length(sxpMetadataList); ++i) {
+    int i;
+    for (i = 0; i < length(sxpMetadataList); ++i) {
 
       name = asString(sxpNames, i);
       value = asString(VECTOR_ELT(sxpMetadataList, i));
@@ -220,7 +223,8 @@ RGDAL_GetDriverNames(void) {
 
   PROTECT(sxpDriverList = allocVector(STRSXP, GDALGetDriverCount()));
 
-  for (int i = 0; i < GDALGetDriverCount(); ++i) {
+  int i;
+  for (i = 0; i < GDALGetDriverCount(); ++i) {
 
     GDALDriver *pDriver = GetGDALDriverManager()->GetDriver(i);
     
@@ -728,13 +732,15 @@ RGDAL_GetRasterData(SEXP sxpRasterBand,
 
   double noDataValue = pRasterBand->GetNoDataValue(&hasNoDataValue);
 
+  int i;
+
   if (hasNoDataValue) {
 
     switch(uRType) {
 
     case INTSXP:
 
-      for (int i = 0; i < LENGTH(sRStorage); ++i)
+      for (i = 0; i < LENGTH(sRStorage); ++i)
 	if (INTEGER(sRStorage)[i] == (int)noDataValue)
 	  INTEGER(sRStorage)[i] = NA_INTEGER;
 
@@ -742,7 +748,7 @@ RGDAL_GetRasterData(SEXP sxpRasterBand,
 
     case REALSXP:
 
-      for (int i = 0; i < LENGTH(sRStorage); ++i)
+      for (i = 0; i < LENGTH(sRStorage); ++i)
 	if (REAL(sRStorage)[i] == noDataValue)
 	  REAL(sRStorage)[i] = NA_REAL;
 
@@ -798,7 +804,8 @@ RGDAL_GetColorTable(SEXP sxpRasterBand) {
 
   SEXP sxpColorMatrix = allocMatrix(INTSXP, nColorEntries, 4);
 
-  for (int i = 0; i < nColorEntries; ++i) {
+  int i;
+  for (i = 0; i < nColorEntries; ++i) {
 
     const GDALColorEntry *pColorEntry = pColorTable->GetColorEntry(i);
 
@@ -820,7 +827,8 @@ RGDAL_SetCategoryNames(SEXP sxpRasterBand, SEXP sxpNames) {
 
   char **nameList = NULL;
 
-  for (int i = 0; i < length(sxpNames); ++i)
+  int i;
+  for (i = 0; i < length(sxpNames); ++i)
     nameList = CSLAddString(nameList, asString(sxpNames, i));
 
   CPLErr err = pRasterBand->SetCategoryNames(nameList);
@@ -846,7 +854,8 @@ RGDAL_GetCategoryNames(SEXP sxpRasterBand) {
 
   PROTECT(sxpCNames = allocVector(STRSXP, CSLCount(pcCNames)));
 
-  for (int i = 0; i < CSLCount(pcCNames); ++i) {
+  int i;
+  for (i = 0; i < CSLCount(pcCNames); ++i) {
 
     const char *field = CSLGetField(pcCNames, i);
 
