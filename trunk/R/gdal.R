@@ -197,7 +197,13 @@ saveDataset <- function(dataset, filename) {
 #setGeneric('closeDataset',
 #           def = function(dataset) standardGeneric('closeDataset'),
 #           package = "rgdal", where = 2, valueClass = 'NULL')
+
 setGeneric('closeDataset', function(dataset) standardGeneric('closeDataset'))
+
+"closeDataset.default" <- function(dataset) 
+	stop("No default method for closeDataset")
+
+setMethod("closeDataset", signature("ANY"), closeDataset.default)
 
 setMethod('closeDataset', 'GDALReadOnlyDataset',
           def = function(dataset) {
