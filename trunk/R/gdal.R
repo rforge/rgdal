@@ -1,7 +1,7 @@
 require(methods, quietly = TRUE, warn.conflicts = FALSE)
 
 .setCollectorFun <- function(object, fun)
-  .Call('R_RegisterFinalizerEx', object, fun, TRUE, PACKAGE="rgdal")
+  .Call('R_RegisterFinalizerEx', object, fun, TRUE)
 
 .assertClass <- function(object, class) {
   
@@ -194,6 +194,27 @@ saveDataset <- function(dataset, filename) {
   
 }
 
+#setGeneric('closeDataset',
+#           def = function(dataset) standardGeneric('closeDataset'),
+#           package = "rgdal", where = 2, valueClass = 'NULL')
+setGeneric('closeDataset', function(dataset) standardGeneric('closeDataset'))
+
+setMethod('closeDataset', 'GDALReadOnlyDataset',
+          def = function(dataset) {
+            .setCollectorFun(slot(dataset, 'handle'), NULL)
+            .Call('RGDAL_CloseDataset', dataset, PACKAGE="rgdal")
+            invisible()
+          })
+
+setMethod('closeDataset', 'GDALTransientDataset',
+          def = function(dataset) {
+            driver <- getDriver(dataset)
+            filename <- getDescription(dataset)
+            .Call('RGDAL_DeleteFile', driver, filename, PACKAGE="rgdal")
+            callNextMethod()
+          })
+
+
 saveDatasetAs <- function(dataset, filename, driver = NULL) {
 
   .assertClass(dataset, 'GDALReadOnlyDataset')
@@ -225,24 +246,6 @@ saveDatasetAs <- function(dataset, filename, driver = NULL) {
   
 }
 
-setGeneric('closeDataset',
-           def = function(dataset) standardGeneric('closeDataset'),
-           where = 2, valueClass = 'NULL')
-
-setMethod('closeDataset', 'GDALReadOnlyDataset',
-          def = function(dataset) {
-            .setCollectorFun(slot(dataset, 'handle'), NULL)
-            .Call('RGDAL_CloseDataset', dataset, PACKAGE="rgdal")
-            invisible()
-          })
-
-setMethod('closeDataset', 'GDALTransientDataset',
-          def = function(dataset) {
-            driver <- getDriver(dataset)
-            filename <- getDescription(dataset)
-            .Call('RGDAL_DeleteFile', driver, filename, PACKAGE="rgdal")
-            callNextMethod()
-          })
 
 deleteDataset <- function(dataset) {
 
@@ -523,7 +526,7 @@ displayDataset <- function(x, offset = c(0, 0), region.dim = dim(x),
 
 }
 
-if (!isGeneric('image')) setGeneric('image', where = 2)
+#if (!isGeneric('image')) setGeneric('image', where = 2)
 
 setMethod('image', 'GDALReadOnlyDataset', displayDataset)
 
