@@ -1,7 +1,6 @@
 require(methods, quietly = TRUE, warn.conflicts = FALSE)
 
-.setCollectorFun <- function(object, fun)
-  .Call('R_RegisterFinalizerEx', object, fun, TRUE)
+.setCollectorFun <- function(object, fun) reg.finalizer(object, fun)
 
 .assertClass <- function(object, class) {
   
