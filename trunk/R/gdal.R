@@ -335,8 +335,11 @@ getRasterTable <- function(dataset,
 
   geoTrans <- getGeoTransFunc(dataset)
 
-  x.i <- 1:region.dim[1] + offset[1]
-  y.i <- 1:region.dim[2] + offset[2]
+  # EJP, 06/01/05:
+  #x.i <- 1:region.dim[1] + offset[1]
+  #y.i <- 1:region.dim[2] + offset[2]
+  y.i <- 1:region.dim[1] - 0.5 + offset[1]
+  x.i <- 1:region.dim[2] - 0.5 + offset[2]
 
   y.i <- rep(y.i, each = length(x.i))
   x.i <- rep(x.i, len = prod(region.dim))
@@ -352,12 +355,13 @@ getRasterTable <- function(dataset,
 
   out <- as.data.frame(out)
     
-  names(out) <- c('row', 'column', paste('band', 1:nbands, sep = ''))
+  # EJP, 06/01/05:
+  #names(out) <- c('row', 'column', paste('band', 1:nbands, sep = ''))
+  names(out) <- c('x', 'y', paste('band', 1:nbands, sep = ''))
 
   out
 
 }
-
                            
 getRasterData <- function(dataset,
                           band = NULL,
@@ -502,9 +506,13 @@ getGeoTransFunc <- function(dataset) {
 
   geoTrans <- .Call('RGDAL_GetGeoTransform', dataset, PACKAGE="rgdal")
 
-  rotMat <- matrix(geoTrans[c(6, 5, 3, 2)], 2)
+  # EJP, 06/01/05:
+  #rotMat <- matrix(geoTrans[c(6, 5, 3, 2)], 2)
+  rotMat <- matrix(geoTrans[c(2, 3, 5, 6)], 2)
 
-  offset <- geoTrans[c(4, 1)]
+  # EJP, 06/01/05:
+  #offset <- geoTrans[c(4, 1)]
+  offset <- geoTrans[c(1, 4)]
 
   function(x, y) {
 
