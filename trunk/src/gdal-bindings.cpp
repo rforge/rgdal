@@ -6,6 +6,7 @@ extern "C" {
 #endif
 
 #include <R.h>
+#include <Rdefines.h>
 #include <Rinternals.h>
 
 static SEXP
@@ -709,9 +710,11 @@ RGDAL_GetRasterData(SEXP sxpRasterBand,
   }
 
   // Create matrix transposed
-  SEXP sRStorage = allocMatrix(uRType,
+  int pc=0;
+  SEXP sRStorage;
+  PROTECT(sRStorage = allocMatrix(uRType,
 			       INTEGER(sxpDimOut)[1],
-			       INTEGER(sxpDimOut)[0]);
+			       INTEGER(sxpDimOut)[0])); pc++;
 
   // Data is read in transposed order
   if(pRasterBand->RasterIO(GF_Read,
@@ -733,15 +736,20 @@ RGDAL_GetRasterData(SEXP sxpRasterBand,
   double noDataValue = pRasterBand->GetNoDataValue(&hasNoDataValue);
 
   int i;
+/*  SEXP NAval;
+  PROTECT(NAval=NEW_NUMERIC(1)); pc++;
+  NUMERIC_POINTER(NAval)[0] = noDataValue; */
 
   if (hasNoDataValue) {
+/*    setAttrib(sRStorage, install("NA.value"), NAval); */
 
     switch(uRType) {
 
     case INTSXP:
 
       for (i = 0; i < LENGTH(sRStorage); ++i)
-	if ((double) abs(INTEGER(sRStorage)[i] - (int)noDataValue) < 1.0e-16) {
+//	if ((double) abs(INTEGER(sRStorage)[i] - (int)noDataValue) < 1.0e-16) {
+	if (INTEGER(sRStorage)[i] == (int) noDataValue) {
 	  INTEGER(sRStorage)[i] = NA_INTEGER;
 	}
 
@@ -750,7 +758,8 @@ RGDAL_GetRasterData(SEXP sxpRasterBand,
     case REALSXP:
 
       for (i = 0; i < LENGTH(sRStorage); ++i)
-	if (fabs(REAL(sRStorage)[i] - noDataValue) < 1.0e-16) {
+//	if (fabs(REAL(sRStorage)[i] - noDataValue) < 1.0e-16) {
+	if (REAL(sRStorage)[i] == (double) ((float) noDataValue)) {
 	  REAL(sRStorage)[i] = NA_REAL;
 	}
 
@@ -766,6 +775,7 @@ RGDAL_GetRasterData(SEXP sxpRasterBand,
 
   }
 
+  UNPROTECT(pc);
   return(sRStorage);
 
 }
