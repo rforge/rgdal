@@ -465,7 +465,7 @@ displayDataset <- function(x, offset = c(0, 0), region.dim = dim(x),
   if (any(plot.dim < 3))
     plot.dim <- 3 * plot.dim / max(plot.dim)
 
-  pm <- getPixmapGDAL(x, band, offset, region.dim, plot.dim)
+  pm <- getPixmapGDAL(x, col, band, offset, region.dim, plot.dim)
 
   plot(pm)
 
