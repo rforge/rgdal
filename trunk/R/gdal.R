@@ -420,7 +420,7 @@ getColorTable <- function(dataset, band = 1) {
   .assertClass(dataset, 'GDALReadOnlyDataset')
 
   if (length(band) > 1) stop("choose one band only")
-  nbands <- .Call('RGDAL_GetRasterCount', x, PACKAGE="rgdal")
+  nbands <- .Call('RGDAL_GetRasterCount', dataset, PACKAGE="rgdal")
   if (!(band %in% 1:nbands)) stop("no such band")
 
   rasterBand <- new('GDALRasterBand', dataset, band)
