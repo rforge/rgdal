@@ -6,6 +6,7 @@
 \alias{copyDataset}
 \alias{deleteDataset}
 \alias{saveDatasetAs}
+\alias{initialize,GDALDataset-method}
 \title{Class "GDALDataset"}
 \description{\code{GDALDataset} extends \code{\link{GDALReadOnlyDataset-class}} with data update commands.
 }

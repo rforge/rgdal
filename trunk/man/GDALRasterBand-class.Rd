@@ -4,7 +4,9 @@
 \alias{getRasterData}
 \alias{getRasterTable}
 \alias{getProjectionRef}
-\title{Class "GDALRasterBand" ~~~ }
+\alias{initialize,GDALRasterBand-method}
+\alias{dim,GDALRasterBand-method}
+\title{Class "GDALRasterBand"}
 \description{Returns a two-dimensional array with data from a raster band, used internally within functions}
 \section{Objects from the Class}{
 Objects can be created by calls of the form \code{new("GDALRasterBand", dataset, band)}.
@@ -25,10 +27,9 @@ Class \code{"GDALMajorObject"}, directly.
   }
 }
 \usage{
-getRasterData(dataset, band = 1, offset = c(0, 0),
+getRasterData(dataset, band = NULL, offset = c(0, 0),
               region.dim = dim(dataset), output.dim = region.dim,
-              interleave = c(0, 0), set.dimnames = FALSE,
-	      as.is = FALSE) 
+              interleave = c(0, 0), as.is = FALSE) 
 
 getRasterTable(dataset, band = NULL, offset = c(0, 0), region.dim = dim(dataset))
 
@@ -45,7 +46,6 @@ getProjectionRef(dataset)
     smaller than \code{region.dim} the data will be subsampled}
   \item{interleave}{Element and row stride while reading data; rarely
     needed}
-  \item{set.dimnames}{if TRUE, getGeoTransFunc() is used to set dimnames}
   \item{as.is}{If false, scale the data to its natural units; if the
     case of thematic data, return the data as factors}
 }

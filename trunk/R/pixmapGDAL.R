@@ -41,6 +41,7 @@ getPixmapGDAL <- function(dataset,
                 }
 		res <- abind(bb[[1]], bb[[2]], bb[[3]], along=3)
 		res <- pixmapRGB(res)
+		if (!is.null(col)) warning("Three RGB bands used, col argument discarded")
 	} else stop (paste("Number of bands", nbands, "neither 1 nor 3"))
 	res
 }

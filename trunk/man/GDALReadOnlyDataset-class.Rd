@@ -7,6 +7,8 @@
 \alias{GDAL.open}
 \alias{getColorTable}
 \alias{getGeoTransFunc}
+\alias{initialize,GDALReadOnlyDataset-method}
+\alias{dim,GDALReadOnlyDataset-method}
 \title{Class "GDALReadOnlyDataset"}
 \description{\code{GDALReadOnlyDataset} is the base class for a GDAL Dataset
   classes. Only read operations are supported. Both \code{GDALDataset}
@@ -31,7 +33,6 @@ Class \code{"GDALMajorObject"}, directly.
   \describe{
     \item{closeDataset}{\code{signature(dataset = "GDALReadOnlyDataset")}: ... }
     \item{dim}{\code{signature(x = "GDALReadOnlyDataset")}: ... }
-    \item{image}{\code{signature(x = "GDALReadOnlyDataset")}: ... }
     \item{initialize}{\code{signature(.Object = "GDALReadOnlyDataset")}: ... }
   }
 }
@@ -41,8 +42,8 @@ GDAL.open(filename)
 getDriver(dataset)
 displayDataset(x, offset = c(0, 0), region.dim = dim(x),
                            reduction = 1, band = NULL, col = NULL,
-                           reset.par = TRUE, max.dim = 500, ...)
-getColorTable(dataset, band = NULL)
+                           max.dim = 500, ...)
+getColorTable(dataset, band = 1)
 getGeoTransFunc(dataset)
 }
 \arguments{
@@ -55,8 +56,7 @@ getGeoTransFunc(dataset)
     dataset}
  \item{reduction}{scaling parameter for region.dim}
  \item{band}{The band number (1-based) to read from}
- \item{col}{a list of colors}
- \item{reset.par}{since \code{displayDataset()} and \code{image} for these objects resets par() internally, this logical flag can be set to prevent resetting, so that other objects may be over-plotted}
+ \item{col}{a vector of colours or a colour function such as rainbow}
  \item{max.dim}{another scaling parameter}
  \item{...}{other plotting parameters passed through}
  \item{}{}
@@ -69,7 +69,7 @@ getGeoTransFunc(dataset)
 
 may appear when \code{GDAL.close} is run, or at some later stage. 
 \code{getDriver} returns an object inheriting from class 'GDALDriver'.
-\code{displayDataset} and its use in \code{image} produce a plot of the dataset, returning an array of image data.
+\code{displayDataset} and its use in \code{plot} for a pixmap object to produce a plot of the dataset, returning a pixmap object.
 \code{getColorTable} returns the dataset colour table (currently does not support RGB imaging).
 \code{getGeoTransFunc} returns a warping function.
   
@@ -86,11 +86,16 @@ x <- new("GDALReadOnlyDataset", logo)
 dim(x)
 plot(density(getRasterTable(x)$band1))
 displayDataset(x)
-displayDataset(x, col=rev(cm.colors(25)))
-oldpar <- par(no.readonly = TRUE)
-im <- displayDataset(x, col=rev(cm.colors(25)), reset.par=FALSE)
-contour(im, nlevels = 1, levels = 100, col = 'black', add = TRUE)
-par(oldpar)
+displayDataset(x, col=function(x){rev(cm.colors(x))})
+im <- displayDataset(x, col=function(x){rev(cm.colors(x))}, reset.par=FALSE)
+contour(1:attr(im, "size")[2], 1:attr(im, "size")[1],
+ t(attr(im, "index"))[,attr(im, "size")[1]:1], nlevels = 1,
+ levels = 100, col = 'black', add = TRUE)
+GDAL.close(x)
+logo <- system.file("pictures/Rlogo.jpg", package="rgdal")[1]
+x <- new("GDALReadOnlyDataset", logo)
+dim(x)
+displayDataset(x)
 GDAL.close(x)
 }
 \keyword{classes}

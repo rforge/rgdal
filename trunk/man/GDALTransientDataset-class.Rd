@@ -1,6 +1,7 @@
 \name{GDALTransientDataset-class}
 \docType{class}
 \alias{GDALTransientDataset-class}
+\alias{initialize,GDALTransientDataset-method}
 \title{Class "GDALTransientDataset"}
 \description{\code{GDALTransientDataset} is identical to 
   \code{\link{GDALDataset-class}}

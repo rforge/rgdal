@@ -3,7 +3,7 @@ closeDataset-methods    ~~ Methods for Function closeDataset in
 GDALDataset-class       Class "GDALDataset"
 GDALDriver-class        Class "GDALDriver": GDAL Driver Object
 GDALMajorObject-class   Class "GDALMajorObject"
-GDALRasterBand-class    Class "GDALRasterBand" ~~~
+GDALRasterBand-class    Class "GDALRasterBand"
 GDALReadOnlyDataset-class
                         Class "GDALReadOnlyDataset"
 GDALTransientDataset-class

@@ -343,7 +343,12 @@ getRasterTable <- function(dataset,
 
   out <- geoTrans(x.i, y.i)
 
-  for (b in band) out <- cbind(out, as.vector(rasterData[,,b]))
+  out <- cbind(out$x, out$y)
+    for (b in band) { 
+        vec <- as.numeric(rasterData[, , b])
+        out <- cbind(out, vec)
+    }
+#for (b in band) out <- cbind(out, as.vector(rasterData[,,b]))
 
   out <- as.data.frame(out)
     
@@ -414,6 +419,10 @@ getColorTable <- function(dataset, band = 1) {
 
   .assertClass(dataset, 'GDALReadOnlyDataset')
 
+  if (length(band) > 1) stop("choose one band only")
+  nbands <- .Call('RGDAL_GetRasterCount', x, PACKAGE="rgdal")
+  if (!(band %in% 1:nbands)) stop("no such band")
+
   rasterBand <- new('GDALRasterBand', dataset, band)
   
   ctab <- .Call('RGDAL_GetColorTable', rasterBand, PACKAGE="rgdal") / 255
@@ -441,7 +450,9 @@ displayDataset <- function(x, offset = c(0, 0), region.dim = dim(x),
   region.dim <- rep(region.dim, length.out = 2)
   reduction <- rep(reduction, length.out = 2)
 
-  if (is.null(band)) band <- 1
+  nbands <- .Call('RGDAL_GetRasterCount', x, PACKAGE="rgdal")
+
+  if (is.null(band)) band <- 1:nbands
 
   if (!length(band) %in% c(1, 3))
     stop("Only single band or 3 band RGB plotting supported")
@@ -472,8 +483,6 @@ displayDataset <- function(x, offset = c(0, 0), region.dim = dim(x),
   invisible(pm)
 
 }
-
-setMethod('image', 'GDALReadOnlyDataset', displayDataset)
 
 setMethod('initialize', 'GDALRasterBand',
           def =  function(.Object, dataset, band = 1) {

@@ -4,6 +4,7 @@
 \alias{getGDALDriverNames}
 \alias{getDriverName}
 \alias{getDriverLongName}
+\alias{initialize,GDALDriver-method}
 \title{Class "GDALDriver": GDAL Driver Object}
 
 \description{\code{GDALDriver} objects encapsulate GDAL file format

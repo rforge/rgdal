@@ -1,13 +1,13 @@
 Package: rgdal
 Title: Bindings for the Geospatial Data Abstraction Library
 Description: Provides bindings to Frank Warmerdam's GDAL (>= 1.1.7) - this version with new-style classes.
-Version: 0.2-3
-Date: 2003-08-08
-Author: Timothy H. Keitt <tkeitt@mail.utexas.edu>, for old-style version: Roger Bivand <Roger.Bivand@nhh.no>
+Version: 0.2-4
+Date: 2003-11-18
+Author: Timothy H. Keitt <tkeitt@mail.utexas.edu> and Roger Bivand <Roger.Bivand@nhh.no>
 Maintainer: Roger Bivand <Roger.Bivand@nhh.no>
 License: GPL (version 2 or higher; see LICENSE)
 URL: http://www.r-project.org/
-Depends: R (>= 1.7.0), abind, pixmap
+Depends: R (>= 1.8.0), abind, pixmap
 
 
 
