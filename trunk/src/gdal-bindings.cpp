@@ -741,16 +741,18 @@ RGDAL_GetRasterData(SEXP sxpRasterBand,
     case INTSXP:
 
       for (i = 0; i < LENGTH(sRStorage); ++i)
-	if (INTEGER(sRStorage)[i] == (int)noDataValue)
+	if ((double) abs(INTEGER(sRStorage)[i] - (int)noDataValue) < 1.0e-16) {
 	  INTEGER(sRStorage)[i] = NA_INTEGER;
+	}
 
       break;
 
     case REALSXP:
 
       for (i = 0; i < LENGTH(sRStorage); ++i)
-	if (REAL(sRStorage)[i] == noDataValue)
+	if (fabs(REAL(sRStorage)[i] - noDataValue) < 1.0e-16) {
 	  REAL(sRStorage)[i] = NA_REAL;
+	}
 
       break;
 
