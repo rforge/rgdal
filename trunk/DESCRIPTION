@@ -7,7 +7,7 @@ Author: Timothy H. Keitt <tkeitt@mail.utexas.edu>, for old-style version: Roger 
 Maintainer: Roger Bivand <Roger.Bivand@nhh.no>
 License: GPL (version 2 or higher; see LICENSE)
 URL: http://www.r-project.org/
-Depends: R (>= 1.7.0)
+Depends: R (>= 1.7.0), abind, pixmap
 
 
 
