@@ -645,12 +645,13 @@ RGDAL_PutRasterData(SEXP sxpRasterBand, SEXP sxpData, SEXP sxpOffset) {
 
   }
 
+  // Transpose data
   if(pRasterBand->RasterIO(GF_Write,
 			   INTEGER(sxpOffset)[1],
 			   INTEGER(sxpOffset)[0],
-			   colsIn, rowsIn,
+			   rowsIn, colsIn,
 			   (void *)CHAR(sxpData),
-			   colsIn, rowsIn,
+			   rowsIn, colsIn,
 			   eGDALType,
 			   0, 0)
      == CE_Failure)
