@@ -1,4 +1,4 @@
-require(methods, quietly = TRUE, warn.conflicts = FALSE)
+#require(methods, quietly = TRUE, warn.conflicts = FALSE)
 
 .setCollectorFun <- function(object, fun) {
 
@@ -198,10 +198,6 @@ saveDataset <- function(dataset, filename) {
   
 }
 
-#setGeneric('closeDataset',
-#           def = function(dataset) standardGeneric('closeDataset'),
-#           package = "rgdal", where = 2, valueClass = 'NULL')
-
 setGeneric('closeDataset', function(dataset) standardGeneric('closeDataset'))
 
 "closeDataset.default" <- function(dataset) 
@@ -281,8 +277,6 @@ GDAL.close <- function(dataset) {
             .Call('RGDAL_CloseDataset', dataset, PACKAGE="rgdal")
             invisible()
 }
-
-#if (!isGeneric('dim')) setGeneric('dim')
 
 setMethod('dim', 'GDALReadOnlyDataset',
           def = function(x) {
@@ -366,7 +360,6 @@ getRasterData <- function(dataset,
                           region.dim = dim(dataset),
                           output.dim = region.dim,
                           interleave = c(0, 0),
-                          set.dimnames = FALSE,
                           as.is = FALSE) {
 
   .assertClass(dataset, 'GDALReadOnlyDataset')
@@ -393,19 +386,6 @@ getRasterData <- function(dataset,
   
   }
 
-  if (set.dimnames) {
-
-    geoTrans <- getGeoTransFunc(dataset)
-
-    x.i <- 1:output.dim[1] + offset[1]
-    y.i <- 1:output.dim[2] + offset[2]
-
-    xy <- geoTrans(x.i, y.i)
-
-    dimnames(x) <- list(xy[,1], xy[,2], band)
-
-  }
-
   x <- drop(x)
 
   if (!as.is) {
@@ -430,16 +410,10 @@ getRasterData <- function(dataset,
 
 }
 
-getColorTable <- function(dataset, band = NULL) {
+getColorTable <- function(dataset, band = 1) {
 
   .assertClass(dataset, 'GDALReadOnlyDataset')
 
-  nbands <- .Call('RGDAL_GetRasterCount', dataset, PACKAGE="rgdal")
-  
-  if (nbands > 1) warning('RGB imaging not yet supported')
-
-  if (is.null(band)) band <- 1
-  
   rasterBand <- new('GDALRasterBand', dataset, band)
   
   ctab <- .Call('RGDAL_GetColorTable', rasterBand, PACKAGE="rgdal") / 255
@@ -459,7 +433,7 @@ getColorTable <- function(dataset, band = NULL) {
 
 displayDataset <- function(x, offset = c(0, 0), region.dim = dim(x),
                            reduction = 1, band = NULL, col = NULL,
-                           reset.par = TRUE, max.dim = 500, ...) {
+                           max.dim = 500, ...) {
 
   .assertClass(x, 'GDALReadOnlyDataset')
 
@@ -469,9 +443,8 @@ displayDataset <- function(x, offset = c(0, 0), region.dim = dim(x),
 
   if (is.null(band)) band <- 1
 
-  if (length(band) > 1)
-    warning('Displaying average of RGB values; ',
-            'this may take some time')
+  if (!length(band) %in% c(1, 3))
+    stop("Only single band or 3 band RGB plotting supported")
   
   offset <- offset %% dim(x)[1:2]
   
@@ -492,51 +465,13 @@ displayDataset <- function(x, offset = c(0, 0), region.dim = dim(x),
   if (any(plot.dim < 3))
     plot.dim <- 3 * plot.dim / max(plot.dim)
 
-  image.data <- getRasterData(x, band, offset, region.dim,
-                              plot.dim, as.is = TRUE)
-  
-  if (length(dim(image.data)) > 2)
-    image.data <- apply(image.data, 1:2, mean)
+  pm <- getPixmapGDAL(x, band, offset, region.dim, plot.dim)
 
-  if (is.complex(image.data))
-    image.data <- Mod(image.data)
-            
-  max.val <- max(image.data, na.rm = TRUE)
+  plot(pm)
 
-  if (!is.finite(max.val)) {
-    image.data[] <- 2
-    max.val <- 2
-  }
-
-  if (is.null(col))
-    col <- getColorTable(x, band)[1:(max.val + 1)]
-
-  if (is.null(col)) col <- gray(seq(0, 1, len = 64))
-  
-  par.in <- par(no.readonly = TRUE)
-
-  if (reset.par) on.exit(par(par.in))
-
-  par(pin = max(par.in$pin)
-      * par.in$fin / max(par.in$fin)
-      * rev(plot.dim) / max(plot.dim))
-  
-  image.data <- image.data[, ncol(image.data):1]
-  
-#  geoTrans <- getGeoTransFunc(dataset)
-
-#  x.i <- 1:plot.dim[1] + offset[1]
-#  y.i <- 1:plot.dim[2] + offset[2]
-
-#  xy <- getGeoTransFunc(x)(x.i, y.i)
-
-  image.default(image.data + 1, col = col, ...)
-            
-  invisible(image.data)
+  invisible(pm)
 
 }
-
-#if (!isGeneric('image')) setGeneric('image', where = 2)
 
 setMethod('image', 'GDALReadOnlyDataset', displayDataset)
 
@@ -562,17 +497,15 @@ getGeoTransFunc <- function(dataset) {
 
   offset <- geoTrans[c(4, 1)]
 
-  function(x, y = NULL) {
+  function(x, y) {
 
-    if (!is.null(y)) x <- cbind(x, y)
+    x <- cbind(x, y)
 
     x <- x %*% rotMat
 
-    x[,1] <- x[,1] + offset[1]
-    x[,2] <- x[,2] + offset[2]
+    list(x = x[,1] + offset[1],
+         y = x[,2] + offset[2])
 
-    x
-    
   }
 
 }
