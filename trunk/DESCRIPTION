@@ -1,8 +1,8 @@
 Package: rgdal
 Title: Bindings for the Geospatial Data Abstraction Library
-Description: Provides bindings to Frank Warmerdam's Geospatial Data Abstraction Library (GDAL) (>= 1.1.7) - this version with new-style classes. The GDAL library is external to the package, and must be correctly installed first.
-Version: 0.2-4
-Date: 2003-11-18
+Description: Provides bindings to Frank Warmerdam's Geospatial Data Abstraction Library (GDAL) (>= 1.1.8) - this version with new-style classes. The GDAL library is external to the package, and must be correctly installed first.
+Version: 0.2-5
+Date: 2003-11-24
 Author: Timothy H. Keitt <tkeitt@mail.utexas.edu> and Roger Bivand <Roger.Bivand@nhh.no>
 Maintainer: Roger Bivand <Roger.Bivand@nhh.no>
 License: GPL (version 2 or higher; see LICENSE)

@@ -224,11 +224,7 @@ RGDAL_GetDriverNames(void) {
 
     GDALDriver *pDriver = GetGDALDriverManager()->GetDriver(i);
     
-/*#if GDAL_VERSION_NUM < 1180
-  SET_VECTOR_ELT(sxpDriverList, i, mkChar(pDriver->pszShortName));
-#else */
   SET_VECTOR_ELT(sxpDriverList, i, mkChar(GDALGetDriverShortName( pDriver )));
-/* #endif */
 
   }
 
@@ -493,11 +489,7 @@ RGDAL_GetDriverShortName(SEXP sxpDriver) {
 
   GDALDriver *pDriver = getGDALDriverPtr(sxpDriver);
 
-/* #if GDAL_VERSION_NUM < 1180
-  return(mkString_safe(pDriver->pszShortName));
-#else */
   return(mkString_safe(GDALGetDriverShortName( pDriver )));
-/* #endif */
 
 }
 
@@ -506,11 +498,7 @@ RGDAL_GetDriverLongName(SEXP sxpDriver) {
 
   GDALDriver *pDriver = getGDALDriverPtr(sxpDriver);
 
-/* #if GDAL_VERSION_NUM < 1180
-  return(mkString_safe(pDriver->pszLongName));
-#else */
   return(mkString_safe(GDALGetDriverLongName( pDriver )));
-/* #endif */
 }
 
 SEXP
