@@ -6,8 +6,15 @@ sub.GDROD = function(x, i, j, ... , drop = FALSE) {
 	dots = list(...)
 	if (!missing(drop))
 		stop("don't supply drop: it needs to be FALSE anyway")
-	missing.i = missing(i)
-	missing.j = missing(j)
+	d = dim(x)
+	if (missing(i))
+		rows = 1:d[1]
+	else 
+		rows = i
+	if (missing(j))
+		cols = 1:d[2]
+	else
+		cols = j
 	if (length(dots) > 0) {
 		# fish for an unnamed argument, and rename it bands
 		m  = match(names(dots),  c(""))
@@ -19,9 +26,12 @@ sub.GDROD = function(x, i, j, ... , drop = FALSE) {
 	gdal.args$dataset = x
 	gdal.args$band = dots$band # NULL if not given
 	if (is.null(gdal.args$offset))
-		gdal.args$offset = c(0, 0)
+		gdal.args$offset = c(min(rows) - 1, min(cols) - 1)
 	if (is.null(gdal.args$region.dim))
-		gdal.args$region.dim = dim(x)
+		gdal.args$region.dim = c(max(rows) - gdal.args$offset[1], 
+			max(cols) - gdal.args$offset[2])
+	rows = rows - gdal.args$offset[1]
+	cols = cols - gdal.args$offset[2]
 	
 	# retrieve topology:
 	gt = .Call('RGDAL_GetGeoTransform', x, PACKAGE="rgdal")
@@ -41,10 +51,15 @@ sub.GDROD = function(x, i, j, ... , drop = FALSE) {
 			gdal.args$as.is = FALSE
 		data = do.call(getRasterData, gdal.args)
 		# subset data:
-		if (length(dim(data)) == 3)
-			data = data[i,j,]
-		else
-			data = data[i,j]
+		d = dim(data) # rows=nx, cols=ny
+		if (length(d) == 3) {
+			if (!is.null(gdal.args$band))
+				band = gdal.args$band
+			else
+				band = 1:d[3]
+			data = data[cols,rows,band]
+		} else
+			data = data[cols,rows]
 		cellsize = abs(c(gt[2] * (1 + gdal.args$interleave[2]),
 				gt[6] * (1 + gdal.args$interleave[1])))
 		d = dim(data) # rows=nx, cols=ny
