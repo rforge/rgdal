@@ -920,6 +920,38 @@ RGDAL_GetGeoTransform(SEXP sxpDataset) {
 
 }
 
+SEXP
+RGDAL_SetNoDataValue(SEXP sxpRasterBand, SEXP NoDataValue) {
+  CPLErr err;
+
+  if (LENGTH(NoDataValue) != 1)
+	error("argument NoDataValue should have length 1");
+
+  GDALRasterBand *pRasterBand = getGDALRasterPtr(sxpRasterBand);
+
+  err = pRasterBand->SetNoDataValue(NUMERIC_POINTER(NoDataValue)[0]);
+
+  if (err == CE_Failure)
+	warning("setting of missing value not supported by this driver");
+
+}
+
+SEXP
+RGDAL_SetGeoTransform(SEXP sxpDataset, SEXP GeoTransform) {
+
+  GDALDataset *pDataset = getGDALDatasetPtr(sxpDataset);
+
+  if (LENGTH(GeoTransform) != 6)
+	error("GeoTransform argument should have length 6");
+
+  CPLErr err = pDataset->SetGeoTransform(NUMERIC_POINTER(GeoTransform));
+
+  if (err == CE_Failure) 
+	warning("Failed to set metadata\n");
+
+  return(sxpDataset);
+}
+
 #ifdef __cplusplus
 }
 #endif
