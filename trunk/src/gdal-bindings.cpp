@@ -934,6 +934,8 @@ RGDAL_SetNoDataValue(SEXP sxpRasterBand, SEXP NoDataValue) {
   if (err == CE_Failure)
 	warning("setting of missing value not supported by this driver");
 
+  return(sxpRasterBand);
+
 }
 
 SEXP
