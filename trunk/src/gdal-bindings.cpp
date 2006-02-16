@@ -1,5 +1,7 @@
 #include <gdal_priv.h>
 #include <cpl_string.h>
+#include <ogr_spatialref.h>
+#include "ogrsf_frmts.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -109,6 +111,8 @@ RGDAL_Init(void) {
 
   GDALAllRegister();
 
+  OGRRegisterAll();
+ 
   return(R_NilValue);
 
 }
@@ -465,14 +469,30 @@ RGDAL_GetRasterCount(SEXP sDataset) {
 
 }
 
+/* changed to return proj4 string 20060212 RSB */
 SEXP
 RGDAL_GetProjectionRef(SEXP sDataset) {
 
-  GDALDataset *pDataset = getGDALDatasetPtr(sDataset);
+  OGRSpatialReference oSRS;
+  char *pszSRS_WKT = NULL;
+  SEXP ans;
 
-  return(mkString_safe(pDataset->GetProjectionRef()));
+  GDALDataset *pDataset = getGDALDatasetPtr(sDataset);
+  
+  pszSRS_WKT = (char*) pDataset->GetProjectionRef();
+
+  oSRS.importFromWkt( &pszSRS_WKT );
+  oSRS.exportToProj4( &pszSRS_WKT );
+  PROTECT(ans = NEW_CHARACTER(1));
+  SET_STRING_ELT(ans, 0, COPY_TO_USER_STRING(pszSRS_WKT));
+
+  CPLFree( pszSRS_WKT );
+  UNPROTECT(1);
+  return(ans);
 
 }
+
+
 
 SEXP
 RGDAL_GetDatasetDriver(SEXP sDataset) {
@@ -949,7 +969,27 @@ RGDAL_SetGeoTransform(SEXP sxpDataset, SEXP GeoTransform) {
   CPLErr err = pDataset->SetGeoTransform(NUMERIC_POINTER(GeoTransform));
 
   if (err == CE_Failure) 
-	warning("Failed to set metadata\n");
+	warning("Failed to set GeoTransform\n");
+
+  return(sxpDataset);
+}
+/* added RSB 20060212 */
+SEXP
+RGDAL_SetProject(SEXP sxpDataset, SEXP proj4string) {
+
+  OGRSpatialReference oSRS;
+  char *pszSRS_WKT = NULL;
+
+  GDALDataset *pDataset = getGDALDatasetPtr(sxpDataset);
+
+  oSRS.importFromProj4(CHAR(STRING_ELT(proj4string, 0)));
+  oSRS.exportToWkt( &pszSRS_WKT );
+
+  OGRErr err = pDataset->SetProjection(pszSRS_WKT);
+  CPLFree( pszSRS_WKT );
+
+  if (err == CE_Failure) 
+	warning("Failed to set Projection\n");
 
   return(sxpDataset);
 }

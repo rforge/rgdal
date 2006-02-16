@@ -142,15 +142,16 @@ setMethod('initialize', 'GDALTransientDataset',
             type = 'Byte', options = '', handle = NULL) {
             if (is.null(handle)) {
               typeNum <- match(type, .GDALDataTypes, 1) - 1
+	      my_tempfile <- tempfile()
               slot(.Object, 'handle') <- .Call('RGDAL_CreateDataset', driver,
                                               as.integer(c(cols, rows, bands)),
                                               as.integer(typeNum),
                                               as.character(options),
-                                              tempfile(), PACKAGE="rgdal")
+                                              my_tempfile, PACKAGE="rgdal")
             } else {
               slot(.Object, 'handle') <- handle
             }
-            cfn <- function(handle) .Call('RGDAL_DeleteHandle', 
+            cfn <- function(handle) .Call('RGDAL_CloseHandle', 
 		handle, PACKAGE="rgdal")
             .setCollectorFun(slot(.Object, 'handle'), cfn)
             .Object
@@ -171,12 +172,14 @@ copyDataset <- function(dataset, driver, strict = FALSE, options = '') {
   
   if (missing(driver)) driver <- getDriver(dataset)
   
+  my_tempfile <- tempfile()
+#  my_tempfile <- as.character(tempfile(tmpdir=.my_tempdir()))
   new.obj <- new('GDALTransientDataset',
                  handle = .Call('RGDAL_CopyDataset',
                    dataset, driver,
                    as.integer(strict),
                    as.character(options),
-                   tempfile(), PACKAGE="rgdal"))
+                   my_tempfile, PACKAGE="rgdal"))
 
   new.obj
   
@@ -216,7 +219,7 @@ setMethod('closeDataset', 'GDALTransientDataset',
           def = function(dataset) {
             driver <- getDriver(dataset)
             filename <- getDescription(dataset)
-            .Call('RGDAL_DeleteFile', driver, filename, PACKAGE="rgdal")
+            .Call('RGDAL_CloseDataset', driver, filename, PACKAGE="rgdal")
             callNextMethod()
           })
 

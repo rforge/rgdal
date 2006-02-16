@@ -6,7 +6,14 @@ GDALMajorObject-class   Class "GDALMajorObject"
 GDALRasterBand-class    Class "GDALRasterBand"
 GDALReadOnlyDataset-class
                         Class "GDALReadOnlyDataset"
+[,GDALReadOnlyDataset-method
+                        subset methods for "GDALReadOnlyDataset"
 GDALTransientDataset-class
                         Class "GDALTransientDataset"
 getPixmapGDAL           Read GDAL datasets as pixmapGrey or pixmapRGB
                         objects
+readGDAL                Read/write between GDAL grid maps and Spatial
+                        objects
+readOGR                 Read OGR vector maps into Spatial objects
+showWKT                 Show Well-Known Text spatial reference system
+                        metadata

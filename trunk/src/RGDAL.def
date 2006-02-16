@@ -37,3 +37,11 @@ RGDAL_SetCategoryNames
 RGDAL_SetGeoTransform
 RGDAL_SetMetadata
 RGDAL_SetNoDataValue
+RGDAL_SetProject
+ogrInfo
+ogrFIDs
+ogrDataFrame
+OGRFeatureInfo
+R_OGR_CAPI_features
+p4s_to_wkt
+ogrP4S
