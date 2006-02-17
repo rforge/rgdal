@@ -44,6 +44,7 @@ sub.GDROD = function(x, i, j, ... , drop = FALSE) {
 	gt = .Call('RGDAL_GetGeoTransform', x, PACKAGE="rgdal")
 	# [1] 178400     40      0 334000      0    -40
 	p4s <- .Call("RGDAL_GetProjectionRef", x, PACKAGE="rgdal")
+	if (nchar(p4s) == 0) p4s <- as.character(NA)
 
 	# retrieve data:
 	if (any(gt[c(3,5)] != 0)) {
