@@ -4,7 +4,7 @@
 \alias{sub.GDROD}
 \title{subset methods for "GDALReadOnlyDataset"}
 \description{subsets GDAL objects, returning a SpatialGridDataFrame object}
-\methods{
+\section{Methods}{
   \describe{
      \item{"["}{\code{signature(.Object = "GDALReadOnlyDataset")}: requires package
  	sp; selects rows and columns, and returns an object of class SpatialGridDataFrame
