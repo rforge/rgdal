@@ -1,6 +1,7 @@
 readGDAL = function(fname, offset, region.dim, ..., half.cell=c(0.5,0.5), silent = FALSE) {
 #	if (!require(rgdal))
 #		stop("read.gdal needs package rgdal to be properly installed")
+	if (nchar(fname) == 0) stop("empty file name")
 	x = GDAL.open(fname)
 	d = dim(x)
 	if (missing(offset)) offset <- c(0,0)
@@ -57,6 +58,7 @@ writeGDAL = function(dataset, fname, drivername = "GTiff", type = "Float32",
 #, clone = NULL
 ) 
 {
+	if (nchar(fname) == 0) stop("empty file name")
 	# stop("write.gdal is not working (yet>")
 	stopifnot(gridded(dataset))
 	fullgrid(dataset) = TRUE

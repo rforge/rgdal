@@ -23,10 +23,17 @@ sub.GDROD = function(x, i, j, ... , drop = FALSE) {
 	}
 	# process common arguments:
 	gdal.args = dots
+	if (is.null(gdal.args$half.cell)) half.cell <- c(0.5,0.5)
+	else {
+		half.cell <- gdal.args$half.cell
+		gdal.args$half.cell <- NULL
+	}
+
 	gdal.args$dataset = x
 	gdal.args$band = dots$band # NULL if not given
 	if (is.null(gdal.args$offset))
-		gdal.args$offset = c(min(rows) - 1, min(cols) - 1)
+		gdal.args$offset = c(0,0)
+#		gdal.args$offset = c(min(rows) - 1, min(cols) - 1)
 	if (is.null(gdal.args$region.dim))
 		gdal.args$region.dim = c(max(rows) - gdal.args$offset[1], 
 			max(cols) - gdal.args$offset[2])
@@ -67,8 +74,18 @@ sub.GDROD = function(x, i, j, ... , drop = FALSE) {
 				gt[6] * (1 + gdal.args$interleave[1])))
 		d = dim(data) # rows=nx, cols=ny
 		cells.dim = c(d[1], d[2]) # c(d[2],d[1])
-		cellcentre.offset = c(x = gt[1] + (0.5 + gdal.args$offset[2])* cellsize[1], 
-			y = gt[4] - (d[2] - 0.5) * abs(cellsize[2]))
+		ysign <- sign(gt[6])
+		co.x <- gt[1] + (gdal.args$offset[2] + half.cell[2]) *
+			 cellsize[1]
+		co.y <- ifelse(ysign < 0, gt[4] + (ysign*((region.dim[1] + 
+			gdal.args$offset[1]) + (ysign*half.cell[1]))) * 
+			abs(cellsize[2]), gt[4] + (ysign*(
+			(gdal.args$offset[1]) + (ysign*half.cell[1]))) * 
+			abs(cellsize[2]))
+		cellcentre.offset <- c(x=co.x, y=co.y)
+#		cellcentre.offset = c(x = gt[1] + (0.5 + 
+#		gdal.args$offset[2])* cellsize[1], 
+#			y = gt[4] - (d[2] - 0.5) * abs(cellsize[2]))
 		grid = GridTopology(cellcentre.offset, cellsize, cells.dim)
 		if (length(d) == 2)
 			df = data.frame(band1 = as.vector(data))

@@ -108,6 +108,7 @@ getDriverLongName <- function(driver) {
 setMethod('initialize', 'GDALReadOnlyDataset',
           def = function(.Object, filename, handle = NULL) {
             if (is.null(handle)) {
+	      if (nchar(filename) == 0) stop("empty file name")
               slot(.Object, 'handle') <- {
                 .Call('RGDAL_OpenDataset', as.character(filename), 
 			TRUE, PACKAGE="rgdal")
@@ -124,6 +125,7 @@ setMethod('initialize', 'GDALReadOnlyDataset',
 setMethod('initialize', 'GDALDataset',
           def = function(.Object, filename, handle = NULL) {
             if (is.null(handle)) {
+	      if (nchar(filename) == 0) stop("empty file name")
               slot(.Object, 'handle') <- {
                 .Call('RGDAL_OpenDataset', as.character(filename), 
 			FALSE, PACKAGE="rgdal")
@@ -143,6 +145,7 @@ setMethod('initialize', 'GDALTransientDataset',
             if (is.null(handle)) {
               typeNum <- match(type, .GDALDataTypes, 1) - 1
 	      my_tempfile <- tempfile()
+	      if (nchar(my_tempfile) == 0) stop("empty file name")
               slot(.Object, 'handle') <- .Call('RGDAL_CreateDataset', driver,
                                               as.integer(c(cols, rows, bands)),
                                               as.integer(typeNum),
@@ -173,6 +176,7 @@ copyDataset <- function(dataset, driver, strict = FALSE, options = '') {
   if (missing(driver)) driver <- getDriver(dataset)
   
   my_tempfile <- tempfile()
+  if (nchar(my_tempfile) == 0) stop("empty file name")
 #  my_tempfile <- as.character(tempfile(tmpdir=.my_tempdir()))
   new.obj <- new('GDALTransientDataset',
                  handle = .Call('RGDAL_CopyDataset',
@@ -192,6 +196,7 @@ saveDataset <- function(dataset, filename) {
   new.class <- ifelse(class(dataset) == 'GDALTransientDataset',
                       'GDALDataset', class(dataset))
   
+  if (nchar(filename) == 0) stop("empty file name")
   new.obj <- new(new.class,
                  handle = .Call('RGDAL_CopyDataset',
                    dataset, getDriver(dataset),
@@ -271,6 +276,7 @@ deleteDataset <- function(dataset) {
 }
 
 GDAL.open <- function(filename) {
+  	if (nchar(filename) == 0) stop("empty file name")
 	res <- new("GDALReadOnlyDataset", filename)
 	res
 }

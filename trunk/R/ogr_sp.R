@@ -1,8 +1,10 @@
 # Copyright 2006 Roger Bivand
 
 readOGR <- function(dsn, layer, verbose=TRUE) {
-	if (missing(dsn)) stop("")
-	if (missing(layer)) stop("")
+	if (missing(dsn)) stop("missing dsn")
+	if (nchar(dsn) == 0) stop("empty name")
+	if (missing(layer)) stop("missing layer")
+	if (nchar(layer) == 0) stop("empty name")
 	ogr_info <- ogrInfo(dsn=dsn, layer=layer)
 	fids <- ogrFIDs(dsn=dsn, layer=layer)
 	if (verbose) {
@@ -14,6 +16,7 @@ readOGR <- function(dsn, layer, verbose=TRUE) {
 	}
 	p4s <- .Call("ogrP4S", as.character(dsn), as.character(layer), 
 		PACKAGE="rgdal")
+	if (!is.na(p4s) && nchar(p4s) == 0) p4s <- as.character(NA)
 	dlist <- .Call("ogrDataFrame", as.character(dsn), as.character(layer), 
 		as.integer(fids), as.integer((1:ogr_info$nitems)-1), 
 		PACKAGE="rgdal")

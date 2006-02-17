@@ -41,8 +41,6 @@ x.sp = x[20:50, 20:50]
 class(x.sp)
 summary(x.sp)
 spplot(x.sp)
-x.sp = x[,,interleave=c(2,2)]
-spplot(x.sp)
 GDAL.close(x)
 
 logo <- system.file("pictures/Rlogo.jpg", package="rgdal")[1]

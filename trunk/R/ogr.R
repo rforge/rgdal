@@ -8,6 +8,10 @@
 
 #
 ogrInfo <- function(dsn, layer){
+  if (missing(dsn)) stop("missing dsn")
+  if (nchar(dsn) == 0) stop("empty name")
+  if (missing(layer)) stop("missing layer")
+  if (nchar(layer) == 0) stop("empty name")
 # a list with various ogr data source information
   ogrinfo <- .Call("ogrInfo",as.character(dsn),as.character(layer), PACKAGE = "rgdal")
   
@@ -17,6 +21,10 @@ ogrInfo <- function(dsn, layer){
 }
 
 ogrFIDs <- function(dsn, layer){
+  if (missing(dsn)) stop("missing dsn")
+  if (nchar(dsn) == 0) stop("empty name")
+  if (missing(layer)) stop("missing layer")
+  if (nchar(layer) == 0) stop("empty name")
   fids <- .Call("ogrFIDs",as.character(dsn),as.character(layer), PACKAGE = "rgdal")
   fids
 }
