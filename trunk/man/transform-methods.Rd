@@ -1,6 +1,6 @@
 \name{transform-methods}
 \docType{methods}
-\title{ Methods for Function transform in package "spproj" }
+\title{ Methods for Function transform in package "rgdal" }
 \alias{transform-methods}
 \alias{transform,ANY-method}
 \alias{transform,SpatialPoints-method}
