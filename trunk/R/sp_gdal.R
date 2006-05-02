@@ -54,7 +54,7 @@ readGDAL = function(fname, offset, region.dim, ..., half.cell=c(0.5,0.5), silent
 }
 
 writeGDAL = function(dataset, fname, drivername = "GTiff", type = "Float32", 
-		mvFlag = NA
+		mvFlag = NA, options=""
 #, clone = NULL
 ) 
 {
@@ -70,7 +70,7 @@ writeGDAL = function(dataset, fname, drivername = "GTiff", type = "Float32",
 #	else {
 		tds.out = new("GDALTransientDataset", driver = d.drv, 
 			rows = d.dim[2], cols = d.dim[1],
-        	bands = nbands, type = type, options = "", 
+        	bands = nbands, type = type, options = options, 
 			handle = NULL)
 		gp = gridparameters(dataset)
 		cellsize = gp$cellsize
