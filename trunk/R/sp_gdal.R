@@ -54,9 +54,9 @@ readGDAL = function(fname, offset, region.dim, ..., half.cell=c(0.5,0.5), silent
 }
 
 writeGDAL = function(dataset, fname, drivername = "GTiff", type = "Float32", 
-		mvFlag = NA, options=""
+		mvFlag = NA, options=NULL)
 #, clone = NULL
-) 
+#) 
 {
 	if (nchar(fname) == 0) stop("empty file name")
 	# stop("write.gdal is not working (yet>")
