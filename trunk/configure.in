@@ -19,15 +19,15 @@ then
 
 else
 
-	echo ''
-	echo 'I was unable to find the gdal-config script distributed with'
-	echo 'GDAL. If you have not installed the GDAL libraries, you can'
-	echo 'download the source from  http://www.remotesensing.org/gdal/'
-	echo 'If you have installed the GDAL libraries, then make sure that'
-	echo 'gdal-config is in your path. Try typing gdal-config at a'
-	echo 'shell prompt and see if it runs. If not, find it and add its'
-	echo 'path to your shell path.'
-	echo ''
+	echo ""
+	echo "The gdal-config script distributed with GDAL could not be found."
+	echo "If you have not installed the GDAL libraries, you can"
+	echo "download the source from  http://www.gdal.org/"
+	echo "If you have installed the GDAL libraries, then make sure that"
+	echo "gdal-config is in your path. Try typing gdal-config at a"
+	echo "shell prompt and see if it runs. If not, use:"
+	echo " --configure-args='--with-gdal-config=/usr/local/bin/gdal-config'"	echo "with appropriate values for your installation."
+	echo ""
 
 	exit 1
 
@@ -82,9 +82,11 @@ if test "$PROJ_SETTING" = "none" ; then
 fi
 if test "$STOP" = "stop" ; then
     echo "libproj.a and/or proj_api.h not found."
+    echo "If the PROJ.4 library is installed in a non-standard location,"
     echo "use --configure-args='--with-proj-include=/opt/local/include"
     echo "--with-proj-lib=/opt/local/lib' for example, replacing /opt/local/*"
-    echo "with appropriate values for your installation"
+    echo "with appropriate values for your installation."
+    echo "If PROJ.4 is not installed, install it."
     exit 1
 fi
 
