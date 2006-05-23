@@ -1338,6 +1338,14 @@ if test "$VER12" != "$REQ_GDAL" ; then
     exit 1
 fi
 
+: ${R_HOME=`R RHOME`}
+          if test -z "${R_HOME}"; then
+            echo "could not determine R_HOME"
+            exit 1
+fi
+CC=`"${R_HOME}/bin/R" CMD config CC`
+CFLAGS=`"${R_HOME}/bin/R" CMD config CFLAGS`
+
 
 # Check whether --with-proj-include or --without-proj-include was given.
 if test "${with_proj_include+set}" = set; then
