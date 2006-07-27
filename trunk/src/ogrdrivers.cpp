@@ -19,7 +19,8 @@ extern "C" {
 
     for (i=0; i < n; i++) {
       OGRSFDriver *poDriver = poR->GetDriver(i);
-      SET_VECTOR_ELT(sxpDriverList, i,
+//      SET_VECTOR_ELT(sxpDriverList, i,
+      SET_STRING_ELT(sxpDriverList, i,
         COPY_TO_USER_STRING(poDriver->GetName()));
     }
 

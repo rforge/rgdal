@@ -167,7 +167,8 @@ RGDAL_GetMetadata(SEXP sxpObj, SEXP sxpDomain) {
 
     SET_VECTOR_ELT(sxpMetadata, i, value ? mkChar(value) : mkChar(""));
 
-    SET_VECTOR_ELT(sxpNames, i, tag ? mkChar(tag) : mkChar(""));
+//    SET_VECTOR_ELT(sxpNames, i, tag ? mkChar(tag) : mkChar(""));
+    SET_STRING_ELT(sxpNames, i, tag ? mkChar(tag) : mkChar(""));
 
   }
 
@@ -233,7 +234,8 @@ RGDAL_GetDriverNames(void) {
 
     GDALDriver *pDriver = GetGDALDriverManager()->GetDriver(i);
     
-  SET_VECTOR_ELT(sxpDriverList, i, mkChar(GDALGetDriverShortName( pDriver )));
+//  SET_VECTOR_ELT(sxpDriverList, i, mkChar(GDALGetDriverShortName( pDriver )));
+    SET_STRING_ELT(sxpDriverList, i, mkChar(GDALGetDriverShortName( pDriver )));
 
   }
 
