@@ -26,6 +26,7 @@ readGDAL = function(fname, offset, region.dim, output.dim, ..., half.cell=c(0.5,
 			region.dim=region.dim, output.dim=output.dim, ...)
 		GDAL.close(x)
 		coordinates(data) = c(1,2)
+		proj4string(data) = CRS(p4s)
 	} else {
 		data = getRasterData(x, offset=offset, 
 			region.dim=region.dim, output.dim=output.dim, ...)
@@ -34,13 +35,13 @@ readGDAL = function(fname, offset, region.dim, output.dim, ..., half.cell=c(0.5,
 		if (!odim_flag) cellsize = abs(c(gt[2],gt[6]))
 		else {
 			icellsize = abs(c(gt[2],gt[6]))
-			span <- icellsize * d
-			cellsize <- span / output.dim
+			span <- icellsize * rev(d)
+			cellsize <- span / rev(output.dim)
 		}
 		ysign <- sign(gt[6])
 #		cells.dim = c(d[1], d[2]) # c(d[2],d[1])
 		co.x <- gt[1] + (offset[2] + half.cell[2]) * cellsize[1]
-		co.y <- ifelse(ysign < 0, gt[4] + (ysign*((region.dim[1] + 
+		co.y <- ifelse(ysign < 0, gt[4] + (ysign*((output.dim[1] + 
 			offset[1]) + (ysign*half.cell[1]))) * abs(cellsize[2]),
 			gt[4] + (ysign*((offset[1]) + (ysign*half.cell[1]))) * 
 			abs(cellsize[2]))
