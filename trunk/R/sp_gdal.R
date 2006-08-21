@@ -1,4 +1,4 @@
-readGDAL = function(fname, offset, region.dim, ..., half.cell=c(0.5,0.5), silent = FALSE) {
+readGDAL = function(fname, offset, region.dim, output.dim, ..., half.cell=c(0.5,0.5), silent = FALSE) {
 #	if (!require(rgdal))
 #		stop("read.gdal needs package rgdal to be properly installed")
 	if (nchar(fname) == 0) stop("empty file name")
@@ -7,6 +7,12 @@ readGDAL = function(fname, offset, region.dim, ..., half.cell=c(0.5,0.5), silent
 	if (missing(offset)) offset <- c(0,0)
 	if (missing(region.dim)) region.dim <- dim(x)[1:2] # rows=nx, cols=ny
 #	else d <- region.dim
+	odim_flag <- NULL
+	if (!missing(output.dim)) odim_flag <- TRUE
+	else {
+		output.dim <- region.dim
+		odim_flag <- FALSE
+	}
 	if (!silent) {
 		cat(paste(fname, "has GDAL driver", getDriverName(getDriver(x)),"\n"))
 		cat(paste("and has", d[1], "rows and", d[2], "columns\n"))
@@ -17,14 +23,20 @@ readGDAL = function(fname, offset, region.dim, ..., half.cell=c(0.5,0.5), silent
 	# [1] 178400     40      0 334000      0    -40
 	if (any(gt[c(3,5)] != 0.0)) {
 		data = getRasterTable(x, offset=offset, 
-			region.dim=region.dim, ...)
+			region.dim=region.dim, output.dim=output.dim, ...)
 		GDAL.close(x)
 		coordinates(data) = c(1,2)
 	} else {
 		data = getRasterData(x, offset=offset, 
-			region.dim=region.dim, ...)
+			region.dim=region.dim, output.dim=output.dim, ...)
 		GDAL.close(x)
-		cellsize = abs(c(gt[2],gt[6]))
+#		cellsize = abs(c(gt[2],gt[6]))
+		if (!odim_flag) cellsize = abs(c(gt[2],gt[6]))
+		else {
+			icellsize = abs(c(gt[2],gt[6]))
+			span <- icellsize * d
+			cellsize <- span / output.dim
+		}
 		ysign <- sign(gt[6])
 #		cells.dim = c(d[1], d[2]) # c(d[2],d[1])
 		co.x <- gt[1] + (offset[2] + half.cell[2]) * cellsize[1]
@@ -36,7 +48,8 @@ readGDAL = function(fname, offset, region.dim, ..., half.cell=c(0.5,0.5), silent
 #		cellcentre.offset = c(x = gt[1] + 0.5 * cellsize[1], 
 #			y = gt[4] - (d[2] - 0.5) * abs(cellsize[2]))
 		grid = GridTopology(cellcentre.offset, cellsize, 
-			rev(region.dim))
+			rev(output.dim))
+#			rev(region.dim))
 		if (length(d) == 2)
 			df = list(band1 = as.vector(data))
 		else {

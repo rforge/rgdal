@@ -4,7 +4,7 @@
 \title{Read/write between GDAL grid maps and Spatial objects}
 \description{The functions read or write GDAL grid maps. They will set the spatial reference system if available.}
 \usage{ 
-readGDAL(fname, offset, region.dim, ..., half.cell=c(0.5, 0.5), silent = FALSE)
+readGDAL(fname, offset, region.dim, output.dim, ..., half.cell=c(0.5, 0.5), silent = FALSE)
 writeGDAL(dataset, fname, drivername = "GTiff", type = "Float32", mvFlag = NA, options=""
 %, clone = NULL
 )
@@ -14,6 +14,7 @@ writeGDAL(dataset, fname, drivername = "GTiff", type = "Float32", mvFlag = NA, o
 \item{fname}{ file name of grid map }
 \item{offset}{Number of rows and columns from the origin (usually the upper left corner) to begin reading from; presently ordered (y,x) - this may change}
 \item{region.dim}{The number of rows and columns to read from the dataset; presently ordered (y,x) - this may change}
+\item{output.dim}{The number of rows and columns to return in the created object using GDAL's method to take care of image decimation / replication; presently ordered (y,x) - this may change}
 \item{half.cell}{Used to adjust the intra-cell offset from corner to centre, usually as default, but may be set to c=(0,0) if needed; presently ordered (y,x) - this may change}
 \item{silent}{ logical; if TRUE, comment is suppressed }
 \item{...}{ arguments passed to either \code{getRasterData}, or
