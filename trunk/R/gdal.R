@@ -548,7 +548,7 @@ getRasterBand <- function(dataset, band = 1) {
 
 getRasterBlockSize <- function(raster) {
 
-  .assertClass(dataset, 'GDALRasterBand')
+  .assertClass(raster, 'GDALRasterBand')
   
   .Call('RGDAL_GetRasterBlockSize', raster, PACKAGE="rgdal")
   

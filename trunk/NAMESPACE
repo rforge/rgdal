@@ -22,6 +22,7 @@ export(putRasterData, saveDataset, copyDataset, deleteDataset, saveDatasetAs)
 export(getGDALDriverNames, getDriverName, getDriverLongName)
 export(getDescription, getMetadata, setMetadata, appendMetadata)
 export(getRasterData, getRasterTable, getProjectionRef)
+export(getRasterBand, getRasterBlockSize)
 export(getDriver, GDAL.close, GDAL.open, getColorTable,
   getGeoTransFunc, sub.GDROD)
 export(make_EPSG, project, readGDAL, writeGDAL, showWKT)
