@@ -6,7 +6,8 @@
 \alias{getProjectionRef}
 \alias{initialize,GDALRasterBand-method}
 \alias{dim,GDALRasterBand-method}
-\alias{getRasterBand,getRasterBlockSize}
+\alias{getRasterBand}
+\alias{getRasterBlockSize}
 \title{Class "GDALRasterBand"}
 \description{Returns a two-dimensional array with data from a raster band, used internally within functions}
 \section{Objects from the Class}{
