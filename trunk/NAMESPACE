@@ -27,6 +27,7 @@ export(getDriver, GDAL.close, GDAL.open, getColorTable,
   getGeoTransFunc, sub.GDROD)
 export(make_EPSG, project, readGDAL, writeGDAL, showWKT)
 export(readOGR, ogrInfo, ogrFIDs, ogrDrivers)
+export(GDALinfo, print.GDALobj)
 #export(getPixmapGDAL, displayDataset)
 
 export(spTransform, spTransform.SpatialPoints, 
@@ -40,4 +41,5 @@ S3method(spTransform, SpatialLines)
 S3method(spTransform, SpatialLinesDataFrame)
 S3method(spTransform, SpatialPolygons)
 S3method(spTransform, SpatialPolygonsDataFrame)
+S3method(print, GDALobj)
 

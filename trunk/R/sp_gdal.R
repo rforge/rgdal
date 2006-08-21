@@ -1,3 +1,34 @@
+GDALinfo <- function(fname) {
+	if (nchar(fname) == 0) stop("empty file name")
+	x <- GDAL.open(fname)
+	d <- dim(x)[1:2]
+        dr <- getDriverName(getDriver(x))
+	p4s <- .Call("RGDAL_GetProjectionRef", x, PACKAGE="rgdal")
+	if (nchar(p4s) == 0) p4s <- as.character(NA)
+	gt <- .Call('RGDAL_GetGeoTransform', x, PACKAGE="rgdal")
+	nbands <- .Call('RGDAL_GetRasterCount', x, PACKAGE="rgdal")
+	GDAL.close(x)
+	res <- c(rows=d[1], columns=d[2], bands=nbands, ll.x=gt[1], ll.y=gt[4], 
+		res.x=abs(gt[2]), res.y=abs(gt[6]), oblique.x=abs(gt[3]), 
+		oblique.y=abs(gt[5]))
+	attr(res, "driver") <- dr 
+	attr(res, "projection") <- p4s 
+	attr(res, "file") <- fname
+	class(res) <- "GDALobj"
+	res
+}
+
+print.GDALobj <- function(x, ...) {
+	xx <- cbind(x)
+	colnames(xx) <- "values"
+	print(xx)
+	cat("driver:", attr(x, "driver"), "\n")
+	cat("projection:", attr(x, "projection"), "\n")
+	cat("file:", attr(x, "file"), "\n")
+	invisible(x)
+}
+
+
 readGDAL = function(fname, offset, region.dim, output.dim, ..., half.cell=c(0.5,0.5), silent = FALSE) {
 #	if (!require(rgdal))
 #		stop("read.gdal needs package rgdal to be properly installed")
@@ -23,7 +54,7 @@ readGDAL = function(fname, offset, region.dim, output.dim, ..., half.cell=c(0.5,
 	# [1] 178400     40      0 334000      0    -40
 	if (any(gt[c(3,5)] != 0.0)) {
 		data = getRasterTable(x, offset=offset, 
-			region.dim=region.dim, output.dim=output.dim, ...)
+			region.dim=region.dim, ...)
 		GDAL.close(x)
 		coordinates(data) = c(1,2)
 		proj4string(data) = CRS(p4s)

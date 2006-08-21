@@ -1,13 +1,16 @@
 \name{readGDAL}
 \alias{readGDAL}
 \alias{writeGDAL}
+\alias{GDALinfo}
+\alias{print.GDALobj}
 \title{Read/write between GDAL grid maps and Spatial objects}
-\description{The functions read or write GDAL grid maps. They will set the spatial reference system if available.}
+\description{The functions read or write GDAL grid maps. They will set the spatial reference system if available. \code{GDALinfo} reports the size and other parameters of the dataset.}
 \usage{ 
 readGDAL(fname, offset, region.dim, output.dim, ..., half.cell=c(0.5, 0.5), silent = FALSE)
 writeGDAL(dataset, fname, drivername = "GTiff", type = "Float32", mvFlag = NA, options=""
 %, clone = NULL
 )
+GDALinfo(fname)
 }
 
 \arguments{
@@ -48,6 +51,7 @@ later on by e.g. using \code{\link[sp]{gridded}(x)=TRUE}.
 \author{Edzer J.\ Pebesma, Roger Bivand}
 
 \examples{
+GDALinfo(system.file("external/test.ag", package="sp")[1])
 x <- readGDAL(system.file("external/test.ag", package="sp")[1])
 class(x)
 image(x)
@@ -72,13 +76,15 @@ fn <- tempfile()
 writeGDAL(meuse.grid["dist"], fn)
 mg2 <- readGDAL(fn)
 proj4string(mg2)
-SP27GTIF <- readGDAL(system.file("pictures/SP27GTIF.TIF", package = "rgdal")[1])
+SP27GTIF <- readGDAL(system.file("pictures/SP27GTIF.TIF", package = "rgdal")[1], output.dim=c(100,100))
 summary(SP27GTIF)
 image(SP27GTIF, col=grey(1:99/100))
-cea <- readGDAL(system.file("pictures/cea.tif", package = "rgdal")[1])
+
+GDALinfo(system.file("pictures/cea.tif", package = "rgdal")[1])
+cea <- readGDAL(system.file("pictures/cea.tif", package = "rgdal")[1], output.dim=c(100,100))
 summary(cea)
 image(cea, col=grey(1:99/100))
-erdas_spnad83 <- readGDAL(system.file("pictures/erdas_spnad83.tif", package = "rgdal")[1])
+erdas_spnad83 <- readGDAL(system.file("pictures/erdas_spnad83.tif", package = "rgdal")[1], output.dim=c(100,100))
 summary(erdas_spnad83)
 image(erdas_spnad83, col=grey(1:99/100))
 }
