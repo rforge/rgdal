@@ -45,7 +45,7 @@ later on by e.g. using \code{\link[sp]{gridded}(x)=TRUE}.
 
 \seealso{ \code{\link[sp]{as.image.SpatialGridDataFrame}}, \code{\link[sp]{image}}, \code{\link[maptools]{readAsciiGrid}} }
 
-\author{Edzer J.\ Pebesma, e.pebesma@geo.uu.nl}
+\author{Edzer J.\ Pebesma, Roger Bivand}
 
 \examples{
 x <- readGDAL(system.file("external/test.ag", package="sp")[1])
