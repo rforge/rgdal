@@ -28,6 +28,41 @@ print.GDALobj <- function(x, ...) {
 	invisible(x)
 }
 
+asGDALROD_SGDF <- function(from) {
+	x <- from
+	d = dim(x)
+	half.cell <- c(0.5,0.5)
+	offset <- c(0,0)
+	output.dim <- d[1:2]
+	p4s <- .Call("RGDAL_GetProjectionRef", x, PACKAGE="rgdal")
+	if (nchar(p4s) == 0) p4s <- as.character(NA)
+	gt = .Call('RGDAL_GetGeoTransform', x, PACKAGE="rgdal")
+	if (any(gt[c(3,5)] != 0.0)) stop("Diagonal grid not permitted")
+	data = getRasterData(x)
+	cellsize = abs(c(gt[2],gt[6]))
+	ysign <- sign(gt[6])
+	co.x <- gt[1] + (offset[2] + half.cell[2]) * cellsize[1]
+	co.y <- ifelse(ysign < 0, gt[4] + (ysign*((output.dim[1] + 
+		offset[1]) + (ysign*half.cell[1]))) * abs(cellsize[2]),
+		gt[4] + (ysign*((offset[1]) + (ysign*half.cell[1]))) * 
+		abs(cellsize[2]))
+	cellcentre.offset <- c(x=co.x, y=co.y)
+	grid = GridTopology(cellcentre.offset, cellsize, rev(output.dim))
+	if (length(d) == 2)
+		df = list(band1 = as.vector(data))
+	else {
+		df <- vector(mode="list", length=d[3])
+		df[[1]] <- as.vector(data[,,1])
+		for (band in 2:d[3])
+			df[[band]] <- as.vector(data[,,band])
+		names(df) = paste("band", 1:d[3], sep="")
+	}
+	data = SpatialGridDataFrame(grid = grid, 
+		data = AttributeList(df), proj4string=CRS(p4s))
+	return(data)
+}
+
+setAs("GDALReadOnlyDataset", "SpatialGridDataFrame", asGDALROD_SGDF)
 
 readGDAL = function(fname, offset, region.dim, output.dim, ..., half.cell=c(0.5,0.5), silent = FALSE) {
 #	if (!require(rgdal))

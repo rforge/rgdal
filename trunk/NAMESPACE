@@ -7,6 +7,7 @@ import(sp)
 exportMethods(spTransform)
 exportMethods(closeDataset)
 exportMethods(initialize)
+exportMethods(coerce)
 
 exportClass(GDALDataset)
 exportClass(GDALDriver)
