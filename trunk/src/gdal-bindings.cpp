@@ -970,6 +970,7 @@ RGDAL_GetColorTable(SEXP sxpRasterBand) {
 
 }
 
+
 SEXP
 RGDAL_SetCategoryNames(SEXP sxpRasterBand, SEXP sxpNames) {
 

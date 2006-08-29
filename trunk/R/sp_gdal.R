@@ -167,6 +167,7 @@ writeGDAL = function(dataset, fname, drivername = "GTiff", type = "Float32",
 		.Call("RGDAL_SetProject", tds.out, p4s, PACKAGE = "rgdal")
 	for (i in 1:nbands) {
 		band = as.matrix(dataset[i])
+		if (!is.numeric(band)) stop("Numeric bands required")
 		if (!is.na(mvFlag))
 			band[is.na(band)] = mvFlag
 		putRasterData(tds.out, band, i)
@@ -174,3 +175,5 @@ writeGDAL = function(dataset, fname, drivername = "GTiff", type = "Float32",
 	saveDataset(tds.out, fname)
 	invisible(fname)
 }
+
+
