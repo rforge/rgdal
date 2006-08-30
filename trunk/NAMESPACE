@@ -25,7 +25,7 @@ export(getDescription, getMetadata, setMetadata, appendMetadata)
 export(getRasterData, getRasterTable, getProjectionRef)
 export(getRasterBand, getRasterBlockSize)
 export(getDriver, GDAL.close, GDAL.open, getColorTable,
-  getGeoTransFunc, sub.GDROD, SGDF2RGB)
+  getGeoTransFunc, sub.GDROD, SGDF2RGB, asSGDF_GROD)
 export(make_EPSG, project, readGDAL, writeGDAL, showWKT)
 export(readOGR, ogrInfo, ogrFIDs, ogrDrivers)
 export(GDALinfo, print.GDALobj)

@@ -64,6 +64,53 @@ asGDALROD_SGDF <- function(from) {
 
 setAs("GDALReadOnlyDataset", "SpatialGridDataFrame", asGDALROD_SGDF)
 
+asSGDF_GROD <- function(x, offset, region.dim, output.dim, ..., half.cell=c(0.5,0.5)) {
+	if (!inherits(x, "GDALReadOnlyDataset"))
+		stop("GDALReadOnlyDataset required")
+	d = dim(x)
+	if (missing(offset)) offset <- c(0,0)
+	if (missing(region.dim)) region.dim <- dim(x)[1:2]
+	odim_flag <- NULL
+	if (!missing(output.dim)) odim_flag <- TRUE
+	else {
+		output.dim <- region.dim
+		odim_flag <- FALSE
+	}
+
+	p4s <- .Call("RGDAL_GetProjectionRef", x, PACKAGE="rgdal")
+	if (nchar(p4s) == 0) p4s <- as.character(NA)
+	gt = .Call('RGDAL_GetGeoTransform', x, PACKAGE="rgdal")
+	if (any(gt[c(3,5)] != 0.0)) stop("Diagonal grid not permitted")
+	data = getRasterData(x, offset=offset, 
+		region.dim=region.dim, output.dim=output.dim, ...)
+	if (!odim_flag) cellsize = abs(c(gt[2],gt[6]))
+	else {
+		icellsize = abs(c(gt[2],gt[6]))
+		span <- icellsize * rev(d)
+		cellsize <- span / rev(output.dim)
+	}
+	ysign <- sign(gt[6])
+	co.x <- gt[1] + (offset[2] + half.cell[2]) * cellsize[1]
+	co.y <- ifelse(ysign < 0, gt[4] + (ysign*((output.dim[1] + 
+		offset[1]) + (ysign*half.cell[1]))) * abs(cellsize[2]),
+		gt[4] + (ysign*((offset[1]) + (ysign*half.cell[1]))) * 
+		abs(cellsize[2]))
+	cellcentre.offset <- c(x=co.x, y=co.y)
+	grid = GridTopology(cellcentre.offset, cellsize, rev(output.dim))
+	if (length(d) == 2)
+		df = list(band1 = as.vector(data))
+	else {
+		df <- vector(mode="list", length=d[3])
+		df[[1]] <- as.vector(data[,,1])
+		for (band in 2:d[3])
+			df[[band]] <- as.vector(data[,,band])
+		names(df) = paste("band", 1:d[3], sep="")
+	}
+	data = SpatialGridDataFrame(grid = grid, 
+		data = AttributeList(df), proj4string=CRS(p4s))
+	return(data)
+}
+
 readGDAL = function(fname, offset, region.dim, output.dim, ..., half.cell=c(0.5,0.5), silent = FALSE) {
 #	if (!require(rgdal))
 #		stop("read.gdal needs package rgdal to be properly installed")
