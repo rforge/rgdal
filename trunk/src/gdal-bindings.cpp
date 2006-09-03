@@ -1,4 +1,5 @@
 #include <gdal_priv.h>
+#include <gdal_alg.h>
 #include <cpl_string.h>
 #include <ogr_spatialref.h>
 #include "ogrsf_frmts.h"
@@ -302,7 +303,9 @@ RGDAL_CloseHandle(SEXP sxpHandle) {
   GDALDataset *pDataset =
     (GDALDataset *) R_ExternalPtrAddr(sxpHandle);
 
+#ifdef RGDALDEBUG
   Rprintf("Closing GDAL dataset handle %p... ", (void *) pDataset);
+#endif
 
   if (pDataset != NULL) {
 
@@ -310,11 +313,15 @@ RGDAL_CloseHandle(SEXP sxpHandle) {
 
     R_ClearExternalPtr(sxpHandle);
 
+#ifdef RGDALDEBUG
     Rprintf(" destroyed ... ");
+#endif
 
   }
 
+#ifdef RGDALDEBUG
   Rprintf("done.\n");
+#endif
 
   return(R_NilValue);
 
@@ -362,8 +369,6 @@ RGDAL_CreateDataset(SEXP sxpDriver, SEXP sDim, SEXP sType,
   const char *filename = asString(sFile);
 
   int i, n;
-
-/*  char **opts=NULL; */
 
 #ifdef RGDALDEBUG
   fprintf(stderr, "Opening dataset: %s\n", filename);
@@ -747,10 +752,12 @@ RGDAL_GetRasterData(SEXP sxpRasterBand,
   case GDT_UInt32:
   case GDT_Int32:
 
-    // Fix me!
+    // Note: the sizes of these types must be the same.
+    // Otherwise very bad things (tm) will happen.
+    // I've never verified that INTSXP is guaranteed to be 32 bit.
+    // THK, Sep 2, 2006
     uRType = INTSXP;
     eGDALType = GDT_Int32;
-//Rprintf("INTSXP ");
 
     break;
 
@@ -760,7 +767,6 @@ RGDAL_GetRasterData(SEXP sxpRasterBand,
     // Fix me!
     uRType = REALSXP;
     eGDALType = GDT_Float64;
-//Rprintf("REALSXP ");
 
     break;
 
@@ -772,7 +778,6 @@ RGDAL_GetRasterData(SEXP sxpRasterBand,
     // Fix me!
     uRType = CPLXSXP;
     eGDALType = GDT_CFloat64;
-//Rprintf("CPLXSXP ");
 
     break;
     
@@ -790,8 +795,7 @@ RGDAL_GetRasterData(SEXP sxpRasterBand,
   PROTECT(sRStorage = allocMatrix(uRType,
 			       INTEGER(sxpDimOut)[1],
 			       INTEGER(sxpDimOut)[0])); pc++;
-//Rprintf("allocated %d, %d\n", INTEGER(sxpDimOut)[1], INTEGER(sxpDimOut)[0]);
-  // Data is read in transposed order
+
 // replication for 2.4.0 RSB 20060726
   switch(uRType) {
 
@@ -941,32 +945,38 @@ RGDAL_GetColorInterp(SEXP sxpRasterBand) {
 
 }
 
+static SEXP
+GDALColorTable2Matrix(GDALColorTableH ctab) {
+
+	int ncol = GDALGetColorEntryCount(ctab);
+
+	SEXP cmat = allocMatrix(INTSXP, ncol, 4);
+
+	for (int i = 0; i < ncol; ++i) {
+
+    	const GDALColorEntry* ce = GDALGetColorEntry(ctab, i);
+
+    	INTEGER(cmat)[i] = static_cast<int>(ce->c1);
+    	INTEGER(cmat)[i + ncol] = static_cast<int>(ce->c2);
+    	INTEGER(cmat)[i + 2 * ncol] = static_cast<int>(ce->c3);
+    	INTEGER(cmat)[i + 3 * ncol] = static_cast<int>(ce->c4);
+
+  	}
+
+  	return(cmat);
+	
+}
+
 SEXP
-RGDAL_GetColorTable(SEXP sxpRasterBand) {
+RGDAL_GetColorTable(SEXP rasterObj) {
 
-  GDALRasterBand *pRasterBand = getGDALRasterPtr(sxpRasterBand);
+  GDALRasterBandH rasterBand = getGDALRasterPtr(rasterObj);
 
-  GDALColorTable *pColorTable = pRasterBand->GetColorTable();
+  GDALColorTableH ctab = GDALGetRasterColorTable(rasterBand);
 
-  if (pColorTable == NULL) return(R_NilValue);
+  if (ctab == NULL) return(R_NilValue);
 
-  int nColorEntries = pColorTable->GetColorEntryCount();
-
-  SEXP sxpColorMatrix = allocMatrix(INTSXP, nColorEntries, 4);
-
-  int i;
-  for (i = 0; i < nColorEntries; ++i) {
-
-    const GDALColorEntry *pColorEntry = pColorTable->GetColorEntry(i);
-
-    INTEGER(sxpColorMatrix)[i] = (int) pColorEntry->c1;
-    INTEGER(sxpColorMatrix)[i + nColorEntries] = (int) pColorEntry->c2;
-    INTEGER(sxpColorMatrix)[i + 2 * nColorEntries] = (int) pColorEntry->c3;
-    INTEGER(sxpColorMatrix)[i + 3 * nColorEntries] = (int) pColorEntry->c4;
-
-  }
-
-  return(sxpColorMatrix);
+	return(GDALColorTable2Matrix(ctab));
 
 }
 
@@ -1096,6 +1106,46 @@ RGDAL_SetProject(SEXP sxpDataset, SEXP proj4string) {
 	warning("Failed to set Projection\n");
 
   return(sxpDataset);
+}
+
+SEXP
+RGDAL_GenCMap(SEXP input1, SEXP input2, SEXP input3, SEXP output, SEXP nColors, SEXP setCMap) {
+	
+	GDALRasterBand* band1 = getGDALRasterPtr(input1);
+	GDALRasterBand* band2 = getGDALRasterPtr(input2);
+	GDALRasterBand* band3 = getGDALRasterPtr(input3);
+		
+	GDALColorTable ctab;
+	
+	int ncol = asInteger(nColors);
+	
+	if (ncol < 1) error("Number of colors must be greater than zero");
+	
+	int err = GDALComputeMedianCutPCT(band1, band2, band3, NULL,
+	                                  ncol, &ctab, NULL, NULL); 
+	
+	if (err == CE_Failure) error("Error generating color table");
+	
+	if (output != R_NilValue) {
+		
+		GDALRasterBand* target = getGDALRasterPtr(output);
+	
+		err = GDALDitherRGB2PCT(band1, band2, band3, target, &ctab, NULL, NULL);
+	
+		if (err == CE_Failure) error("Image dithering failed");
+	
+		if (asLogical(setCMap)) {
+			
+			err = GDALSetRasterColorTable(target, &ctab);
+	
+			if (err == CE_Failure) warning("Unable to set color table");
+			
+		}
+		
+	}   	
+	
+	return(GDALColorTable2Matrix(&ctab));
+	
 }
 
 #ifdef __cplusplus

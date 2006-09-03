@@ -457,49 +457,98 @@ getColorTable <- function(dataset, band = 1) {
 
 }
 
-#displayDataset <- function(x, offset = c(0, 0), region.dim = dim(x),
-#                           reduction = 1, band = NULL, col = NULL,
-#                           max.dim = 500, ...) {
-#
-#  .assertClass(x, 'GDALReadOnlyDataset')
-#
-#  offset <- rep(offset, length.out = 2)
-#  region.dim <- rep(region.dim, length.out = 2)
-#  reduction <- rep(reduction, length.out = 2)
-#
-#  nbands <- .Call('RGDAL_GetRasterCount', x, PACKAGE="rgdal")
-#
-#  if (is.null(band)) band <- 1:nbands
-#
-#  if (!length(band) %in% c(1, 3))
-#    stop("Only single band or 3 band RGB plotting supported")
-#  
-#  offset <- offset %% dim(x)[1:2]
-#  
-#  outOfBounds <- (region.dim + offset) > dim(x)[1:2]
-#  
-#  if (any(outOfBounds))
-#    region.dim[outOfBounds]  <- {
-#      dim(x)[outOfBounds] - offset[outOfBounds]
-#    }
-#
-#  if (any(reduction < 1)) reduction[reduction < 1] <- 1
-#
-#  plot.dim <- region.dim / reduction
-#            
-#  if (any(plot.dim > max.dim))
-#    plot.dim <- max.dim * plot.dim / max(plot.dim)
-#
-#  if (any(plot.dim < 3))
-#    plot.dim <- 3 * plot.dim / max(plot.dim)
-#
-#  pm <- getPixmapGDAL(x, col, band, offset, region.dim, plot.dim)
-#
-#  plot(pm)
-#
-#  invisible(pm)
-#
-#}
+displayDataset <- function(x, offset = c(0, 0), region.dim = dim(x),
+                           reduction = 1, band = 1, col = NULL,
+                           reset.par = TRUE, max.dim = 500, ...) {
+
+  .assertClass(x, 'GDALReadOnlyDataset')
+
+  offset <- rep(offset, length.out = 2)
+  region.dim <- rep(region.dim, length.out = 2)
+  reduction <- rep(reduction, length.out = 2)
+
+  offset <- offset %% dim(x)[1:2]
+  
+  oob <- (region.dim + offset) > dim(x)[1:2]
+  
+  if (any(oob)) region.dim[oob]  <-  dim(x)[oob] - offset[oob]
+
+  reduction[reduction < 1] <- 1
+
+  plot.dim <- region.dim / reduction
+            
+  if (any(plot.dim > max.dim))
+    plot.dim <- max.dim * plot.dim / max(plot.dim)
+
+  if (any(plot.dim < 3))
+    plot.dim <- 3 * plot.dim / max(plot.dim)
+
+  if (length(band) > 1) {
+
+    band <- rep(band, length.out = 3)
+
+    dithered <- new('GDALTransientDataset',
+                    new('GDALDriver', 'GTiff'),
+                    nrow(x), ncol(x))
+
+    ctab <- .Call('RGDAL_GenCMap',
+                  getRasterBand(x, band[1]),
+                  getRasterBand(x, band[2]),
+                  getRasterBand(x, band[3]),
+                  getRasterBand(dithered),
+                  256, FALSE, package = "rgdal") / 255
+
+    col <- rgb(ctab[,1], ctab[,2], ctab[,3])
+
+    image.data <- getRasterData(dithered, 1,
+                                offset, region.dim,
+                                plot.dim, as.is = TRUE)
+
+    out <- list(image.data = image.data,
+                col = col, dithered = dithered)
+  
+  } else {
+
+    image.data <- getRasterData(x, band, offset,
+                                region.dim, plot.dim,
+                                as.is = TRUE)
+
+    if (is.null(col)) {
+      
+      max.val <- max(image.data, na.rm = TRUE)
+
+      if (!is.finite(max.val)) {
+        image.data[] <- 2
+        max.val <- 2
+      }
+
+      col <- getColorTable(x, band)[1:(max.val + 1)]
+      
+    }
+
+    out <- list(image.data = image.data, col = col)
+  
+  }
+
+  if (is.null(col)) col <- gray(seq(0, 1, len = 256))
+  
+  par.in <- par(no.readonly = TRUE)
+
+  out$par.in <- par.in
+
+  if (reset.par) on.exit(par(par.in))
+
+  par(pin = max(par.in$pin)
+      * par.in$fin / max(par.in$fin)
+      * rev(plot.dim) / max(plot.dim))
+  
+  image.data <- image.data[, ncol(image.data):1]
+  
+  image.default(image.data + 1, col = col, axes = FALSE, ...)
+            
+  invisible(out)
+
+}
 
 setMethod('initialize', 'GDALRasterBand',
           def =  function(.Object, dataset, band = 1) {
