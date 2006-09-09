@@ -1,0 +1,24 @@
+closeDataset-methods    closeDataset methods
+CRS-class               Class "CRS" of coordinate reference system
+                        arguments
+GDALDataset-class       Class "GDALDataset"
+GDALDriver-class        Class "GDALDriver": GDAL Driver Object
+GDALMajorObject-class   Class "GDALMajorObject"
+GDALRasterBand-class    Class "GDALRasterBand"
+GDALReadOnlyDataset-class
+                        Class "GDALReadOnlyDataset"
+[,GDALReadOnlyDataset-method
+                        subset methods for "GDALReadOnlyDataset"
+GDALTransientDataset-class
+                        Class "GDALTransientDataset"
+make_EPSG               Make a data frame of EPSG projection codes
+project                 Projection of coordinate matrices
+readGDAL                Read/write between GDAL grid maps and Spatial
+                        objects
+readOGR                 Read OGR vector maps into Spatial objects
+SGDF2RGB                Convert RGB three band to single band colour
+                        table
+showWKT                 Show Well-Known Text spatial reference system
+                        metadata
+spTransform-methods     Methods for Function spTransform in package
+                        "rgdal"
