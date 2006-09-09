@@ -2,7 +2,7 @@
 #include <gdal_alg.h>
 #include <cpl_string.h>
 #include <ogr_spatialref.h>
-#include "ogrsf_frmts.h"
+#include <ogrsf_frmts.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -11,6 +11,22 @@ extern "C" {
 #include <R.h>
 #include <Rdefines.h>
 #include <Rinternals.h>
+
+#if R_XDR_INTEGER_SIZE == 1
+#define GDAL_INTEGER_TYPE GDT_Byte
+#elif R_XDR_INTEGER_SIZE == 2
+#define GDAL_INTEGER_TYPE GDT_Int16
+#elif R_XDR_INTEGER_SIZE == 4
+#define GDAL_INTEGER_TYPE GDT_Int32
+#endif
+
+#if R_XDR_DOUBLE_SIZE == 4
+#define GDAL_FLOAT_TYPE GDT_Float32
+#define GDAL_COMPLEX_TYPE GDT_CFloat32
+#elif R_XDR_DOUBLE_SIZE == 8
+#define GDAL_FLOAT_TYPE GDT_Float64
+#define GDAL_COMPLEX_TYPE GDT_CFloat64
+#endif
 
 static SEXP
 mkString_safe(const char *string) {
@@ -662,7 +678,7 @@ RGDAL_PutRasterData(SEXP sxpRasterBand, SEXP sxpData, SEXP sxpOffset) {
   case GDT_UInt32:
   case GDT_Int32:
 
-    eGDALType = GDT_Int32;
+    eGDALType = GDAL_INTEGER_TYPE;
     PROTECT(sxpData = coerceVector(sxpData, INTSXP));
   // Transpose data
 // replication for 2.4.0 RSB 20060726
@@ -682,7 +698,7 @@ RGDAL_PutRasterData(SEXP sxpRasterBand, SEXP sxpData, SEXP sxpOffset) {
   case GDT_Float32:
   case GDT_Float64:
 
-    eGDALType = GDT_Float64;
+    eGDALType = GDAL_FLOAT_TYPE;
     PROTECT(sxpData = coerceVector(sxpData, REALSXP));
   // Transpose data
     if(pRasterBand->RasterIO(GF_Write,
@@ -703,7 +719,7 @@ RGDAL_PutRasterData(SEXP sxpRasterBand, SEXP sxpData, SEXP sxpOffset) {
   case GDT_CFloat32:
   case GDT_CFloat64:
 
-    eGDALType = GDT_CFloat64;
+    eGDALType = GDAL_COMPLEX_TYPE;
     PROTECT(sxpData = coerceVector(sxpData, CPLXSXP));
   // Transpose data
     if(pRasterBand->RasterIO(GF_Write,
@@ -752,21 +768,16 @@ RGDAL_GetRasterData(SEXP sxpRasterBand,
   case GDT_UInt32:
   case GDT_Int32:
 
-    // Note: the sizes of these types must be the same.
-    // Otherwise very bad things (tm) will happen.
-    // I've never verified that INTSXP is guaranteed to be 32 bit.
-    // THK, Sep 2, 2006
     uRType = INTSXP;
-    eGDALType = GDT_Int32;
+    eGDALType = GDAL_INTEGER_TYPE;
 
     break;
 
   case GDT_Float32:
   case GDT_Float64:
 
-    // Fix me!
     uRType = REALSXP;
-    eGDALType = GDT_Float64;
+    eGDALType = GDAL_FLOAT_TYPE;
 
     break;
 
@@ -775,9 +786,8 @@ RGDAL_GetRasterData(SEXP sxpRasterBand,
   case GDT_CFloat32:
   case GDT_CFloat64:
 
-    // Fix me!
     uRType = CPLXSXP;
-    eGDALType = GDT_CFloat64;
+    eGDALType = GDAL_COMPLEX_TYPE;
 
     break;
     
@@ -856,7 +866,6 @@ RGDAL_GetRasterData(SEXP sxpRasterBand,
       break;
 
   }
-
 
   int hasNoDataValue;
 
@@ -970,11 +979,11 @@ GDALColorTable2Matrix(GDALColorTableH ctab) {
 SEXP
 RGDAL_GetColorTable(SEXP rasterObj) {
 
-  GDALRasterBandH rasterBand = getGDALRasterPtr(rasterObj);
+	GDALRasterBandH rasterBand = getGDALRasterPtr(rasterObj);
 
-  GDALColorTableH ctab = GDALGetRasterColorTable(rasterBand);
+	GDALColorTableH ctab = GDALGetRasterColorTable(rasterBand);
 
-  if (ctab == NULL) return(R_NilValue);
+	if (ctab == NULL) return(R_NilValue);
 
 	return(GDALColorTable2Matrix(ctab));
 
@@ -1058,9 +1067,6 @@ SEXP
 RGDAL_SetNoDataValue(SEXP sxpRasterBand, SEXP NoDataValue) {
   CPLErr err;
 
-  if (LENGTH(NoDataValue) != 1)
-	error("argument NoDataValue should have length 1");
-
   GDALRasterBand *pRasterBand = getGDALRasterPtr(sxpRasterBand);
 
   err = pRasterBand->SetNoDataValue(NUMERIC_POINTER(NoDataValue)[0]);
@@ -1103,7 +1109,7 @@ RGDAL_SetProject(SEXP sxpDataset, SEXP proj4string) {
   CPLFree( pszSRS_WKT );
 
   if (err == CE_Failure) 
-	warning("Failed to set Projection\n");
+	warning("Failed to set projection\n");
 
   return(sxpDataset);
 }
@@ -1119,7 +1125,8 @@ RGDAL_GenCMap(SEXP input1, SEXP input2, SEXP input3, SEXP output, SEXP nColors, 
 	
 	int ncol = asInteger(nColors);
 	
-	if (ncol < 1) error("Number of colors must be greater than zero");
+	if (ncol < 2 || ncol > 256)
+		error("Number of colors should range from 2 to 256");
 	
 	int err = GDALComputeMedianCutPCT(band1, band2, band3, NULL,
 	                                  ncol, &ctab, NULL, NULL); 
