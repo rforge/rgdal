@@ -1,4 +1,5 @@
 .project
+.cdtproject
 *.so
 *.o
 config.status
