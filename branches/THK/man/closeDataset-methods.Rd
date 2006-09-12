@@ -5,9 +5,9 @@
 \alias{closeDataset}
 \alias{closeDataset.default}
 \alias{closeDataset,ANY-method}
-\alias{closeDataset,GDALReadOnlyDataset-method}
+\alias{closeDataset,GDALDataset-method}
 \alias{closeDataset,GDALTransientDataset-method}
-\description{Methods for closing GDAL datasets, used internally}
+\description{Methods for closing GDAL datasets}
 \usage{
 	closeDataset(dataset)
 	closeDataset.default(dataset)
@@ -19,7 +19,9 @@
 
 \item{dataset = "ANY"}{default method, returns error}
 
-\item{dataset = "GDALReadOnlyDataset"}{closes the "GDALReadOnlyDataset"}
+\item{dataset = "GDALDataset"}{closes the "GDALDataset"}
+
+\item{dataset = "GDALMutableDataset"}{closes the "GDALMutableDataset"}
 
 \item{dataset = "GDALTransientDataset"}{closes the "GDALTransientDataset"}
 }}

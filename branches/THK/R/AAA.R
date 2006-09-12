@@ -1,6 +1,5 @@
 
 
-#.First.lib <- function(lib, pkg) {
 .onLoad <- function(lib, pkg) {
   require(methods, quietly = TRUE, warn.conflicts = FALSE)
   require(sp)
@@ -18,7 +17,6 @@
   
 }
 
-#.Last.lib <- function(lib, pkg) {
 .onUnload <- function(libpath) {
     Sys.putenv("PROJ_LIB"=.rgdal_old.PROJ_LIB)
     Sys.putenv("GDAL_DATA"=.rgdal_old.GDAL_DATA)

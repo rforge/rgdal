@@ -4,7 +4,7 @@
 \alias{initialize,GDALTransientDataset-method}
 \title{Class "GDALTransientDataset"}
 \description{\code{GDALTransientDataset} is identical to 
-  \code{\link{GDALDataset-class}}
+  \code{\link{GDALMutableDataset-class}}
   except that transient datasets are not associated with any
   user-visible file. Transient datasets delete their associated file
   data when closed. See \code{\link{saveDataset}} and
@@ -24,13 +24,13 @@ Objects can be created by calls of the form \code{new("GDALTransientDataset", dr
 }
 \section{Slots}{
   \describe{
-    \item{\code{handle}:}{Object of class \code{"externalptr", from class "GDALDataset"}, used internally; not for public consumption}
+    \item{\code{handle}:}{Object of class \code{"externalptr", from class "GDALMutableDataset"}, used internally; not for public consumption}
   }
 }
 \section{Extends}{
-Class \code{"GDALDataset"}, directly.
-Class \code{"GDALReadOnlyDataset"}, by class "GDALDataset".
-Class \code{"GDALMajorObject"}, by class "GDALDataset".
+Class \code{"GDALMutableDataset"}, directly.
+Class \code{"GDALDataset"}, by class "GDALMutableDataset".
+Class \code{"GDALMajorObject"}, by class "GDALMutableDataset".
 }
 \section{Methods}{
   \describe{
@@ -42,7 +42,7 @@ Class \code{"GDALMajorObject"}, by class "GDALDataset".
 \author{Timothy H. Keitt, modified by Roger Bivand}
 
 \seealso{See also \code{\link{GDALDriver-class}},
- \code{\link{GDALReadOnlyDataset-class}}}
+ \code{\link{GDALDataset-class}}}
 
 \examples{
 }

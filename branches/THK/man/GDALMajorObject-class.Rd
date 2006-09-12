@@ -58,7 +58,7 @@ appendMetadata(object, metadata)
 \author{Timothy H. Keitt, modified by Roger Bivand}
 
 \seealso{ \code{\link{GDALDriver-class}},
-  \code{\link{GDALReadOnlyDataset-class}}, \code{\link{GDALDataset-class}} and
+  \code{\link{GDALDataset-class}}, \code{\link{GDALMutableDataset-class}} and
   \code{\link{GDALTransientDataset-class}} }
 
 \examples{
@@ -68,11 +68,11 @@ setMetadata(driver, list(Key = 'Test metadata'))
 getMetadata(driver)
 rm(driver)
 logo <- system.file("pictures/logo.jpg", package="rgdal")[1]
-x <- new("GDALReadOnlyDataset", logo)
+x <- openDataset(logo)
 getDescription(x)
 getMetadata(x)
 dim(x)
-GDAL.close(x)
+closeDataset(x)
 
 }
 \keyword{classes}

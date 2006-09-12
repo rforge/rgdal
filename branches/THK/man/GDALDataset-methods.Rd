@@ -1,14 +1,14 @@
-\name{GDALReadOnlyDataset-methods}
+\name{GDALDataset-methods}
 \docType{methods}
-\alias{[,GDALReadOnlyDataset-method}
-\alias{,GDALReadOnlyDataset-method}
-\alias{coerce,GDALReadOnlyDataset,SpatialGridDataFrame-method}
+\alias{[,GDALDataset-method}
+\alias{,GDALDataset-method}
+\alias{coerce,GDALDataset,SpatialGridDataFrame-method}
 \alias{sub.GDROD}
-\title{subset methods for "GDALReadOnlyDataset"}
+\title{subset methods for "GDALDataset"}
 \description{subsets GDAL objects, returning a SpatialGridDataFrame object}
 \section{Methods}{
   \describe{
-     \item{"["}{\code{signature(.Object = "GDALReadOnlyDataset")}: requires package
+     \item{"["}{\code{signature(.Object = "GDALDataset")}: requires package
  	sp; selects rows and columns, and returns an object of class SpatialGridDataFrame
  	if the grid is not rotated, or else of class SpatialPointsDataFrame. Any arguments
  	passed to getRasterData (or in case of rotation getRasterTable) may be passed as
@@ -28,38 +28,38 @@ Further named arguments to \code{[} are to either getRasterTable or getRasterDat
 the other arguments, \code{offset} and \code{region.dim} are
 derived from row/column selection values.
 
-An GDALReadOnlyDataset object can be coerced directly to a SpatialGridDataFrame
+An GDALDataset object can be coerced directly to a SpatialGridDataFrame
 }
 
 \author{Edzer J. Pebesma}
 
 \seealso{See also \code{\link{readGDAL}} \code{\link{GDALDriver-class}},
-\code{\link{GDALDataset-class}}, \code{\link{GDALTransientDataset-class}},
+\code{\link{GDALMutableDataset-class}}, \code{\link{GDALTransientDataset-class}},
 \code{\link[sp]{SpatialGridDataFrame-class}} .}
 
 \examples{
 logo <- system.file("pictures/logo.jpg", package="rgdal")[1]
-x <- new("GDALReadOnlyDataset", logo)
+x <- openDataset(logo)
 dim(x)
 x.sp = x[20:50, 20:50]
 class(x.sp)
 summary(x.sp)
 spplot(x.sp)
-GDAL.close(x)
+closeDataset(x)
 
 logo <- system.file("pictures/Rlogo.jpg", package="rgdal")[1]
-x.gdal <- new("GDALReadOnlyDataset", logo)
+x.gdal <- openDataset(logo)
 x = x.gdal[,,3]
 dim(x)
 summary(x)
 spplot(x)
 spplot(x.gdal[])
-GDAL.close(x.gdal)
+closeDataset(x.gdal)
 
 logo <- system.file("pictures/Rlogo.jpg", package="rgdal")[1]
-x.gdal <- new("GDALReadOnlyDataset", logo)
+x.gdal <- openDataset(logo)
 x.as <- as(x.gdal, "SpatialGridDataFrame")
-GDAL.close(x.gdal)
+closeDataset(x.gdal)
 summary(x.as)
 }
 \keyword{classes}

@@ -55,9 +55,9 @@ getDriverLongName(driver)
 \examples{
 getGDALDriverNames()
 logo <- system.file("pictures/logo.jpg", package="rgdal")[1]
-x <- new("GDALReadOnlyDataset", logo)
+x <- openDataset(logo)
 getDriver(x)
 getDriverLongName(getDriver(x))
-GDAL.close(x)
+closeDataset(x)
 }
 \keyword{classes}

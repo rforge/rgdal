@@ -31,14 +31,13 @@ sub.GDROD = function(x, i, j, ... , drop = FALSE) {
 
 	gdal.args$dataset = x
 	gdal.args$band = dots$band # NULL if not given
-	if (is.null(gdal.args$offset))
-		gdal.args$offset = c(0,0)
-#		gdal.args$offset = c(min(rows) - 1, min(cols) - 1)
+	if (is.null(gdal.args$at))
+		gdal.args$at = c(1, 1)
 	if (is.null(gdal.args$region.dim))
-		gdal.args$region.dim = c(max(rows) - gdal.args$offset[1], 
-			max(cols) - gdal.args$offset[2])
-	rows = rows - gdal.args$offset[1]
-	cols = cols - gdal.args$offset[2]
+		gdal.args$region.dim = c(max(rows) - gdal.args$at[1] + 1, 
+			max(cols) - gdal.args$at[2] + 1)
+	rows = rows - gdal.args$at[1] + 1
+	cols = cols - gdal.args$at[2] + 1
 	# further arguments to getRasterData:
 	if (is.null(gdal.args$output.dim))
 		gdal.args$output.dim = gdal.args$region.dim
@@ -75,18 +74,15 @@ sub.GDROD = function(x, i, j, ... , drop = FALSE) {
 		d = dim(data) # rows=nx, cols=ny
 		cells.dim = c(d[1], d[2]) # c(d[2],d[1])
 		ysign <- sign(gt[6])
-		co.x <- gt[1] + (gdal.args$offset[2] + half.cell[2]) *
+		co.x <- gt[1] + (gdal.args$at[2] - 1 + half.cell[2]) *
 			 cellsize[1]
 		co.y <- ifelse(ysign < 0, gt[4] + (ysign*((
 			gdal.args$region.dim[1] + 
-			gdal.args$offset[1]) + (ysign*half.cell[1]))) * 
+			gdal.args$at[1] - 1) + (ysign*half.cell[1]))) * 
 			abs(cellsize[2]), gt[4] + (ysign*(
-			(gdal.args$offset[1]) + (ysign*half.cell[1]))) * 
+			(gdal.args$at[1] - 1) + (ysign*half.cell[1]))) * 
 			abs(cellsize[2]))
 		cellcentre.offset <- c(x=co.x, y=co.y)
-#		cellcentre.offset = c(x = gt[1] + (0.5 + 
-#		gdal.args$offset[2])* cellsize[1], 
-#			y = gt[4] - (d[2] - 0.5) * abs(cellsize[2]))
 		grid = GridTopology(cellcentre.offset, cellsize, cells.dim)
 		if (length(d) == 2)
 			df = data.frame(band1 = as.vector(data))
@@ -101,4 +97,4 @@ sub.GDROD = function(x, i, j, ... , drop = FALSE) {
 	}
 	return(data)
 }
-setMethod("[", "GDALReadOnlyDataset", sub.GDROD)
+setMethod("[", "GDALDataset", sub.GDROD)

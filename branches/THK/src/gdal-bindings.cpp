@@ -406,7 +406,9 @@ RGDAL_CreateDataset(SEXP sxpDriver, SEXP sDim, SEXP sType,
     n = length(sOpts);
     char *opts[n];
     for (i=0; i < n; i++) opts[i] = CHAR(STRING_ELT(sOpts, i));
+#ifdef RGDALDEBUG
     for (i=0; i < n; i++) Rprintf("option: %s\n", opts[i]);
+#endif
     pDataset = pDriver->Create(filename,
 			  INTEGER(sDim)[0],
 			  INTEGER(sDim)[1],
@@ -661,7 +663,7 @@ RGDAL_GetScale(SEXP sxpRasterBand) {
 }
 
 SEXP
-RGDAL_PutRasterData(SEXP sxpRasterBand, SEXP sxpData, SEXP sxpOffset) {
+RGDAL_PutRasterData(SEXP sxpRasterBand, SEXP sxpData, SEXP at) {
 
   GDALRasterBand *pRasterBand = getGDALRasterPtr(sxpRasterBand);
 
@@ -683,8 +685,8 @@ RGDAL_PutRasterData(SEXP sxpRasterBand, SEXP sxpData, SEXP sxpOffset) {
   // Transpose data
 // replication for 2.4.0 RSB 20060726
     if(pRasterBand->RasterIO(GF_Write,
-			   INTEGER(sxpOffset)[1],
-			   INTEGER(sxpOffset)[0],
+			   INTEGER(at)[1] - 1,
+			   INTEGER(at)[0] - 1,
 			   rowsIn, colsIn,
 			   (void *)INTEGER(sxpData),
 			   rowsIn, colsIn,
@@ -702,8 +704,8 @@ RGDAL_PutRasterData(SEXP sxpRasterBand, SEXP sxpData, SEXP sxpOffset) {
     PROTECT(sxpData = coerceVector(sxpData, REALSXP));
   // Transpose data
     if(pRasterBand->RasterIO(GF_Write,
-			   INTEGER(sxpOffset)[1],
-			   INTEGER(sxpOffset)[0],
+			   INTEGER(at)[1] - 1,
+			   INTEGER(at)[0] - 1,
 			   rowsIn, colsIn,
 			   (void *)REAL(sxpData),
 			   rowsIn, colsIn,
@@ -723,8 +725,8 @@ RGDAL_PutRasterData(SEXP sxpRasterBand, SEXP sxpData, SEXP sxpOffset) {
     PROTECT(sxpData = coerceVector(sxpData, CPLXSXP));
   // Transpose data
     if(pRasterBand->RasterIO(GF_Write,
-			   INTEGER(sxpOffset)[1],
-			   INTEGER(sxpOffset)[0],
+			   INTEGER(at)[1] - 1,
+			   INTEGER(at)[0] - 1,
 			   rowsIn, colsIn,
 			   (void *)COMPLEX(sxpData),
 			   rowsIn, colsIn,
@@ -811,8 +813,8 @@ RGDAL_GetRasterData(SEXP sxpRasterBand,
 
     case INTSXP:
       if(pRasterBand->RasterIO(GF_Read,
-			   INTEGER(sxpRegion)[1],
-			   INTEGER(sxpRegion)[0],
+			   INTEGER(sxpRegion)[1] - 1,
+			   INTEGER(sxpRegion)[0] - 1,
 			   INTEGER(sxpRegion)[3],
 			   INTEGER(sxpRegion)[2],
 			   (void *)INTEGER(sRStorage),
@@ -828,8 +830,8 @@ RGDAL_GetRasterData(SEXP sxpRasterBand,
     case REALSXP:
 
       if(pRasterBand->RasterIO(GF_Read,
-			   INTEGER(sxpRegion)[1],
-			   INTEGER(sxpRegion)[0],
+			   INTEGER(sxpRegion)[1] - 1,
+			   INTEGER(sxpRegion)[0] - 1,
 			   INTEGER(sxpRegion)[3],
 			   INTEGER(sxpRegion)[2],
 			   (void *)REAL(sRStorage),
@@ -845,8 +847,8 @@ RGDAL_GetRasterData(SEXP sxpRasterBand,
     case CPLXSXP:
 
       if(pRasterBand->RasterIO(GF_Read,
-			   INTEGER(sxpRegion)[1],
-			   INTEGER(sxpRegion)[0],
+			   INTEGER(sxpRegion)[1] - 1,
+			   INTEGER(sxpRegion)[0] - 1,
 			   INTEGER(sxpRegion)[3],
 			   INTEGER(sxpRegion)[2],
 			   (void *)COMPLEX(sRStorage),

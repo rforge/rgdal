@@ -29,11 +29,11 @@ Class \code{"GDALMajorObject"}, directly.
   }
 }
 \usage{
-getRasterData(dataset, band = NULL, offset = c(0, 0),
+getRasterData(dataset, band = NULL, at = c(1, 1),
               region.dim = dim(dataset), output.dim = region.dim,
               interleave = c(0, 0), as.is = FALSE) 
 
-getRasterTable(dataset, band = NULL, offset = c(0, 0), region.dim = dim(dataset))
+getRasterTable(dataset, band = NULL, at = c(1, 1), region.dim = dim(dataset))
 
 getProjectionRef(dataset)
 
@@ -42,12 +42,12 @@ getRasterBand(dataset, band = 1)
 getRasterBlockSize(raster)
 }
 \arguments{
-  \item{dataset}{An object inheriting from class 'GDALReadOnlyDataset'}
+  \item{dataset}{An object inheriting from class 'GDALDataset'}
   \item{band}{The band number (1-based) to read from}
-  \item{offset}{Number of rows and columns from the origin (usually the
-    upper left corner) to begin reading from; presently ordered (y,x) - this may change}
+  \item{at}{Location of the origin (usually the
+    upper left corner) to begin reading.}
   \item{region.dim}{The number of rows and columns to read from the
-    dataset; presently ordered (y,x) - this may change}
+    dataset}
   \item{output.dim}{Number of rows and columns in the output data; if
     smaller than \code{region.dim} the data will be subsampled}
   \item{interleave}{Element and row stride while reading data; rarely
@@ -77,12 +77,12 @@ getRasterBlockSize(raster)
 
 \author{Timothy H. Keitt, modified by Roger Bivand}
 
-\seealso{See also \code{\link{GDALDriver-class}}, \code{\link{GDALDataset-class}}, \code{\link{GDALTransientDataset-class}}}
+\seealso{See also \code{\link{GDALDriver-class}}, \code{\link{GDALMutableDataset-class}}, \code{\link{GDALTransientDataset-class}}}
 
 \examples{
 logo <- system.file("pictures/logo.jpg", package="rgdal")[1]
-x <- new("GDALReadOnlyDataset", logo)
+x <- openDataset(logo)
 plot(density(getRasterTable(x)$band1))
-GDAL.close(x)
+closeDataset(x)
 }
 \keyword{classes}
