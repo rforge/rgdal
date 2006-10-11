@@ -244,4 +244,6 @@ writeGDAL = function(dataset, fname, drivername = "GTiff", type = "Float32",
 	invisible(fname)
 }
 
+gdalDrivers <- function() getGDALDriverNames()
+
 

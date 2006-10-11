@@ -26,7 +26,7 @@ export(getRasterBand, getRasterBlockSize)
 export(getDriver, GDAL.close, GDAL.open, getColorTable,
   getGeoTransFunc, sub.GDROD, SGDF2RGB, asSGDF_GROD, RGB2PCT)
 export(make_EPSG, project, readGDAL, writeGDAL, showWKT)
-export(readOGR, ogrInfo, ogrFIDs, ogrDrivers)
+export(readOGR, ogrInfo, ogrFIDs, ogrDrivers, gdalDrivers)
 export(GDALinfo, print.GDALobj)
 export(displayDataset)
 
