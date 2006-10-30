@@ -54,6 +54,7 @@ later on by e.g. using \code{\link[sp]{gridded}(x)=TRUE}.
 \author{Edzer J.\ Pebesma, Roger Bivand}
 
 \examples{
+library(grid)
 GDALinfo(system.file("external/test.ag", package="sp")[1])
 x <- readGDAL(system.file("external/test.ag", package="sp")[1])
 class(x)
