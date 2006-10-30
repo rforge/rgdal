@@ -189,7 +189,7 @@ extern "C" {
 #else
     // EJP, changed into:
     poLayer->ResetReading();
-	iRow = 0;
+    iRow = 0;
     while((poFeature = poLayer->GetNextFeature()) != NULL) {
 #endif
       // now get the value using the right type:
@@ -208,12 +208,14 @@ extern "C" {
 	error("Unsupported type. should have been caught before");
       }
       delete poFeature;
+#ifdef EJP
       // according to tutorial: OGRFeature::DestroyFeature(poFeature);
       // see comment FW in OGR tutorial: We could just "delete" it, 
       // but this can cause problems in windows builds where the GDAL DLL 
       // has a different "heap" from the main program. To be on the safe 
       // side we use a GDAL function to delete the feature.
-	  iRow++;
+      iRow++;
+#endif
     }
     UNPROTECT(1);
     return(ans);
