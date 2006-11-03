@@ -45,3 +45,4 @@ OGRFeatureInfo
 R_OGR_CAPI_features
 p4s_to_wkt
 ogrP4S
+ogr_GetDriverNames
