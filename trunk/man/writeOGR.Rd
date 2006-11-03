@@ -1,0 +1,55 @@
+\name{writeOGR}
+\alias{writeOGR}
+%- Also NEED an '\alias' for EACH other topic documented here.
+\title{Write spatial vector data using OGR}
+\description{
+  The function is an interface with the OGR abstraction library for spatial vector data, allowing data to be written out using supported drivers. The drivers supported will depend on the local installation, and the capabilities of those drivers (many are read-only, only KML where available is write-only). The objects exported are SpatialPointsDataFrame, SpatialLinesDataFrame, or SpatialPolygonsDataFrame objects as defined in the sp package.
+}
+\usage{
+writeOGR(obj, dsn, layer, driver, options = NULL, verbose = FALSE)
+}
+%- maybe also 'usage' for other objects documented here.
+\arguments{
+  \item{obj}{a SpatialPointsDataFrame, SpatialLinesDataFrame, or a SpatialPolygonsDataFrame object.}
+  \item{dsn}{data source name (interpretation varies by driver --- for some drivers, dsn is a file name, but may also be a folder)}
+  \item{layer}{layer name (varies by driver, may be a file name without extension)}
+  \item{driver}{a character string equal to one of the driver names returned by \code{\link{ogrDrivers}}}
+  \item{options}{a character vector of options, which vary by driver, and should be treated as experimental}
+  \item{verbose}{if TRUE, returns a list of information about the attempted write operation}
+}
+\details{
+  Working out which combination of dsn, layer, and driver (and option) values give the desired output takes time and care, and is constrained by the ability of drivers to write output; many are read-only. Use of the references given is highly advisable, with searches in the archives of other software using GDAL/OGR.
+}
+
+\value{
+ if verbose=TRUE, a list of information about the attempted write operation
+}
+\references{\url{http://www.remotesensing.org/gdal/ogr/index.html}, \url{http://www.remotesensing.org/gdal/ogr/ogr_formats.html}, \url{http://examples.oreilly.com/webmapping/}}
+\author{Roger Bivand}
+
+\seealso{\code{\link{readOGR}}}
+\examples{
+cities <- readOGR(system.file("vectors", package = "rgdal")[1], "cities")
+td <- tempdir()
+writeOGR(cities, "td", "cities", driver="ESRI Shapefile")
+cities2 <- readOGR("td", "cities")
+all.equal(cities, cities2)
+writeOGR(cities, "td/cities.gml", "cities", driver="GML")
+cities3 <- readOGR("td/cities.gml", "cities")
+all.equal(cities, cities3)
+# The GML driver does not support coordinate reference systems
+roads <- readOGR(system.file("vectors", package = "rgdal")[1], "kiritimati_primary_roads")
+summary(roads)
+writeOGR(roads, "td", "roads", driver="MapInfo File")
+roads2 <- readOGR("td/roads.tab", "roads")
+summary(roads2)
+scot_BNG <- readOGR(system.file("vectors", package = "rgdal")[1], "scot_BNG")
+summary(scot_BNG)
+writeOGR(scot_BNG, "td", "scot_BNG", driver="MapInfo File")
+scot_BNG2 <- readOGR("td/scot_BNG.tab", "scot_BNG")
+summary(scot_BNG2)
+}
+% Add one or more standard keywords, see file 'KEYWORDS' in the
+% R documentation directory.
+\keyword{spatial}
+
