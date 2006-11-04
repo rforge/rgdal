@@ -97,8 +97,10 @@ SEXP OGR_write(SEXP inp)
 
     for (i=0; i < length(sOpts); i++) papszCreateOptions = CSLAddString( 
         papszCreateOptions, CHAR(STRING_ELT(sOpts, i)) );
+#ifdef RGDALDEBUG
     for (i=0; i < CSLCount(papszCreateOptions); i++)
         Rprintf("option %d: %s\n", i, CSLGetField(papszCreateOptions, i));
+#endif
     if (strcmp(PROJ4, "NA")) {
             OGRSpatialReference hSRS = NULL;
             if (hSRS.importFromProj4(PROJ4) != OGRERR_NONE)

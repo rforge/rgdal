@@ -397,8 +397,10 @@ RGDAL_CreateDataset(SEXP sxpDriver, SEXP sDim, SEXP sType,
 
   for (i=0; i < length(sOpts); i++) papszCreateOptions = CSLAddString( 
     papszCreateOptions, CHAR(STRING_ELT(sOpts, i)) );
+#ifdef RGDALDEBUG
   for (i=0; i < CSLCount(papszCreateOptions); i++)
     Rprintf("option %d: %s\n", i, CSLGetField(papszCreateOptions, i));
+#endif
   pDataset = pDriver->Create(filename,
 			  INTEGER(sDim)[0],
 			  INTEGER(sDim)[1],
@@ -449,6 +451,8 @@ RGDAL_CopyDataset(SEXP sxpDataset, SEXP sxpDriver,
 		  SEXP sxpFile) {
 
   GDALDataset *pDataset = getGDALDatasetPtr(sxpDataset);
+  char **papszCreateOptions = NULL;
+  int i;
 
   const char *filename = asString(sxpFile);
 
@@ -456,12 +460,18 @@ RGDAL_CopyDataset(SEXP sxpDataset, SEXP sxpDriver,
 
   GDALDriver *pDriver = getGDALDriverPtr(sxpDriver);
 
+  for (i=0; i < length(sxpOpts); i++) papszCreateOptions = CSLAddString( 
+    papszCreateOptions, CHAR(STRING_ELT(sxpOpts, i)) );
+#ifdef RGDALDEBUG
+  for (i=0; i < CSLCount(papszCreateOptions); i++)
+    Rprintf("option %d: %s\n", i, CSLGetField(papszCreateOptions, i));
+#endif
   GDALDataset *pDatasetCopy = pDriver->CreateCopy(filename,
-						  pDataset,
-						  asInteger(sxpStrict),
-						  NULL, NULL, NULL);
+		pDataset, asInteger(sxpStrict),
+		papszCreateOptions, NULL, NULL);
 
   if (pDatasetCopy == NULL) error("Dataset copy failed\n");
+  CSLDestroy(papszCreateOptions);
 
   SEXP sxpHandle = R_MakeExternalPtr((void *) pDatasetCopy,
 				     mkChar("GDAL Dataset"),
