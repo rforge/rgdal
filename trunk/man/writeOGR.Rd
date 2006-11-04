@@ -30,24 +30,32 @@ writeOGR(obj, dsn, layer, driver, options = NULL, verbose = FALSE)
 \seealso{\code{\link{readOGR}}}
 \examples{
 cities <- readOGR(system.file("vectors", package = "rgdal")[1], "cities")
+is.na(cities$POPULATION) <- cities$POPULATION == -99
+summary(cities$POPULATION)
 td <- tempdir()
-writeOGR(cities, "td", "cities", driver="ESRI Shapefile")
-cities2 <- readOGR("td", "cities")
+writeOGR(cities, td, "cities", driver="ESRI Shapefile")
+cities2 <- readOGR(td, "cities")
+summary(cities2$POPULATION)
 all.equal(cities, cities2)
-writeOGR(cities, "td/cities.gml", "cities", driver="GML")
-cities3 <- readOGR("td/cities.gml", "cities")
-all.equal(cities, cities3)
+if ("GML" \%in\% ogrDrivers()$name) {
+  writeOGR(cities, paste(td, "cities.gml", sep="/"), "cities", driver="GML")
+  cities3 <- readOGR(paste(td, "cities.gml", sep="/"), "cities")
+  all.equal(cities, cities3)
+}
 # The GML driver does not support coordinate reference systems
 roads <- readOGR(system.file("vectors", package = "rgdal")[1], "kiritimati_primary_roads")
 summary(roads)
-writeOGR(roads, "td", "roads", driver="MapInfo File")
-roads2 <- readOGR("td/roads.tab", "roads")
+writeOGR(roads, td, "roads", driver="MapInfo File")
+roads2 <- readOGR(paste(td, "roads.tab", sep="/"), "roads")
 summary(roads2)
 scot_BNG <- readOGR(system.file("vectors", package = "rgdal")[1], "scot_BNG")
 summary(scot_BNG)
-writeOGR(scot_BNG, "td", "scot_BNG", driver="MapInfo File")
-scot_BNG2 <- readOGR("td/scot_BNG.tab", "scot_BNG")
+writeOGR(scot_BNG, td, "scot_BNG", driver="MapInfo File")
+scot_BNG2 <- readOGR(paste(td, "scot_BNG.tab", sep="/"), "scot_BNG")
 summary(scot_BNG2)
+writeOGR(scot_BNG, td, "scot_BNG", driver="MapInfo File", options="FORMAT=MIF")
+scot_BNG3 <- readOGR(paste(td, "scot_BNG.tab", sep="/"), "scot_BNG")
+summary(scot_BNG3)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

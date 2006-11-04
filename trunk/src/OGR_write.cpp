@@ -1,3 +1,4 @@
+#include <cpl_string.h>
 #include "ogrsf_frmts.h"
 
 #ifdef __cplusplus
@@ -15,6 +16,7 @@ SEXP OGR_write(SEXP inp)
 //  in code there
 
     OGRSFDriver *poDriver;
+    char **papszCreateOptions = NULL;
     SEXP ans, oCard;
     int pc=0, i, j, k;
 
@@ -84,47 +86,29 @@ SEXP OGR_write(SEXP inp)
     }
 
 //  retrieve and set spatial reference system and create layer
-//  and handle options (copied from gdal-bindings.cpp and probably nop):
-//  papszOptions: a StringList of name=value options.
-//  Options are driver specific. **FIXME**
+//  and handle options:
+//  papszCreateOptions: a StringList of name=value options.
+//  Options are driver specific. 
 
     SEXP sOpts = VECTOR_ELT(inp, 9);
 
     SEXP p4s = GET_SLOT(obj, install("proj4string"));
     char *PROJ4 = CHAR(STRING_ELT(GET_SLOT(p4s, install("projargs")), 0));
 
-    if (isNull(sOpts)) {
-        char **opts = NULL;
-        if (strcmp(PROJ4, "NA")) {
+    for (i=0; i < length(sOpts); i++) papszCreateOptions = CSLAddString( 
+        papszCreateOptions, CHAR(STRING_ELT(sOpts, i)) );
+    if (strcmp(PROJ4, "NA")) {
             OGRSpatialReference hSRS = NULL;
             if (hSRS.importFromProj4(PROJ4) != OGRERR_NONE)
 	        error("Can't parse PROJ.4-style parameter string");
             if (!strcmp(CHAR(STRING_ELT(VECTOR_ELT(inp, 3), 0)),
                 "ESRI Shapefile")) hSRS.morphToESRI();
             poLayer = poDS->CreateLayer( CHAR(STRING_ELT(VECTOR_ELT(inp, 2),
-                0)), &hSRS, wkbtype, opts );
+                0)), &hSRS, wkbtype, papszCreateOptions );
 
-        } else poLayer = poDS->CreateLayer( CHAR(STRING_ELT(VECTOR_ELT(inp, 2),
-            0)), NULL, wkbtype, opts );
-    } else {
-        int nopts = length(sOpts);
-        char **opts = new char*[nopts];
-        for (i=0; i < nopts; i++) opts[i] = CHAR(STRING_ELT(sOpts, i));
-        for (i=0; i < nopts; i++) Rprintf("option: %s\n", opts[i]);
-        if (strcmp(PROJ4, "NA")) {
-            OGRSpatialReference hSRS = NULL;
-            if (hSRS.importFromProj4(PROJ4) != OGRERR_NONE)
-	        error("Can't parse PROJ.4-style parameter string");
-            if (!strcmp(CHAR(STRING_ELT(VECTOR_ELT(inp, 3), 0)),
-                "ESRI Shapefile")) hSRS.morphToESRI();
-            poLayer = poDS->CreateLayer( CHAR(STRING_ELT(VECTOR_ELT(inp, 2),
-                0)), &hSRS, wkbtype, opts );
+    } else poLayer = poDS->CreateLayer( CHAR(STRING_ELT(VECTOR_ELT(inp, 2),
+        0)), NULL, wkbtype, papszCreateOptions );
 
-        } else poLayer = poDS->CreateLayer( CHAR(STRING_ELT(VECTOR_ELT(inp, 2),
-            0)), NULL, wkbtype, opts );
-
-        if (!isNull(sOpts)) delete[] opts;
-    }
 
     if( poLayer == NULL )
     {

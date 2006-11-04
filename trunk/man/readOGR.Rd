@@ -40,8 +40,10 @@ kiritimati_primary_roads <- readOGR(system.file("vectors", package = "rgdal")[1]
 summary(kiritimati_primary_roads)
 scot_BNG <- readOGR(system.file("vectors", package = "rgdal")[1], "scot_BNG")
 summary(scot_BNG)
-places <- try(readOGR(system.file("vectors/airports.gml", package = "rgdal")[1], "airports"))
-if (class(places) != "try-error") summary(places)
+if ("GML" \%in\% ogrDrivers()$name) {
+  airports <- try(readOGR(system.file("vectors/airports.gml", package = "rgdal")[1], "airports"))
+  summary(airports)
+}
 ps_cant_31 <- readOGR(system.file("vectors/ps_cant_31.MIF", package = "rgdal")[1], "ps_cant_31")
 summary(ps_cant_31)
 Up <- readOGR(system.file("vectors/Up.tab", package = "rgdal")[1], "Up")
