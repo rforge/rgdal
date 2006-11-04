@@ -397,11 +397,14 @@ RGDAL_CreateDataset(SEXP sxpDriver, SEXP sDim, SEXP sType,
 
   for (i=0; i < length(sOpts); i++) papszCreateOptions = CSLAddString( 
     papszCreateOptions, CHAR(STRING_ELT(sOpts, i)) );
+  for (i=0; i < CSLCount(papszCreateOptions); i++)
+    Rprintf("option %d: %s\n", i, CSLGetField(papszCreateOptions, i));
   pDataset = pDriver->Create(filename,
 			  INTEGER(sDim)[0],
 			  INTEGER(sDim)[1],
 			  INTEGER(sDim)[2],
 			  eGDALType, papszCreateOptions);
+  CSLDestroy(papszCreateOptions);
 
   if (pDataset == NULL) error("Unable to create dataset\n");
 

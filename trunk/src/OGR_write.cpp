@@ -97,6 +97,8 @@ SEXP OGR_write(SEXP inp)
 
     for (i=0; i < length(sOpts); i++) papszCreateOptions = CSLAddString( 
         papszCreateOptions, CHAR(STRING_ELT(sOpts, i)) );
+    for (i=0; i < CSLCount(papszCreateOptions); i++)
+        Rprintf("option %d: %s\n", i, CSLGetField(papszCreateOptions, i));
     if (strcmp(PROJ4, "NA")) {
             OGRSpatialReference hSRS = NULL;
             if (hSRS.importFromProj4(PROJ4) != OGRERR_NONE)
@@ -108,7 +110,7 @@ SEXP OGR_write(SEXP inp)
 
     } else poLayer = poDS->CreateLayer( CHAR(STRING_ELT(VECTOR_ELT(inp, 2),
         0)), NULL, wkbtype, papszCreateOptions );
-
+    CSLDestroy(papszCreateOptions);
 
     if( poLayer == NULL )
     {
