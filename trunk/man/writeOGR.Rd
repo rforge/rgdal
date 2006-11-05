@@ -43,6 +43,14 @@ if ("GML" \%in\% ogrDrivers()$name) {
   all.equal(cities, cities3)
 }
 # The GML driver does not support coordinate reference systems
+if ("KML" \%in\% ogrDrivers()$name) {
+  data(meuse)
+  coordinates(meuse) <- c("x", "y")
+  proj4string(meuse) <- CRS("+init=epsg:28992")
+  meuse_ll <- spTransform(meuse, CRS("+proj=longlat +datum=WGS84"))
+  writeOGR(meuse_ll["zinc"], paste(td, "meuse.kml", sep="/"), "zinc", "KML")
+}
+list.files(td)
 roads <- readOGR(system.file("vectors", package = "rgdal")[1], "kiritimati_primary_roads")
 summary(roads)
 writeOGR(roads, td, "roads", driver="MapInfo File")
@@ -51,11 +59,9 @@ summary(roads2)
 scot_BNG <- readOGR(system.file("vectors", package = "rgdal")[1], "scot_BNG")
 summary(scot_BNG)
 writeOGR(scot_BNG, td, "scot_BNG", driver="MapInfo File")
+list.files(td)
 scot_BNG2 <- readOGR(paste(td, "scot_BNG.tab", sep="/"), "scot_BNG")
 summary(scot_BNG2)
-writeOGR(scot_BNG, td, "scot_BNG", driver="MapInfo File", options="FORMAT=MIF")
-scot_BNG3 <- readOGR(paste(td, "scot_BNG.tab", sep="/"), "scot_BNG")
-summary(scot_BNG3)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

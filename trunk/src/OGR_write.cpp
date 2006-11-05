@@ -5,8 +5,8 @@
 extern "C" {
 #endif
 
-#include <Rdefines.h> /* Rinternals.h + GET_SLOT etc */
-#include <R.h>  /* includes Rconfig.h */
+#include <Rdefines.h> 
+#include <R.h>  
 
 
 SEXP OGR_write(SEXP inp)

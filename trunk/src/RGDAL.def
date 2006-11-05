@@ -47,3 +47,7 @@ p4s_to_wkt
 ogrP4S
 ogr_GetDriverNames
 OGR_write
+checkCRSArgs
+project
+project_inv
+transform
