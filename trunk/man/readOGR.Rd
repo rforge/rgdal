@@ -42,7 +42,7 @@ scot_BNG <- readOGR(system.file("vectors", package = "rgdal")[1], "scot_BNG")
 summary(scot_BNG)
 if ("GML" \%in\% ogrDrivers()$name) {
   airports <- try(readOGR(system.file("vectors/airports.gml", package = "rgdal")[1], "airports"))
-  summary(airports)
+  if (class(airports) != "try-error") summary(airports)
 }
 ps_cant_31 <- readOGR(system.file("vectors/ps_cant_31.MIF", package = "rgdal")[1], "ps_cant_31")
 summary(ps_cant_31)

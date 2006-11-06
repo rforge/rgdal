@@ -17,6 +17,7 @@ SEXP OGR_write(SEXP inp)
 
     OGRSFDriver *poDriver;
     char **papszCreateOptions = NULL;
+    char **papszCreateOptionsLayer = NULL;
     SEXP ans, oCard;
     int pc=0, i, j, k;
 
@@ -28,15 +29,28 @@ SEXP OGR_write(SEXP inp)
     {
         error("Driver not available");
     }
+//  retrieve and set options:
+//  papszCreateOptions: a StringList of name=value options.
+//  Options are driver specific. 
+
+    SEXP sOpts = VECTOR_ELT(inp, 9);
+
+    for (i=0; i < length(sOpts); i++) papszCreateOptions = CSLAddString( 
+        papszCreateOptions, CHAR(STRING_ELT(sOpts, i)) );
+#ifdef RGDALDEBUG
+    for (i=0; i < CSLCount(papszCreateOptions); i++)
+        Rprintf("option %d: %s\n", i, CSLGetField(papszCreateOptions, i));
+#endif
 
     OGRDataSource *poDS;
 
     poDS = poDriver->CreateDataSource( CHAR(STRING_ELT(VECTOR_ELT(inp,
-        1), 0)), NULL );
+        1), 0)), papszCreateOptions );
     if( poDS == NULL )
     {
         error( "Creation of output file failed" );
     }
+    CSLDestroy(papszCreateOptions);
 
 //  define layer characteristics
 
@@ -85,22 +99,23 @@ SEXP OGR_write(SEXP inp)
         if (multi > 0) wkbtype = wkbMultiPolygon;
     }
 
-//  retrieve and set spatial reference system and create layer
-//  and handle options:
+//  retrieve and set spatial reference system
+//  retrieve and set options:
 //  papszCreateOptions: a StringList of name=value options.
 //  Options are driver specific. 
 
-    SEXP sOpts = VECTOR_ELT(inp, 9);
+    SEXP sxpOpts = VECTOR_ELT(inp, 10);
+
+    for (i=0; i < length(sxpOpts); i++) papszCreateOptionsLayer = CSLAddString( 
+        papszCreateOptionsLayer, CHAR(STRING_ELT(sxpOpts, i)) );
+#ifdef RGDALDEBUG
+    for (i=0; i < CSLCount(papszCreateOptionsLayer); i++)
+        Rprintf("option %d: %s\n", i, CSLGetField(papszCreateOptionsLayer, i));
+#endif
 
     SEXP p4s = GET_SLOT(obj, install("proj4string"));
     char *PROJ4 = CHAR(STRING_ELT(GET_SLOT(p4s, install("projargs")), 0));
 
-    for (i=0; i < length(sOpts); i++) papszCreateOptions = CSLAddString( 
-        papszCreateOptions, CHAR(STRING_ELT(sOpts, i)) );
-#ifdef RGDALDEBUG
-    for (i=0; i < CSLCount(papszCreateOptions); i++)
-        Rprintf("option %d: %s\n", i, CSLGetField(papszCreateOptions, i));
-#endif
     if (strcmp(PROJ4, "NA")) {
             OGRSpatialReference hSRS = NULL;
             if (hSRS.importFromProj4(PROJ4) != OGRERR_NONE)
@@ -108,16 +123,16 @@ SEXP OGR_write(SEXP inp)
             if (!strcmp(CHAR(STRING_ELT(VECTOR_ELT(inp, 3), 0)),
                 "ESRI Shapefile")) hSRS.morphToESRI();
             poLayer = poDS->CreateLayer( CHAR(STRING_ELT(VECTOR_ELT(inp, 2),
-                0)), &hSRS, wkbtype, papszCreateOptions );
+                0)), &hSRS, wkbtype, papszCreateOptionsLayer );
 
     } else poLayer = poDS->CreateLayer( CHAR(STRING_ELT(VECTOR_ELT(inp, 2),
-        0)), NULL, wkbtype, papszCreateOptions );
-    CSLDestroy(papszCreateOptions);
+        0)), NULL, wkbtype, papszCreateOptionsLayer );
 
     if( poLayer == NULL )
     {
         error( "Layer creation failed" );
     }
+    CSLDestroy(papszCreateOptionsLayer);
 
 // create fields in layer
 

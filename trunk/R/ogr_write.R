@@ -1,4 +1,4 @@
-writeOGR <- function(obj, dsn, layer, driver, options=NULL, verbose=FALSE) {
+writeOGR <- function(obj, dsn, layer, driver, dataset_options=NULL, layer_options=NULL, verbose=FALSE) {
     drvs <- ogrDrivers()
     mch <- match(driver, drvs$name)
     if (is.na(mch) || length(mch) > 1)
@@ -32,12 +32,13 @@ writeOGR <- function(obj, dsn, layer, driver, options=NULL, verbose=FALSE) {
     nobj <- nrow(slot(obj, "data"))
     
     pre <- list(obj, dsn, layer, driver, nobj, nf, fld_names,
-         ogr_ftype, ldata, options)
+         ogr_ftype, ldata, dataset_options, layer_options)
     res <- .Call("OGR_write", pre, PACKAGE="rgdal")
     if (verbose) {
         res <- list(object_type=res, output_dsn=dsn, output_layer=layer,
             output_diver=driver, output_n=nobj, output_nfields=nf,
-            output_fields=fld_names, output_fclasses=ogr_ftype, options=options)
+            output_fields=fld_names, output_fclasses=ogr_ftype, 
+            dataset_options=dataset_options, layer_options=layer_options)
         return(res)
     } 
 }
