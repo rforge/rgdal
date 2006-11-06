@@ -379,7 +379,8 @@ SEXP OGR_write(SEXP inp)
             Lns = GET_SLOT(VECTOR_ELT(lns, i), install("Polygons"));
             Lns_l = length(Lns);
 
-             OGRMultiPolygon OGRmpls;
+//            OGRMultiPolygon OGRmpls;
+            OGRPolygon OGRply;
 
             for (k=0; k<Lns_l; k++) {
                 SEXP crds, dim;
@@ -388,7 +389,7 @@ SEXP OGR_write(SEXP inp)
                 dim = getAttrib(crds, install("dim"));
                 int ncrds = INTEGER_POINTER(dim)[0];
 
-                OGRPolygon OGRply;
+//                OGRPolygon OGRply;
                 OGRLinearRing OGRlr;
 
                 for (j=0; j<ncrds; j++) 
@@ -397,12 +398,13 @@ SEXP OGR_write(SEXP inp)
 
                 OGRply.addRing( &OGRlr );
 
-                if( OGRmpls.addGeometry( &OGRply ) != OGRERR_NONE ) {
-                    error( "Failed to add polygon" );
-                } 
+//                if( OGRmpls.addGeometry( &OGRply ) != OGRERR_NONE ) {
+//                    error( "Failed to add polygon" );
+//                } 
             }
 
-             if( poFeature->SetGeometry( &OGRmpls ) != OGRERR_NONE ) {
+//             if( poFeature->SetGeometry( &OGRmpls ) != OGRERR_NONE ) {
+             if( poFeature->SetGeometry( &OGRply ) != OGRERR_NONE ) {
                error( "Failed to set geometry" );
             } 
 
