@@ -75,7 +75,13 @@ setClass('GDALTransientDataset', 'GDALDataset')
          
 setClass('GDALRasterBand', 'GDALMajorObject')
 
-getGDALDriverNames <- function() .Call('RGDAL_GetDriverNames', PACKAGE="rgdal")
+getGDALDriverNames <- function() {
+  res <- .Call('RGDAL_GetDriverNames', PACKAGE="rgdal")
+  res <- as.data.frame(res)
+  res <- res[order(res$name),]
+  row.names(res) <- NULL
+  res
+}
 
 setMethod('initialize', 'GDALDriver',
           def = function(.Object, name, handle = NULL) {

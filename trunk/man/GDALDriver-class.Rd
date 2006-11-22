@@ -40,7 +40,7 @@ getDriverLongName(driver)
 
 \details{
   \describe{
-    \item{\code{getGDALDriverNames, gdalDrivers}:}{returns all driver names currently installed in GDAL.}
+    \item{\code{getGDALDriverNames, gdalDrivers}:}{returns all driver names currently installed in GDAL, with their declared write status.}
   
     \item{\code{getDriverName}:}{returns the GDAL driver name associated
       with the driver object.}

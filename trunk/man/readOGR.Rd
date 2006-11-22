@@ -21,7 +21,7 @@ ogrDrivers()
   \item{verbose}{report progress}
 }
 \details{
-  The drivers available will depend on the installation of GDAL/OGR, and can vary; the \code{ogrDrivers()} function shows which are available. Note that stray files in data source directories (such as *.dbf) may lead to suprious errors that accompanying *.shp are missing.
+  The drivers available will depend on the installation of GDAL/OGR, and can vary; the \code{ogrDrivers()} function shows which are available, and which may be written (but all are assumed to be readable, which is not the case - KML is writable but not readable). Note that stray files in data source directories (such as *.dbf) may lead to suprious errors that accompanying *.shp are missing.
 }
 \value{
   A Spatial object is returned suiting the vector data source, either a SpatialPointsDataFrame (using an AttributeList for its data slot directly), a SpatialLinesDataFrame, or a SpatialPolygonsDataFrame.
