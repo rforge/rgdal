@@ -313,6 +313,7 @@ setMethod('dim', 'GDALReadOnlyDataset',
             nrows <- .Call('RGDAL_GetRasterYSize', x, PACKAGE="rgdal")
             ncols <- .Call('RGDAL_GetRasterXSize', x, PACKAGE="rgdal")
             nbands <- .Call('RGDAL_GetRasterCount', x, PACKAGE="rgdal")
+            if (nbands < 1) warning("no bands in dataset")
             if (nbands > 1)
               c(nrows, ncols, nbands)
             else
@@ -360,6 +361,7 @@ getRasterTable <- function(dataset,
   if (is.null(band)) {
 
     nbands <- .Call('RGDAL_GetRasterCount', dataset, PACKAGE="rgdal")
+    if (nbands < 1) stop("no bands in dataset")
     band <- 1:nbands
 
   } else {
@@ -411,6 +413,7 @@ getRasterData <- function(dataset,
   interleave <- rep(interleave, length.out = 2)
 
   nbands <- .Call('RGDAL_GetRasterCount', dataset, PACKAGE="rgdal")
+  if (nbands < 1) stop("no bands in dataset")
 
   if (is.null(band)) band <- 1:nbands
   

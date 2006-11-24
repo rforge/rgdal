@@ -16,7 +16,7 @@ exportClass(GDALReadOnlyDataset)
 exportClass(GDALTransientDataset)
 exportClass(CRS)
 
-export(project, make_EPSG)
+export(project, make_EPSG, projInfo)
 export(CRSargs)
 export(putRasterData, saveDataset, copyDataset, deleteDataset, saveDatasetAs)
 export(getGDALDriverNames, getDriverName, getDriverLongName, gdalDrivers)

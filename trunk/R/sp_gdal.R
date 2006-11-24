@@ -7,6 +7,7 @@ GDALinfo <- function(fname) {
 	if (nchar(p4s) == 0) p4s <- as.character(NA)
 	gt <- .Call('RGDAL_GetGeoTransform', x, PACKAGE="rgdal")
 	nbands <- .Call('RGDAL_GetRasterCount', x, PACKAGE="rgdal")
+        if (nbands < 1) warning("no bands in dataset")
 	GDAL.close(x)
 	res <- c(rows=d[1], columns=d[2], bands=nbands, ll.x=gt[1], ll.y=gt[4], 
 		res.x=abs(gt[2]), res.y=abs(gt[6]), oblique.x=abs(gt[3]), 
