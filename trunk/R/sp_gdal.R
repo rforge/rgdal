@@ -77,8 +77,8 @@ setAs("GDALReadOnlyDataset", "SpatialGridDataFrame", asGDALROD_SGDF)
 }
 
 asSGDF_GROD <- function(x, offset, region.dim, output.dim, ..., half.cell=c(0.5,0.5)) {
-	if (!inherits(x, "GDALReadOnlyDataset"))
-		stop("GDALReadOnlyDataset required")
+	if (!extends(class(x), "GDALReadOnlyDataset"))
+		stop("x must be or extend a GDALReadOnlyDataset")
 	d = dim(x)
 	if (missing(offset)) offset <- c(0,0)
 	if (missing(region.dim)) region.dim <- dim(x)[1:2]

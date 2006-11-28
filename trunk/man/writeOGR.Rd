@@ -40,14 +40,14 @@ writeOGR(cities, td, "cities", driver="ESRI Shapefile")
 cities2 <- readOGR(td, "cities")
 summary(cities2$POPULATION)
 all.equal(cities, cities2)
-if ("GML" \%in\% ogrDrivers()$name) {
+\dontrun{if ("GML" \%in\% ogrDrivers()$name) {
   airports <- try(readOGR(system.file("vectors/airports.gml", package = "rgdal")[1], "airports"))
   if (class(airports) != "try-error") {
     writeOGR(cities, paste(td, "cities.gml", sep="/"), "cities", driver="GML")
     cities3 <- readOGR(paste(td, "cities.gml", sep="/"), "cities")
     all.equal(cities, cities3)
   }
-}
+}}
 # The GML driver does not support coordinate reference systems
 if ("KML" \%in\% ogrDrivers()$name) {
   data(meuse)
