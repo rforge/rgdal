@@ -20,12 +20,19 @@ GDALinfo <- function(fname) {
 }
 
 print.GDALobj <- function(x, ...) {
-	xx <- cbind(x)
-	colnames(xx) <- "values"
-	print(xx)
-	cat("driver:", attr(x, "driver"), "\n")
-	cat("projection:", attr(x, "projection"), "\n")
-	cat("file:", attr(x, "file"), "\n")
+	cat("rows       ", x[1], "\n")
+	cat("columns    ", x[2], "\n")
+	cat("bands      ", x[3], "\n")
+	cat("ll.x       ", x[4], "\n")
+	cat("ll.y       ", x[5], "\n")
+	cat("res.x      ", x[6], "\n")
+	cat("res.y      ", x[7], "\n")
+	cat("oblique.x  ", x[8], "\n")
+	cat("oblique.y  ", x[9], "\n")
+	cat("driver     ", attr(x, "driver"), "\n")
+	cat("projection ", paste(strwrap(attr(x, "projection")),
+		collapse="\n"), "\n")
+	cat("file       ", attr(x, "file"), "\n")
 	invisible(x)
 }
 
