@@ -61,7 +61,6 @@ vec2RGB <- function(vec, breaks, col) {
 	if (!is.vector(vec)) stop("vec must be a vector")
 	if (length(col) != (length(breaks)-1)) 
 		stop("length of col must be one less than length of breaks")
-	n <- length(vec)
 	idvec <- findInterval(vec, breaks, all.inside=TRUE)
 	rgb_col <- col2rgb(col)
 	res <- rgb_col[, idvec]
