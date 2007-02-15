@@ -173,6 +173,7 @@ readGDAL = function(fname, offset, region.dim, output.dim, ..., half.cell=c(0.5,
 		else {
 			icellsize = abs(c(gt[2],gt[6]))
 			span <- icellsize * rev(d[1:2])
+# bug report Mike Sumner 070215
 			cellsize <- span / rev(output.dim)
 		}
 		ysign <- sign(gt[6])
