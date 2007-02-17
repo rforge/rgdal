@@ -16,7 +16,7 @@ ogrInfo <- function(dsn, layer){
   ogrinfo <- .Call("ogrInfo",as.character(dsn),as.character(layer), PACKAGE = "rgdal")
   
   names(ogrinfo) <- c("nrows","nitems","iteminfo","driver")
-  names(ogrinfo$iteminfo) <- c("name","precision","length")
+  names(ogrinfo$iteminfo) <- c("name","type","length")
   ogrinfo
 }
 

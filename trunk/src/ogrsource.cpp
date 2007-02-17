@@ -175,7 +175,7 @@ extern "C" {
       PROTECT(ans=allocVector(STRSXP,nRows));
       break;
     default:
-      error("unsupported type");
+      error("unsupported field type");
     }
 
     // now go over each row and retrieve data. iRow is an index in a 
@@ -205,7 +205,7 @@ extern "C" {
 	break;
       default:
         delete poFeature;
-	error("Unsupported type. should have been caught before");
+	error("Unsupported field type. should have been caught before");
       }
       delete poFeature;
 #ifdef EJP
