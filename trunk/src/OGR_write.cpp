@@ -353,6 +353,7 @@ SEXP OGR_write(SEXP inp)
 // Multi polygon data
 
     } else if (wkbtype == wkbMultiPolygon) {
+	Rprintf("Yes, multipolygons...\n");
 
         SEXP lns = GET_SLOT(obj, install("polygons"));
         if (length(lns) != nobs)
@@ -407,6 +408,11 @@ SEXP OGR_write(SEXP inp)
              if( poFeature->SetGeometry( &OGRply ) != OGRERR_NONE ) {
                error( "Failed to set geometry" );
             } 
+
+	    // EJP:
+	    poFeature->SetGeometryDirectly(
+		OGRGeometryFactory::forceToMultiPolygon(
+		poFeature->StealGeometry() ) );
 
             if( poLayer->CreateFeature( poFeature ) != OGRERR_NONE ) {
                error( "Failed to create feature" );
