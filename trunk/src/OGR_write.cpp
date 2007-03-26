@@ -353,7 +353,7 @@ SEXP OGR_write(SEXP inp)
 // Multi polygon data
 
     } else if (wkbtype == wkbMultiPolygon) {
-	Rprintf("Yes, multipolygons...\n");
+	// Rprintf("Yes, multipolygons...\n");
 
         SEXP lns = GET_SLOT(obj, install("polygons"));
         if (length(lns) != nobs)
