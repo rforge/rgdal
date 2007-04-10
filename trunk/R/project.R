@@ -129,7 +129,7 @@ setMethod("spTransform", signature("SpatialLines", "CRS"), spTransform.SpatialLi
 	xSP <- as(x, "SpatialLines")
 	resSP <- spTransform(xSP, CRSobj)
 	xDF <- as(x, "data.frame")
-	res <- SpatialLinesDataFrame(sl=resSP, data=xDF)
+	res <- SpatialLinesDataFrame(sl=resSP, data=xDF, match.ID = FALSE)
 	res
 }
 setMethod("spTransform", signature("SpatialLinesDataFrame", "CRS"), spTransform.SpatialLinesDataFrame)
@@ -185,7 +185,7 @@ setMethod("spTransform", signature("SpatialPolygons", "CRS"), spTransform.Spatia
 	xSP <- as(x, "SpatialPolygons")
 	resSP <- spTransform(xSP, CRSobj)
 	xDF <- as(x, "data.frame")
-	res <- SpatialPolygonsDataFrame(Sr=resSP, data=xDF)
+	res <- SpatialPolygonsDataFrame(Sr=resSP, data=xDF, match.ID = FALSE)
 	res
 }
 setMethod("spTransform", signature("SpatialPolygonsDataFrame", "CRS"), spTransform.SpatialPolygonsDataFrame)
