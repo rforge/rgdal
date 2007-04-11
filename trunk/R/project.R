@@ -30,6 +30,7 @@
     cbind(res$x, res$y)
 }
 
+
 if (!isGeneric("spTransform"))
 	setGeneric("spTransform", function(x, CRSobj, ...)
 		standardGeneric("spTransform"))
@@ -47,6 +48,12 @@ if (!isGeneric("spTransform"))
 	res <- .Call("transform", proj4string(x), CRSargs(CRSobj), n,
 		as.double(crds[,1]), as.double(crds[,2]),
 		PACKAGE="rgdal")
+	if (any(!is.finite(res[[1]])) || any(!is.finite(res[[2]]))) {
+		k <- which(!is.finite(res[[1]]) || !is.finite(res[[2]]))
+		cat("non finite transformation detected:\n")
+		print(cbind(crds, res[[1]], res[[2]])[k,])
+		stop(paste("failure in points", paste(k, collapse=":")))
+	}
 	# make sure coordinate names are set back:
 	crds[,1:2] <- cbind(res[[1]], res[[2]])
 	dimnames(crds)[[2]] <- crds.names
@@ -81,13 +88,20 @@ setMethod("spTransform", signature("SpatialGridDataFrame", "CRS"),
 		spTransform(as(x, "SpatialPixelsDataFrame"), CRSobj, ...))
 
 
-".spTransform_Line" <- function(x, to_args, from_args) {
+".spTransform_Line" <- function(x, to_args, from_args, ii, jj) {
 #	crds <- getSlineCoordsSlot(x)
 	crds <- x@coords
 	n <- nrow(crds)
 	res <- .Call("transform", from_args, to_args, n,
 		as.double(crds[,1]), as.double(crds[,2]),
 		PACKAGE="rgdal")
+	if (any(!is.finite(res[[1]])) || any(!is.finite(res[[2]]))) {
+		k <- which(!is.finite(res[[1]]) || !is.finite(res[[2]]))
+		cat("non finite transformation detected:\n")
+		print(cbind(crds, res[[1]], res[[2]])[k,])
+		stop(paste("failure in Lines", ii, "Line", jj, 
+			"points", paste(k, collapse=":")))
+	}
 	crds <- cbind(res[[1]], res[[2]])
 	x <- Line(coords=crds)
 	x
@@ -95,13 +109,13 @@ setMethod("spTransform", signature("SpatialGridDataFrame", "CRS"),
 
 #setMethod("spTransform", signature("Sline", "CRS"), spTransform.Sline)
 
-".spTransform_Lines" <- function(x, to_args, from_args) {
+".spTransform_Lines" <- function(x, to_args, from_args, ii) {
 	ID <- getLinesIDSlot(x)
 	input <- x@Lines
 	n <- length(input)
 	output <- vector(mode="list", length=n)
 	for (i in 1:n) output[[i]] <- .spTransform_Line(input[[i]], 
-		to_args=to_args, from_args=from_args)
+		to_args=to_args, from_args=from_args, ii=ii, jj=i)
 	x <- Lines(output, ID)
 	x
 }
@@ -120,7 +134,7 @@ setMethod("spTransform", signature("SpatialGridDataFrame", "CRS"),
 	n <- length(input)
 	output <- vector(mode="list", length=n)
 	for (i in 1:n) output[[i]] <- .spTransform_Lines(input[[i]], 
-		to_args=to_args, from_args=from_args)
+		to_args=to_args, from_args=from_args, ii=i)
 	res <- SpatialLines(output, proj4string=CRS(to_args))
 	res
 }
@@ -137,31 +151,36 @@ setMethod("spTransform", signature("SpatialLinesDataFrame", "CRS"), spTransform.
 
 
 
-".spTransform_Polygon" <- function(x, to_args, from_args) {
+".spTransform_Polygon" <- function(x, to_args, from_args, ii, jj) {
 	crds <- getPolygonCoordsSlot(x)
 	n <- nrow(crds)
 	res <- .Call("transform", from_args, to_args, n,
 		as.double(crds[,1]), as.double(crds[,2]),
 		PACKAGE="rgdal")
+	if (any(!is.finite(res[[1]])) || any(!is.finite(res[[2]]))) {
+		k <- which(!is.finite(res[[1]]) || !is.finite(res[[2]]))
+		cat("non finite transformation detected:\n")
+		print(cbind(crds, res[[1]], res[[2]])[k,])
+		stop(paste("failure in Polygons", ii, "Polygon", jj, 
+			"points", paste(k, collapse=":")))
+	}
 	crds <- cbind(res[[1]], res[[2]])
 	x <- Polygon(coords=crds)
 	x
 }
 
-#setMethod("spTransform", signature("Sring", "CRS"), spTransform.Sring)
 
-".spTransform_Polygons" <- function(x, to_args, from_args) {
+".spTransform_Polygons" <- function(x, to_args, from_args, ii) {
 	ID <- getPolygonsIDSlot(x)
 	input <- getPolygonsPolygonsSlot(x)
 	n <- length(input)
 	output <- vector(mode="list", length=n)
 	for (i in 1:n) output[[i]] <- .spTransform_Polygon(input[[i]], 
-		to_args=to_args, from_args=from_args)
+		to_args=to_args, from_args=from_args, ii=ii, jj=i)
 	res <- Polygons(output, ID)
 	res
 }
 
-#setMethod("spTransform", signature("Srings", "CRS"), spTransform.Srings)
 
 "spTransform.SpatialPolygons" <- function(x, CRSobj, ...) {
 	from_args <- proj4string(x)
@@ -174,7 +193,7 @@ setMethod("spTransform", signature("SpatialLinesDataFrame", "CRS"), spTransform.
 	n <- length(input)
 	output <- vector(mode="list", length=n)
 	for (i in 1:n) output[[i]] <- .spTransform_Polygons(input[[i]], 
-		to_args=to_args, from_args=from_args)
+		to_args=to_args, from_args=from_args, ii=i)
 	res <- SpatialPolygons(output, pO=getSpPplotOrderSlot(x), 
 		proj4string=CRSobj)
 	res
