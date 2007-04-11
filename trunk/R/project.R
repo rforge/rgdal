@@ -1,4 +1,4 @@
-# Copyright (c) 2003-6 by Barry Rowlingson, Roger Bivand, and Edzer Pebesma
+# Copyright (c) 2003-7 by Barry Rowlingson, Roger Bivand, and Edzer Pebesma
 
 "project" <- function(xy, proj, inv=FALSE) {
 
