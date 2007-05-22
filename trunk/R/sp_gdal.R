@@ -135,7 +135,7 @@ asSGDF_GROD <- function(x, offset, region.dim, output.dim, ..., half.cell=c(0.5,
 	return(data)
 }
 
-readGDAL = function(fname, offset, region.dim, output.dim, ..., half.cell=c(0.5,0.5), silent = FALSE) {
+readGDAL = function(fname, offset, region.dim, output.dim, band, ..., half.cell=c(0.5,0.5), silent = FALSE) {
 #	if (!require(rgdal))
 #		stop("read.gdal needs package rgdal to be properly installed")
 	if (nchar(fname) == 0) stop("empty file name")
@@ -145,6 +145,12 @@ readGDAL = function(fname, offset, region.dim, output.dim, ..., half.cell=c(0.5,
 	if (missing(region.dim)) region.dim <- dim(x)[1:2] # rows=nx, cols=ny
 #	else d <- region.dim
 	odim_flag <- NULL
+        if (missing(band)) band <- NULL
+        else {
+                if (length(band) > 1) d[3] <- length(band)
+                else d <- d[1:2]
+        }
+# bug report Mike Sumner 070522
 	if (!missing(output.dim)) odim_flag <- TRUE
 	else {
 		output.dim <- region.dim
@@ -159,13 +165,13 @@ readGDAL = function(fname, offset, region.dim, output.dim, ..., half.cell=c(0.5,
 	gt = .Call('RGDAL_GetGeoTransform', x, PACKAGE="rgdal")
 	# [1] 178400     40      0 334000      0    -40
 	if (any(gt[c(3,5)] != 0.0)) {
-		data = getRasterTable(x, offset=offset, 
+		data = getRasterTable(x, band=band, offset=offset, 
 			region.dim=region.dim, ...)
 		GDAL.close(x)
 		coordinates(data) = c(1,2)
 		proj4string(data) = CRS(p4s)
 	} else {
-		data = getRasterData(x, offset=offset, 
+		data = getRasterData(x, band=band, offset=offset, 
 			region.dim=region.dim, output.dim=output.dim, ...)
 		GDAL.close(x)
 #		cellsize = abs(c(gt[2],gt[6]))
