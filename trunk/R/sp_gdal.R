@@ -65,14 +65,8 @@ asGDALROD_SGDF <- function(from) {
 			df[[band]] <- as.vector(data[,,band])
 		names(df) = paste("band", 1:d[3], sep="")
 	}
-	if (.sp_lt_0.9()) {
-		df1 <- as(df, "AttributeList")
-	} else {
-		df1 <- data.frame(df)
-	}
-	data = SpatialGridDataFrame(grid = grid, 
-		data = df1, proj4string=CRS(p4s))
-	return(data)
+	return(SpatialGridDataFrame(grid = grid, 
+		data = data.frame(df), proj4string=CRS(p4s)))
 }
 
 setAs("GDALReadOnlyDataset", "SpatialGridDataFrame", asGDALROD_SGDF)
@@ -136,8 +130,6 @@ asSGDF_GROD <- function(x, offset, region.dim, output.dim, ..., half.cell=c(0.5,
 }
 
 readGDAL = function(fname, offset, region.dim, output.dim, band, ..., half.cell=c(0.5,0.5), silent = FALSE) {
-#	if (!require(rgdal))
-#		stop("read.gdal needs package rgdal to be properly installed")
 	if (nchar(fname) == 0) stop("empty file name")
 	x = GDAL.open(fname)
 	d = dim(x)
@@ -171,9 +163,6 @@ readGDAL = function(fname, offset, region.dim, output.dim, band, ..., half.cell=
 		coordinates(data) = c(1,2)
 		proj4string(data) = CRS(p4s)
 	} else {
-		data = getRasterData(x, band=band, offset=offset, 
-			region.dim=region.dim, output.dim=output.dim, ...)
-		GDAL.close(x)
 #		cellsize = abs(c(gt[2],gt[6]))
 		if (!odim_flag) cellsize = abs(c(gt[2],gt[6]))
 		else {
@@ -195,6 +184,9 @@ readGDAL = function(fname, offset, region.dim, output.dim, band, ..., half.cell=
 		grid = GridTopology(cellcentre.offset, cellsize, 
 			rev(output.dim))
 #			rev(region.dim))
+		data = getRasterData(x, band=band, offset=offset, 
+			region.dim=region.dim, output.dim=output.dim, ...)
+		GDAL.close(x)
 		if (length(d) == 2)
 			df = list(band1 = as.vector(data))
 		else {
@@ -205,13 +197,8 @@ readGDAL = function(fname, offset, region.dim, output.dim, band, ..., half.cell=
 #			df = as.data.frame(df)
 			names(df) = paste("band", 1:d[3], sep="")
 		}
-		if (.sp_lt_0.9()) {
-			df1 <- as(df, "AttributeList")
-		} else {
-			df1 <- data.frame(df)
-		}
 		data = SpatialGridDataFrame(grid = grid, 
-			data = df1, proj4string=CRS(p4s))
+			data = data.frame(df), proj4string=CRS(p4s))
 	}
 	return(data)
 }
@@ -220,36 +207,6 @@ writeGDAL = function(dataset, fname, drivername = "GTiff", type = "Float32",
 		mvFlag = NA, options=NULL)
 {
 	if (nchar(fname) == 0) stop("empty file name")
-#	stopifnot(gridded(dataset))
-#	fullgrid(dataset) = TRUE
-#	d.dim = dim(as.matrix(dataset[1]))
-#	d.drv = new("GDALDriver", drivername)
-#	nbands = length(names(slot(dataset, "data")))
-#        if (!is.null(options) && !is.character(options))
-#                stop("options not character")
-#	tds.out = new("GDALTransientDataset", driver = d.drv, 
-#		rows = d.dim[2], cols = d.dim[1], bands = nbands,
-#		type = type, options = options, handle = NULL)
-#	gp = gridparameters(dataset)
-#	cellsize = gp$cellsize
-#	offset = gp$cellcentre.offset
-#	dims = gp$cells.dim
-#	gt = c(offset[1] - 0.5 * cellsize[1], cellsize[1], 0.0, 
-#		offset[2] + (dims[2] -0.5) * cellsize[2], 0.0, -cellsize[2])
-#	.Call("RGDAL_SetGeoTransform", tds.out, gt, PACKAGE = "rgdal")
-#
-#	if (!is.na(mvFlag))
-#		.Call("RGDAL_SetNoDataValue", tds.out, as.double(mvFlag), PACKAGE = "rgdal")
-#	p4s <- proj4string(dataset)
-#	if (!is.na(p4s) && nchar(p4s) > 0)
-#		.Call("RGDAL_SetProject", tds.out, p4s, PACKAGE = "rgdal")
-#	for (i in 1:nbands) {
-#		band = as.matrix(dataset[i])
-#		if (!is.numeric(band)) stop("Numeric bands required")
-#		if (!is.na(mvFlag))
-#			band[is.na(band)] = mvFlag
-#		putRasterData(tds.out, band, i)
-#	}
 	tds.out <- create2GDAL(dataset=dataset, drivername=drivername, 
 		type=type, mvFlag=mvFlag, options=options)
 	saveDataset(tds.out, fname, options=options)
@@ -293,5 +250,3 @@ create2GDAL = function(dataset, drivername = "GTiff", type = "Float32", mvFlag =
 }
 
 gdalDrivers <- function() getGDALDriverNames()
-
-
