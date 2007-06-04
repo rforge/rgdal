@@ -81,7 +81,7 @@ setReplaceMethod("$", c("SpatialGridDataFrameGDAL", "character", "ANY"),
 )
 
 # avoid inheritance:
-setReplaceMethod("[[", c("Spatial", "ANY", "missing", "ANY"),
+setReplaceMethod("[[", c("SpatialGridDataFrameGDAL", "ANY", "missing", "ANY"),
     function(x, i, j, value)
 		stop("no replacement method available")
 )
