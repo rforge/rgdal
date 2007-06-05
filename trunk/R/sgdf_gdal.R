@@ -70,6 +70,7 @@ setMethod("[[", c("SpatialGridDataFrameGDAL", "ANY", "missing"),
 
 # avoid inheritance:
 setMethod("$", c("SpatialGridDataFrameGDAL"
+, "character"
 #, "ANY"
 ),
     function(x, name)

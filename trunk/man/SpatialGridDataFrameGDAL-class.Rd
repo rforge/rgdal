@@ -10,7 +10,7 @@
 \alias{print.summary.SpatialGridDataFrameGDAL}
 \alias{coerce,SpatialGridDataFrameGDAL,SpatialGridDataFrame-method}
 \alias{coerce,SpatialGridDataFrameGDAL,SpatialPixelsDataFrame-method}
-\alias{$,SpatialGridDataFrameGDAL-method}
+\alias{$,SpatialGridDataFrameGDAL,character-method}
 \alias{[[,SpatialGridDataFrameGDAL,ANY,missing-method}
 \alias{$<-,SpatialGridDataFrameGDAL,character-method}
 \alias{[[<-,SpatialGridDataFrameGDAL,ANY,missing-method}
