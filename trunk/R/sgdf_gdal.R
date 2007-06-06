@@ -1,18 +1,29 @@
 setClass("SpatialGridDataFrameGDAL",
-    representation("SpatialGridDataFrame", grod = "GDALReadOnlyDataset", name = "character"),
+#   representation("SpatialGridDataFrame", grod = "GDALReadOnlyDataset", name = "character"),
+    representation("Spatial", grid = "GridTopology", grod = "GDALReadOnlyDataset", name = "character"),
     validity = function(object) {
         if (is.null(object@grod))
             stop("grod is NULL; this should not happen")
-		if (nrow(object@data) > 0)
-			stop("data slot should have zero rows")
+#		if (nrow(object@data) > 0)
+#			stop("data slot should have zero rows")
         return(TRUE)
     }
 )
+setClass("SpatialGridDataFrameGDALWrite", "SpatialGridDataFrameGDAL")
+#    representation("SpatialGridDataFrame", gd = "GDALDataset", name = "character"),
+#    validity = function(object) {
+#        if (is.null(object@grod))
+#            stop("grod is NULL; this should not happen")
+#		if (nrow(object@data) > 0)
+#			stop("data slot should have zero rows")
+#        return(TRUE)
+#    }
+#)
 
 open.SpatialGridDataFrameGDAL = function(con, ..., silent = FALSE) {
 	if (nchar(con) == 0) stop("empty file name")
 
-	grod = GDAL.open(con)
+	grod = GDAL.open(con, read.only = TRUE)
 
 	d = dim(grod)
 	if (!silent) {
@@ -35,11 +46,18 @@ open.SpatialGridDataFrameGDAL = function(con, ..., silent = FALSE) {
 		abs(cellsize[2]))
 	cellcentre.offset <- c(x=co.x, y=co.y)
 	grid = GridTopology(cellcentre.offset, cellsize, rev(output.dim))
+	#bbox = bbox(SpatialGrid(grid)),
+
+	x = SpatialPoints(rbind(grid@cellcentre.offset, 
+			grid@cellcentre.offset + (grid@cells.dim - 1) * grid@cellsize))
+	x@bbox[,1] = x@bbox[,1] - 0.5 * grid@cellsize
+	x@bbox[,2] = x@bbox[,2] + 0.5 * grid@cellsize
+
 	data = new("SpatialGridDataFrameGDAL", 
-		bbox = bbox(SpatialGrid(grid)),
+		bbox = x@bbox,
 		proj4string = CRS(p4s), 
 		grid = grid,
-		data = data.frame(), 
+		# data = data.frame(), 
 		grod = grod,
 		name = con)
 	return(data)
@@ -49,9 +67,41 @@ close.SpatialGridDataFrameGDAL = function(con, ...) {
 	GDAL.close(con@grod)
 	invisible(NULL)
 }
+close.SpatialGridDataFrameGDALWrite = close.SpatialGridDataFrameGDAL 
+
+copy.SpatialGridDataFrameGDAL = function(dataset, fname, driver = 
+		getDriver(dataset@grod), strict = FALSE, options = NULL, silent = FALSE)
+{
+	if (nchar(fname) == 0) 
+		stop("empty file name")
+	assertClass(dataset, 'SpatialGridDataFrameGDAL')
+	# grod = GDAL.open(con, read.only = FALSE)
+
+	if (is.character(driver)) 
+		driver <- new("GDALDriver", driver)
+	if (nchar(fname) == 0) 
+		stop("empty file name")
+
+	if (!is.null(options) && !is.character(options))
+		stop("options not character")
+
+	grod <- new('GDALTransientDataset',
+		handle = .Call('RGDAL_CopyDataset',
+			dataset@grod, driver, as.integer(strict),
+			as.character(options), fname, PACKAGE="rgdal"))
+
+	data = new("SpatialGridDataFrameGDALWrite", 
+		bbox = bbox(dataset),
+		proj4string = CRS(proj4string(dataset)), 
+		grid = dataset@grid, grod = grod, name = fname)
+	return(data)
+}
 
 setAs("SpatialGridDataFrameGDAL", "SpatialGridDataFrame",
-	function(from) from[]
+	function(from) { 
+		print("doing the coerce...")
+		from[]
+	}
 )
 
 setAs("SpatialGridDataFrameGDAL", "SpatialPixelsDataFrame",
@@ -92,6 +142,7 @@ setReplaceMethod("[[", c("SpatialGridDataFrameGDAL", "ANY", "missing", "ANY"),
 setMethod("summary", "SpatialGridDataFrameGDAL",
 	function(object, ...) {
 		obj = list()
+		obj$class = class(object)
 		obj$grid = object@grid
 		obj$name = object@name
 		class(obj) = "summary.SpatialGridDataFrameGDAL"
@@ -100,7 +151,36 @@ setMethod("summary", "SpatialGridDataFrameGDAL",
 )
 
 print.summary.SpatialGridDataFrameGDAL = function(x, ...) {
-	cat(paste("object of class", class(x), "\n"))
+	cat(paste("object of class", x$class, "\n"))
 	cat(paste("file name:", x$name, "\n"))
 	print(x$grid)
 }
+
+setReplaceMethod("[", "SpatialGridDataFrameGDALWrite", function(x, i, j, ..., value) {
+	ncol = gridparameters(x@grid)[1,"cells.dim"]
+	nrow = gridparameters(x@grid)[2,"cells.dim"]
+	if (!is.numeric(value)) stop("Numeric bands required")
+	if (missing(i)) i = 1:nrow
+	if (missing(j)) j = 1:ncol
+	i = i - 1 # y/row index -- zero offset
+	j = j - 1 # x/cols -- zero offset
+	if (length(i) * length(j) != length(value))
+		stop("lengths do not match")
+	dots = list(...)
+	if (length(dots) > 0)
+		band = dots[[1]]
+	else
+		band = 1
+#	mvFlag = .Call("RGDAL_GetNoDataValue", x@grod)
+#	if (!is.na(mvFlag))
+#		data[is.na(data)] = mvFlag
+	offset = 1
+	nc = length(j)
+	for (row in i) {
+		r = offset:(offset + nc - 1)
+		v = value[r]
+		putRasterData(x@grod, v, band, c(row, j[1])) # offset y, x
+		offset = offset + nc
+	}
+	x
+})

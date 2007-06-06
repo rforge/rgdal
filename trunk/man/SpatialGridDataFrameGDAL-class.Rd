@@ -1,16 +1,19 @@
 \name{SpatialGridDataFrameGDAL-class}
 \docType{class}
 \alias{SpatialGridDataFrameGDAL-class}
+\alias{SpatialGridDataFrameGDALWrite-class}
 \alias{[,SpatialGridDataFrameGDAL-method}
 \alias{summary,SpatialGridDataFrameGDAL-method}
 %\alias{show,SpatialGridDataFrame-method}
 %\alias{cbind.SpatialGridDataFrame}
 \alias{open.SpatialGridDataFrameGDAL}
+\alias{copy.SpatialGridDataFrameGDAL}
 \alias{close.SpatialGridDataFrameGDAL}
 \alias{print.summary.SpatialGridDataFrameGDAL}
 \alias{coerce,SpatialGridDataFrameGDAL,SpatialGridDataFrame-method}
 \alias{coerce,SpatialGridDataFrameGDAL,SpatialPixelsDataFrame-method}
 \alias{$,SpatialGridDataFrameGDAL,character-method}
+\alias{[<-,SpatialGridDataFrameGDALWrite-method}
 \alias{[[,SpatialGridDataFrameGDAL,ANY,missing-method}
 \alias{$<-,SpatialGridDataFrameGDAL,character-method}
 \alias{[[<-,SpatialGridDataFrameGDAL,ANY,missing-method}
@@ -63,7 +66,7 @@ x <- open.SpatialGridDataFrameGDAL(system.file("external/test.ag", package="sp")
 image(x[])
 image(as(x, "SpatialGridDataFrame"))
 summary(as(x, "SpatialGridDataFrame"))
-spplot(x) # S4 method: will transform x
+spplot(as(x, "SpatialGridDataFrame"))
 # select first 50 rows:
 summary(x[1:50])
 # select first 50 columns:
