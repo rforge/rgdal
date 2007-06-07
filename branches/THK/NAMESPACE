@@ -29,6 +29,7 @@ export(make_EPSG, project, readGDAL, writeGDAL, showWKT)
 export(readOGR, ogrInfo, ogrFIDs, ogrDrivers)
 export(GDALinfo, print.GDALobj)
 export(displayDataset)
+export(blockApply)
 
 export(spTransform, spTransform.SpatialPoints, 
   spTransform.SpatialPointsDataFrame, spTransform.SpatialLines, 

@@ -99,8 +99,6 @@ getDriverLongName <- function(driver) {
 createHandle <- function(driver, rows, cols, bands = 1,
                          type = "Byte", file = NULL, options = NULL) {
 
-  if (is.character(driver)) driver <- new("GDALDriver", driver)
-  
   assertClass(driver, "GDALDriver")
 
   typeNum <- match(type, .GDALDataTypes, 1) - 1
@@ -153,12 +151,14 @@ createDataset <- function(driver, rows, cols,
                           bands = 1, type = "Byte",
                           file = NULL, options = NULL) {
 
+  if (is.character(driver)) driver <- new("GDALDriver", driver)
+  
   handle <- createHandle(driver, rows, cols, bands, type, file, options)
 
-  if (is.null(file))
-    new('GDALTransientDataset', handle)
+  if (is.null(file) && (getDriverName(driver) != "MEM"))
+    new("GDALTransientDataset", handle)
   else
-    new('GDALMutableDataset', handle)
+    new("GDALMutableDataset", handle)
 
 }
 
@@ -360,7 +360,7 @@ getRasterData <- function(dataset,
                           region.dim = dim(dataset),
                           output.dim = region.dim,
                           interleave = c(0, 0),
-                          as.is = FALSE) {
+                          as.is = FALSE, drop = TRUE) {
 
   assertClass(dataset, "GDALDataset")
 
@@ -386,7 +386,7 @@ getRasterData <- function(dataset,
   
   }
 
-  x <- drop(x)
+  if (drop) x <- drop(x)
 
   if (!as.is) {
   
@@ -438,9 +438,7 @@ RGB2PCT <- function(x, band, driver.name = "MEM",
 
   band <- rep(band, length.out = 3)
 
-  dithered <- new("GDALTransientDataset",
-                  new("GDALDriver", driver.name),
-                  nrow(x), ncol(x))
+  dithered <- createDataset(driver.name, nrow(x), ncol(x))
 
   ctab <- .Call("RGDAL_GenCMap",
                 getRasterBand(x, band[1]),
@@ -515,6 +513,8 @@ displayDataset <- function(x, at = c(1, 1), region.dim = dim(x),
 
 }
 
+image.GDALDataset <- function(x, ...) displayDataset(x, ...)
+
 setMethod("initialize", "GDALRasterBand",
           def =  function(.Object, dataset, band = 1) {
             assertClass(dataset, "GDALDataset")
@@ -569,5 +569,88 @@ getRasterBlockSize <- function(raster) {
   
 }
 
+blockApply <- function(x, fun, ..., block.size = NULL,
+                       file = NULL, driver = NULL) {
+
+  assertClass(x, "GDALDataset")
+
+  fun <- match.fun(fun)
+
+  if (is.null(block.size))
+    block.size <- getRasterBlockSize(getRasterBand(x))
+
+  if (is.null(driver)) driver <- getDriver(x)
+
+  block.size <- rep(block.size, length.out = 2)
+
+  block <- getRasterData(x, region = block.size)
+
+  res <- fun(block, ...)
+
+  type <- switch(storage.mode(res),
+                 logical = "Byte",
+                 integer = "Int32",
+                 double = "Float64",
+                 complex = "CFloat64",
+                 stop("Unsupported data type"))
+
+  if (is.array(res)) {
+
+    if (any(dim(res)[1:2] != dim(block)[1:2]))
+      stop("Function result does not match block dimensions")
+
+    nband <- if(is.matrix(res)) 1 else dim(res)[3]
+
+    out <- createDataset(driver, nrow(x), ncol(x), nband, type, file)
+
+    writeRes <- function(x, at)
+      for (b in 1:nband) putRasterData(out, x[,,b], b, at)
+
+  } else {
+
+    nBlocksY <- ceiling(nrow(x) / nrow(block))
+    nBlocksX <- ceiling(ncol(x) / ncol(block))
+
+    nband <- length(res)
+    
+    out <- createDataset(driver, nBlocksY, nBlocksX, nband, type, file)
+
+    writeRes <- function(x, at)
+      for (b in 1:nband) putRasterData(out, x[b], b, at)
+
+  }
+
+  writeRes(res, c(1, 1))
+
+  row <- 1
+  col <- block.size[2] + 1
+
+  while (row <= nrow(x)) {
+
+    while (col <= ncol(x)) {
+
+      region <- c(min(block.size[1], nrow(x) - row + 1),
+                  min(block.size[2], ncol(x) - col + 1))
+
+      cat(row, col, region, "\n")
+
+      block <- getRasterData(x,
+                             at = c(row, col),
+                             region = region)
+      
+      writeRes(fun(block, ...), c(row, col))      
+
+      col <- col + block.size[2]
+
+    }
+
+    col <- 1
+    row <- row + block.size[1]
+    
+  }
+  
+  out
+
+}
 
 
