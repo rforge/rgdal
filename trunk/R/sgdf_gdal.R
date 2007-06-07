@@ -1,26 +1,14 @@
-setClass("SpatialGridDataFrameGDAL",
-#   representation("SpatialGridDataFrame", grod = "GDALReadOnlyDataset", name = "character"),
+setClass("SpatialGDAL",
     representation("Spatial", grid = "GridTopology", grod = "GDALReadOnlyDataset", name = "character"),
     validity = function(object) {
         if (is.null(object@grod))
             stop("grod is NULL; this should not happen")
-#		if (nrow(object@data) > 0)
-#			stop("data slot should have zero rows")
         return(TRUE)
     }
 )
-setClass("SpatialGridDataFrameGDALWrite", "SpatialGridDataFrameGDAL")
-#    representation("SpatialGridDataFrame", gd = "GDALDataset", name = "character"),
-#    validity = function(object) {
-#        if (is.null(object@grod))
-#            stop("grod is NULL; this should not happen")
-#		if (nrow(object@data) > 0)
-#			stop("data slot should have zero rows")
-#        return(TRUE)
-#    }
-#)
+setClass("SpatialGDALWrite", "SpatialGDAL")
 
-open.SpatialGridDataFrameGDAL = function(con, ..., silent = FALSE) {
+open.SpatialGDAL = function(con, ..., silent = FALSE) {
 	if (nchar(con) == 0) stop("empty file name")
 
 	grod = GDAL.open(con, read.only = TRUE)
@@ -53,7 +41,7 @@ open.SpatialGridDataFrameGDAL = function(con, ..., silent = FALSE) {
 	x@bbox[,1] = x@bbox[,1] - 0.5 * grid@cellsize
 	x@bbox[,2] = x@bbox[,2] + 0.5 * grid@cellsize
 
-	data = new("SpatialGridDataFrameGDAL", 
+	data = new("SpatialGDAL", 
 		bbox = x@bbox,
 		proj4string = CRS(p4s), 
 		grid = grid,
@@ -63,18 +51,18 @@ open.SpatialGridDataFrameGDAL = function(con, ..., silent = FALSE) {
 	return(data)
 }
 
-close.SpatialGridDataFrameGDAL = function(con, ...) {
+close.SpatialGDAL = function(con, ...) {
 	GDAL.close(con@grod)
 	invisible(NULL)
 }
-close.SpatialGridDataFrameGDALWrite = close.SpatialGridDataFrameGDAL 
+close.SpatialGDALWrite = close.SpatialGDAL 
 
-copy.SpatialGridDataFrameGDAL = function(dataset, fname, driver = 
+copy.SpatialGDAL = function(dataset, fname, driver = 
 		getDriver(dataset@grod), strict = FALSE, options = NULL, silent = FALSE)
 {
 	if (nchar(fname) == 0) 
 		stop("empty file name")
-	assertClass(dataset, 'SpatialGridDataFrameGDAL')
+	assertClass(dataset, 'SpatialGDAL')
 	# grod = GDAL.open(con, read.only = FALSE)
 
 	if (is.character(driver)) 
@@ -90,36 +78,36 @@ copy.SpatialGridDataFrameGDAL = function(dataset, fname, driver =
 			dataset@grod, driver, as.integer(strict),
 			as.character(options), fname, PACKAGE="rgdal"))
 
-	data = new("SpatialGridDataFrameGDALWrite", 
+	data = new("SpatialGDALWrite", 
 		bbox = bbox(dataset),
 		proj4string = CRS(proj4string(dataset)), 
 		grid = dataset@grid, grod = grod, name = fname)
 	return(data)
 }
 
-setAs("SpatialGridDataFrameGDAL", "SpatialGridDataFrame",
+setAs("SpatialGDAL", "SpatialGridDataFrame",
 	function(from) { 
 		print("doing the coerce...")
 		from[]
 	}
 )
 
-setAs("SpatialGridDataFrameGDAL", "SpatialPixelsDataFrame",
+setAs("SpatialGDAL", "SpatialPixelsDataFrame",
 	function(from) as(from[], "SpatialPixelsDataFrame")
 )
 
-setMethod("[", "SpatialGridDataFrameGDAL",
+setMethod("[", "SpatialGDAL",
 	function(x, i, j, ... , drop = FALSE)
 		x@grod[i = i, j = j, ...]
 )
 
-setMethod("[[", c("SpatialGridDataFrameGDAL", "ANY", "missing"),
+setMethod("[[", c("SpatialGDAL", "ANY", "missing"),
     function(x, i, j, ...)
         x[,,i][[1]] # efficient: reads only band i
 )
 
 # avoid inheritance:
-setMethod("$", c("SpatialGridDataFrameGDAL"
+setMethod("$", c("SpatialGDAL"
 , "character"
 #, "ANY"
 ),
@@ -128,35 +116,35 @@ setMethod("$", c("SpatialGridDataFrameGDAL"
 )
 
 # avoid inheritance:
-setReplaceMethod("$", c("SpatialGridDataFrameGDAL", "character", "ANY"),
+setReplaceMethod("$", c("SpatialGDAL", "character", "ANY"),
     function(x, name, value)
 		stop("no replacement method available")
 )
 
 # avoid inheritance:
-setReplaceMethod("[[", c("SpatialGridDataFrameGDAL", "ANY", "missing", "ANY"),
+setReplaceMethod("[[", c("SpatialGDAL", "ANY", "missing", "ANY"),
     function(x, i, j, value)
 		stop("no replacement method available")
 )
 
-setMethod("summary", "SpatialGridDataFrameGDAL",
+setMethod("summary", "SpatialGDAL",
 	function(object, ...) {
 		obj = list()
 		obj$class = class(object)
 		obj$grid = object@grid
 		obj$name = object@name
-		class(obj) = "summary.SpatialGridDataFrameGDAL"
+		class(obj) = "summary.SpatialGDAL"
 		obj
 	}
 )
 
-print.summary.SpatialGridDataFrameGDAL = function(x, ...) {
+print.summary.SpatialGDAL = function(x, ...) {
 	cat(paste("object of class", x$class, "\n"))
 	cat(paste("file name:", x$name, "\n"))
 	print(x$grid)
 }
 
-setReplaceMethod("[", "SpatialGridDataFrameGDALWrite", function(x, i, j, ..., value) {
+setReplaceMethod("[", "SpatialGDALWrite", function(x, i, j, ..., value) {
 	ncol = gridparameters(x@grid)[1,"cells.dim"]
 	nrow = gridparameters(x@grid)[2,"cells.dim"]
 	if (!is.numeric(value)) stop("Numeric bands required")
@@ -174,13 +162,8 @@ setReplaceMethod("[", "SpatialGridDataFrameGDALWrite", function(x, i, j, ..., va
 #	mvFlag = .Call("RGDAL_GetNoDataValue", x@grod)
 #	if (!is.na(mvFlag))
 #		data[is.na(data)] = mvFlag
-	offset = 1
-	nc = length(j)
-	for (row in i) {
-		r = offset:(offset + nc - 1)
-		v = value[r]
-		putRasterData(x@grod, v, band, c(row, j[1])) # offset y, x
-		offset = offset + nc
-	}
+	if (!is.matrix(value))
+		value = matrix(value, length(i), length(j))
+	putRasterData(x@grod, value, band, c(i[1], j[1])) # offset y, x
 	x
 })
