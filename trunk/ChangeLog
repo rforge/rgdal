@@ -1,3 +1,9 @@
+2007-08-17 18:57  rsbivand
+
+	* ChangeLog, DESCRIPTION, R/ogr_sp.R, R/sp_gdal.R, inst/ChangeLog,
+	  inst/README.windows, man/readGDAL.Rd, man/readOGR.Rd: p4s
+	  workaround
+
 2007-08-08 20:40  rsbivand
 
 	* DESCRIPTION, src/OGR_write.cpp, src/gdal-bindings.cpp,
