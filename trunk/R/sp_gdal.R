@@ -203,7 +203,8 @@ writeGDAL = function(dataset, fname, drivername = "GTiff", type = "Float32",
 	if (nchar(fname) == 0) stop("empty file name")
 	tds.out <- create2GDAL(dataset=dataset, drivername=drivername, 
 		type=type, mvFlag=mvFlag, options=options)
-	saveDataset(tds.out, fname, options=options)
+	tmp.obj <- saveDataset(tds.out, fname, options=options)
+        GDAL.close(tmp.obj)
 	invisible(fname)
 }
 
