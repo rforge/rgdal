@@ -1,3 +1,19 @@
+2007-10-26 18:56  rsbivand
+
+	* DESCRIPTION: close after writeGDAL
+
+2007-10-26 18:25  rsbivand
+
+	* DESCRIPTION, R/sp_gdal.R: close after writeGDAL
+
+2007-10-17 09:12  rsbivand
+
+	* R/make_EPSG.R: EPSG
+
+2007-09-04 14:52  rsbivand
+
+	* ChangeLog, inst/ChangeLog: Changelog
+
 2007-08-17 18:57  rsbivand
 
 	* ChangeLog, DESCRIPTION, R/ogr_sp.R, R/sp_gdal.R, inst/ChangeLog,
