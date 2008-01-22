@@ -1,12 +1,14 @@
 \name{projInfo}
 \alias{projInfo}
+\alias{getPROJ4VersionInfo}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{List PROJ.4 tag information}
 \description{
-  The function lists known values and descriptions for PROJ.4 tags for tag in \code{c("proj", "ellps", "datum")}.
+  The \code{projInfo} function lists known values and descriptions for PROJ.4 tags for tag in \code{c("proj", "ellps", "datum")}; \code{getPROJ4VersionInfo} returns the version of the underlying PROJ.4 release.
 }
 \usage{
 projInfo(type = "proj")
+getPROJ4VersionInfo()
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -21,7 +23,10 @@ projInfo(type = "proj")
 \references{\url{http://www.remotesensing.org/proj/}}
 \author{Roger Bivand \email{Roger.Bivand@nhh.no}}
 
+\note{Loading the rgdal package changes the \code{PROJ\_LIB} environmental variable to the PROJ.4 support files bundles with the package.}
+
 \examples{
+getPROJ4VersionInfo()
 projInfo()
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
