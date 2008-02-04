@@ -20,7 +20,7 @@ getPROJ4VersionInfo()
 \value{
   A data frame with a name and description column, and two extra columns for the "ellps" and "datum" tags.
 }
-\references{\url{http://www.remotesensing.org/proj/}}
+\references{\url{http://proj.maptools.org/}}
 \author{Roger Bivand \email{Roger.Bivand@nhh.no}}
 
 \note{Loading the rgdal package changes the \code{PROJ\_LIB} environmental variable to the PROJ.4 support files bundles with the package.}
