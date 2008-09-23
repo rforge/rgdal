@@ -232,8 +232,6 @@ create2GDAL = function(dataset, drivername = "GTiff", type = "Float32", mvFlag =
 		offset[2] + (dims[2] -0.5) * cellsize[2], 0.0, -cellsize[2])
 	.Call("RGDAL_SetGeoTransform", tds.out, gt, PACKAGE = "rgdal")
 
-	if (!is.na(mvFlag))
-		.Call("RGDAL_SetNoDataValue", tds.out, as.double(mvFlag), PACKAGE = "rgdal")
 	p4s <- proj4string(dataset)
 	if (!is.na(p4s) && nchar(p4s) > 0)
 		.Call("RGDAL_SetProject", tds.out, p4s, PACKAGE = "rgdal")
@@ -243,6 +241,11 @@ create2GDAL = function(dataset, drivername = "GTiff", type = "Float32", mvFlag =
 		if (!is.na(mvFlag))
 			band[is.na(band)] = mvFlag
 		putRasterData(tds.out, band, i)
+		if (!is.na(mvFlag)) {
+		    tds.out_b <- getRasterBand(dataset=tds.out, band=i)
+		    .Call("RGDAL_SetNoDataValue", tds.out_b, as.double(mvFlag),
+		        PACKAGE = "rgdal")
+		}
 	}
 	tds.out
 }
