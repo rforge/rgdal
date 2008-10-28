@@ -3,7 +3,7 @@
 .setCollectorFun <- function(object, fun) {
 
   if (is.null(fun)) fun <- function(obj) obj
-  reg.finalizer(object, fun)
+  reg.finalizer(object, fun, onexit=TRUE)
 
 }
 
