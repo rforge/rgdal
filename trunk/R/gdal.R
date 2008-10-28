@@ -312,7 +312,7 @@ GDAL.open <- function(filename, read.only = TRUE) {
 GDAL.close <- function(dataset) {
             .setCollectorFun(slot(dataset, 'handle'), NULL)
             .Call('RGDAL_CloseDataset', dataset, PACKAGE="rgdal")
-            invisible()
+            invisible(gc())
 }
 
 setMethod('dim', 'GDALReadOnlyDataset',
