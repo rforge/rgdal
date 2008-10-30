@@ -1,3 +1,15 @@
+2008-10-30 15:21  edzer
+
+	* NAMESPACE: removed exportClass(CRS), as sp does this already.
+
+2008-10-30 15:13  rsbivand
+
+	* inst/proj/: IGNF, ntf_r93.gsb: added shares
+
+2008-10-30 12:52  rsbivand
+
+	* ChangeLog, inst/ChangeLog: changelog
+
 2008-10-30 12:44  rsbivand
 
 	* DESCRIPTION, inst/proj/FL, inst/proj/MD, inst/proj/TN,

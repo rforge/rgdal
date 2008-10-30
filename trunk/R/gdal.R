@@ -167,7 +167,8 @@ setMethod('initialize', 'GDALTransientDataset',
             } else {
               slot(.Object, 'handle') <- handle
             }
-            cfn <- function(handle) .Call('RGDAL_CloseHandle', 
+            cfn <- function(handle) .Call('RGDAL_CloseHandle',
+#            cfn <- function(handle) .Call('RGDAL_CloseDataset', RSB 081030
 		handle, PACKAGE="rgdal")
             .setCollectorFun(slot(.Object, 'handle'), cfn)
             .Object
