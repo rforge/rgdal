@@ -206,7 +206,7 @@ copyDataset <- function(dataset, driver, strict = FALSE, options = NULL) {
   
 }
 
-saveDataset <- function(dataset, filename, options=NULL) {
+saveDataset <- function(dataset, filename, options=NULL, returnNewObj=FALSE) {
 
   assertClass(dataset, 'GDALReadOnlyDataset')
   
@@ -221,8 +221,8 @@ saveDataset <- function(dataset, filename, options=NULL) {
                    dataset, getDriver(dataset),
                    FALSE, options, filename, PACKAGE="rgdal"))
 
-  invisible(new.obj)
-  
+  if (returnNewObj) return(new.obj)
+  invisible(GDAL.close(new.obj))
 }
 
 setGeneric('closeDataset', function(dataset) standardGeneric('closeDataset'))
