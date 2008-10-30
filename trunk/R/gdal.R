@@ -236,14 +236,16 @@ setMethod('closeDataset', 'GDALReadOnlyDataset',
           def = function(dataset) {
             .setCollectorFun(slot(dataset, 'handle'), NULL)
             .Call('RGDAL_CloseDataset', dataset, PACKAGE="rgdal")
-            invisible()
+            invisible(gc())
           })
 
 setMethod('closeDataset', 'GDALTransientDataset',
           def = function(dataset) {
             driver <- getDriver(dataset)
-            filename <- getDescription(dataset)
-            .Call('RGDAL_CloseDataset', driver, filename, PACKAGE="rgdal")
+#            filename <- getDescription(dataset)
+#            .Call('RGDAL_CloseDataset', driver, filename, PACKAGE="rgdal")
+            .Call('RGDAL_CloseDataset', driver, PACKAGE="rgdal")
+            invisible(gc())
             callNextMethod()
           })
 
