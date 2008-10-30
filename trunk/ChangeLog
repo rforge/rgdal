@@ -1,3 +1,8 @@
+2008-10-30 20:59  rsbivand
+
+	* ChangeLog, R/gdal.R, inst/ChangeLog, src/Makevars.win: no DEBUG
+	  in Windows
+
 2008-10-30 15:21  edzer
 
 	* NAMESPACE: removed exportClass(CRS), as sp does this already.
