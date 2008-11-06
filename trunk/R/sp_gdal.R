@@ -217,19 +217,19 @@ create2GDAL = function(dataset, drivername = "GTiff", type = "Float32", mvFlag =
 	if (is.na(match(type, .GDALDataTypes)))
             stop(paste("Invalid type:", type, "not in:",
                 paste(.GDALDataTypes, collapse="\n")))
-	d.dim = dim(as.matrix(dataset[1]))
+#	d.dim = dim(as.matrix(dataset[1])) RSB 081106
+	gp = gridparameters(dataset)
+	cellsize = gp$cellsize
+	offset = gp$cellcentre.offset
+	dims = gp$cells.dim
 	d.drv = new("GDALDriver", drivername)
 	nbands = length(names(slot(dataset, "data")))
         if (!is.null(options) && !is.character(options))
                 stop("options not character")
 	tds.out = new("GDALTransientDataset", driver = d.drv, 
-		rows = d.dim[2], cols = d.dim[1],
+		rows = dims[2], cols = dims[1],
         	bands = nbands, type = type, options = options, 
 		handle = NULL)
-	gp = gridparameters(dataset)
-	cellsize = gp$cellsize
-	offset = gp$cellcentre.offset
-	dims = gp$cells.dim
 	gt = c(offset[1] - 0.5 * cellsize[1], cellsize[1], 0.0, 
 		offset[2] + (dims[2] -0.5) * cellsize[2], 0.0, -cellsize[2])
 	.Call("RGDAL_SetGeoTransform", tds.out, gt, PACKAGE = "rgdal")
