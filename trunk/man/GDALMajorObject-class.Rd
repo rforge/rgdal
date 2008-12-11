@@ -63,10 +63,12 @@ appendMetadata(object, metadata)
 
 \examples{
 
+\dontrun{
 driver <- new('GDALDriver', as.character(getGDALDriverNames()[1,1]))
 setMetadata(driver, list(Key = 'Test metadata'))
 getMetadata(driver)
 rm(driver)
+}
 logo <- system.file("pictures/logo.jpg", package="rgdal")[1]
 x <- new("GDALReadOnlyDataset", logo)
 getDescription(x)
