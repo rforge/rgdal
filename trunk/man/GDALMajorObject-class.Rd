@@ -62,17 +62,18 @@ appendMetadata(object, metadata)
   \code{\link{GDALTransientDataset-class}} }
 
 \examples{
-
-\dontrun{
 driver <- new('GDALDriver', as.character(getGDALDriverNames()[1,1]))
+\dontrun{
 setMetadata(driver, list(Key = 'Test metadata'))
 getMetadata(driver)
-rm(driver)
 }
+rm(driver)
 logo <- system.file("pictures/logo.jpg", package="rgdal")[1]
 x <- new("GDALReadOnlyDataset", logo)
 getDescription(x)
+\dontrun{
 getMetadata(x)
+}
 dim(x)
 GDAL.close(x)
 
