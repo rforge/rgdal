@@ -1,3 +1,25 @@
+2008-12-13 12:30  rsbivand
+
+	* DESCRIPTION, NAMESPACE, R/gdal.R, man/GDALMajorObject-class.Rd,
+	  man/GDALReadOnlyDataset-class.Rd, src/gdal-bindings.cpp: metadata
+	  problems
+
+2008-12-11 21:08  rsbivand
+
+	* man/GDALMajorObject-class.Rd: metadata problems
+
+2008-12-11 21:04  rsbivand
+
+	* DESCRIPTION, man/GDALMajorObject-class.Rd: metadata problems
+
+2008-11-22 01:01  rsbivand
+
+	* DESCRIPTION, R/sp_gdal.R: fix GDALinfo origin bug
+
+2008-11-06 09:09  rsbivand
+
+	* R/sp_gdal.R: tidy in create2GDAL
+
 2008-10-30 20:59  rsbivand
 
 	* ChangeLog, R/gdal.R, inst/ChangeLog, src/Makevars.win: no DEBUG
