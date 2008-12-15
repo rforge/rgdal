@@ -1,8 +1,16 @@
+2008-12-15 10:36  rsbivand
+
+	* DESCRIPTION, inst/README: testing for 1.6
+
+2008-12-15 10:04  rsbivand
+
+	* DESCRIPTION, inst/vectors/cities.prj: testing for 1.6
+
 2008-12-13 12:30  rsbivand
 
 	* DESCRIPTION, NAMESPACE, R/gdal.R, man/GDALMajorObject-class.Rd,
-	  man/GDALReadOnlyDataset-class.Rd, src/gdal-bindings.cpp: metadata
-	  problems
+	  man/GDALReadOnlyDataset-class.Rd, src/gdal-bindings.cpp,
+	  ChangeLog, inst/ChangeLog: metadata problems
 
 2008-12-11 21:08  rsbivand
 

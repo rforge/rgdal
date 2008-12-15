@@ -8,5 +8,5 @@ Description: Provides bindings to Frank Warmerdam's Geospatial Data Abstraction 
 Author: Timothy H. Keitt <tkeitt@mail.utexas.edu>, Roger Bivand <Roger.Bivand@nhh.no>, Edzer Pebesma <e.pebesma@geo.uu.nl>, Barry Rowlingson
 Maintainer: Roger Bivand <Roger.Bivand@nhh.no>
 License: GPL (>= 2)
-URL: http://www.gdal.org, http://rgdal.sourceforge.net/, http://sourceforge.net/projects/rgdal/
-SystemRequirements: for building from source: GDAL >= 1.3.1 && GDAL < 1.6.0 (until tested) library from http://www.gdal.org/download.html and PROJ.4 (proj >= 4.4.9) from http://proj.maptools.org/
+URL: http://www.gdal.org, http://sourceforge.net/projects/rgdal/
+SystemRequirements: for building from source: GDAL >= 1.3.1 library from http://trac.osgeo.org/gdal/wiki/DownloadSource and PROJ.4 (proj >= 4.4.9) from http://trac.osgeo.org/proj/; GDAL OSX frameworks built by William Kyngesburye at http://www.kyngchaos.com/ may be used for source installs on OSX, rgdal OSX binary packages are also available at the same site.
