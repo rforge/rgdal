@@ -1,6 +1,11 @@
+2009-01-11 21:54  rsbivand
+
+	* DESCRIPTION, configure.win: add R_PACKAGE_DIR in configure.win
+
 2008-12-15 10:36  rsbivand
 
-	* DESCRIPTION, inst/README: testing for 1.6
+	* DESCRIPTION, inst/README, ChangeLog, inst/ChangeLog: testing for
+	  1.6
 
 2008-12-15 10:04  rsbivand
 
