@@ -1,6 +1,6 @@
 #!/bin/sh
 if test -z "$GDAL_HOME" ; then
-    GDAL_HOME="C:/work/packages/GDAL153"
+    GDAL_HOME="C:/work/packages/GDAL160"
 fi
 echo "GDAL_HOME=${GDAL_HOME}" > src/Makeconf.win
 
