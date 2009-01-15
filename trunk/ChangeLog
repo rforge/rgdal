@@ -1,3 +1,15 @@
+2009-01-15 21:24  rsbivand
+
+	* src/RGDAL.def: changed to use platform shared files
+
+2009-01-15 21:20  rsbivand
+
+	* configure.win, R/gdal.R: Windows adjustment for CRAN build
+
+2009-01-15 21:07  rsbivand
+
+	* ChangeLog, inst/ChangeLog: changed to use platform shared files
+
 2009-01-15 21:04  rsbivand
 
 	* DESCRIPTION, NAMESPACE, R/AAA.R, R/gdal.R, R/project.R,
