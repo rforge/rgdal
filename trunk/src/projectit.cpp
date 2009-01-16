@@ -12,7 +12,9 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+/* #include <projects.h> */
 #include <proj_api.h>
+FILE *pj_open_lib(char *, char *);
 
 
 SEXP
@@ -22,6 +24,25 @@ PROJ4VersionInfo(void) {
     PROTECT(ans=NEW_CHARACTER(1));
     SET_STRING_ELT(ans, 0, COPY_TO_USER_STRING(pj_get_release()));
 
+    UNPROTECT(1);
+
+    return(ans);
+}
+
+SEXP
+PROJ4NADsInstalled(void) {
+    SEXP ans;
+
+    FILE *fp;
+
+    PROTECT(ans=NEW_LOGICAL(1));
+    fp = pj_open_lib("conus", "rb");
+    if (fp == NULL) LOGICAL_POINTER(ans)[0] = FALSE;
+    else {
+        LOGICAL_POINTER(ans)[0] = TRUE;
+        fclose(fp);
+    }
+    
     UNPROTECT(1);
 
     return(ans);
@@ -216,7 +237,7 @@ struct PJ_DATUMS {
     char    *ellipse_id; /* ie from ellipse table */
     char    *comments; /* EPSG code, etc */
 };
-struct PJ_DATUMS *pj_get_datums_ref( void );
+struct PJ_DATUMS *pj_get_datums_ref( void ); 
 
 SEXP projInfo(SEXP type) {
     SEXP ans;

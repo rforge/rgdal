@@ -1,6 +1,13 @@
+2009-01-16 09:24  rsbivand
+
+	* DESCRIPTION, NAMESPACE, R/project.R, man/projInfo.Rd,
+	  man/spTransform-methods.Rd, src/projectit.cpp: added NAD examples
+	  and test
+
 2009-01-15 21:24  rsbivand
 
-	* src/RGDAL.def: changed to use platform shared files
+	* src/RGDAL.def, ChangeLog, inst/ChangeLog: changed to use platform
+	  shared files
 
 2009-01-15 21:20  rsbivand
 
