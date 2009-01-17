@@ -48,6 +48,55 @@ PROJ4NADsInstalled(void) {
     return(ans);
 }
 
+#define MAX_LINE_LEN 512	/* maximal line length supported.     */
+
+SEXP
+PROJcopyEPSG(SEXP tf) {
+    SEXP ans;
+
+    FILE *fp, *fptf;
+    char buf[MAX_LINE_LEN+1];   /* input buffer */
+    int i=0;
+
+    PROTECT(ans=NEW_INTEGER(1));
+    fp = pj_open_lib("epsg", "rb");
+    if (fp == NULL) INTEGER_POINTER(ans)[0] = 0;
+    else {
+        fptf = fopen(CHAR(STRING_ELT(tf, 0)), "wb");
+        if (fptf == NULL) {
+            INTEGER_POINTER(ans)[0] = 0;
+            fclose(fp);
+            UNPROTECT(1);
+            return(ans);
+        }
+        /* copy from fp to fptf */
+        /* copy source file to target file, line by line. */
+        while (fgets(buf, MAX_LINE_LEN+1, fp)) {
+	    if (fputs(buf, fptf) == EOF) {  /* error writing data */
+                INTEGER_POINTER(ans)[0] = 0;
+                fclose(fp);
+                fclose(fptf);
+                UNPROTECT(1);
+                return(ans);
+	    }
+            i++;
+        }
+        if (!feof(fp)) { /* fgets failed _not_ due to encountering EOF */
+            INTEGER_POINTER(ans)[0] = 0;
+            fclose(fp);
+            fclose(fptf);
+            UNPROTECT(1);
+            return(ans);
+        }
+        INTEGER_POINTER(ans)[0] = i;
+        fclose(fp);
+        fclose(fptf);
+    }
+    
+    UNPROTECT(1);
+
+    return(ans);
+}
 
 void project(int *n, double *xlon, double *ylat, double *x, double *y, char **projarg){
 
