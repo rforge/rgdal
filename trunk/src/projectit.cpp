@@ -14,7 +14,7 @@ extern "C" {
 #endif
 /* #include <projects.h> */
 #include <proj_api.h>
-FILE *pj_open_lib(char *, char *);
+FILE *pj_open_lib(const char *, const char *);
 
 
 SEXP
@@ -59,6 +59,7 @@ PROJcopyEPSG(SEXP tf) {
     int i=0;
 
     PROTECT(ans=NEW_INTEGER(1));
+    INTEGER_POINTER(ans)[0] = 0;
     fp = pj_open_lib("epsg", "rb");
     if (fp == NULL) INTEGER_POINTER(ans)[0] = 0;
     else {
@@ -174,7 +175,7 @@ SEXP transform(SEXP fromargs, SEXP toargs, SEXP npts, SEXP x, SEXP y) {
 	/* interface to pj_transform() to be able to use longlat proj
 	 * and datum transformation in an SEXP format */
 
-	int i, n, iter;
+	int i, n;
 	double *xx, *yy, *zz;
 	projPJ fromPJ, toPJ;
 	SEXP res;
