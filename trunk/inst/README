@@ -22,10 +22,10 @@ package):
 
 http://fwtools.maptools.org/
 
-If installing PROJ.4 from RPM binaries, note that three RPM files
-are required: "proj", "proj-devel", and "proj-nad". The third file,
-"proj-nad", contains all of the support files placed in /usr/share/proj,
-and is required for any use of "proj" itself.
+If installing PROJ.4 from RPM binaries, note that four RPM files are
+required: "proj", "proj-devel", "proj-epsg" and "proj-nad". The third and
+fourth files, "proj-epsg" and "proj-nad", contain all of the support files
+placed in /usr/share/proj, and is required for any use of "proj" itself.
 
 Debian users appear to get all of the required files (libraries, binaries,
 support files and headers) in the "proj" package, although some package
