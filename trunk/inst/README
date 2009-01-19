@@ -22,6 +22,16 @@ package):
 
 http://fwtools.maptools.org/
 
+If installing PROJ.4 from RPM binaries, note that three RPM files
+are required: "proj", "proj-devel", and "proj-nad". The third file,
+"proj-nad", contains all of the support files placed in /usr/share/proj,
+and is required for any use of "proj" itself.
+
+Debian users appear to get all of the required files (libraries, binaries,
+support files and headers) in the "proj" package, although some package
+lists seem to omit NAD binaries, for example /usr/share/proj/conus,
+which if missing will provoke a warning under ./configure.
+
 For OSX users, either install PROJ.4 and GDAL/OGR from source, then
 install the rgdal source package, or use the comprehensive frameworks
 provided by William Kyngesburye:
