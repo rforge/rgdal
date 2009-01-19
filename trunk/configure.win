@@ -19,6 +19,6 @@ if test -z "$OSGEO4W_BUILD" ; then
   echo "OSGEO= " >> src/Makeconf.win
 
 else
-    echo "OSGEO=-DOSGEO" >> src/Makeconf.win
+    echo "OSGEO=-DOSGEO4W" >> src/Makeconf.win
 fi
 
