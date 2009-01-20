@@ -165,7 +165,7 @@ fi
 rm -f proj_conf_test.c proj_conf_test
 
 if test "$WARN" = "warn" ; then
-    echo "Warning: proj/conus not found"
+    echo "Note: proj/conus not found"
     echo "No support available in PROJ4 for NAD grid datum transformations"
     echo "If required, consider re-installing from source with the contents"
     echo "of http://download.osgeo.org/proj/proj-datumgrid-1.4.zip in nad/."

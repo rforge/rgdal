@@ -1,3 +1,21 @@
+2009-01-20 10:52  rsbivand
+
+	* configure, configure.in: NAD files absence note
+
+2009-01-20 10:39  rsbivand
+
+	* inst/: README, OSGeo4W_test: OSGeo4W build
+
+2009-01-19 21:42  rsbivand
+
+	* DESCRIPTION, configure.win, R/AAA.R, inst/README.windows,
+	  src/gdal-bindings.cpp, src/projectit.cpp: OSGeo4W attempts
+
+2009-01-19 18:31  rsbivand
+
+	* ChangeLog, configure.win, inst/ChangeLog, src/Makevars.win:
+	  OSGeo4W build
+
 2009-01-19 17:32  rsbivand
 
 	* configure, configure.in, inst/README: proj-epsg*.rpm notes
