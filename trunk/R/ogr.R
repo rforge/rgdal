@@ -1,5 +1,5 @@
 # Copyright 2003 (c) Barry Rowlingson
-# Modified 2006 Roger Bivand
+# Modified 2006-9 Roger Bivand
 ###
 ###
 ###  Routines for ogr layer data source 
@@ -7,16 +7,18 @@
 ###
 
 #
-ogrInfo <- function(dsn, layer){
+ogrInfo <- function(dsn, layer, input_field_name_encoding=NULL){
   if (missing(dsn)) stop("missing dsn")
   if (nchar(dsn) == 0) stop("empty name")
   if (missing(layer)) stop("missing layer")
   if (nchar(layer) == 0) stop("empty name")
 # a list with various ogr data source information
   ogrinfo <- .Call("ogrInfo",as.character(dsn),as.character(layer), PACKAGE = "rgdal")
-  
   names(ogrinfo) <- c("nrows","nitems","iteminfo","driver")
   names(ogrinfo$iteminfo) <- c("name","type","length","typeName")
+  if (!is.null(input_field_name_encoding)) 
+    ogrinfo$iteminfo$name <- iconv(ogrinfo$iteminfo$name,
+      from=input_field_name_encoding)
   class(ogrinfo) <- "ogrinfo"
   ogrinfo
 }
