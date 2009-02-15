@@ -57,8 +57,13 @@ readOGR <- function(dsn, layer, verbose=TRUE, p4s=NULL,
 		else stop(paste("Multiple incompatible geometries:", 
 			paste(u_eType, collapse=":")))
 	}
+	WKB <- c("wkbPoint", "wkbLineString", "wkbPolygon", "wkbMultiPoint",
+	    "wkbMultiLineString", "wkbMultiPolygon", "wkbGeometryCollection")
+        if (verbose) cat("Feature type:", paste(WKB[u_eType], collapse=", "),
+	    "with", u_with_z+2, "dimensions\n")
 	if (u_eType == 5) u_eType <- 2
 	if (u_eType == 6) u_eType <- 3
+
 	gFeatures <- geometry[[5]]
 	if (length(gFeatures) != ogr_info$nrows) stop("Feature mismatch")
 	if (u_eType == 1) { # points

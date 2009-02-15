@@ -44,19 +44,23 @@ Please note that the OGR drivers used may not handle missing data gracefully, an
 \seealso{\code{\link[sp]{SpatialPointsDataFrame-class}}, \code{\link[sp]{SpatialLinesDataFrame-class}}, \code{\link[sp]{SpatialPolygonsDataFrame-class}}, \code{\link[maptools]{readShapePoly}}, \code{\link[base]{iconv}}}
 \examples{
 ogrDrivers()
+ogrInfo(system.file("vectors", package = "rgdal")[1], "cities")
 cities <- readOGR(system.file("vectors", package = "rgdal")[1], "cities")
 summary(cities)
-ogrInfo(system.file("vectors", package = "rgdal")[1], "cities")
+ogrInfo(system.file("vectors", package = "rgdal")[1], "kiritimati_primary_roads")
 kiritimati_primary_roads <- readOGR(system.file("vectors", package = "rgdal")[1], "kiritimati_primary_roads")
 summary(kiritimati_primary_roads)
+ogrInfo(system.file("vectors", package = "rgdal")[1], "scot_BNG")
 scot_BNG <- readOGR(system.file("vectors", package = "rgdal")[1], "scot_BNG")
 summary(scot_BNG)
 if ("GML" \%in\% ogrDrivers()$name) {
   airports <- try(readOGR(system.file("vectors/airports.gml", package = "rgdal")[1], "airports"))
   if (class(airports) != "try-error") summary(airports)
 }
+ogrInfo(system.file("vectors/ps_cant_31.MIF", package = "rgdal")[1], "ps_cant_31")
 ps_cant_31 <- readOGR(system.file("vectors/ps_cant_31.MIF", package = "rgdal")[1], "ps_cant_31")
 summary(ps_cant_31)
+ogrInfo(system.file("vectors/Up.tab", package = "rgdal")[1], "Up")
 Up <- readOGR(system.file("vectors/Up.tab", package = "rgdal")[1], "Up")
 summary(Up)
 }
