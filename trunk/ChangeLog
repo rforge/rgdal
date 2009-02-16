@@ -1,6 +1,11 @@
+2009-02-16 10:13  rsbivand
+
+	* R/gdal.R: drop=FALSE in readGDAL
+
 2009-02-16 09:17  rsbivand
 
-	* INDEX, R/sp_gdal.R: drop=FALSE in readGDAL
+	* INDEX, R/sp_gdal.R, ChangeLog, inst/ChangeLog: drop=FALSE in
+	  readGDAL
 
 2009-02-15 16:12  rsbivand
 
