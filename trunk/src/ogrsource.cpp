@@ -232,6 +232,8 @@ extern "C" {
           SET_STRING_ELT(ans,iRow,mkChar(poFeature->GetFieldAsString(iField)));
 	else SET_STRING_ELT(ans, iRow, NA_STRING);
 	break;
+/* GetFieldAsDateTime OFTDate OFTDateTime OFTTime
+ * GetFieldAsString()*/
       default:
         delete poFeature;
 	error("Unsupported field type. should have been caught before");
