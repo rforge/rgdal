@@ -1,3 +1,13 @@
+2009-06-25 15:03  rsbivand
+
+	* ChangeLog, DESCRIPTION, R/ogr_sp.R, inst/vectors/test_trk2.gpx,
+	  src/ogr_geom.cpp, src/ogrsource.cpp: adding DateTime -> String
+	  reading
+
+2009-06-24 20:28  rsbivand
+
+	* src/ogrsource.cpp: Date handling
+
 2009-04-16 18:05  rsbivand
 
 	* DESCRIPTION, R/ogr_sp.R, man/readOGR.Rd: third coordinate in OGR
