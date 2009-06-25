@@ -92,6 +92,7 @@ SEXP R_OGR_CAPI_features(SEXP dsn, SEXP layer)
 	    /* Geometry */
 	Ogr_geometry = OGR_F_GetGeometryRef(Ogr_feature);
 	with_z = 0;
+/* TODO fix NULL reading */
 	if ( Ogr_geometry == NULL ) {
 	    error("NULL geometry found");
 	} else {

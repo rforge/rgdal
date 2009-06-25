@@ -195,6 +195,15 @@ extern "C" {
     case OFTString:
       PROTECT(ans=allocVector(STRSXP,nRows));
       break;
+      case OFTDate:
+	PROTECT(ans=allocVector(STRSXP,nRows));
+	break;
+      case OFTDateTime:
+	PROTECT(ans=allocVector(STRSXP,nRows));
+	break;
+      case OFTTime:
+	PROTECT(ans=allocVector(STRSXP,nRows));
+	break;
     default:
       error("unsupported field type: %s",poField->GetFieldTypeName(
         poField->GetType()));
@@ -232,8 +241,25 @@ extern "C" {
           SET_STRING_ELT(ans,iRow,mkChar(poFeature->GetFieldAsString(iField)));
 	else SET_STRING_ELT(ans, iRow, NA_STRING);
 	break;
+      case OFTDate:
+	if (poFeature->IsFieldSet(iField)) 
+          SET_STRING_ELT(ans,iRow,mkChar(poFeature->GetFieldAsString(iField)));
+	else SET_STRING_ELT(ans, iRow, NA_STRING);
+	break;
+      case OFTDateTime:
+	if (poFeature->IsFieldSet(iField)) 
+          SET_STRING_ELT(ans,iRow,mkChar(poFeature->GetFieldAsString(iField)));
+	else SET_STRING_ELT(ans, iRow, NA_STRING);
+	break;
+      case OFTTime:
+	if (poFeature->IsFieldSet(iField)) 
+          SET_STRING_ELT(ans,iRow,mkChar(poFeature->GetFieldAsString(iField)));
+	else SET_STRING_ELT(ans, iRow, NA_STRING);
+	break;
 /* GetFieldAsDateTime OFTDate OFTDateTime OFTTime
  * GetFieldAsString()*/
+/* http://trac.osgeo.org/gdal/ticket/2968 */
+/* gtx <- readOGR("rgdal/inst/vectors/test_trk2.gpx", "track_points")*/
       default:
         delete poFeature;
 	error("Unsupported field type. should have been caught before");

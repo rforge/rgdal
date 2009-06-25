@@ -9,7 +9,8 @@ readOGR <- function(dsn, layer, verbose=TRUE, p4s=NULL,
 	if (nchar(layer) == 0) stop("empty name")
 	ogr_info <- ogrInfo(dsn=dsn, layer=layer,
             input_field_name_encoding=input_field_name_encoding)
-        keep <- ogr_info$iteminfo$typeName %in% c("Integer", "Real", "String")
+        keep <- ogr_info$iteminfo$typeName %in% c("Integer", "Real",
+            "String", "Date", "Time", "DateTime")
         if (drop_unsupported_fields) {
              iflds <- as.integer((1:ogr_info$nitems)-1)
              iflds <- iflds[keep]
