@@ -1,8 +1,8 @@
 2009-06-26 10:04  rsbivand
 
 	* R/ogr.R, R/ogr_sp.R, inst/vectors/pgnullGPS.gpx, man/readOGR.Rd,
-	  src/ogr_geom.cpp, src/ogrsource.cpp: adding NULL, empty geometry,
-	  ring closure handling
+	  src/ogr_geom.cpp, src/ogrsource.cpp, ChangeLog, inst/ChangeLog,
+	  DESCRIPTION: adding NULL, empty geometry, ring closure handling
 
 2009-06-25 18:09  rsbivand
 

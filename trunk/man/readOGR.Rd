@@ -42,6 +42,10 @@ ogrDrivers()
 \note{The bases for this implementation are taken from functions in Barry Rowlingson's draft Rmap package, and from Radim Blazek's v.in.ogr program in GRASS.
 
 Please note that the OGR drivers used may not handle missing data gracefully, and be prepared to have to correct for this manually. From rgdal 0.5-27, missing value handling has been improved, and OGR unset field values are set to NA in R, but drivers and external files may vary in their representations of missing values.
+
+In addition, from 0.6-9 date and time fields are read as strings rather than being treated as unsupported; NULL geometries are identified and dropped. There are differences in the reporting of NULL geometries between \code{ogrInfo} and \code{readOGR} - in \code{ogrInfo}, only declared NULL geometries are reported, but in \code{readOGR}, any line or polygon geometries with no coordinates are assigned NULL geometry status as well. An attempt is made to close unclosed rings in polygon geometries. 
+
+For reading GPX files, refer to the OGR GPX format documentation for the use of layer tags: \dQuote{waypoints}, \dQuote{tracks}, \dQuote{routes}, \dQuote{track_points} and \dQuote{route_points} - reading GPX files requires a build of GDAL/OGR with the expat XML library. 
 }
 \seealso{\code{\link[sp]{SpatialPointsDataFrame-class}}, \code{\link[sp]{SpatialLinesDataFrame-class}}, \code{\link[sp]{SpatialPolygonsDataFrame-class}}, \code{\link[maptools]{readShapePoly}}, \code{\link[base]{iconv}}}
 \examples{
@@ -65,6 +69,10 @@ summary(ps_cant_31)
 ogrInfo(system.file("vectors/Up.tab", package = "rgdal")[1], "Up")
 Up <- readOGR(system.file("vectors/Up.tab", package = "rgdal")[1], "Up")
 summary(Up)
+test_trk2 <- try(readOGR(system.file("vectors/test_trk2.gpx", package = "rgdal")[1], "tracks"))
+if (class(test_trk2) != "try-error") summary(test_trk2)
+test_trk2pts <- try(readOGR(system.file("vectors/test_trk2.gpx", package = "rgdal")[1], "track_points"))
+if (class(test_trk2pts) != "try-error") summary(test_trk2pts)
 }
 \keyword{spatial}
 
