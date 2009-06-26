@@ -250,6 +250,7 @@ SEXP R_OGR_CAPI_features(SEXP dsn, SEXP layer)
       }
       i++;
     }
+    OGR_DS_Destroy(Ogr_ds);
     UNPROTECT(pc);
 
     return(ans);
@@ -352,6 +353,7 @@ SEXP R_OGR_types(SEXP dsn, SEXP layer)
 	i++;
       
     }
+    OGR_DS_Destroy(Ogr_ds);
     UNPROTECT(pc);
 
     return(ans);

@@ -1,3 +1,13 @@
+2009-06-26 10:56  rsbivand
+
+	* R/ogr.R, src/ogr_geom.cpp: added destroy DS object to readOGR and
+	  ogrInfo to permit reading many files
+
+2009-06-26 10:08  rsbivand
+
+	* ChangeLog, inst/ChangeLog: adding NULL, empty geometry, ring
+	  closure handling
+
 2009-06-26 10:04  rsbivand
 
 	* R/ogr.R, R/ogr_sp.R, inst/vectors/pgnullGPS.gpx, man/readOGR.Rd,

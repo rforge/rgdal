@@ -51,11 +51,14 @@ ogrInfo <- function(dsn, layer, input_field_name_encoding=NULL){
   ogrinfo$eType <- u_eType
   ogrinfo$with_z <- u_with_z
   ogrinfo$null_geometries <- null_geometries
+  ogrinfo$dsn <- dsn
+  ogrinfo$layer <- layer
   class(ogrinfo) <- "ogrinfo"
   ogrinfo
 }
 
 print.ogrinfo <- function(x, ...) {
+  cat("Source: \"", x$dsn, '\", layer: \"', x$layer, "\"", '\n', sep='')
   cat("Driver:", x$driver, "number of rows", x$nrows, "\n")
   WKB <- c("wkbPoint", "wkbLineString", "wkbPolygon", "wkbMultiPoint",
     "wkbMultiLineString", "wkbMultiPolygon", "wkbGeometryCollection")
