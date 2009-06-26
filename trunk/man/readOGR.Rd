@@ -73,6 +73,9 @@ test_trk2 <- try(readOGR(system.file("vectors/test_trk2.gpx", package = "rgdal")
 if (class(test_trk2) != "try-error") summary(test_trk2)
 test_trk2pts <- try(readOGR(system.file("vectors/test_trk2.gpx", package = "rgdal")[1], "track_points"))
 if (class(test_trk2pts) != "try-error") summary(test_trk2pts)
+ogrInfo(system.file("vectors", package = "rgdal")[1], "trin_inca_pl03")
+birds <- readOGR(system.file("vectors", package = "rgdal")[1], "trin_inca_pl03")
+summary(birds)
 }
 \keyword{spatial}
 

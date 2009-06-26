@@ -1,7 +1,14 @@
+2009-06-26 11:13  rsbivand
+
+	* man/readOGR.Rd, inst/vectors/trin_inca_pl03.dbf,
+	  inst/vectors/trin_inca_pl03.shp, inst/vectors/trin_inca_pl03.shx:
+	  adding NULL example
+
 2009-06-26 10:56  rsbivand
 
-	* R/ogr.R, src/ogr_geom.cpp: added destroy DS object to readOGR and
-	  ogrInfo to permit reading many files
+	* R/ogr.R, src/ogr_geom.cpp, ChangeLog, inst/ChangeLog: added
+	  destroy DS object to readOGR and ogrInfo to permit reading many
+	  files
 
 2009-06-26 10:08  rsbivand
 
