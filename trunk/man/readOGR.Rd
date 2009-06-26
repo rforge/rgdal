@@ -11,7 +11,7 @@
 }
 \usage{
 readOGR(dsn, layer, verbose = TRUE, p4s=NULL, drop_unsupported_fields=FALSE,
- input_field_name_encoding=NULL, pointDropZ=FALSE)
+ input_field_name_encoding=NULL, pointDropZ=FALSE, dropNULLGeometries=TRUE)
 ogrInfo(dsn, layer, input_field_name_encoding=NULL)
 ogrFIDs(dsn, layer)
 ogrDrivers()
@@ -23,9 +23,10 @@ ogrDrivers()
   \item{layer}{layer name (varies by driver, may be a file name without extension)}
   \item{verbose}{report progress}
   \item{p4s}{PROJ4 string defining CRS, if default NULL, the value is read from the OGR data set} 
-  \item{drop\_unsupported\_fields}{default FALSE, if TRUE skip fields other than string, integer, and real}
+  \item{drop\_unsupported\_fields}{default FALSE, if TRUE skip fields other than String, Integer, and Real; Date, Time and DateTime are converted to String}
   \item{input\_field\_name\_encoding}{default NULL; if not NULL, should be a valid encoding name for the source platform of the data source and layer, see \code{\link[base]{iconv}}}
   \item{pointDropZ}{default FALSE, if TRUE, discard third coordinates for point geometries; third coordinates are alway discarded for line and polygon geometries}
+  \item{dropNULLGeometries}{default TRUE, drop both declared NULL geometries, and empty geometries with no coordinates; if FALSE, return a data frame with the attribute values of the NULL and empty geometries}
   \item{x}{ogrinfo object}
   \item{...}{other arguments to print method}
 }

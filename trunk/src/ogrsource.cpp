@@ -256,10 +256,7 @@ extern "C" {
           SET_STRING_ELT(ans,iRow,mkChar(poFeature->GetFieldAsString(iField)));
 	else SET_STRING_ELT(ans, iRow, NA_STRING);
 	break;
-/* GetFieldAsDateTime OFTDate OFTDateTime OFTTime
- * GetFieldAsString()*/
-/* http://trac.osgeo.org/gdal/ticket/2968 */
-/* gtx <- readOGR("rgdal/inst/vectors/test_trk2.gpx", "track_points")*/
+
       default:
         delete poFeature;
 	error("Unsupported field type. should have been caught before");
