@@ -98,7 +98,7 @@ setMethod('initialize', 'GDALReadOnlyDataset',
 	      if (nchar(filename) == 0) stop("empty file name")
               slot(.Object, 'handle') <- {
                 .Call('RGDAL_OpenDataset', as.character(filename), 
-			TRUE, PACKAGE="rgdal")
+			TRUE, (options("warn") < 0), PACKAGE="rgdal")
               }
             } else {
               slot(.Object, 'handle') <- handle
@@ -115,7 +115,7 @@ setMethod('initialize', 'GDALDataset',
 	      if (nchar(filename) == 0) stop("empty file name")
               slot(.Object, 'handle') <- {
                 .Call('RGDAL_OpenDataset', as.character(filename), 
-			FALSE, PACKAGE="rgdal")
+			FALSE, (options("warn") < 0), PACKAGE="rgdal")
               }
             } else {
               slot(.Object, 'handle') <- handle

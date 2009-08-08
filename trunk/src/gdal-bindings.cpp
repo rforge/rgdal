@@ -116,7 +116,7 @@ __errorHandler(CPLErr eErrClass, int err_no, const char *msg) {
 
   if (eErrClass == CE_Warning) {
 
-    warning("\n\tGDAL Error %d: %s\n", err_no, msg);
+    warning("\n\tNon-fatal GDAL Error %d: %s\n", err_no, msg);
 
   } else {
 
@@ -406,7 +406,7 @@ RGDAL_CreateDataset(SEXP sxpDriver, SEXP sDim, SEXP sType,
 }
 
 SEXP
-RGDAL_OpenDataset(SEXP filename, SEXP read_only) {
+RGDAL_OpenDataset(SEXP filename, SEXP read_only, SEXP warn_flag) {
 
   const char *fn = asString(filename);
 
@@ -417,7 +417,30 @@ RGDAL_OpenDataset(SEXP filename, SEXP read_only) {
   else
     RWFlag = GA_Update;
 
+/* Modification suggested by Even Rouault, 2009-08-08: */
+
+  CPLErrorReset();
+  if (asLogical(warn_flag))
+    CPLPushErrorHandler(CPLQuietErrorHandler);
+  else
+    CPLPushErrorHandler(CPLDefaultErrorHandler); 
+
   GDALDataset *pDataset = (GDALDataset *) GDALOpen(fn, RWFlag);
+
+  CPLPopErrorHandler();
+
+/* Similarly to SWIG bindings, the following lines will cause
+RGDAL_OpenDataset() to fail on - uncleared - errors even if pDataset is not
+NULL. They could also be just removed. While pDataset != NULL, there's some
+hope ;-) */
+
+  CPLErr eclass = CPLGetLastErrorType();
+
+  if (pDataset != NULL && eclass == CE_Failure) {
+    GDALClose(pDataset);
+    pDataset = NULL;
+    __errorHandler(eclass, CPLGetLastErrorNo(), CPLGetLastErrorMsg());
+  }
 
   if (pDataset == NULL)
     error("Could not open file: %s\n", filename);
