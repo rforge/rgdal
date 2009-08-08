@@ -4,6 +4,7 @@
 #include <cpl_csv.h>
 #include <ogr_spatialref.h>
 #include <ogrsf_frmts.h>
+#include <cpl_error.h>
 
 // R headers moved outside extern "C" 070808 RSB re. note from BDR
 // #ifdef __cplusplus
@@ -127,6 +128,51 @@ __errorHandler(CPLErr eErrClass, int err_no, const char *msg) {
   return;
 
 }
+
+/************************************************************************/
+/*                       CPLDefaultErrorHandler()                       */
+/* quoted from GDAL, pointed at REptintf()                              */
+/************************************************************************/
+
+void CPL_STDCALL R_CPLDefaultErrorHandler( CPLErr eErrClass, int nError, 
+                             const char * pszErrorMsg )
+
+{
+    static int       nCount = 0;
+    static int       nMaxErrors = -1;
+
+    if (eErrClass != CE_Debug)
+    {
+        if( nMaxErrors == -1 )
+        {
+            nMaxErrors = 
+                atoi(CPLGetConfigOption( "CPL_MAX_ERROR_REPORTS", "1000" ));
+        }
+
+        nCount++;
+        if (nCount > nMaxErrors && nMaxErrors > 0 )
+            return;
+    }
+
+
+    if( eErrClass == CE_Debug )
+        REprintf("%s\n", pszErrorMsg );
+    else if( eErrClass == CE_Warning )
+        REprintf("Warning %d: %s\n", nError, pszErrorMsg );
+    else
+        REprintf("ERROR %d: %s\n", nError, pszErrorMsg );
+
+    if (eErrClass != CE_Debug 
+        && nMaxErrors > 0 
+        && nCount == nMaxErrors )
+    {
+        REprintf( "More than %d errors or warnings have been reported. "
+                 "No more will be reported from now.\n", 
+                 nMaxErrors );
+    }
+
+}
+
 
 SEXP
 RGDAL_Init(void) {
@@ -423,7 +469,7 @@ RGDAL_OpenDataset(SEXP filename, SEXP read_only, SEXP warn_flag) {
   if (asLogical(warn_flag))
     CPLPushErrorHandler(CPLQuietErrorHandler);
   else
-    CPLPushErrorHandler(CPLDefaultErrorHandler); 
+    CPLPushErrorHandler(R_CPLDefaultErrorHandler); 
 
   GDALDataset *pDataset = (GDALDataset *) GDALOpen(fn, RWFlag);
 

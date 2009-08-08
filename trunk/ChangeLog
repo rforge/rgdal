@@ -1,8 +1,12 @@
+2009-08-08 20:48  rsbivand
+
+	* src/gdal-bindings.cpp: altered CPL default to use REprintf
+
 2009-08-08 17:16  rsbivand
 
-	* DESCRIPTION, R/gdal.R, src/gdal-bindings.cpp: allowing error
-	  handler switch for opening GDAL (for AIG driver case) - suggested
-	  by Even Rouault
+	* DESCRIPTION, R/gdal.R, src/gdal-bindings.cpp, ChangeLog,
+	  inst/ChangeLog: allowing error handler switch for opening GDAL
+	  (for AIG driver case) - suggested by Even Rouault
 
 2009-07-14 11:19  rsbivand
 
