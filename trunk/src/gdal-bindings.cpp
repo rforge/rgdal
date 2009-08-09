@@ -158,9 +158,9 @@ void CPL_STDCALL R_CPLDefaultErrorHandler( CPLErr eErrClass, int nError,
     if( eErrClass == CE_Debug )
         REprintf("%s\n", pszErrorMsg );
     else if( eErrClass == CE_Warning )
-        REprintf("Warning %d: %s\n", nError, pszErrorMsg );
+        REprintf("CPL Warning %d: %s\n", nError, pszErrorMsg );
     else
-        REprintf("ERROR %d: %s\n", nError, pszErrorMsg );
+        REprintf("CPL ERROR %d: %s\n", nError, pszErrorMsg );
 
     if (eErrClass != CE_Debug 
         && nMaxErrors > 0 
@@ -452,7 +452,7 @@ RGDAL_CreateDataset(SEXP sxpDriver, SEXP sDim, SEXP sType,
 }
 
 SEXP
-RGDAL_OpenDataset(SEXP filename, SEXP read_only, SEXP warn_flag) {
+RGDAL_OpenDataset(SEXP filename, SEXP read_only, SEXP silent) {
 
   const char *fn = asString(filename);
 
@@ -466,10 +466,10 @@ RGDAL_OpenDataset(SEXP filename, SEXP read_only, SEXP warn_flag) {
 /* Modification suggested by Even Rouault, 2009-08-08: */
 
   CPLErrorReset();
-  if (asLogical(warn_flag))
-    CPLPushErrorHandler(R_CPLDefaultErrorHandler); 
-  else
+  if (asLogical(silent))
     CPLPushErrorHandler(CPLQuietErrorHandler);
+  else
+    CPLPushErrorHandler(R_CPLDefaultErrorHandler); 
 
   GDALDataset *pDataset = (GDALDataset *) GDALOpen(fn, RWFlag);
 
@@ -489,7 +489,7 @@ hope ;-) */
   }
 
   if (pDataset == NULL)
-    error("Could not open file: %s\n", filename);
+    error("%s\n", CPLGetLastErrorMsg());
 
   SEXP sxpHandle = R_MakeExternalPtr((void *) pDataset,
 				     mkChar("GDAL Dataset"),
