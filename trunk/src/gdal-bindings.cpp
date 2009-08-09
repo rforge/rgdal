@@ -131,7 +131,7 @@ __errorHandler(CPLErr eErrClass, int err_no, const char *msg) {
 
 /************************************************************************/
 /*                       CPLDefaultErrorHandler()                       */
-/* quoted from GDAL, pointed at REptintf()                              */
+/* quoted from GDAL, pointed at REprintf()                              */
 /************************************************************************/
 
 void CPL_STDCALL R_CPLDefaultErrorHandler( CPLErr eErrClass, int nError, 
@@ -467,9 +467,9 @@ RGDAL_OpenDataset(SEXP filename, SEXP read_only, SEXP warn_flag) {
 
   CPLErrorReset();
   if (asLogical(warn_flag))
-    CPLPushErrorHandler(CPLQuietErrorHandler);
-  else
     CPLPushErrorHandler(R_CPLDefaultErrorHandler); 
+  else
+    CPLPushErrorHandler(CPLQuietErrorHandler);
 
   GDALDataset *pDataset = (GDALDataset *) GDALOpen(fn, RWFlag);
 
