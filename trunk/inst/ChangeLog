@@ -1,3 +1,8 @@
+2009-08-14 20:48  rsbivand
+
+	* ChangeLog, R/sp_gdal.R, inst/ChangeLog: propagating fname fix for
+	  RST driver requiring *.rst extension
+
 2009-08-14 20:17  rsbivand
 
 	* DESCRIPTION, R/gdal.R, R/sp_gdal.R, man/readGDAL.Rd: propagating
