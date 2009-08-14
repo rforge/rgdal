@@ -1,9 +1,14 @@
+2009-08-14 20:17  rsbivand
+
+	* DESCRIPTION, R/gdal.R, R/sp_gdal.R, man/readGDAL.Rd: propagating
+	  fname fix for RST driver requiring *.rst extension
+
 2009-08-09 15:28  rsbivand
 
 	* DESCRIPTION, R/gdal.R, R/sgdf_gdal.R, R/sp_gdal.R,
 	  man/GDALDataset-class.Rd, man/GDALReadOnlyDataset-class.Rd,
-	  man/SpatialGDAL-class.Rd, man/readGDAL.Rd, src/gdal-bindings.cpp:
-	  altered CPL default to use REprintf
+	  man/SpatialGDAL-class.Rd, man/readGDAL.Rd, src/gdal-bindings.cpp,
+	  ChangeLog, inst/ChangeLog: altered CPL default to use REprintf
 
 2009-08-09 09:42  rsbivand
 

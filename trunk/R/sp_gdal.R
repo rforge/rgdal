@@ -244,8 +244,12 @@ create2GDAL = function(dataset, drivername = "GTiff", type = "Float32", mvFlag =
 	.Call("RGDAL_SetGeoTransform", tds.out, gt, PACKAGE = "rgdal")
 
 	p4s <- proj4string(dataset)
-	if (!is.na(p4s) && nchar(p4s) > 0)
-		.Call("RGDAL_SetProject", tds.out, p4s, PACKAGE = "rgdal")
+	if (!is.na(p4s) && nchar(p4s) > 0) {
+	    .Call("RGDAL_SetProject", tds.out, p4s, PACKAGE = "rgdal")
+        } else {
+            if (getDriverName(getDriver(tds.out)) == "RST") 
+                stop("RST files must have a valid coordinate reference system")
+        }
 	for (i in 1:nbands) {
 		band = as.matrix(dataset[i])
 		if (!is.numeric(band)) stop("Numeric bands required")
