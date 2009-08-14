@@ -211,7 +211,7 @@ writeGDAL = function(dataset, fname, drivername = "GTiff", type = "Float32",
 {
 	if (nchar(fname) == 0) stop("empty file name")
 	tds.out <- create2GDAL(dataset=dataset, drivername=drivername, 
-		type=type, mvFlag=mvFlag, options=options)
+		type=type, mvFlag=mvFlag, options=options, fname=fname)
 	saveDataset(tds.out, fname, options=options)
 # RSB 081030 GDAL.close cleanup
 #	tmp.obj <- saveDataset(tds.out, fname, options=options)
@@ -219,7 +219,7 @@ writeGDAL = function(dataset, fname, drivername = "GTiff", type = "Float32",
 	invisible(fname)
 }
 
-create2GDAL = function(dataset, drivername = "GTiff", type = "Float32", mvFlag = NA, options=NULL)
+create2GDAL = function(dataset, drivername = "GTiff", type = "Float32", mvFlag = NA, options=NULL, fname=NULL)
 {
 	stopifnot(gridded(dataset))
 	fullgrid(dataset) = TRUE
@@ -237,7 +237,7 @@ create2GDAL = function(dataset, drivername = "GTiff", type = "Float32", mvFlag =
                 stop("options not character")
 	tds.out = new("GDALTransientDataset", driver = d.drv, 
 		rows = dims[2], cols = dims[1],
-        	bands = nbands, type = type, options = options, 
+        	bands = nbands, type = type, options = options, fname = fname,
 		handle = NULL)
 	gt = c(offset[1] - 0.5 * cellsize[1], cellsize[1], 0.0, 
 		offset[2] + (dims[2] -0.5) * cellsize[2], 0.0, -cellsize[2])

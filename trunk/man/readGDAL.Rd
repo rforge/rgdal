@@ -11,12 +11,12 @@
 readGDAL(fname, offset, region.dim, output.dim, band, p4s=NULL, ..., half.cell=c(0.5, 0.5), silent = FALSE)
 asSGDF_GROD(x, offset, region.dim, output.dim, p4s=NULL, ..., half.cell=c(0.5,0.5))
 writeGDAL(dataset, fname, drivername = "GTiff", type = "Float32", mvFlag = NA, options=NULL)
-create2GDAL(dataset, drivername = "GTiff", type = "Float32", mvFlag = NA, options=NULL)
+create2GDAL(dataset, drivername = "GTiff", type = "Float32", mvFlag = NA, options=NULL, fname = NULL)
 GDALinfo(fname, silent=FALSE)
 }
 
 \arguments{
-\item{fname}{ file name of grid map }
+\item{fname}{ file name of grid map; in \code{create2GDAL} provides a way to pass through a file name with driver-required extension for sensitive drivers }
 \item{x}{A GDALReadOnlyDataset object}
 \item{offset}{Number of rows and columns from the origin (usually the upper left corner) to begin reading from; presently ordered (y,x) - this may change}
 \item{region.dim}{The number of rows and columns to read from the dataset; presently ordered (y,x) - this may change}
