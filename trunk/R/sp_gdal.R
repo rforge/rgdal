@@ -207,12 +207,23 @@ readGDAL = function(fname, offset, region.dim, output.dim, band, p4s=NULL, ..., 
 }
 
 writeGDAL = function(dataset, fname, drivername = "GTiff", type = "Float32", 
-		mvFlag = NA, options=NULL)
+		mvFlag = NA, options=NULL, copy_drivername = "GTiff")
 {
 	if (nchar(fname) == 0) stop("empty file name")
-	tds.out <- create2GDAL(dataset=dataset, drivername=drivername, 
+        x <- gdalDrivers()
+	copy_only <- as.character(x[!x$create & x$copy, 1])
+        if (drivername %in% copy_only) {
+	    tds.create <- create2GDAL(dataset=dataset,
+                drivername=copy_drivername, type=type,
+                mvFlag=mvFlag, fname=NULL)
+            tds.copy <- copyDataset(tds.create, driver=drivername, fname=fname)
+            GDAL.close(tds.create)
+	    saveDataset(tds.copy, fname, options=options)
+        } else {
+	    tds.out <- create2GDAL(dataset=dataset, drivername=drivername, 
 		type=type, mvFlag=mvFlag, options=options, fname=fname)
-	saveDataset(tds.out, fname, options=options)
+	    saveDataset(tds.out, fname, options=options)
+        }
 # RSB 081030 GDAL.close cleanup
 #	tmp.obj <- saveDataset(tds.out, fname, options=options)
 #        GDAL.close(tmp.obj)

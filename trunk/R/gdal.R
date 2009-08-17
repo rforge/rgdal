@@ -170,15 +170,20 @@ getDriver <- function(dataset) {
 
 }
 
-copyDataset <- function(dataset, driver, strict = FALSE, options = NULL) {
+copyDataset <- function(dataset, driver, strict = FALSE, options = NULL, fname = NULL) {
 
   assertClass(dataset, 'GDALReadOnlyDataset')
   
   if (missing(driver)) driver <- getDriver(dataset)
   else if (is.character(driver)) driver <- new("GDALDriver", driver)
 
-  my_tempfile <- tempfile()
-
+  if (is.null(fname)) {
+     my_tempfile <- tempfile()
+  } else {
+     my_tempfile <- paste(tempdir(), "/",
+       paste(sample(letters, 3), collapse=""),
+       basename(fname[1]), sep="")
+  }
   if (nchar(my_tempfile) == 0) stop("empty file name")
   if (!is.null(options) && !is.character(options))
     stop("options not character")

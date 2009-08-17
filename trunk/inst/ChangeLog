@@ -1,3 +1,9 @@
+2009-08-17 13:56  rsbivand
+
+	* DESCRIPTION, R/gdal.R, R/sp_gdal.R, man/GDALDataset-class.Rd,
+	  man/GDALTransientDataset-class.Rd, man/readGDAL.Rd,
+	  man/readOGR.Rd: added copy only driver detection and handling
+
 2009-08-14 20:48  rsbivand
 
 	* ChangeLog, R/sp_gdal.R, inst/ChangeLog: propagating fname fix for
