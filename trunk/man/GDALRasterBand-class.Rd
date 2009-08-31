@@ -31,7 +31,7 @@ Class \code{"GDALMajorObject"}, directly.
 \usage{
 getRasterData(dataset, band = NULL, offset = c(0, 0),
               region.dim = dim(dataset), output.dim = region.dim,
-              interleave = c(0, 0), as.is = FALSE) 
+              interleave = c(0, 0), as.is = FALSE, signedInt = NULL) 
 
 getRasterTable(dataset, band = NULL, offset = c(0, 0), region.dim = dim(dataset))
 
@@ -54,6 +54,7 @@ getRasterBlockSize(raster)
     needed}
   \item{as.is}{If false, scale the data to its natural units; if the
     case of thematic data, return the data as factors}
+\item{signedInt}{default NULL, if TRUE and input band is unsigned UInt16 or UInt32, convert to signed, if FALSE and input band is signed Int16 or Int32, convert to unsigned}
   \item{raster}{An object of class GDALRasterBand}
 }
 

@@ -809,14 +809,18 @@ SEXP
 RGDAL_GetRasterData(SEXP sxpRasterBand,
 		    SEXP sxpRegion,
 		    SEXP sxpDimOut,
-		    SEXP sxpInterleave) {
+		    SEXP sxpInterleave,
+                    SEXP flipSignedInt) {
 
   GDALRasterBand *pRasterBand = getGDALRasterPtr(sxpRasterBand);
 
   GDALDataType eGDALType = GDT_Int32;
   SEXPTYPE uRType = INTSXP;
 
-  switch(pRasterBand->GetRasterDataType()) {
+  int RDT = pRasterBand->GetRasterDataType();
+  int Iflag = 0;
+
+  switch(RDT) {
 
   case GDT_Byte:
   case GDT_UInt16:
@@ -826,6 +830,18 @@ RGDAL_GetRasterData(SEXP sxpRasterBand,
 
     uRType = INTSXP;
     eGDALType = GDAL_INTEGER_TYPE;
+
+    if (LOGICAL_POINTER(flipSignedInt)[0]) {
+      if (LOGICAL_POINTER(flipSignedInt)[1]) {
+        /* force to signed */
+        if (RDT == GDT_UInt16) Iflag=-16;
+        if (RDT == GDT_UInt32) Iflag=-32;
+      } else {
+        /* force to unsigned */
+        if (RDT == GDT_Int16) Iflag=16;
+        if (RDT == GDT_Int32) Iflag=32;
+      }
+    }
 
     break;
 
@@ -923,7 +939,7 @@ RGDAL_GetRasterData(SEXP sxpRasterBand,
 
   }
 
-  int hasNoDataValue;
+  int hasNoDataValue, offset;
 
   double noDataValue = pRasterBand->GetNoDataValue(&hasNoDataValue);
 
@@ -980,6 +996,28 @@ RGDAL_GetRasterData(SEXP sxpRasterBand,
 
     }
 
+  }
+  if (uRType == INTSXP && Iflag != 0) {
+    if (Iflag < 0) {
+      if (Iflag == -16) offset = 2^(16-1)-1;
+      else offset = 2^(32-1)-1;
+      for (i = 0; i < LENGTH(sRStorage); ++i) {
+        /* force to signed */
+        if (INTEGER(sRStorage)[i] >= offset) {
+          INTEGER(sRStorage)[i] = -(INTEGER(sRStorage)[i]-offset);
+        }
+      }
+    } else {
+      if (Iflag == 16) offset = 2^(16-1)-1;
+      else offset = 2^(32-1)-1;
+      for (i = 0; i < LENGTH(sRStorage); ++i) {
+        if (INTEGER(sRStorage)[i] < 0) {
+          INTEGER(sRStorage)[i] = (offset+(offset+INTEGER(sRStorage)[i]));
+        }
+
+        /* force to unsigned */
+      }
+    }
   }
 
   UNPROTECT(pc);

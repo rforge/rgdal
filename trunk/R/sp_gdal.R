@@ -130,7 +130,7 @@ asSGDF_GROD <- function(x, offset, region.dim, output.dim, p4s=NULL, ..., half.c
 	return(data)
 }
 
-readGDAL = function(fname, offset, region.dim, output.dim, band, p4s=NULL, ..., half.cell=c(0.5,0.5), silent = FALSE) {
+readGDAL = function(fname, offset, region.dim, output.dim, band, p4s=NULL, ..., signedInt=NULL, half.cell=c(0.5,0.5), silent = FALSE) {
 	if (nchar(fname) == 0) stop("empty file name")
 	x = GDAL.open(fname, silent=silent)
 	d = dim(x)
@@ -188,7 +188,8 @@ readGDAL = function(fname, offset, region.dim, output.dim, band, p4s=NULL, ..., 
 			rev(output.dim))
 #			rev(region.dim))
 		data = getRasterData(x, band=band, offset=offset, 
-			region.dim=region.dim, output.dim=output.dim, ...)
+			region.dim=region.dim, output.dim=output.dim, ...,
+                        signedInt=signedInt)
 		GDAL.close(x)
 		if (length(d) == 2)
 			df = list(band1 = as.vector(data))
