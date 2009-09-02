@@ -8,7 +8,7 @@
 \title{Read/write between GDAL grid maps and Spatial objects}
 \description{The functions read or write GDAL grid maps. They will set the spatial reference system if available. \code{GDALinfo} reports the size and other parameters of the dataset. \code{create2GDAL} creates a GDAL data set from a SpatialGridDataFrame object, in particular to be able to save to GDAL driver formats that only permit copying rather than creation.}
 \usage{ 
-readGDAL(fname, offset, region.dim, output.dim, band, p4s=NULL, ..., signedInt = NULL, half.cell=c(0.5, 0.5), silent = FALSE)
+readGDAL(fname, offset, region.dim, output.dim, band, p4s=NULL, ..., half.cell=c(0.5, 0.5), silent = FALSE)
 asSGDF_GROD(x, offset, region.dim, output.dim, p4s=NULL, ..., half.cell=c(0.5,0.5))
 writeGDAL(dataset, fname, drivername = "GTiff", type = "Float32", mvFlag = NA, options=NULL, copy_drivername = "GTiff")
 create2GDAL(dataset, drivername = "GTiff", type = "Float32", mvFlag = NA, options=NULL, fname = NULL)
@@ -23,7 +23,6 @@ GDALinfo(fname, silent=FALSE)
 \item{output.dim}{The number of rows and columns to return in the created object using GDAL's method to take care of image decimation / replication; presently ordered (y,x) - this may change}
 \item{band}{if missing, all bands are read}
 \item{p4s}{PROJ4 string defining CRS, if default (NULL), the value is read from the GDAL data set} 
-\item{signedInt}{default NULL, if TRUE and input band is unsigned UInt16 or UInt32, convert to signed, if FALSE and input band is signed Int16 or Int32, convert to unsigned}
 \item{half.cell}{Used to adjust the intra-cell offset from corner to centre, usually as default, but may be set to c=(0,0) if needed; presently ordered (y,x) - this may change}
 \item{silent}{ logical; if TRUE, comment and non-fatal CPL driver errors suppressed }
 \item{...}{ arguments passed to either \code{getRasterData}, or

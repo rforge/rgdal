@@ -405,7 +405,7 @@ getRasterData <- function(dataset,
                           region.dim = dim(dataset),
                           output.dim = region.dim,
                           interleave = c(0, 0),
-                          as.is = FALSE, signedInt = NULL) {
+                          as.is = FALSE) {
 
   assertClass(dataset, 'GDALReadOnlyDataset')
 
@@ -421,13 +421,6 @@ getRasterData <- function(dataset,
   
   x <- array(dim = as.integer(c(rev(output.dim), length(band))))
 
-  flagSignedInt <- logical(2)
-  if (is.null(signedInt)) {
-    flagSignedInt <- rep(FALSE, 2)
-  } else {
-    flagSignedInt[1] <- TRUE
-    flagSignedInt[2] <- signedInt
-  }
 
   for (i in seq(along = band)) {
 
@@ -437,7 +430,6 @@ getRasterData <- function(dataset,
                       as.integer(c(offset, region.dim)),
                       as.integer(output.dim),
                       as.integer(interleave),
-                      as.logical(flagSignedInt),
                       PACKAGE="rgdal")
   
   }

@@ -8,6 +8,8 @@
 \alias{dim,GDALRasterBand-method}
 \alias{getRasterBand}
 \alias{getRasterBlockSize}
+\alias{toSigned}
+\alias{toUnSigned}
 \title{Class "GDALRasterBand"}
 \description{Returns a two-dimensional array with data from a raster band, used internally within functions}
 \section{Objects from the Class}{
@@ -31,7 +33,7 @@ Class \code{"GDALMajorObject"}, directly.
 \usage{
 getRasterData(dataset, band = NULL, offset = c(0, 0),
               region.dim = dim(dataset), output.dim = region.dim,
-              interleave = c(0, 0), as.is = FALSE, signedInt = NULL) 
+              interleave = c(0, 0), as.is = FALSE) 
 
 getRasterTable(dataset, band = NULL, offset = c(0, 0), region.dim = dim(dataset))
 
@@ -40,6 +42,11 @@ getProjectionRef(dataset)
 getRasterBand(dataset, band = 1)
 
 getRasterBlockSize(raster)
+
+toSigned(x, base)
+
+toUnSigned(x, base)
+
 }
 \arguments{
   \item{dataset}{An object inheriting from class 'GDALReadOnlyDataset'}
@@ -54,8 +61,9 @@ getRasterBlockSize(raster)
     needed}
   \item{as.is}{If false, scale the data to its natural units; if the
     case of thematic data, return the data as factors}
-\item{signedInt}{default NULL, if TRUE and input band is unsigned UInt16 or UInt32, convert to signed, if FALSE and input band is signed Int16 or Int32, convert to unsigned}
   \item{raster}{An object of class GDALRasterBand}
+  \item{x}{integer variable for conversion}
+  \item{base}{If Byte input, 8, if Int16 or UInt16, 16}
 }
 
 \details{
@@ -71,6 +79,9 @@ getRasterBlockSize(raster)
 
     \item{\code{getRasterBlockSize}:}{returns the natural block size of
       the raster band. Use this for efficient tiled IO.}
+
+    \item{\code{toSigned}:}{used to convert a band read as unsigned integer to signed integer}
+    \item{\code{toUnSigned}:}{used to convert a band read as signed integer to unsigned integer}
 
   }
 }
