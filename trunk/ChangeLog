@@ -1,9 +1,15 @@
+2009-09-03 15:03  rsbivand
+
+	* DESCRIPTION, man/SpatialGDAL-class.Rd, man/readGDAL.Rd,
+	  man/showWKT.Rd: tidying docs links for 2.10.0
+
 2009-09-02 20:33  rsbivand
 
 	* DESCRIPTION, NAMESPACE, R/gdal.R, R/sp_gdal.R,
 	  man/GDALRasterBand-class.Rd, man/readGDAL.Rd,
-	  src/gdal-bindings.cpp: extra information on band type and helpers
-	  for signed/unsigned conversion
+	  src/gdal-bindings.cpp, ChangeLog, inst/ChangeLog: extra
+	  information on band type and helpers for signed/unsigned
+	  conversion
 
 2009-08-31 22:46  rsbivand
 
