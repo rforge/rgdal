@@ -202,7 +202,9 @@ readGDAL = function(fname, offset, region.dim, output.dim, band, p4s=NULL, ..., 
 		}
 		ysign <- sign(gt[6])
 #		cells.dim = c(d[1], d[2]) # c(d[2],d[1])
-		co.x <- gt[1] + (offset[2] + half.cell[2]) * cellsize[1]
+# bug report Jose M. Blanco Moreno 091004
+		co.x <- gt[1] + ((offset[2]/(cellsize[1]/abs(gt[2]))) + 
+                    half.cell[2]) * cellsize[1]
 		co.y <- ifelse(ysign < 0, gt[4] + (ysign*((output.dim[1] + 
 # bug report Jose M. Blanco Moreno 091004
 			(offset[1]/(cellsize[2]/abs(gt[6]))) + 
