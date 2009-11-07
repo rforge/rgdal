@@ -1,3 +1,15 @@
+2009-11-07 14:05  rsbivand
+
+	* man/writeOGR.Rd: writing logical OGR fields as integer
+
+2009-11-07 13:53  rsbivand
+
+	* R/ogr_write.R: writing logical OGR fields as integer
+
+2009-10-29 21:23  rsbivand
+
+	* ChangeLog, inst/ChangeLog: tidy
+
 2009-10-28 12:33  rsbivand
 
 	* DESCRIPTION, R/gdal.R, R/sgdf_gdal.R, R/sp_gdal.R, R/subs.R,
