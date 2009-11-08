@@ -18,7 +18,7 @@ assign(".rgdal_old.GDAL_DATA", "", envir=.RGDAL_CACHE)
     Sys.setenv("GDAL_DATA"=system.file("gdal", package = "rgdal")[1])
     assign(".rgdal_old.NEEDED", TRUE, envir=.RGDAL_CACHE)
   } else if (.Platform$OS.type == "windows") {
-    .rgdal_OSGeo4W <- Sys.getenv("OSGEO4W_ROOT")
+    assign(".rgdal_OSGeo4W", Sys.getenv("OSGEO4W_ROOT"), envir=.RGDAL_CACHE)
   }
 
   library.dynam('rgdal', pkg, lib)

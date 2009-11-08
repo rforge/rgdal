@@ -1,6 +1,15 @@
+2009-11-08 19:16  rsbivand
+
+	* R/AAA.R: fix unloading problem
+
+2009-11-08 18:13  rsbivand
+
+	* R/AAA.R: fix unloading problem
+
 2009-11-07 14:05  rsbivand
 
-	* man/writeOGR.Rd: writing logical OGR fields as integer
+	* man/writeOGR.Rd, ChangeLog, DESCRIPTION, inst/ChangeLog: writing
+	  logical OGR fields as integer
 
 2009-11-07 13:53  rsbivand
 
