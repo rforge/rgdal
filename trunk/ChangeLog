@@ -1,6 +1,6 @@
 2009-11-08 19:16  rsbivand
 
-	* R/AAA.R: fix unloading problem
+	* R/AAA.R, ChangeLog, inst/ChangeLog: fix unloading problem
 
 2009-11-08 18:13  rsbivand
 
