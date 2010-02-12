@@ -1,6 +1,12 @@
+2010-02-12 15:49  rsbivand
+
+	* DESCRIPTION, NAMESPACE, R/ogr.R, R/sp_gdal.R, man/readGDAL.Rd,
+	  man/readOGR.Rd: adding direct access to spatial refs
+
 2010-01-03 14:48  rsbivand
 
-	* R/ogr_write.R, DESCRIPTION: POSIXt as double in writeOGR
+	* R/ogr_write.R, DESCRIPTION, ChangeLog, inst/ChangeLog: POSIXt as
+	  double in writeOGR
 
 2009-12-06 19:42  rsbivand
 

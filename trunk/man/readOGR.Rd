@@ -4,6 +4,7 @@
 \alias{print.ogrinfo}
 \alias{ogrFIDs}
 \alias{ogrDrivers}
+\alias{OGRSpatialRef}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Read OGR vector maps into Spatial objects}
 \description{
@@ -29,6 +30,7 @@ readOGR(dsn, layer, verbose = TRUE, p4s=NULL, drop_unsupported_fields=FALSE,
 ogrInfo(dsn, layer, input_field_name_encoding=NULL)
 ogrFIDs(dsn, layer)
 ogrDrivers()
+OGRSpatialRef(dsn, layer)
 \method{print}{ogrinfo}(x, ...)
 }
 %- maybe also 'usage' for other objects documented here.
@@ -71,9 +73,11 @@ ogrInfo(dsn=dsn, layer="cities")
 cities <- readOGR(dsn=dsn, layer="cities")
 summary(cities)
 ogrInfo(dsn=dsn, layer="kiritimati_primary_roads")
+OGRSpatialRef(dsn=dsn, layer="kiritimati_primary_roads")
 kiritimati_primary_roads <- readOGR(dsn=dsn, layer="kiritimati_primary_roads")
 summary(kiritimati_primary_roads)
 ogrInfo(dsn=dsn, layer="scot_BNG")
+OGRSpatialRef(dsn=dsn, layer="scot_BNG")
 scot_BNG <- readOGR(dsn=dsn, layer="scot_BNG")
 summary(scot_BNG)
 if ("GML" \%in\% ogrDrivers()$name) {
