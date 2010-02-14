@@ -26,7 +26,8 @@ lines or \code{layer="track_points"} points.
 }
 \usage{
 readOGR(dsn, layer, verbose = TRUE, p4s=NULL, drop_unsupported_fields=FALSE,
- input_field_name_encoding=NULL, pointDropZ=FALSE, dropNULLGeometries=TRUE)
+ input_field_name_encoding=NULL, pointDropZ=FALSE, dropNULLGeometries=TRUE,
+ useC=TRUE)
 ogrInfo(dsn, layer, input_field_name_encoding=NULL)
 ogrFIDs(dsn, layer)
 ogrDrivers()
@@ -43,6 +44,7 @@ OGRSpatialRef(dsn, layer)
   \item{input\_field\_name\_encoding}{default NULL; if not NULL, should be a valid encoding name for the source platform of the data source and layer, see \code{\link[base]{iconv}}}
   \item{pointDropZ}{default FALSE, if TRUE, discard third coordinates for point geometries; third coordinates are alway discarded for line and polygon geometries}
   \item{dropNULLGeometries}{default TRUE, drop both declared NULL geometries, and empty geometries with no coordinates; if FALSE, return a data frame with the attribute values of the NULL and empty geometries}
+  \item{useC}{default TRUE, if FALSE use original interpreted code in a loop}
   \item{x}{ogrinfo object}
   \item{...}{other arguments to print method}
 }
