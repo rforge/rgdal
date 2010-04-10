@@ -11,6 +11,7 @@ if test -z "$OSGEO4W_BUILD" ; then
   if test -z "$R_PACKAGE_DIR" ; then
     R_PACKAGE_DIR=${DPKG}
   fi
+
 # build changes BDR 100410
   if test "${R_ARCH}" != "/x64"; then
     mkdir -p "${R_PACKAGE_DIR}/libs${R_ARCH}"
