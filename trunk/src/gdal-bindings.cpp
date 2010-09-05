@@ -804,6 +804,25 @@ RGDAL_GetBandType(SEXP sxpRasterBand) {
   return(ans);
 }
 
+/* new RAT
+SEXP
+RGDAL_GetDefaultRAT(SEXP sRasterBand) {
+
+  SEXP ans;
+
+  GDALRasterBand *pRasterBand = getGDALRasterPtr(sxpRasterBand);
+  PROTECT(ans = NEW_LIST(1));
+
+  GDALRasterAttributeTable *pRasterBandRAT = pRasterBand-> GetDefaultRAT();
+
+  if (pRasterBandRAT == NULL) SET_VECTOR_ELT(ans, 0, R_NilValue);
+
+  UNPROTECT(1);
+  return(ans);
+
+}
+*/
+
 SEXP
 RGDAL_PutRasterData(SEXP sxpRasterBand, SEXP sxpData, SEXP sxpOffset) {
 
