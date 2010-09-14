@@ -1,0 +1,56 @@
+Installing the R source rgdal package
+
+In order to install the R source rgdal package, you should first have
+installed GDAL/OGR with all of their dependencies needed for the data
+you need to access. There are many dependencies, not all of which need to
+be met for every user, but which provide the flexibility needed by users
+with special requirements. Note that both driver updates and new drivers
+are made available in successive releases of GDAL/OGR, and that, for
+special purposes, tracking the GDAL/OGR CVS changes can be very useful.
+
+The main download source is:
+
+http://trac.osgeo.org/gdal/wiki/DownloadSource
+
+PROJ.4 is available at:
+
+http://trac.osgeo.org/proj/
+
+but installing FWTools is a convenient way to get started (but will
+be limited to the - extensive - range of drivers built into the binary
+package):
+
+http://fwtools.maptools.org/
+
+If installing PROJ.4 from RPM binaries, note that four RPM files are
+required: "proj", "proj-devel", "proj-epsg" and "proj-nad". The third and
+fourth files, "proj-epsg" and "proj-nad", contain all of the support files
+placed in /usr/share/proj, and are required for any use of "proj" itself.
+
+Debian users appear to get the required files (libraries, binaries,
+support files and headers) in the "proj" package, although package
+lists for proj 4.6.* and etch-backports, lenny and sid omit NAD support
+binaries, for example /usr/share/proj/conus, which if missing will
+provoke a warning under ./configure. This only matters if grid datum
+transformation is required (for example in North America), in which
+case, until the Debian packagers re-insert the missing support files,
+the resolution is to install proj (and the NAD files, a separate download)
+from source, or to download just the source NAD files, and run nad2bin on
+each required, placing the output files in /usr/share/proj, as described
+in the nad2bin manual page.
+
+For OSX users, either install PROJ.4 and GDAL/OGR from source, then
+install the rgdal source package, or use the comprehensive frameworks
+provided by William Kyngesburye:
+
+http://www.kyngchaos.com/
+
+Either simply install the GDAL framework and all of its dependencies,
+then install the rgdal source package from the command line:
+
+R CMD INSTALL --configure-args="" rgdal_*.tar.gz
+
+with the correct configure-args for your platform, or install the GDAL
+framework with dependencies first, then an rgdal binary from the same
+site.
+
