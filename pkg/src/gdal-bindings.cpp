@@ -1,5 +1,6 @@
 #include <gdal_priv.h>
 #include <gdal_alg.h>
+#include <gdal_rat.h>
 #include <cpl_string.h>
 #include <cpl_csv.h>
 #include <ogr_spatialref.h>
@@ -763,6 +764,84 @@ RGDAL_GetBandMetadataItem(SEXP sxpRasterBand, SEXP sxpItem, SEXP sxpDomain) {
 
 
 SEXP
+RGDAL_GetRAT(SEXP sxpRasterBand) {
+
+  SEXP ans, GFT_type, GFT_usage;
+
+  int nc, nr, i, j, ival;
+  double val;
+  GDALRATFieldType *nc_types;
+  GDALRATFieldUsage *nc_usages;
+
+  GDALRasterBand *pRasterBand = getGDALRasterPtr(sxpRasterBand);
+
+  const GDALRasterAttributeTable *pRAT = pRasterBand->GetDefaultRAT();
+
+  if (pRAT == NULL) return(R_NilValue);
+
+  nc = (int) pRAT->GetColumnCount();
+  PROTECT(ans = NEW_LIST(nc));
+  nc_types = (GDALRATFieldType *) R_alloc((size_t) nc,
+    sizeof(GDALRATFieldType));
+  nc_usages = (GDALRATFieldUsage *) R_alloc((size_t) nc,
+    sizeof(GDALRATFieldUsage));
+  nr = (int) pRAT->GetRowCount();
+
+  for (i=0; i<nc; i++) {
+    nc_types[i] = pRAT->GetTypeOfCol(i);
+    nc_usages[i] = pRAT->GetUsageOfCol(i);
+    if (nc_types[i] == GFT_Integer) {
+      SET_VECTOR_ELT(ans, i, NEW_INTEGER(nr));
+    } else if (nc_types[i] == GFT_Real) {
+      SET_VECTOR_ELT(ans, i, NEW_NUMERIC(nr));
+    } else if (nc_types[i] == GFT_String) {
+      SET_VECTOR_ELT(ans, i, NEW_CHARACTER(nr));
+    } else {
+      error("unknown column type");
+    }
+  }
+  for (i=0; i<nc; i++) {
+
+    if (nc_types[i] == GFT_Integer) {
+
+      for (j=0; j<nr; j++) {
+        ival = (int) pRAT->GetValueAsInt(j, i);
+        INTEGER_POINTER(VECTOR_ELT(ans, i))[j] = ival;
+      }
+      
+    } else if (nc_types[i] == GFT_Real) {
+
+      for (j=0; j<nr; j++) {
+        val = (double) pRAT->GetValueAsDouble(j, i);
+        NUMERIC_POINTER(VECTOR_ELT(ans, i))[j] = val;
+      }
+      
+    } else if (nc_types[i] == GFT_String) {
+
+      for (j=0; j<nr; j++) {
+        SET_STRING_ELT(VECTOR_ELT(ans, i), j,
+          COPY_TO_USER_STRING(pRAT->GetValueAsString(j, i)));
+      }
+      
+    }     
+
+  }
+  PROTECT(GFT_type = NEW_INTEGER(nc));
+  PROTECT(GFT_usage = NEW_INTEGER(nc));
+
+  for (i=0; i<nc; i++) {
+    INTEGER_POINTER(GFT_type)[i] = (int) nc_types[i];
+    INTEGER_POINTER(GFT_usage)[i] = (int) nc_usages[i];
+  }
+
+  setAttrib(ans, install("GFT_type"), GFT_type);
+  setAttrib(ans, install("GFT_usage"), GFT_usage);
+  
+  UNPROTECT(3);
+  return(ans);
+}
+
+SEXP
 RGDAL_GetBandMinimum(SEXP sxpRasterBand) {
 
   SEXP ans;
@@ -839,24 +918,6 @@ RGDAL_GetBandType(SEXP sxpRasterBand) {
   return(ans);
 }
 
-/* new RAT
-SEXP
-RGDAL_GetDefaultRAT(SEXP sRasterBand) {
-
-  SEXP ans;
-
-  GDALRasterBand *pRasterBand = getGDALRasterPtr(sxpRasterBand);
-  PROTECT(ans = NEW_LIST(1));
-
-  GDALRasterAttributeTable *pRasterBandRAT = pRasterBand-> GetDefaultRAT();
-
-  if (pRasterBandRAT == NULL) SET_VECTOR_ELT(ans, 0, R_NilValue);
-
-  UNPROTECT(1);
-  return(ans);
-
-}
-*/
 
 SEXP
 RGDAL_PutRasterData(SEXP sxpRasterBand, SEXP sxpData, SEXP sxpOffset) {

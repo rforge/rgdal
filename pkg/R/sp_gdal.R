@@ -1,4 +1,4 @@
-GDALinfo <- function(fname, silent=FALSE) {
+GDALinfo <- function(fname, silent=FALSE, returnRAT=FALSE) {
 	if (nchar(fname) == 0) stop("empty file name")
 	x <- GDAL.open(fname, silent=silent)
 	d <- dim(x)[1:2]
@@ -22,6 +22,7 @@ GDALinfo <- function(fname, silent=FALSE) {
             Bmn <- numeric(nbands)
             Bsd <- numeric(nbands)
             Pix <- character(nbands)
+            if (returnRAT) RATlist <- vector(mode="list", length=nbands)
             for (i in seq(along = band)) {
 
                 raster <- getRasterBand(x, band[i])
@@ -40,6 +41,10 @@ GDALinfo <- function(fname, silent=FALSE) {
                     Bmn[i] <- statsi[3]
                     Bsd[i] <- statsi[4]
                 }
+                if (returnRAT) {
+                    RATi <- .Call("RGDAL_GetRAT", raster, PACKAGE="rgdal")
+                    if (!is.null(RATi)) RATlist[[i]] <- RATi
+                 }
 #                Pix[i] <- .Call("RGDAL_GetBandMetadataItem",
 #                    raster, "PIXELTYPE", "IMAGE_STRUCTURE", PACKAGE="rgdal")
             }
@@ -66,6 +71,7 @@ GDALinfo <- function(fname, silent=FALSE) {
         attr(res, "df") <- df
         attr(res, "mdata") <- mdata
         attr(res, "subdsmdata") <- subdsmdata
+        if (returnRAT) attr(res, "RATlist") <- RATlist
 	class(res) <- "GDALobj"
 	res
 }
