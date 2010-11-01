@@ -791,6 +791,41 @@ RGDAL_GetBandMaximum(SEXP sxpRasterBand) {
 }
 
 SEXP
+RGDAL_GetBandStatistics(SEXP sxpRasterBand) {
+
+  CPLErr err;
+
+  SEXP ans;
+
+  double min, max, mean, sd;
+
+  GDALRasterBand *pRasterBand = getGDALRasterPtr(sxpRasterBand);
+
+  err = pRasterBand->GetStatistics(FALSE, FALSE, &min, &max, &mean, &sd);
+
+  if (err == CE_Failure) {
+	warning("statistics not supported by this driver");
+        return(R_NilValue);
+  }
+
+  if (err == CE_Warning) {
+	warning("statistics not supported by this driver");
+        return(R_NilValue);
+  }
+
+  PROTECT(ans = NEW_NUMERIC(4));
+  NUMERIC_POINTER(ans)[0] = min;
+  NUMERIC_POINTER(ans)[1] = max;
+  NUMERIC_POINTER(ans)[2] = mean;
+  NUMERIC_POINTER(ans)[3] = sd;
+
+  UNPROTECT(1);
+  return(ans);
+}
+
+
+
+SEXP
 RGDAL_GetBandType(SEXP sxpRasterBand) {
 
   SEXP ans;
@@ -1242,6 +1277,23 @@ RGDAL_SetNoDataValue(SEXP sxpRasterBand, SEXP NoDataValue) {
 
   if (err == CE_Failure)
 	warning("setting of missing value not supported by this driver");
+
+  return(sxpRasterBand);
+
+}
+
+SEXP RGDAL_SetStatistics(SEXP sxpRasterBand, SEXP statistics) {
+
+  CPLErr err;
+
+  GDALRasterBand *pRasterBand = getGDALRasterPtr(sxpRasterBand);
+
+  err = pRasterBand->SetStatistics(NUMERIC_POINTER(statistics)[0],
+    NUMERIC_POINTER(statistics)[1], NUMERIC_POINTER(statistics)[2],
+    NUMERIC_POINTER(statistics)[3]);
+
+  if (err == CE_Failure)
+	warning("setting of statistics not supported by this driver");
 
   return(sxpRasterBand);
 

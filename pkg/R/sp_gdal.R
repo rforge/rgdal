@@ -19,20 +19,31 @@ GDALinfo <- function(fname, silent=FALSE) {
             GDType <- character(nbands)
             Bmin <- numeric(nbands)
             Bmax <- numeric(nbands)
+            Bmn <- numeric(nbands)
+            Bsd <- numeric(nbands)
             Pix <- character(nbands)
             for (i in seq(along = band)) {
 
                 raster <- getRasterBand(x, band[i])
                 GDType[i] <- .GDALDataTypes[(.Call("RGDAL_GetBandType",
                     raster, PACKAGE="rgdal"))+1]
-                Bmin[i] <- .Call("RGDAL_GetBandMinimum", raster,
+                statsi <- .Call("RGDAL_GetBandStatistics", raster,
                     PACKAGE="rgdal")
-                Bmax[i] <- .Call("RGDAL_GetBandMaximum", raster,
-                    PACKAGE="rgdal")
+                if (is.null(statsi)) {
+                    Bmin[i] <- .Call("RGDAL_GetBandMinimum", raster,
+                        PACKAGE="rgdal")
+                    Bmax[i] <- .Call("RGDAL_GetBandMaximum", raster,
+                        PACKAGE="rgdal")
+                } else {
+                    Bmin[i] <- statsi[1]
+                    Bmax[i] <- statsi[2]
+                    Bmn[i] <- statsi[3]
+                    Bsd[i] <- statsi[4]
+                }
 #                Pix[i] <- .Call("RGDAL_GetBandMetadataItem",
 #                    raster, "PIXELTYPE", "IMAGE_STRUCTURE", PACKAGE="rgdal")
             }
-            df <- data.frame(GDType=GDType, Bmin=Bmin, Bmax=Bmax)
+            df <- data.frame(GDType=GDType, Bmin=Bmin, Bmax=Bmax, Bmean=Bmn, Bsd=Bsd)
         }
         
 	GDAL.close(x)
@@ -263,7 +274,8 @@ readGDAL = function(fname, offset, region.dim, output.dim, band, p4s=NULL, ..., 
 }
 
 writeGDAL = function(dataset, fname, drivername = "GTiff", type = "Float32", 
-		mvFlag = NA, options=NULL, copy_drivername = "GTiff")
+		mvFlag = NA, options=NULL, copy_drivername = "GTiff",
+                setStatistics=FALSE)
 {
 	if (nchar(fname) == 0) stop("empty file name")
         x <- gdalDrivers()
@@ -271,13 +283,14 @@ writeGDAL = function(dataset, fname, drivername = "GTiff", type = "Float32",
         if (drivername %in% copy_only) {
 	    tds.create <- create2GDAL(dataset=dataset,
                 drivername=copy_drivername, type=type,
-                mvFlag=mvFlag, fname=NULL)
+                mvFlag=mvFlag, fname=NULL, setStatistics=setStatistics)
             tds.copy <- copyDataset(tds.create, driver=drivername, fname=fname)
             GDAL.close(tds.create)
 	    saveDataset(tds.copy, fname, options=options)
         } else {
 	    tds.out <- create2GDAL(dataset=dataset, drivername=drivername, 
-		type=type, mvFlag=mvFlag, options=options, fname=fname)
+		type=type, mvFlag=mvFlag, options=options, fname=fname,
+                setStatistics=setStatistics)
 	    saveDataset(tds.out, fname, options=options)
         }
 # RSB 081030 GDAL.close cleanup
@@ -286,7 +299,7 @@ writeGDAL = function(dataset, fname, drivername = "GTiff", type = "Float32",
 	invisible(fname)
 }
 
-create2GDAL = function(dataset, drivername = "GTiff", type = "Float32", mvFlag = NA, options=NULL, fname=NULL)
+create2GDAL = function(dataset, drivername = "GTiff", type = "Float32", mvFlag = NA, options=NULL, fname=NULL, setStatistics=FALSE)
 {
 	stopifnot(gridded(dataset))
 	fullgrid(dataset) = TRUE
@@ -320,6 +333,11 @@ create2GDAL = function(dataset, drivername = "GTiff", type = "Float32", mvFlag =
 	for (i in 1:nbands) {
 		band = as.matrix(dataset[i])
 		if (!is.numeric(band)) stop("Numeric bands required")
+                if (setStatistics) {
+                    statistics <- range(c(band), na.rm=TRUE)
+                    statistics <- c(statistics, mean(c(band), na.rm=TRUE))
+                    statistics <- c(statistics, sd(c(band), na.rm=TRUE))
+                }
 		if (!is.na(mvFlag))
 			band[is.na(band)] = mvFlag
 		putRasterData(tds.out, band, i)
@@ -328,6 +346,11 @@ create2GDAL = function(dataset, drivername = "GTiff", type = "Float32", mvFlag =
 		    .Call("RGDAL_SetNoDataValue", tds.out_b, as.double(mvFlag),
 		        PACKAGE = "rgdal")
 		}
+                if (setStatistics) {
+                    tds.out_b <- getRasterBand(dataset=tds.out, band=i)
+                    .Call("RGDAL_SetStatistics", tds.out_b,
+                        as.double(statistics), PACKAGE = "rgdal")
+                }
 	}
 	tds.out
 }

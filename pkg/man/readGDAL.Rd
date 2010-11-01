@@ -11,8 +11,8 @@
 \usage{ 
 readGDAL(fname, offset, region.dim, output.dim, band, p4s=NULL, ..., half.cell=c(0.5, 0.5), silent = FALSE)
 asSGDF_GROD(x, offset, region.dim, output.dim, p4s=NULL, ..., half.cell=c(0.5,0.5))
-writeGDAL(dataset, fname, drivername = "GTiff", type = "Float32", mvFlag = NA, options=NULL, copy_drivername = "GTiff")
-create2GDAL(dataset, drivername = "GTiff", type = "Float32", mvFlag = NA, options=NULL, fname = NULL)
+writeGDAL(dataset, fname, drivername = "GTiff", type = "Float32", mvFlag = NA, options=NULL, copy_drivername = "GTiff", setStatistics=FALSE)
+create2GDAL(dataset, drivername = "GTiff", type = "Float32", mvFlag = NA, options=NULL, fname = NULL, setStatistics=FALSE)
 GDALinfo(fname, silent=FALSE)
 GDALSpatialRef(fname, silent=FALSE)
 }
@@ -36,6 +36,7 @@ etc.) }
 \item{type}{ GDAL write data type (others than this default have not been tested) }
 \item{ mvFlag }{ missing value flag for output file }
 \item{options}{driver-specific options to be passed to the GDAL driver}
+\item{setStatistics}{default FALSE, if TRUE, attempt to set per-band statistics in the output file (driver-dependent)}
 %\item{clone}{if not NULL, a grid file to clone}
 }
 

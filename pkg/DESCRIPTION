@@ -1,7 +1,7 @@
 Package: rgdal
 Title: Bindings for the Geospatial Data Abstraction Library
-Version: 0.6-28
-Date: 2010-07-02
+Version: 0.6-29
+Date: 2010-11-01
 Depends: R (>= 2.10.0), methods, sp (>= 0.9-60)
 LinkingTo: sp
 LazyLoad: yes
