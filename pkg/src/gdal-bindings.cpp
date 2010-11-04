@@ -766,9 +766,9 @@ RGDAL_GetBandMetadataItem(SEXP sxpRasterBand, SEXP sxpItem, SEXP sxpDomain) {
 SEXP
 RGDAL_GetRAT(SEXP sxpRasterBand) {
 
-  SEXP ans, GFT_type, GFT_usage;
+  SEXP ans, GFT_type, GFT_usage, nc_names;
 
-  int nc, nr, i, j, ival;
+  int nc, nr, i, j, ival, np=0;
   double val;
   GDALRATFieldType *nc_types;
   GDALRATFieldUsage *nc_usages;
@@ -780,7 +780,8 @@ RGDAL_GetRAT(SEXP sxpRasterBand) {
   if (pRAT == NULL) return(R_NilValue);
 
   nc = (int) pRAT->GetColumnCount();
-  PROTECT(ans = NEW_LIST(nc));
+  PROTECT(ans = NEW_LIST(nc));np++;
+  PROTECT(nc_names = NEW_CHARACTER(nc));np++;
   nc_types = (GDALRATFieldType *) R_alloc((size_t) nc,
     sizeof(GDALRATFieldType));
   nc_usages = (GDALRATFieldUsage *) R_alloc((size_t) nc,
@@ -790,6 +791,7 @@ RGDAL_GetRAT(SEXP sxpRasterBand) {
   for (i=0; i<nc; i++) {
     nc_types[i] = pRAT->GetTypeOfCol(i);
     nc_usages[i] = pRAT->GetUsageOfCol(i);
+    SET_STRING_ELT(nc_names, i, COPY_TO_USER_STRING(pRAT->GetNameOfCol(i)));
     if (nc_types[i] == GFT_Integer) {
       SET_VECTOR_ELT(ans, i, NEW_INTEGER(nr));
     } else if (nc_types[i] == GFT_Real) {
@@ -826,8 +828,8 @@ RGDAL_GetRAT(SEXP sxpRasterBand) {
     }     
 
   }
-  PROTECT(GFT_type = NEW_INTEGER(nc));
-  PROTECT(GFT_usage = NEW_INTEGER(nc));
+  PROTECT(GFT_type = NEW_INTEGER(nc));np++;
+  PROTECT(GFT_usage = NEW_INTEGER(nc));np++;
 
   for (i=0; i<nc; i++) {
     INTEGER_POINTER(GFT_type)[i] = (int) nc_types[i];
@@ -836,8 +838,9 @@ RGDAL_GetRAT(SEXP sxpRasterBand) {
 
   setAttrib(ans, install("GFT_type"), GFT_type);
   setAttrib(ans, install("GFT_usage"), GFT_usage);
+  setAttrib(ans, R_NamesSymbol, nc_names);
   
-  UNPROTECT(3);
+  UNPROTECT(np);
   return(ans);
 }
 
