@@ -772,6 +772,28 @@ RGDAL_GetRAT(SEXP sxpRasterBand) {
   double val;
   GDALRATFieldType *nc_types;
   GDALRATFieldUsage *nc_usages;
+  const char *GFU_type_string[] = {"GFT_Integer",
+                                   "GFT_Real",
+                                   "GFT_String"};
+  const char *GFU_usage_string[] = {"GFU_Generic",
+                                    "GFU_PixelCount",
+                                    "GFU_Name",
+                                    "GFU_Min",
+                                    "GFU_Max",
+                                    "GFU_MinMax",
+                                    "GFU_Red",
+                                    "GFU_Green",
+                                    "GFU_Blue",
+                                    "GFU_Alpha",
+                                    "GFU_RedMin",
+                                    "GFU_GreenMin",
+                                    "GFU_BlueMin",
+                                    "GFU_AlphaMin",
+                                    "GFU_RedMax",
+                                    "GFU_GreenMax",
+                                    "GFU_BlueMax",
+                                    "GFU_AlphaMax",
+                                    "GFU_MaxCount"};
 
   GDALRasterBand *pRasterBand = getGDALRasterPtr(sxpRasterBand);
 
@@ -828,12 +850,14 @@ RGDAL_GetRAT(SEXP sxpRasterBand) {
     }     
 
   }
-  PROTECT(GFT_type = NEW_INTEGER(nc));np++;
-  PROTECT(GFT_usage = NEW_INTEGER(nc));np++;
+  PROTECT(GFT_type = NEW_CHARACTER(nc));np++;
+  PROTECT(GFT_usage = NEW_CHARACTER(nc));np++;
 
   for (i=0; i<nc; i++) {
-    INTEGER_POINTER(GFT_type)[i] = (int) nc_types[i];
-    INTEGER_POINTER(GFT_usage)[i] = (int) nc_usages[i];
+    SET_STRING_ELT(GFT_type, i,
+      COPY_TO_USER_STRING(GFU_type_string[nc_types[i]]));
+    SET_STRING_ELT(GFT_usage, i,
+      COPY_TO_USER_STRING(GFU_usage_string[nc_usages[i]]));
   }
 
   setAttrib(ans, install("GFT_type"), GFT_type);
@@ -873,7 +897,7 @@ RGDAL_GetBandMaximum(SEXP sxpRasterBand) {
 }
 
 SEXP
-RGDAL_GetBandStatistics(SEXP sxpRasterBand) {
+RGDAL_GetBandStatistics(SEXP sxpRasterBand, SEXP silent) {
 
   CPLErr err;
 
@@ -886,12 +910,14 @@ RGDAL_GetBandStatistics(SEXP sxpRasterBand) {
   err = pRasterBand->GetStatistics(FALSE, FALSE, &min, &max, &mean, &sd);
 
   if (err == CE_Failure) {
-	warning("statistics not supported by this driver");
+	if (!LOGICAL_POINTER(silent)[0])
+            warning("statistics not supported by this driver");
         return(R_NilValue);
   }
 
   if (err == CE_Warning) {
-	warning("statistics not supported by this driver");
+	if (!LOGICAL_POINTER(silent)[0])
+    	    warning("statistics not supported by this driver");
         return(R_NilValue);
   }
 

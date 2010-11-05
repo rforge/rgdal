@@ -6,7 +6,8 @@ GDALinfo <- function(fname, silent=FALSE, returnRAT=FALSE) {
 	p4s <- .Call("RGDAL_GetProjectionRef", x, PACKAGE="rgdal")
 	if (nchar(p4s) == 0) p4s <- as.character(NA)
 	gt <- .Call('RGDAL_GetGeoTransform', x, PACKAGE="rgdal")
-        if (attr(gt, "CE_Failure")) warning("GeoTransform values not available")
+        if (attr(gt, "CE_Failure") && !silent)
+            warning("GeoTransform values not available")
 	nbands <- .Call('RGDAL_GetRasterCount', x, PACKAGE="rgdal")
         mdata <- .Call('RGDAL_GetMetadata', x, NULL, PACKAGE="rgdal")
         subdsmdata <- .Call('RGDAL_GetMetadata', x, "SUBDATASETS",
@@ -28,7 +29,7 @@ GDALinfo <- function(fname, silent=FALSE, returnRAT=FALSE) {
                 raster <- getRasterBand(x, band[i])
                 GDType[i] <- .GDALDataTypes[(.Call("RGDAL_GetBandType",
                     raster, PACKAGE="rgdal"))+1]
-                statsi <- .Call("RGDAL_GetBandStatistics", raster,
+                statsi <- .Call("RGDAL_GetBandStatistics", raster, silent,
                     PACKAGE="rgdal")
                 if (is.null(statsi)) {
                     Bmin[i] <- .Call("RGDAL_GetBandMinimum", raster,
@@ -104,6 +105,21 @@ print.GDALobj <- function(x, ...) {
             cat("Subdatasets:\n")
             cv <- attr(x, "subdsmdata")
             for (i in 1:length(cv)) cat(cv[i], "\n")
+        }
+        if (!is.null(attr(x, "RATlist"))) {
+            RATs <- attr(x, "RATlist")
+            nRAT <- length(RATs)
+            if (nRAT == 1 ) cat("Raster attribute table:\n")
+            else cat("Raster attribute tables (", nRAT, "):\n", sep="")
+            for (i in 1:nRAT) {
+                if (i > 1) cat("----------------------\n")
+                RAT <- RATs[[i]]
+                print(as.data.frame(RAT))
+                cat(paste("  types:", paste(attr(RAT, "GFT_type"),
+                    collapse=", ")), "\n")
+                cat(paste("  usages:", paste(attr(RAT, "GFT_usage"),
+                    collapse=", ")), "\n")
+            }
         }
 	invisible(x)
 }
