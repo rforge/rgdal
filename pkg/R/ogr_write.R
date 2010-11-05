@@ -13,6 +13,10 @@ writeOGR <- function(obj, dsn, layer, driver, dataset_options=NULL, layer_option
 # fix for over-eager internal checking in the KML driver 090114
     }
     stopifnot(inherits(obj, "Spatial"))
+    if (gridded(obj)) {
+        obj <- as(obj, "SpatialPointsDataFrame")
+        if (verbose) warning("coercing gridded object to points")
+    }
     if (!"data" %in% names(getSlots(class(obj))))
         stop("obj must be a SpatialPointsDataFrame, SpatialLinesDataFrame or\n    SpatialPolygonsDataFrame") 
     dfcls <- sapply(slot(obj, "data"), function(x) class(x)[1])
