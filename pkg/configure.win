@@ -1,6 +1,6 @@
 #!/bin/sh
 if test -z "$GDAL_HOME" ; then
-    GDAL_HOME="C:/work/packages/GDAL171"
+    GDAL_HOME="C:/work/packages/GDAL172"
 fi
 echo "GDAL_HOME=${GDAL_HOME}" > src/Makeconf.win
 
@@ -14,9 +14,9 @@ if test -z "$OSGEO4W_BUILD" ; then
 
 # build changes BDR 100410
   if test "${R_ARCH}" != "/x64"; then
-    mkdir -p "${R_PACKAGE_DIR}/libs${R_ARCH}"
-    cp ${GDAL_HOME}/bin/libgdal-1.dll "${R_PACKAGE_DIR}/libs${R_ARCH}"
-    cp ${GDAL_HOME}/bin/libexpat-1.dll "${R_PACKAGE_DIR}/libs${R_ARCH}"
+#    mkdir -p "${R_PACKAGE_DIR}/libs${R_ARCH}"
+#    cp ${GDAL_HOME}/bin/libgdal-1.dll "${R_PACKAGE_DIR}/libs${R_ARCH}"
+#    cp ${GDAL_HOME}/bin/libexpat-1.dll "${R_PACKAGE_DIR}/libs${R_ARCH}"
     echo "WIN=32 " >> src/Makeconf.win
   else
    echo "WIN=64 " >> src/Makeconf.win
