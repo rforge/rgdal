@@ -33,14 +33,14 @@ see the rgdal documentation for the available options (subsetting
 etc.) }
 \item{dataset}{ object of class \link[sp]{SpatialGridDataFrame-class} or \link[sp]{SpatialPixelsDataFrame-class}}
 \item{drivername, copy_drivername}{ GDAL driver name; if the chosen driver does not support dataset creation, an attempt is made to use the \code{copy_drivername} driver to create a dataset, and \code{copyDatset} to copy to the target driver }
-\item{type}{ GDAL write data type (others than this default have not been tested) }
-\item{ mvFlag }{ missing value flag for output file }
+\item{type}{ GDAL write data type, one of: \sQuote{Byte}, \sQuote{Int16}, \sQuote{Int32}, \sQuote{Float32}, \sQuote{Float64}; \sQuote{UInt16}, \sQuote{UInt32} are available but have not been tests }
+\item{ mvFlag }{default NA, missing value flag for output file; the default value works for \sQuote{Int32}, \sQuote{Float32}, \sQuote{Float64}, but suitable in-range value that fits the data type should be used for other data types, for example 255 for \sQuote{Byte}, -32768 for \sQuote{Int16}, and so on.}
 \item{options}{driver-specific options to be passed to the GDAL driver}
 \item{setStatistics}{default FALSE, if TRUE, attempt to set per-band statistics in the output file (driver-dependent)}
 \item{returnRAT}{default FALSE, if TRUE, return a list with a Raster Attribute Table or NULL for each band}
 %\item{clone}{if not NULL, a grid file to clone}
 }
-
+\details{If types other than \sQuote{Int32}, \sQuote{Float32}, \sQuote{Float64} are used, the \dQuote{mvFlag} argument should be used to set a no data value other than the default NA. Note that the flag only replaces NA values in the data being exported with the value of the argument - it does not mark data values equal to \dQuote{mvFlag} as missing. The value is stored in the file being written in driver-specific ways, and may be used when the file is read. When the default \dQuote{mvFlag=NA} is used, no NoDataValue is written to the file, and the input data is written as is.}
 \value{
 \code{read.GDAL} returns the data in the file as a Spatial object. 
 
