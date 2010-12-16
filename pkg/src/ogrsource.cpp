@@ -372,15 +372,21 @@ extern "C" {
     return(ans);
   }
 
-SEXP ogrDeleteLayer (SEXP ogrSource, SEXP Layer) {
+SEXP ogrDeleteLayer (SEXP ogrSource, SEXP Layer, SEXP ogrDriver) {
     OGRLayer *poLayer;
     OGRDataSource *poDS;
     OGRSFDriver *poDriver;
     int iLayer = -1;
     int flag = 0;
 
-    poDS = OGRSFDriverRegistrar::Open(CHAR(STRING_ELT(ogrSource, 0)), 
-	TRUE, &poDriver);
+    poDriver = OGRSFDriverRegistrar::GetRegistrar()->GetDriverByName(
+                CHAR(STRING_ELT(ogrDriver, 0)) );
+    if (poDriver == NULL) {
+        error("Driver not available");
+    }
+
+    poDS = poDriver->Open(CHAR(STRING_ELT(ogrSource, 0)), 
+	TRUE);
 
     if (poDS==NULL)
         error("Cannot open data source for update");

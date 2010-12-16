@@ -1,4 +1,4 @@
-writeOGR <- function(obj, dsn, layer, driver, dataset_options=NULL, layer_options=NULL, verbose=FALSE, overwrite_layer=FALSE, delete_dsn=FALSE) {
+writeOGR <- function(obj, dsn, layer, driver, dataset_options=NULL, layer_options=NULL, verbose=FALSE, check_exists=NULL, overwrite_layer=FALSE, delete_dsn=FALSE) {
     drvs <- ogrDrivers()
     mch <- match(driver, drvs$name)
     if (is.na(mch) || length(mch) > 1)
@@ -35,13 +35,25 @@ writeOGR <- function(obj, dsn, layer, driver, dataset_options=NULL, layer_option
             "; column names: ", paste(names(obj@data)[!dftof %in% known], 
             collapse=","))
 
-    if ((strsplit(getGDALVersionInfo(), " ")[[1]][2] > "1.7") ||
-        overwrite_layer) {
-        already_exists <- class(try(.Call("ogrInfo", as.character(dsn),
-            as.character(layer), PACKAGE = "rgdal"), silent=TRUE)) == "list"
+    if (is.null(check_exists)) {
+        if (getGDALVersionInfo("VERSION_NUM") >= "1800") {
+            check_exists <- TRUE
+        } else {
+            check_exists <- FALSE
+        }
+    }
+
+    if (check_exists) {
+        already_exists <- FALSE
+        ogrI <- try(.Call("ogrInfo", as.character(dsn),
+            as.character(layer), PACKAGE = "rgdal"), silent=TRUE)
+        if (class(ogrI) != "try-error") {
+            if (driver == ogrI[[4]]) already_exists <- TRUE
+        }
         if (already_exists) {
             if (overwrite_layer) {
-                layer_del <- try(ogrDeleteLayer(dsn, layer), silent=TRUE)
+                layer_del <- try(ogrDeleteLayer(dsn, layer, driver),
+                    silent=TRUE)
                 if (class(layer_del) == "try-error" && delete_dsn) {
                     ogrDeleteDataSource(dsn, driver)
                     if (verbose) warning("existing data source removed")
@@ -98,13 +110,15 @@ writeOGR <- function(obj, dsn, layer, driver, dataset_options=NULL, layer_option
     } 
 }
 
-ogrDeleteLayer <- function(dsn, layer) {
+ogrDeleteLayer <- function(dsn, layer, driver) {
     if (missing(dsn)) stop("missing dsn")
     if (nchar(dsn) == 0) stop("empty name")
     if (missing(layer)) stop("missing layer")
     if (nchar(layer) == 0) stop("empty name")
+    if (missing(driver)) stop("missing layer")
+    if (nchar(driver) == 0) stop("empty name")
     res <- .Call("ogrDeleteLayer", as.character(dsn), as.character(layer),
-        PACKAGE = "rgdal")
+        as.character(driver), PACKAGE = "rgdal")
     invisible(res)
 }
 
