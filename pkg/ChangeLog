@@ -1,3 +1,14 @@
+2010-12-16 13:10  rsbivand
+
+	* DESCRIPTION, R/gdal.R, R/ogr_write.R, inst/README,
+	  man/GDALDriver-class.Rd, man/writeOGR.Rd, src/OGR_write.cpp,
+	  src/gdal-bindings.cpp, src/ogrsource.cpp: adding layer deletion
+	  for GDAL 1.8
+
+2010-12-14 11:39  rsbivand
+
+	* ChangeLog, inst/ChangeLog: adding layer deletion for GDAL 1.8
+
 2010-12-14 11:39  rsbivand
 
 	* DESCRIPTION, R/ogr_write.R, inst/vectors/airports.gml,
