@@ -448,15 +448,31 @@ getRasterData <- function(dataset,
     catNames <- .Call('RGDAL_GetCategoryNames', raster, PACKAGE="rgdal")
   
     if (!is.null(catNames)) {
-      levels <- rep(min(x):max(x), len = length(catNames))
-      x <- array(factor(x, levels, catNames), dim = dim(x),
+      ux <- unique(x)
+      if (length(ux) == length(catNames)) {
+        levels <- sort(ux)
+        x <- array(factor(x, levels, catNames), dim = dim(x),
                  dimnames = dimnames(x))
+      } else {
+        warning("Assign CategoryNames manually, level/label length mismatch")
+      }
     }
 
   }
 
   x
 
+}
+
+getCategoryNames <- function(dataset, band = 1) {
+
+  assertClass(dataset, 'GDALReadOnlyDataset')
+
+  raster <- getRasterBand(dataset, band)
+  
+  catNames <- .Call('RGDAL_GetCategoryNames', raster, PACKAGE="rgdal")
+
+  catNames
 }
 
 getColorTable <- function(dataset, band = 1) {
