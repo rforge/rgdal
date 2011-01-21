@@ -1356,7 +1356,7 @@ RGDAL_GetCategoryNames(SEXP sxpRasterBand) {
 
     const char *field = CSLGetField(pcCNames, i);
 
-    SET_VECTOR_ELT(sxpCNames, i, mkChar(field));
+    SET_STRING_ELT(sxpCNames, i, mkChar(field));
 
   }
 
