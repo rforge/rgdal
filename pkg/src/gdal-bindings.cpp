@@ -178,11 +178,21 @@ void CPL_STDCALL R_CPLDefaultErrorHandler( CPLErr eErrClass, int nError,
 SEXP
 RGDAL_Init(void) {
 
-  CPLSetErrorHandler((CPLErrorHandler)__errorHandler);
+//  CPLSetErrorHandler((CPLErrorHandler)__errorHandler);
+  CPLPushErrorHandler((CPLErrorHandler)__errorHandler);
 
   GDALAllRegister();
 
   OGRRegisterAll();
+ 
+  return(R_NilValue);
+
+}
+
+SEXP
+RGDAL_Exit(void) {
+
+  CPLPopErrorHandler();
  
   return(R_NilValue);
 
