@@ -14,15 +14,22 @@ extern "C" {
 #endif
 /* #include <projects.h> */
 #include <proj_api.h>
+#ifdef P4CTX
+FILE *pj_open_lib(projCtx, const char *, const char *);
+#else
 FILE *pj_open_lib(const char *, const char *);
-
+#endif
 
 SEXP
 PROJ4VersionInfo(void) {
     SEXP ans;
 
-    PROTECT(ans=NEW_CHARACTER(1));
-    SET_STRING_ELT(ans, 0, COPY_TO_USER_STRING(pj_get_release()));
+    PROTECT(ans=NEW_LIST(2));
+    SET_VECTOR_ELT(ans, 0, NEW_CHARACTER(1));
+    SET_VECTOR_ELT(ans, 1, NEW_INTEGER(1));
+    SET_STRING_ELT(VECTOR_ELT(ans, 0), 0,
+        COPY_TO_USER_STRING(pj_get_release()));
+    INTEGER_POINTER(VECTOR_ELT(ans, 1))[0] = PJ_VERSION;
 
     UNPROTECT(1);
 
@@ -39,7 +46,12 @@ PROJ4NADsInstalled(void) {
     FILE *fp;
 
     PROTECT(ans=NEW_LOGICAL(1));
+
+#ifdef P4CTX
+    fp = pj_open_lib(pj_get_default_ctx(), "conus", "rb");
+#else
     fp = pj_open_lib("conus", "rb");
+#endif
     if (fp == NULL) LOGICAL_POINTER(ans)[0] = FALSE;
     else {
         LOGICAL_POINTER(ans)[0] = TRUE;
@@ -66,8 +78,14 @@ PROJcopyEPSG(SEXP tf) {
 
 #ifdef OSGEO4W
     fp = fopen("C:\\OSGeo4W\\share\\proj\\epsg", "rb");
+#endif /* OSGEO4W */
+
+#ifndef OSGEO4W
+#ifdef P4CTX
+    fp = pj_open_lib(pj_get_default_ctx(), "epsg", "rb");
 #else
     fp = pj_open_lib("epsg", "rb");
+#endif
 #endif /* OSGEO4W */
     if (fp == NULL) INTEGER_POINTER(ans)[0] = 0;
     else {
