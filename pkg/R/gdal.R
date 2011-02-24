@@ -98,7 +98,7 @@ setMethod('initialize', 'GDALReadOnlyDataset',
             if (is.null(handle)) {
 	      if (nchar(filename) == 0) stop("empty file name")
               silent <- as.logical(silent)
-              if (length(silent) != 1 || is.na(silent) || !is.logical(silent))
+              if (length(silent) != 1L || is.na(silent) || !is.logical(silent))
                   stop("options(warn) not set")
               slot(.Object, 'handle') <- {
                 .Call('RGDAL_OpenDataset', as.character(filename), 
@@ -118,7 +118,7 @@ setMethod('initialize', 'GDALDataset',
             if (is.null(handle)) {
 	      if (nchar(filename) == 0) stop("empty file name")
               silent <- as.logical(silent)
-              if (length(silent) != 1 || is.na(silent) || !is.logical(silent))
+              if (length(silent) != 1L || is.na(silent) || !is.logical(silent))
                   stop("options(warn) not set")
               slot(.Object, 'handle') <- {
                 .Call('RGDAL_OpenDataset', as.character(filename), 
@@ -435,7 +435,7 @@ getRasterData <- function(dataset,
   
   }
 
-  if (length(band) == 1) x <- drop(x)
+  if (length(band) == 1L) x <- drop(x)
 
   if (!as.is) {
   
@@ -483,7 +483,7 @@ getColorTable <- function(dataset, band = 1) {
   
   ctab <- .Call('RGDAL_GetColorTable', raster, PACKAGE="rgdal") / 255
 
-  if (length(ctab) == 0) return(NULL)
+  if (length(ctab) == 0L) return(NULL)
 
   if (.Call('RGDAL_GetColorInterp', raster, PACKAGE="rgdal") == 'Palette')
     switch(.Call('RGDAL_GetPaletteInterp', raster, PACKAGE="rgdal"),  

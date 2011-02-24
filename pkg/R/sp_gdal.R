@@ -171,7 +171,7 @@ asGDALROD_SGDF <- function(from) {
 		abs(cellsize[2]))
 	cellcentre.offset <- c(x=co.x, y=co.y)
 	grid = GridTopology(cellcentre.offset, cellsize, rev(output.dim))
-	if (length(d) == 2)
+	if (length(d) == 2L)
 		df = list(band1 = as.vector(data))
 	else {
 		df <- vector(mode="list", length=d[3])
@@ -222,7 +222,7 @@ asSGDF_GROD <- function(x, offset, region.dim, output.dim, p4s=NULL, ..., half.c
 		abs(cellsize[2]))
 	cellcentre.offset <- c(x=co.x, y=co.y)
 	grid = GridTopology(cellcentre.offset, cellsize, rev(output.dim))
-	if (length(d) == 2)
+	if (length(d) == 2L)
 		df = list(band1 = as.vector(data))
 	else {
 		df <- vector(mode="list", length=d[3])
@@ -247,7 +247,7 @@ readGDAL = function(fname, offset, region.dim, output.dim, band, p4s=NULL, ..., 
 	odim_flag <- NULL
         if (missing(band)) band <- NULL
         else {
-                if (length(band) > 1) d[3] <- length(band)
+                if (length(band) > 1L) d[3] <- length(band)
                 else d <- d[1:2]
         }
 # bug report Mike Sumner 070522
@@ -305,7 +305,7 @@ readGDAL = function(fname, offset, region.dim, output.dim, band, p4s=NULL, ..., 
 		data = getRasterData(x, band=band, offset=offset, 
 			region.dim=region.dim, output.dim=output.dim, ...)
 		GDAL.close(x)
-		if (length(d) == 2)
+		if (length(d) == 2L)
 			df = list(band1 = as.vector(data))
 		else {
 			df <- vector(mode="list", length=d[3])
