@@ -1,3 +1,150 @@
+not sure if you are the appropriate recipient for this email, but as your
+name 
+appeared on http://cran.r-project.org/web/packages/rgdal/index.html I try my
+chance ;-).
+
+(CC'ing gdal-dev too since other users of GDAL might be interested by the 
+issue related with CPLSetErrorHandler() in other contexts)
+
+I had a discussion with Bob on the GDAL IRC that you can follow here :
+
+http://logs.qgis.org/gdal/%23gdal.2011-02-16.log and
+http://logs.qgis.org/gdal/%23gdal.2011-02-17.log
+
+Here's my analysis (based on https://r-forge.r-
+project.org/scm/viewvc.php/trunk/src/gdal-bindings.cpp?view=markup&root=rgda
+l 
+) of what leads to the crash he noticed (of course I can be wrong since my 
+knowledge of R is null, so this is mostly based on guess) :
+1) QGIS loads a plugin that loads RGDAL
+2) When RGDAL is initialized, it installs a global error handler 
+__errorHandler with CPLSetErrorHandler()
+3) Some functions of QGIS unrelated to RGDAL causes a CPLError() to be
+emitted 
+by GDAL/OGR
+4) The global RGDAL error handler is triggered, causes the error() method to
+be called which apparently causes a longjmp() to the R interpreter
+5) At that point QGIS crashes as the longjmp() is inappropriate because R 
+isn't ready for being run at that point
+
+So my suggestion would be not to use a global error handler set when RGDAL
+is 
+initialized, but rather for each binding of the GDAL API, install a local 
+error handler with CPLPushErrorHandler(__errorHandler) and uninstall it
+before 
+returning to R with CPLPopErrorHandler()
+
+For example :
+
+SEXP
+RGDAL_GetDescription(SEXP sxpObj) {
+
+  void *pGDALObj = getGDALObjPtr(sxpObj);
+
+  CPLPushErrorHandler(__errorHandler);
+
+  const char *desc = ((GDALMajorObject *)pGDALObj)->GetDescription();
+
+  CPLPopErrorHandler();
+
+  return(mkString_safe(desc));
+
+}
+
+This is going to be quite painfull since you have to do this for each GDAL 
+method you bind, and be careful to correctly pair CPLPushErrorHandler() / 
+CPLPopErrorHandler() (the later being the easiest to forget in unsuual code 
+paths, such as error code paths).
+
+
+
+Actually, I'm just thinking that when an error actually triggers, the 
+CPLPopErrorHandler() will not be called due to the longjmp() done in the
+error 
+handler... So you probably needs to call CPLPopErrorHandler() in the error 
+handler before it to call error() (a quick review of port/cpl_error.cpp
+leads 
+me to think this is OK to do so, but this needs certainly some testing)
+
+Or other possibility, it might be dangerous that the error handler
+interrupts 
+the GDAL code flow with the longjmp(). It could cause memory leaks or leaves
+GDAL in an unstable state (unreleased locks, or whatever). What would be
+safer 
+would be that the error handler just stores the error code and/or message,
+and 
+just looks at it after the return from the GDAL code.
+
+Something like this :
+
+static CPLErr saved_eErrClass = CE_None;
+static saved_err_no = 0;
+static char saved_error_msg[2048];
+
+static void
+__errorHandler(CPLErr eErrClass, int err_no, const char *msg) {
+        saved_eErrClass = eErrClass;
+        saved_err_no = err_no;
+/* a mutex could be usefull here to avoid a race condition if 2 threads 
+trigger the error handler at the same time */
+        strncpy(saved_error_msg, msg, sizeof(saved_error_msg));
+        saved_error_msg[sizeof(saved_error_msg)-1] = 0;
+}
+
+void installErrorHandler()
+{
+   CPLPushErrorHandler(__errorHandler);
+   saved_err_no = 0;
+}
+
+void uninstallErrorHandlerAndTriggerRError()
+{
+    CPLPopErrorHandler();
+    if (saved_err_no == CE_Warning) {
+
+    warning("\n\tNon-fatal GDAL Error %d: %s\n", saved_err_no, 
+saved_error_msg);
+
+  } else if (saved_err_no == CE_Failure) {
+
+    error("\n\tGDAL Error %d: %s\n", saved_err_no, saved_error_msg);
+
+  }
+}
+
+SEXP
+RGDAL_GetDescription(SEXP sxpObj) {
+
+  void *pGDALObj = getGDALObjPtr(sxpObj);
+
+  installErrorHandler();
+
+  const char *desc = ((GDALMajorObject *)pGDALObj)->GetDescription();
+
+   uninstallErrorHandlerAndTriggerRError();
+
+  return(mkString_safe(desc));
+
+}
+Or you could also take the approach of 
+gdal/swig/include/python/python_exceptions.i where the installed error
+handler 
+just forwards CE_Fatal, CE_Warning and CE_Debug to the previous error
+handler 
+(or the default one if there's none). After the GDAL call, it just looks at 
+CPLGetLastErrorType() and if it is CE_Failure, it triggers a Python
+exception 
+with the error messages fetched with CPLGetLastErrorMsg(). 
+
+Something like 
+
+http://trac.osgeo.org/qgis/browser/trunk/qgis/src/providers/ogr/qgsogrprovid
+er.cpp#L67
+
+might be useful to automate the push/pop.
+
+
+
 			R-Forge SVN README
 
 This file explains the repository structure of your project. A more
