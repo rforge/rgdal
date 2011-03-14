@@ -12,9 +12,10 @@
 // extern "C" {
 // #endif
 
-#include <R.h>
+/*#include <R.h>
 #include <Rdefines.h>
-#include <Rinternals.h>
+#include <Rinternals.h>*/
+#include "rgdal.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -113,7 +114,7 @@ getGDALRasterPtr(SEXP sxpRasterBand) {
 
 }
 
-static void
+/*static void
 __errorHandler(CPLErr eErrClass, int err_no, const char *msg) {
 
   if (eErrClass == CE_Warning) {
@@ -128,14 +129,14 @@ __errorHandler(CPLErr eErrClass, int err_no, const char *msg) {
 
   return;
 
-}
+}*/
 
 /************************************************************************/
 /*                       CPLDefaultErrorHandler()                       */
 /* quoted from GDAL, pointed at REprintf()                              */
 /************************************************************************/
 
-void CPL_STDCALL R_CPLDefaultErrorHandler( CPLErr eErrClass, int nError, 
+/*void CPL_STDCALL R_CPLDefaultErrorHandler( CPLErr eErrClass, int nError, 
                              const char * pszErrorMsg )
 
 {
@@ -172,14 +173,46 @@ void CPL_STDCALL R_CPLDefaultErrorHandler( CPLErr eErrClass, int nError,
                  nMaxErrors );
     }
 
+}*/
+
+static void
+__errorHandler(CPLErr eErrClass, int err_no, const char *msg) {
+        saved_eErrClass = eErrClass;
+        saved_err_no = err_no;
+/* a mutex could be usefull here to avoid a race condition if 2 threads 
+trigger the error handler at the same time */
+        strncpy(saved_error_msg, msg, sizeof(saved_error_msg));
+        saved_error_msg[sizeof(saved_error_msg)-1] = 0;
 }
+
+void installErrorHandler()
+{
+   CPLPushErrorHandler(__errorHandler);
+   saved_err_no = 0;
+}
+
+void uninstallErrorHandlerAndTriggerError()
+{
+    CPLPopErrorHandler();
+    if (saved_err_no == CE_Warning) {
+
+    warning("\n\tNon-fatal GDAL Error %d: %s\n", saved_err_no, 
+saved_error_msg);
+
+  } else if (saved_err_no == CE_Failure) {
+
+    error("\n\tGDAL Error %d: %s\n", saved_err_no, saved_error_msg);
+
+  }
+}
+
 
 
 SEXP
 RGDAL_Init(void) {
 
 //  CPLSetErrorHandler((CPLErrorHandler)__errorHandler);
-  CPLPushErrorHandler((CPLErrorHandler)__errorHandler);
+//  CPLPushErrorHandler((CPLErrorHandler)__errorHandler);
 
   GDALAllRegister();
 
@@ -192,7 +225,7 @@ RGDAL_Init(void) {
 SEXP
 RGDAL_Exit(void) {
 
-  CPLPopErrorHandler();
+//  CPLPopErrorHandler();
  
   return(R_NilValue);
 
@@ -203,7 +236,10 @@ RGDAL_GDALVersionInfo(SEXP str) {
     SEXP ans;
 
     PROTECT(ans=NEW_CHARACTER(1));
+
+    installErrorHandler();
     SET_STRING_ELT(ans, 0, COPY_TO_USER_STRING(GDALVersionInfo(asString(str))));
+    uninstallErrorHandlerAndTriggerError();
 
     UNPROTECT(1);
 
@@ -215,7 +251,9 @@ RGDAL_GDAL_DATA_Info(void) {
     SEXP ans;
 
     PROTECT(ans=NEW_CHARACTER(1));
+    installErrorHandler();
     SET_STRING_ELT(ans, 0, COPY_TO_USER_STRING(CSVFilename( "prime_meridian.csv" )));
+    uninstallErrorHandlerAndTriggerError();
 
     UNPROTECT(1);
 
@@ -237,7 +275,9 @@ RGDAL_GetDescription(SEXP sxpObj) {
 
   void *pGDALObj = getGDALObjPtr(sxpObj);
 
+  installErrorHandler();
   const char *desc = ((GDALMajorObject *)pGDALObj)->GetDescription();
+  uninstallErrorHandlerAndTriggerError();
 
   return(mkString_safe(desc));
 
@@ -249,7 +289,9 @@ RGDAL_GetDriverNames(void) {
 
   SEXP ans, ansnames;
   int pc=0;
+  installErrorHandler();
   int nDr=GDALGetDriverCount();
+  uninstallErrorHandlerAndTriggerError();
 
   PROTECT(ans = NEW_LIST(4)); pc++;
   PROTECT(ansnames = NEW_CHARACTER(4)); pc++;
@@ -265,6 +307,7 @@ RGDAL_GetDriverNames(void) {
   SET_VECTOR_ELT(ans, 3, NEW_LOGICAL(nDr));
 
   int i, flag;
+  installErrorHandler();
   for (i = 0; i < nDr; ++i) {
 
     GDALDriver *pDriver = GetGDALDriverManager()->GetDriver(i);
@@ -280,6 +323,7 @@ RGDAL_GetDriverNames(void) {
     if (GDALGetMetadataItem( pDriver, GDAL_DCAP_CREATECOPY, NULL )) flag=1;
     LOGICAL_POINTER(VECTOR_ELT(ans, 3))[i] = flag;
   }
+  uninstallErrorHandlerAndTriggerError();
 
   UNPROTECT(pc);
 
@@ -292,7 +336,9 @@ RGDAL_GetDriver(SEXP sxpDriverName) {
 
   const char *pDriverName = asString(sxpDriverName);
 
+  installErrorHandler();
   GDALDriver *pDriver = (GDALDriver *) GDALGetDriverByName(pDriverName);
+  uninstallErrorHandlerAndTriggerError();
 
   if (pDriver == NULL)
     error("No driver registered with name: %s\n", pDriverName);
@@ -314,12 +360,14 @@ deleteFile(GDALDriver *pDriver, const char *filename) {
 //  fflush(stderr);
 #endif
 
+  installErrorHandler();
   if (strcmp(GDALGetDriverLongName( pDriver ), "In Memory Raster") != 0) {
       CPLErr eErr = pDriver->Delete(filename);
 
     if (eErr == CE_Failure)
       warning("Failed to delete dataset: %s\n", filename);
   }
+  uninstallErrorHandlerAndTriggerError();
 
 #ifdef RGDALDEBUG
   Rprintf("done.\n", filename);
@@ -353,6 +401,7 @@ RGDAL_CloseHandle(SEXP sxpHandle) {
   Rprintf("Closing GDAL dataset handle %p... ", (void *) pDataset);
 #endif
 
+  installErrorHandler();
   if (pDataset != NULL) {
 
     pDataset->~GDALDataset();
@@ -364,6 +413,7 @@ RGDAL_CloseHandle(SEXP sxpHandle) {
 #endif
 
   }
+  uninstallErrorHandlerAndTriggerError();
 
 #ifdef RGDALDEBUG
   Rprintf("done.\n");
@@ -381,6 +431,7 @@ RGDAL_DeleteHandle(SEXP sxpHandle) {
 
   if (pDataset == NULL) return(R_NilValue);
 
+  installErrorHandler();
   GDALDriver *pDriver = pDataset->GetDriver();
 
   const char *filename = pDataset->GetDescription();
@@ -391,6 +442,7 @@ RGDAL_DeleteHandle(SEXP sxpHandle) {
 #ifndef OSGEO4W
   deleteFile(pDriver, filename);
 #endif
+  uninstallErrorHandlerAndTriggerError();
   return(R_NilValue);
 
 }
@@ -437,22 +489,30 @@ RGDAL_CreateDataset(SEXP sxpDriver, SEXP sDim, SEXP sType,
 
   GDALDataType eGDALType = (GDALDataType) asInteger(sType);
 
+  installErrorHandler();
   for (i=0; i < length(sOpts); i++) papszCreateOptions = CSLAddString( 
     papszCreateOptions, CHAR(STRING_ELT(sOpts, i)) );
 #ifdef RGDALDEBUG
   for (i=0; i < CSLCount(papszCreateOptions); i++)
     Rprintf("option %d: %s\n", i, CSLGetField(papszCreateOptions, i));
 #endif
+  uninstallErrorHandlerAndTriggerError();
+  installErrorHandler();
   pDataset = pDriver->Create(filename,
 			  INTEGER(sDim)[0],
 			  INTEGER(sDim)[1],
 			  INTEGER(sDim)[2],
 			  eGDALType, papszCreateOptions);
+  uninstallErrorHandlerAndTriggerError();
+  installErrorHandler();
   CSLDestroy(papszCreateOptions);
+  uninstallErrorHandlerAndTriggerError();
 
   if (pDataset == NULL) error("Unable to create dataset\n");
 
+  installErrorHandler();
   pDataset->SetDescription(filename);
+  uninstallErrorHandlerAndTriggerError();
 
   SEXP sxpHandle = R_MakeExternalPtr((void *) pDataset,
 				     mkChar("GDAL Dataset"),
@@ -480,27 +540,31 @@ RGDAL_OpenDataset(SEXP filename, SEXP read_only, SEXP silent) {
   if (asLogical(silent))
     CPLPushErrorHandler(CPLQuietErrorHandler);
   else
-    CPLPushErrorHandler(R_CPLDefaultErrorHandler); 
+     installErrorHandler();
 
   GDALDataset *pDataset = (GDALDataset *) GDALOpen(fn, RWFlag);
 
-  CPLPopErrorHandler();
+  if (pDataset == NULL)
+    error("%s\n", CPLGetLastErrorMsg());
+
+  if (asLogical(silent))
+    CPLPopErrorHandler();
+  else
+    uninstallErrorHandlerAndTriggerError();
 
 /* Similarly to SWIG bindings, the following lines will cause
 RGDAL_OpenDataset() to fail on - uncleared - errors even if pDataset is not
 NULL. They could also be just removed. While pDataset != NULL, there's some
 hope ;-) */
 
-  CPLErr eclass = CPLGetLastErrorType();
+/*  CPLErr eclass = CPLGetLastErrorType();
 
   if (pDataset != NULL && eclass == CE_Failure) {
     GDALClose(pDataset);
     pDataset = NULL;
     __errorHandler(eclass, CPLGetLastErrorNo(), CPLGetLastErrorMsg());
-  }
+  }*/
 
-  if (pDataset == NULL)
-    error("%s\n", CPLGetLastErrorMsg());
 
   SEXP sxpHandle = R_MakeExternalPtr((void *) pDataset,
 				     mkChar("GDAL Dataset"),
@@ -525,6 +589,7 @@ RGDAL_CopyDataset(SEXP sxpDataset, SEXP sxpDriver,
 
   GDALDriver *pDriver = getGDALDriverPtr(sxpDriver);
 
+  installErrorHandler();
   for (i=0; i < length(sxpOpts); i++) papszCreateOptions = CSLAddString( 
     papszCreateOptions, CHAR(STRING_ELT(sxpOpts, i)) );
 #ifdef RGDALDEBUG
@@ -534,6 +599,7 @@ RGDAL_CopyDataset(SEXP sxpDataset, SEXP sxpDriver,
   GDALDataset *pDatasetCopy = pDriver->CreateCopy(filename,
 		pDataset, asInteger(sxpStrict),
 		papszCreateOptions, NULL, NULL);
+  uninstallErrorHandlerAndTriggerError();
 
   if (pDatasetCopy == NULL) error("Dataset copy failed\n");
   CSLDestroy(papszCreateOptions);
