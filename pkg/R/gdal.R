@@ -359,7 +359,7 @@ getRasterTable <- function(dataset,
 
   rasterData <- getRasterData(dataset, band,
                               offset = offset,
-                              region = region.dim)
+                              region.dim = region.dim)
 
   if (is.null(band)) {
 
