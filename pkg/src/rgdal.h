@@ -2,6 +2,10 @@
 #include <Rinternals.h>
 #include <Rdefines.h>
 
+#include <cpl_string.h>
+#include <cpl_csv.h>
+#include <cpl_error.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
