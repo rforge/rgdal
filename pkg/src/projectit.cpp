@@ -8,6 +8,7 @@
 #include <R.h>
 #include <Rdefines.h>
 /*#include <Rinternals.h>*/
+#include "rgdal.h"
 
 #ifdef __cplusplus
 extern "C" {

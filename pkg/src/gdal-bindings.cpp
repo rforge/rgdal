@@ -214,9 +214,13 @@ RGDAL_Init(void) {
 //  CPLSetErrorHandler((CPLErrorHandler)__errorHandler);
 //  CPLPushErrorHandler((CPLErrorHandler)__errorHandler);
 
+    installErrorHandler();
   GDALAllRegister();
+    uninstallErrorHandlerAndTriggerError();
 
+    installErrorHandler();
   OGRRegisterAll();
+    uninstallErrorHandlerAndTriggerError();
  
   return(R_NilValue);
 
@@ -592,17 +596,24 @@ RGDAL_CopyDataset(SEXP sxpDataset, SEXP sxpDriver,
   installErrorHandler();
   for (i=0; i < length(sxpOpts); i++) papszCreateOptions = CSLAddString( 
     papszCreateOptions, CHAR(STRING_ELT(sxpOpts, i)) );
+  uninstallErrorHandlerAndTriggerError();
 #ifdef RGDALDEBUG
+  installErrorHandler();
   for (i=0; i < CSLCount(papszCreateOptions); i++)
     Rprintf("option %d: %s\n", i, CSLGetField(papszCreateOptions, i));
+  uninstallErrorHandlerAndTriggerError();
 #endif
+  installErrorHandler();
   GDALDataset *pDatasetCopy = pDriver->CreateCopy(filename,
 		pDataset, asInteger(sxpStrict),
 		papszCreateOptions, NULL, NULL);
   uninstallErrorHandlerAndTriggerError();
 
   if (pDatasetCopy == NULL) error("Dataset copy failed\n");
+
+  installErrorHandler();
   CSLDestroy(papszCreateOptions);
+  uninstallErrorHandlerAndTriggerError();
 
   SEXP sxpHandle = R_MakeExternalPtr((void *) pDatasetCopy,
 				     mkChar("GDAL Dataset"),
@@ -618,7 +629,12 @@ RGDAL_GetRasterXSize(SEXP sDataset) {
 
   GDALDataset *pDataset = getGDALDatasetPtr(sDataset);
 
-  return(ScalarInteger(pDataset->GetRasterXSize()));
+  int res;
+
+  installErrorHandler();
+  res = pDataset->GetRasterXSize();
+  uninstallErrorHandlerAndTriggerError();
+  return(ScalarInteger(res));
 
 }
 
@@ -627,7 +643,12 @@ RGDAL_GetRasterYSize(SEXP sDataset) {
 
   GDALDataset *pDataset = getGDALDatasetPtr(sDataset);
 
-  return(ScalarInteger(pDataset->GetRasterYSize()));
+  int res;
+
+  installErrorHandler();
+  res = pDataset->GetRasterYSize();
+  uninstallErrorHandlerAndTriggerError();
+  return(ScalarInteger(res));
 
 }
 
@@ -636,7 +657,12 @@ RGDAL_GetRasterCount(SEXP sDataset) {
 
   GDALDataset *pDataset = getGDALDatasetPtr(sDataset);
 
-  return(ScalarInteger(pDataset->GetRasterCount()));
+  int res;
+
+  installErrorHandler();
+  res = pDataset->GetRasterCount();
+  uninstallErrorHandlerAndTriggerError();
+  return(ScalarInteger(res));
 
 }
 
@@ -650,14 +676,20 @@ RGDAL_GetProjectionRef(SEXP sDataset) {
 
   GDALDataset *pDataset = getGDALDatasetPtr(sDataset);
   
+  installErrorHandler();
   pszSRS_WKT = (char*) pDataset->GetProjectionRef();
+  uninstallErrorHandlerAndTriggerError();
 
+  installErrorHandler();
   oSRS.importFromWkt( &pszSRS_WKT );
   oSRS.exportToProj4( &pszSRS_WKT );
+  uninstallErrorHandlerAndTriggerError();
   PROTECT(ans = NEW_CHARACTER(1));
   SET_STRING_ELT(ans, 0, COPY_TO_USER_STRING(pszSRS_WKT));
 
+  installErrorHandler();
   CPLFree( pszSRS_WKT );
+  uninstallErrorHandlerAndTriggerError();
   UNPROTECT(1);
   return(ans);
 
@@ -672,11 +704,13 @@ RGDAL_GetMetadata(SEXP sDataset, SEXP tag) {
 
     GDALDataset *pDataset = getGDALDatasetPtr(sDataset);
 
+  installErrorHandler();
     if (tag == R_NilValue) {
         papszMetadata = pDataset->GetMetadata( NULL );
     } else {
         papszMetadata = pDataset->GetMetadata(CHAR(STRING_ELT(tag, 0)));
     }
+  uninstallErrorHandlerAndTriggerError();
 
     if (CSLCount(papszMetadata) == 0) return(R_NilValue);
 
@@ -698,7 +732,9 @@ RGDAL_GetDatasetDriver(SEXP sDataset) {
 
   GDALDataset *pDataset = getGDALDatasetPtr(sDataset);
 
+  installErrorHandler();
   GDALDriver *pDriver = pDataset->GetDriver();
+  uninstallErrorHandlerAndTriggerError();
 
   SEXP sxpDriver = R_MakeExternalPtr((void *) pDriver,
 				     mkChar("GDAL Dataset"),
@@ -713,7 +749,10 @@ RGDAL_GetDriverShortName(SEXP sxpDriver) {
 
   GDALDriver *pDriver = getGDALDriverPtr(sxpDriver);
 
-  return(mkString_safe(GDALGetDriverShortName( pDriver )));
+  installErrorHandler();
+  const char *desc = GDALGetDriverShortName( pDriver );
+  uninstallErrorHandlerAndTriggerError();
+  return(mkString_safe(desc));
 
 }
 
@@ -721,8 +760,10 @@ SEXP
 RGDAL_GetDriverLongName(SEXP sxpDriver) {
 
   GDALDriver *pDriver = getGDALDriverPtr(sxpDriver);
-
-  return(mkString_safe(GDALGetDriverLongName( pDriver )));
+  installErrorHandler();
+  const char *desc = GDALGetDriverLongName( pDriver );
+  uninstallErrorHandlerAndTriggerError();
+  return(mkString_safe(desc));
 }
 
 SEXP
@@ -732,7 +773,9 @@ RGDAL_GetRasterBand(SEXP sDataset, SEXP sBand) {
 
   int band = asInteger(sBand);
 
+  installErrorHandler();
   GDALRasterBand *pRasterBand = pDataset->GetRasterBand(band);
+  uninstallErrorHandlerAndTriggerError();
 
   SEXP rpRasterBand = R_MakeExternalPtr((void *) pRasterBand,
 					mkChar("GDAL Raster Band"),
@@ -746,7 +789,12 @@ RGDAL_GetXSize(SEXP sRasterBand) {
 
   GDALRasterBand *pRasterBand = getGDALRasterPtr(sRasterBand);
 
-  return(ScalarInteger(pRasterBand->GetXSize()));
+  int res;
+
+  installErrorHandler();
+  res = pRasterBand->GetXSize();
+  uninstallErrorHandlerAndTriggerError();
+  return(ScalarInteger(res));
 
 }
 
@@ -755,7 +803,12 @@ RGDAL_GetYSize(SEXP sRasterBand) {
 
   GDALRasterBand *pRasterBand = getGDALRasterPtr(sRasterBand);
 
-  return(ScalarInteger(pRasterBand->GetYSize()));
+  int res;
+
+  installErrorHandler();
+  res = pRasterBand->GetYSize();
+  uninstallErrorHandlerAndTriggerError();
+  return(ScalarInteger(res));
 
 }
 
@@ -766,7 +819,9 @@ RGDAL_GetRasterBlockSize(SEXP rasterObj) {
 	 
 	 SEXP blockSize = allocVector(INTSXP, 2);
 	 
+  installErrorHandler();
 	 raster->GetBlockSize(INTEGER(blockSize) + 1, INTEGER(blockSize));
+  uninstallErrorHandlerAndTriggerError();
 	 
 	 return(blockSize);
 	 
@@ -776,8 +831,12 @@ SEXP
 RGDAL_GetAccess(SEXP sxpDataset) {
 
   GDALDataset *pDataset = getGDALDatasetPtr(sxpDataset);
+  int res;
 
-  return(ScalarLogical(pDataset->GetAccess() == GA_ReadOnly));
+  installErrorHandler();
+  res = pDataset->GetAccess() == GA_ReadOnly;
+  uninstallErrorHandlerAndTriggerError();
+  return(ScalarLogical(res));
 
 }
 
@@ -786,7 +845,12 @@ RGDAL_GetRasterAccess(SEXP sxpRasterBand) {
 
   GDALRasterBand *pRasterBand = getGDALRasterPtr(sxpRasterBand);
 
-  return(ScalarLogical(pRasterBand->GetAccess() == GA_ReadOnly));
+  int res;
+
+  installErrorHandler();
+  res = pRasterBand->GetAccess() == GA_ReadOnly;
+  uninstallErrorHandlerAndTriggerError();
+  return(ScalarLogical(res));
 
 }
 
@@ -797,7 +861,9 @@ RGDAL_GetNoDataValue(SEXP sxpRasterBand) {
 
   int hasNoDataValue;
 
+  installErrorHandler();
   double noDataValue = pRasterBand->GetNoDataValue(&hasNoDataValue);
+  uninstallErrorHandlerAndTriggerError();
 
   return(hasNoDataValue ? ScalarReal(noDataValue) : R_NilValue);
 
@@ -807,8 +873,12 @@ SEXP
 RGDAL_GetOffset(SEXP sxpRasterBand) {
 
   GDALRasterBand *pRasterBand = getGDALRasterPtr(sxpRasterBand);
+  double res;
 
-  return(ScalarReal(pRasterBand->GetOffset()));
+  installErrorHandler();
+  res = pRasterBand->GetOffset();
+  uninstallErrorHandlerAndTriggerError();
+  return(ScalarReal(res));
 
 }
 
@@ -816,8 +886,12 @@ SEXP
 RGDAL_GetScale(SEXP sxpRasterBand) {
 
   GDALRasterBand *pRasterBand = getGDALRasterPtr(sxpRasterBand);
+  double res;
 
-  return(ScalarReal(pRasterBand->GetScale()));
+  installErrorHandler();
+  res = pRasterBand->GetScale();
+  uninstallErrorHandlerAndTriggerError();
+  return(ScalarReal(res));
 
 }
 
@@ -873,19 +947,26 @@ RGDAL_GetRAT(SEXP sxpRasterBand) {
 
   GDALRasterBand *pRasterBand = getGDALRasterPtr(sxpRasterBand);
 
+  installErrorHandler();
   const GDALRasterAttributeTable *pRAT = pRasterBand->GetDefaultRAT();
+  uninstallErrorHandlerAndTriggerError();
 
   if (pRAT == NULL) return(R_NilValue);
 
+  installErrorHandler();
   nc = (int) pRAT->GetColumnCount();
+  uninstallErrorHandlerAndTriggerError();
   PROTECT(ans = NEW_LIST(nc));np++;
   PROTECT(nc_names = NEW_CHARACTER(nc));np++;
   nc_types = (GDALRATFieldType *) R_alloc((size_t) nc,
     sizeof(GDALRATFieldType));
   nc_usages = (GDALRATFieldUsage *) R_alloc((size_t) nc,
     sizeof(GDALRATFieldUsage));
+  installErrorHandler();
   nr = (int) pRAT->GetRowCount();
+  uninstallErrorHandlerAndTriggerError();
 
+  installErrorHandler();
   for (i=0; i<nc; i++) {
     nc_types[i] = pRAT->GetTypeOfCol(i);
     nc_usages[i] = pRAT->GetUsageOfCol(i);
@@ -900,6 +981,8 @@ RGDAL_GetRAT(SEXP sxpRasterBand) {
       error("unknown column type");
     }
   }
+  uninstallErrorHandlerAndTriggerError();
+  installErrorHandler();
   for (i=0; i<nc; i++) {
 
     if (nc_types[i] == GFT_Integer) {
@@ -926,6 +1009,7 @@ RGDAL_GetRAT(SEXP sxpRasterBand) {
     }     
 
   }
+  uninstallErrorHandlerAndTriggerError();
   PROTECT(GFT_type = NEW_CHARACTER(nc));np++;
   PROTECT(GFT_usage = NEW_CHARACTER(nc));np++;
 
@@ -952,7 +1036,9 @@ RGDAL_GetBandMinimum(SEXP sxpRasterBand) {
   GDALRasterBand *pRasterBand = getGDALRasterPtr(sxpRasterBand);
   PROTECT(ans = NEW_NUMERIC(1));
 
+  installErrorHandler();
   NUMERIC_POINTER(ans)[0] = (double) pRasterBand->GetMinimum();
+  uninstallErrorHandlerAndTriggerError();
 
   UNPROTECT(1);
   return(ans);
@@ -966,7 +1052,9 @@ RGDAL_GetBandMaximum(SEXP sxpRasterBand) {
   GDALRasterBand *pRasterBand = getGDALRasterPtr(sxpRasterBand);
   PROTECT(ans = NEW_NUMERIC(1));
 
+  installErrorHandler();
   NUMERIC_POINTER(ans)[0] = (double) pRasterBand->GetMaximum();
+  uninstallErrorHandlerAndTriggerError();
 
   UNPROTECT(1);
   return(ans);
@@ -983,19 +1071,23 @@ RGDAL_GetBandStatistics(SEXP sxpRasterBand, SEXP silent) {
 
   GDALRasterBand *pRasterBand = getGDALRasterPtr(sxpRasterBand);
 
+  installErrorHandler();
   err = pRasterBand->GetStatistics(FALSE, FALSE, &min, &max, &mean, &sd);
 
   if (err == CE_Failure) {
 	if (!LOGICAL_POINTER(silent)[0])
             warning("statistics not supported by this driver");
+  uninstallErrorHandlerAndTriggerError();
         return(R_NilValue);
   }
 
   if (err == CE_Warning) {
 	if (!LOGICAL_POINTER(silent)[0])
     	    warning("statistics not supported by this driver");
+  uninstallErrorHandlerAndTriggerError();
         return(R_NilValue);
   }
+  uninstallErrorHandlerAndTriggerError();
 
   PROTECT(ans = NEW_NUMERIC(4));
   NUMERIC_POINTER(ans)[0] = min;
@@ -1017,7 +1109,9 @@ RGDAL_GetBandType(SEXP sxpRasterBand) {
   GDALRasterBand *pRasterBand = getGDALRasterPtr(sxpRasterBand);
   PROTECT(ans = NEW_INTEGER(1));
 
+  installErrorHandler();
   INTEGER_POINTER(ans)[0] = (int) pRasterBand->GetRasterDataType();
+  uninstallErrorHandlerAndTriggerError();
 
   UNPROTECT(1);
   return(ans);
@@ -1046,6 +1140,7 @@ RGDAL_PutRasterData(SEXP sxpRasterBand, SEXP sxpData, SEXP sxpOffset) {
     PROTECT(sxpData = coerceVector(sxpData, INTSXP));
   // Transpose data
 // replication for 2.4.0 RSB 20060726
+    installErrorHandler();
     if(pRasterBand->RasterIO(GF_Write,
 			   INTEGER(sxpOffset)[1],
 			   INTEGER(sxpOffset)[0],
@@ -1054,8 +1149,11 @@ RGDAL_PutRasterData(SEXP sxpRasterBand, SEXP sxpData, SEXP sxpOffset) {
 			   rowsIn, colsIn,
 			   eGDALType,
 			   0, 0)
-       == CE_Failure)
+       == CE_Failure) {
+      uninstallErrorHandlerAndTriggerError();
       error("Failure during raster IO\n");
+    }
+    uninstallErrorHandlerAndTriggerError();
 
     break;
 
@@ -1065,6 +1163,7 @@ RGDAL_PutRasterData(SEXP sxpRasterBand, SEXP sxpData, SEXP sxpOffset) {
     eGDALType = GDAL_FLOAT_TYPE;
     PROTECT(sxpData = coerceVector(sxpData, REALSXP));
   // Transpose data
+    installErrorHandler();
     if(pRasterBand->RasterIO(GF_Write,
 			   INTEGER(sxpOffset)[1],
 			   INTEGER(sxpOffset)[0],
@@ -1073,8 +1172,11 @@ RGDAL_PutRasterData(SEXP sxpRasterBand, SEXP sxpData, SEXP sxpOffset) {
 			   rowsIn, colsIn,
 			   eGDALType,
 			   0, 0)
-       == CE_Failure)
+       == CE_Failure) {
+      uninstallErrorHandlerAndTriggerError();
       error("Failure during raster IO\n");
+    }
+    uninstallErrorHandlerAndTriggerError();
 
     break;
 
@@ -1086,6 +1188,7 @@ RGDAL_PutRasterData(SEXP sxpRasterBand, SEXP sxpData, SEXP sxpOffset) {
     eGDALType = GDAL_COMPLEX_TYPE;
     PROTECT(sxpData = coerceVector(sxpData, CPLXSXP));
   // Transpose data
+    installErrorHandler();
     if(pRasterBand->RasterIO(GF_Write,
 			   INTEGER(sxpOffset)[1],
 			   INTEGER(sxpOffset)[0],
@@ -1094,8 +1197,11 @@ RGDAL_PutRasterData(SEXP sxpRasterBand, SEXP sxpData, SEXP sxpOffset) {
 			   rowsIn, colsIn,
 			   eGDALType,
 			   0, 0)
-       == CE_Failure)
+       == CE_Failure) {
+      uninstallErrorHandlerAndTriggerError();
       error("Failure during raster IO\n");
+    }
+    uninstallErrorHandlerAndTriggerError();
 
     break;
     
@@ -1119,7 +1225,9 @@ RGDAL_GetBandNoDataValue(SEXP sxpRasterBand) {
   GDALRasterBand *pRasterBand = getGDALRasterPtr(sxpRasterBand);
   SEXP res;
   int hasNoDataValue;
+  installErrorHandler();
   double noDataValue = pRasterBand->GetNoDataValue(&hasNoDataValue);
+  uninstallErrorHandlerAndTriggerError();
 
   if (hasNoDataValue) {
     PROTECT(res = NEW_NUMERIC(1));
@@ -1144,7 +1252,9 @@ RGDAL_GetRasterData(SEXP sxpRasterBand,
   GDALDataType eGDALType = GDT_Int32;
   SEXPTYPE uRType = INTSXP;
 
+  installErrorHandler();
   int RDT = pRasterBand->GetRasterDataType();
+  uninstallErrorHandlerAndTriggerError();
 
   switch(RDT) {
 
@@ -1196,6 +1306,7 @@ RGDAL_GetRasterData(SEXP sxpRasterBand,
   switch(uRType) {
 
     case INTSXP:
+      installErrorHandler();
       if(pRasterBand->RasterIO(GF_Read,
 			   INTEGER(sxpRegion)[1],
 			   INTEGER(sxpRegion)[0],
@@ -1207,12 +1318,16 @@ RGDAL_GetRasterData(SEXP sxpRasterBand,
 			   eGDALType,
 			   INTEGER(sxpInterleave)[0],
 			   INTEGER(sxpInterleave)[1])
-         == CE_Failure)
+         == CE_Failure) {
+           uninstallErrorHandlerAndTriggerError();
            error("Failure during raster IO\n");
+      }
+      uninstallErrorHandlerAndTriggerError();
       break;
 
     case REALSXP:
 
+      installErrorHandler();
       if(pRasterBand->RasterIO(GF_Read,
 			   INTEGER(sxpRegion)[1],
 			   INTEGER(sxpRegion)[0],
@@ -1224,12 +1339,16 @@ RGDAL_GetRasterData(SEXP sxpRasterBand,
 			   eGDALType,
 			   INTEGER(sxpInterleave)[0],
 			   INTEGER(sxpInterleave)[1])
-         == CE_Failure)
+         == CE_Failure) {
+           uninstallErrorHandlerAndTriggerError();
            error("Failure during raster IO\n");
+      }
+      uninstallErrorHandlerAndTriggerError();
       break;
 
     case CPLXSXP:
 
+      installErrorHandler();
       if(pRasterBand->RasterIO(GF_Read,
 			   INTEGER(sxpRegion)[1],
 			   INTEGER(sxpRegion)[0],
@@ -1241,8 +1360,11 @@ RGDAL_GetRasterData(SEXP sxpRasterBand,
 			   eGDALType,
 			   INTEGER(sxpInterleave)[0],
 			   INTEGER(sxpInterleave)[1])
-         == CE_Failure)
+         == CE_Failure) {
+           uninstallErrorHandlerAndTriggerError();
            error("Failure during raster IO\n");
+      }
+      uninstallErrorHandlerAndTriggerError();
       break;
 
     default:
@@ -1320,6 +1442,7 @@ RGDAL_GetRasterData(SEXP sxpRasterBand,
     }
 
   } else {
+    installErrorHandler();
     if (uRType == REALSXP && pRasterBand->GetRasterDataType() == GDT_Float32) {
         for (i = 0; i < LENGTH(sRStorage); ++i)
 	  if (ISNAN(REAL(sRStorage)[i])) {
@@ -1327,6 +1450,7 @@ RGDAL_GetRasterData(SEXP sxpRasterBand,
 	  }
       
     }
+    uninstallErrorHandlerAndTriggerError();
   }
 
   UNPROTECT(pc);
@@ -1339,10 +1463,15 @@ RGDAL_GetPaletteInterp(SEXP sxpRasterBand) {
 
   GDALRasterBand *pRasterBand = getGDALRasterPtr(sxpRasterBand);
 
+  installErrorHandler();
   GDALPaletteInterp ePI = 
     pRasterBand->GetColorTable()->GetPaletteInterpretation();
-
-  return(mkString_safe(GDALGetPaletteInterpretationName(ePI)));
+  uninstallErrorHandlerAndTriggerError();
+  
+  installErrorHandler();
+  const char *desc = GDALGetPaletteInterpretationName(ePI);
+  uninstallErrorHandlerAndTriggerError();
+  return(mkString_safe(desc));
 
 }
 
@@ -1351,19 +1480,27 @@ RGDAL_GetColorInterp(SEXP sxpRasterBand) {
 
   GDALRasterBand *pRasterBand = getGDALRasterPtr(sxpRasterBand);
 
+  installErrorHandler();
   GDALColorInterp eCI = pRasterBand->GetColorInterpretation();
+  uninstallErrorHandlerAndTriggerError();
 
-  return(mkString_safe(GDALGetColorInterpretationName(eCI)));
+  installErrorHandler();
+  const char *desc = GDALGetColorInterpretationName(eCI);
+  uninstallErrorHandlerAndTriggerError();
+  return(mkString_safe(desc));
 
 }
 
 static SEXP
 GDALColorTable2Matrix(GDALColorTableH ctab) {
 
+        installErrorHandler();
 	int ncol = GDALGetColorEntryCount(ctab);
+        uninstallErrorHandlerAndTriggerError();
 
 	SEXP cmat = allocMatrix(INTSXP, ncol, 4);
 
+        installErrorHandler();
 	for (int i = 0; i < ncol; ++i) {
 
     	const GDALColorEntry* ce = GDALGetColorEntry(ctab, i);
@@ -1374,6 +1511,7 @@ GDALColorTable2Matrix(GDALColorTableH ctab) {
     	INTEGER(cmat)[i + 3 * ncol] = static_cast<int>(ce->c4);
 
   	}
+        uninstallErrorHandlerAndTriggerError();
 
   	return(cmat);
 	
@@ -1384,7 +1522,9 @@ RGDAL_GetColorTable(SEXP rasterObj) {
 
 	GDALRasterBandH rasterBand = getGDALRasterPtr(rasterObj);
 
+        installErrorHandler();
 	GDALColorTableH ctab = GDALGetRasterColorTable(rasterBand);
+        uninstallErrorHandlerAndTriggerError();
 
 	if (ctab == NULL) return(R_NilValue);
 
@@ -1401,12 +1541,16 @@ RGDAL_SetCategoryNames(SEXP sxpRasterBand, SEXP sxpNames) {
   char **nameList = NULL;
 
   int i;
+  installErrorHandler();
   for (i = 0; i < length(sxpNames); ++i)
     nameList = CSLAddString(nameList, asString(sxpNames, i));
+  uninstallErrorHandlerAndTriggerError();
 
+  installErrorHandler();
   CPLErr err = pRasterBand->SetCategoryNames(nameList);
 
   if (err == CE_Failure) warning("Failed to set category names");
+  uninstallErrorHandlerAndTriggerError();
 
   return(sxpRasterBand);
 
@@ -1417,24 +1561,33 @@ RGDAL_GetCategoryNames(SEXP sxpRasterBand) {
 
   GDALRasterBand *pRasterBand = getGDALRasterPtr(sxpRasterBand);
 
+  installErrorHandler();
   char **pcCNames = pRasterBand->GetCategoryNames();
+  uninstallErrorHandlerAndTriggerError();
 
   if (pcCNames == NULL) return(R_NilValue);
 
+  installErrorHandler();
   pcCNames = CSLDuplicate(pcCNames);
+  uninstallErrorHandlerAndTriggerError();
 
   SEXP sxpCNames;
 
-  PROTECT(sxpCNames = allocVector(STRSXP, CSLCount(pcCNames)));
+  installErrorHandler();
+  int ii = CSLCount(pcCNames);
+  uninstallErrorHandlerAndTriggerError();
+  PROTECT(sxpCNames = allocVector(STRSXP, ii));
 
   int i;
-  for (i = 0; i < CSLCount(pcCNames); ++i) {
+  installErrorHandler();
+  for (i = 0; i < ii; ++i) {
 
     const char *field = CSLGetField(pcCNames, i);
 
     SET_STRING_ELT(sxpCNames, i, mkChar(field));
 
   }
+  uninstallErrorHandlerAndTriggerError();
 
   UNPROTECT(1);
   
@@ -1451,6 +1604,7 @@ RGDAL_GetGeoTransform(SEXP sxpDataset) {
   SEXP ceFail = NEW_LOGICAL(1);
   LOGICAL_POINTER(ceFail)[0] = FALSE;
 
+  installErrorHandler();
   CPLErr err = pDataset->GetGeoTransform(REAL(sxpGeoTrans));
 
   if (err == CE_Failure) {
@@ -1466,6 +1620,8 @@ RGDAL_GetGeoTransform(SEXP sxpDataset) {
 
   }
   setAttrib(sxpGeoTrans, install("CE_Failure"), ceFail);
+  uninstallErrorHandlerAndTriggerError();
+
   return(sxpGeoTrans);
 
 }
@@ -1476,10 +1632,12 @@ RGDAL_SetNoDataValue(SEXP sxpRasterBand, SEXP NoDataValue) {
 
   GDALRasterBand *pRasterBand = getGDALRasterPtr(sxpRasterBand);
 
+  installErrorHandler();
   err = pRasterBand->SetNoDataValue(NUMERIC_POINTER(NoDataValue)[0]);
 
   if (err == CE_Failure)
 	warning("setting of missing value not supported by this driver");
+  uninstallErrorHandlerAndTriggerError();
 
   return(sxpRasterBand);
 
@@ -1491,12 +1649,14 @@ SEXP RGDAL_SetStatistics(SEXP sxpRasterBand, SEXP statistics) {
 
   GDALRasterBand *pRasterBand = getGDALRasterPtr(sxpRasterBand);
 
+  installErrorHandler();
   err = pRasterBand->SetStatistics(NUMERIC_POINTER(statistics)[0],
     NUMERIC_POINTER(statistics)[1], NUMERIC_POINTER(statistics)[2],
     NUMERIC_POINTER(statistics)[3]);
 
   if (err == CE_Failure)
 	warning("setting of statistics not supported by this driver");
+  uninstallErrorHandlerAndTriggerError();
 
   return(sxpRasterBand);
 
@@ -1510,10 +1670,12 @@ RGDAL_SetGeoTransform(SEXP sxpDataset, SEXP GeoTransform) {
   if (LENGTH(GeoTransform) != 6)
 	error("GeoTransform argument should have length 6");
 
+  installErrorHandler();
   CPLErr err = pDataset->SetGeoTransform(NUMERIC_POINTER(GeoTransform));
 
   if (err == CE_Failure) 
 	warning("Failed to set GeoTransform\n");
+  uninstallErrorHandlerAndTriggerError();
 
   return(sxpDataset);
 }
@@ -1526,14 +1688,18 @@ RGDAL_SetProject(SEXP sxpDataset, SEXP proj4string) {
 
   GDALDataset *pDataset = getGDALDatasetPtr(sxpDataset);
 
+  installErrorHandler();
   oSRS.importFromProj4(CHAR(STRING_ELT(proj4string, 0)));
   oSRS.exportToWkt( &pszSRS_WKT );
+  uninstallErrorHandlerAndTriggerError();
 
+  installErrorHandler();
   OGRErr err = pDataset->SetProjection(pszSRS_WKT);
   CPLFree( pszSRS_WKT );
 
   if (err == CE_Failure) 
 	warning("Failed to set projection\n");
+  uninstallErrorHandlerAndTriggerError();
 
   return(sxpDataset);
 }
@@ -1552,24 +1718,38 @@ RGDAL_GenCMap(SEXP input1, SEXP input2, SEXP input3, SEXP output, SEXP nColors, 
 	if (ncol < 2 || ncol > 256)
 		error("Number of colors should range from 2 to 256");
 	
+        installErrorHandler();
 	int err = GDALComputeMedianCutPCT(band1, band2, band3, NULL,
 	                                  ncol, &ctab, NULL, NULL); 
 	
-	if (err == CE_Failure) error("Error generating color table");
-	
+	if (err == CE_Failure) {
+          uninstallErrorHandlerAndTriggerError();
+          error("Error generating color table");
+	}
+        uninstallErrorHandlerAndTriggerError();
 	if (output != R_NilValue) {
 		
 		GDALRasterBand* target = getGDALRasterPtr(output);
 	
+                installErrorHandler();
 		err = GDALDitherRGB2PCT(band1, band2, band3, target, &ctab, NULL, NULL);
 	
-		if (err == CE_Failure) error("Image dithering failed");
+		if (err == CE_Failure) {
+                  uninstallErrorHandlerAndTriggerError();
+                  error("Image dithering failed");
+                }
+                uninstallErrorHandlerAndTriggerError();
 	
 		if (asLogical(setCMap)) {
 			
+                        installErrorHandler();
 			err = GDALSetRasterColorTable(target, &ctab);
 	
-			if (err == CE_Failure) warning("Unable to set color table");
+			if (err == CE_Failure) {
+                          uninstallErrorHandlerAndTriggerError();
+                          warning("Unable to set color table");
+                        }
+                        uninstallErrorHandlerAndTriggerError();
 			
 		}
 		
