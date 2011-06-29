@@ -68,6 +68,8 @@ if test [ -n "$proj_include_path" ] ; then
     AC_SUBST([PKG_CPPFLAGS],["-I${proj_include_path} ${PKG_CPPFLAGS}"])
 fi
 
+AC_SUBST([CPPFLAGS], ["${CPPFLAGS} ${PKG_CPPFLAGS}"])
+
 AC_CHECK_HEADERS(proj_api.h)
 if test "$ac_cv_header_proj_api_h" = "no" ; then
     STOP="stop"

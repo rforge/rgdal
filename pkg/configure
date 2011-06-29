@@ -309,7 +309,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS GDAL_CONFIG PKG_CPPFLAGS CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT CPP EGREP PKG_LIBS LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS GDAL_CONFIG PKG_CPPFLAGS CPPFLAGS CC CFLAGS LDFLAGS ac_ct_CC EXEEXT OBJEXT CPP EGREP PKG_LIBS LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -1367,6 +1367,9 @@ if test  -n "$proj_include_path"  ; then
     PKG_CPPFLAGS="-I${proj_include_path} ${PKG_CPPFLAGS}"
 
 fi
+
+CPPFLAGS="${CPPFLAGS} ${PKG_CPPFLAGS}"
+
 
 ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
@@ -3806,10 +3809,10 @@ s,@ECHO_T@,$ECHO_T,;t t
 s,@LIBS@,$LIBS,;t t
 s,@GDAL_CONFIG@,$GDAL_CONFIG,;t t
 s,@PKG_CPPFLAGS@,$PKG_CPPFLAGS,;t t
+s,@CPPFLAGS@,$CPPFLAGS,;t t
 s,@CC@,$CC,;t t
 s,@CFLAGS@,$CFLAGS,;t t
 s,@LDFLAGS@,$LDFLAGS,;t t
-s,@CPPFLAGS@,$CPPFLAGS,;t t
 s,@ac_ct_CC@,$ac_ct_CC,;t t
 s,@EXEEXT@,$EXEEXT,;t t
 s,@OBJEXT@,$OBJEXT,;t t
