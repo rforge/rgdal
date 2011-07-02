@@ -33,54 +33,23 @@ Error : Null external pointer
 > try(GDAL.open(logo))
 An object of class "GDALReadOnlyDataset"
 Slot "handle":
-<pointer: 0x13430330>
+<pointer: 0xdf3a330>
 
 > try(GDAL.close(x))
 > try(new('GDALDriver', "GeoTIFF"))
 Error in .local(.Object, ...) : No driver registered with name: GeoTIFF
 
 > fn <- system.file("pictures/erdas_spnad83.tif", package = "rgdal")[1]
-> GDALinfo(fn)
-rows        658 
-columns     571 
-bands       1 
-origin.x        78999 
-origin.y        1412948 
-res.x       40 
-res.y       40 
-ysign       -1 
-oblique.x   0 
-oblique.y   0 
-driver      GTiff 
-projection  +proj=tmerc +lat_0=30 +lon_0=-82.16666666666667 +k=0.9999 +x_0=200000
-+y_0=0 +datum=NAD83 +units=us-ft +no_defs 
-file        /home/rsb/topics/packages/rgdal/pkg.Rcheck/rgdal/pictures/erdas_spnad83.tif 
-apparent band summary:
-  GDType Bmin Bmax Bmean Bsd hasNoDataValue NoDataValue
-1   Byte    0  255     0   0          FALSE           0
-Metadata:
-TIFFTAG_SOFTWARE=IMAGINE TIFF Support
-Copyright 1991 - 1999 by ERDAS, Inc. All Rights Reserved
-@(#)$RCSfile: etif.c $ $Revision: 1.4 $ $Date: 1999/08/27 17:48:49 $ 
-TIFFTAG_XRESOLUTION=1 
-TIFFTAG_YRESOLUTION=1 
-TIFFTAG_RESOLUTIONUNIT=1 (unitless) 
-AREA_OR_POINT=Area 
+> x <- GDALinfo(fn)
 Warning message:
 statistics not supported by this driver 
-> try(erdas_spnad83 <- readGDAL(fn, offset=c(500, 1000), region.dim=c(400, 400)))
-/home/rsb/topics/packages/rgdal/pkg.Rcheck/rgdal/pictures/erdas_spnad83.tif has GDAL driver GTiff 
-and has 658 rows and 571 columns
+> try(erdas_spnad83 <- readGDAL(fn, offset=c(500, 1000), region.dim=c(400, 400), silent=TRUE))
 Error : Failure during raster IO
 
-> try(erdas_spnad83 <- readGDAL(fn, region.dim=c(4000, 400)))
-/home/rsb/topics/packages/rgdal/pkg.Rcheck/rgdal/pictures/erdas_spnad83.tif has GDAL driver GTiff 
-and has 658 rows and 571 columns
+> try(erdas_spnad83 <- readGDAL(fn, region.dim=c(4000, 400), silent=TRUE))
 Error : Failure during raster IO
 
-> x <- readGDAL(fn)
-/home/rsb/topics/packages/rgdal/pkg.Rcheck/rgdal/pictures/erdas_spnad83.tif has GDAL driver GTiff 
-and has 658 rows and 571 columns
+> x <- readGDAL(fn, silent=TRUE)
 > tf <- tempfile()
 > try(writeGDAL(x, tf, drivername="GTiff", type="Byte", options="INTERLEAVE=PIXIL"))
 Error in .local(.Object, ...) : Unable to create dataset
@@ -95,19 +64,15 @@ In addition: Warning message:
 In create2GDAL(dataset = dataset, drivername = drivername, type = type,  :
   mvFlag=NA unsuitable for type Byte
 > dsn <- system.file("vectors", package = "rgdal")[1]
-> try(ogrInfo(dsn=dsn, layer="citis"))
+> x <- try(ogrInfo(dsn=dsn, layer="citis"))
 Error in ogrInfo(dsn = dsn, layer = "citis") : Cannot open layer
 > try(OGRSpatialRef(dsn=dsn, layer="scot_BMG"))
 Error in OGRSpatialRef(dsn = dsn, layer = "scot_BMG") : Cannot open layer
 > dsn <- system.file("vectors/test_trk2.gpx", package = "rgdal")[1]
-> try(readOGR(dsn=dsn, layer="trucks"))
+> try(readOGR(dsn=dsn, layer="trucks", verbose=FALSE))
 Error in ogrInfo(dsn = dsn, layer = layer, input_field_name_encoding = input_field_name_encoding) : 
   Cannot open layer
-> cities <- readOGR(system.file("vectors", package = "rgdal")[1], "cities")
-OGR data source with driver: ESRI Shapefile 
-Source: "/home/rsb/topics/packages/rgdal/pkg.Rcheck/rgdal/vectors", layer: "cities"
-with 606 features and 4 fields
-Feature type: wkbPoint with 2 dimensions
+> cities <- readOGR(system.file("vectors", package = "rgdal")[1], "cities", verbose=FALSE)
 > td <- tempdir()
 > try(writeOGR(cities, td, "cities", driver="ESRI_Shapefile"))
 Error in writeOGR(cities, td, "cities", driver = "ESRI_Shapefile") : 
