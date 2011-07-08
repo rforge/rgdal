@@ -13,9 +13,9 @@ llgridlines = function(obj, easts, norths, ndiscr = 20,
 		plot(grd_x, add = TRUE, lty = lty, ...)
         if (packageVersion("sp") >= "0.9.84") {
 	    grdat_ll <- gridat(obj_ll, easts = easts, norths = norths,
-                side=side, ...)
+                side=side, offset = offset)
         } else {
-	    grdat_ll <- gridat(obj_ll, easts = easts, norths = norths, ...)
+	    grdat_ll <- gridat(obj_ll, easts = easts, norths = norths, offset = offset)
         }
 	grdat_x <- spTransform(grdat_ll, CRS(proj4string(obj)))
 	if (plotLabels)
