@@ -3,7 +3,7 @@
 \title{Plot long-lat grid over projected data}
 \description{ Plot long-lat grid over projected data }
 \usage{
-llgridlines(obj, easts, norths, ndiscr = 20, lty = 2, offset=0.5,
+llgridlines(obj, easts, norths, ndiscr = 20, lty = 2, offset=0.5, side="WS",
 llcrs = "+proj=longlat +datum=WGS84", plotLines = TRUE, plotLabels =
 TRUE, ...)
 }
@@ -14,6 +14,7 @@ TRUE, ...)
   \item{norths}{numeric; see \link[sp]{gridlines}}
   \item{ndiscr}{numeric; see \link[sp]{gridlines}}
   \item{offset}{numeric; see \link[sp]{gridat}}
+  \item{side}{character, default \dQuote{WS}; see \link[sp]{gridat}; available from \pkg{sp} 0.9-84}
   \item{lty}{line type to be used for grid lines}
 \item{llcrs}{proj4string of longitude - latitude}
 \item{plotLines}{logical; plot lines?}

@@ -1,5 +1,6 @@
 llgridlines = function(obj, easts, norths, ndiscr = 20, 
-		lty = 2, offset=0.5, llcrs = "+proj=longlat +datum=WGS84",
+		lty = 2, offset=0.5, side="WS", 
+                llcrs = "+proj=longlat +datum=WGS84",
 		plotLines = TRUE, plotLabels = TRUE, ...) {
 	obj_ll <- spTransform(obj, CRS(llcrs))
 	if (missing(easts))
@@ -10,7 +11,12 @@ llgridlines = function(obj, easts, norths, ndiscr = 20,
 	grd_x <- spTransform(grd, CRS(proj4string(obj)))
 	if (plotLines)
 		plot(grd_x, add = TRUE, lty = lty, ...)
-	grdat_ll <- gridat(obj_ll, easts = easts, norths = norths, ...)
+        if (packageVersion("sp") >= "0.9.84") {
+	    grdat_ll <- gridat(obj_ll, easts = easts, norths = norths,
+                side=side, ...)
+        } else {
+	    grdat_ll <- gridat(obj_ll, easts = easts, norths = norths, ...)
+        }
 	grdat_x <- spTransform(grdat_ll, CRS(proj4string(obj)))
 	if (plotLabels)
 		text(coordinates(grdat_x), labels=parse(text=grdat_x$labels),
