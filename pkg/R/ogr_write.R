@@ -100,6 +100,7 @@ writeOGR <- function(obj, dsn, layer, driver, dataset_options=NULL, layer_option
     if (driver == "ESRI Shapefile") {
         if (any(nchar(fld_names) > 10)) {
             fld_names <- abbreviate(fld_names, minlength=7)
+            warning("Field names abbreviated for ESRI Shapefile driver")
         }
     }
     if (length(fld_names) != length(unique(fld_names)))
