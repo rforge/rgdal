@@ -97,6 +97,13 @@ writeOGR <- function(obj, dsn, layer, driver, dataset_options=NULL, layer_option
         } else stop(paste(dfcls[i], dftof[i], "unknown data type"))
     }
     fld_names <- names(dfcls)
+    if (driver == "ESRI Shapefile") {
+        if (any(nchar(fld_names) > 10)) {
+            fld_names <- abbreviate(fld_names, minlength=7)
+        }
+    }
+    if (length(fld_names) != length(unique(fld_names)))
+       stop("Non-unique field names")
     nobj <- nrow(slot(obj, "data"))
     
     pre <- list(obj, as.character(dsn), as.character(layer), 
