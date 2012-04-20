@@ -1,3 +1,19 @@
+2012-04-20 14:25  rsbivand
+
+	* DESCRIPTION, configure, configure.ac, configure.in,
+	  src/Makevars.in: upgrading configure
+
+2012-04-16 13:11  rsbivand
+
+	* DESCRIPTION, R/ogr_sp.R, R/ogr_write.R, man/readOGR.Rd,
+	  src/local_stubs.c, src/ogr_geom.cpp, src/ogr_polygons.c,
+	  src/rgdal.h: extracting OGC SFS comments for Polygons from input
+	  geometry order
+
+2012-01-18 14:57  rsbivand
+
+	* ChangeLog, inst/ChangeLog: tidy
+
 2012-01-18 14:56  rsbivand
 
 	* DESCRIPTION, src/ogrsource.cpp: extend ogrListLayers() < OGR 1.8
