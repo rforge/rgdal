@@ -294,7 +294,7 @@ AC_ARG_WITH([data-copy],
     AC_HELP_STRING([--with-data-copy=yes/no],
                [local copy of data directories in package]),
                [data_copy=$withval])
-if test ${data_copy} = "yes" ; then
+if test "${data_copy}" = "yes" ; then
 echo "Copy data for:"
   proj_lib0="${PROJ_LIB}"
   AC_ARG_WITH([proj-data],

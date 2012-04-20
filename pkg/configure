@@ -3426,7 +3426,7 @@ if test "${with_data_copy+set}" = set; then
   withval="$with_data_copy"
   data_copy=$withval
 fi;
-if test ${data_copy} = "yes" ; then
+if test "${data_copy}" = "yes" ; then
 echo "Copy data for:"
   proj_lib0="${PROJ_LIB}"
 
