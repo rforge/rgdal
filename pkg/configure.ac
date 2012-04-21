@@ -127,6 +127,13 @@ fi
 
 rm -f gdal_test errors.txt gdal_test.c
 
+GDAL_DATA_TEST_FILE="${GDAL_DATADIR}/epsg.wkt"
+if test -r "${GDAL_DATA_TEST_FILE}" ; then
+  echo "GDAL: ${GDAL_DATA_TEST_FILE} is readable"
+else
+  AC_MSG_ERROR([epsg.wkt not found in GDAL data directory.])
+fi
+
 # PROJ.4
 
 AC_ARG_WITH([proj-include],
@@ -226,6 +233,8 @@ ${CC} ${CFLAGS} ${PKG_CPPFLAGS} -o proj_conf_test proj_conf_test.c ${PKG_LIBS} -
 proj_share=`echo $?`
 if test ${proj_share} -eq 1 ; then
     STOP="stop"
+else
+    echo "PROJ.4: epsg found and readable"
 fi
 
 rm -f proj_conf_test.c proj_conf_test
@@ -276,6 +285,8 @@ ${CC} ${CFLAGS} ${PKG_CPPFLAGS} -o proj_conf_test proj_conf_test.c ${PKG_LIBS} -
 proj_share=`echo $?`
 if test ${proj_share} -eq 1 ; then
     WARN="warn"
+else
+    echo "PROJ.4: conus found and readable"
 fi
 
 rm -f proj_conf_test.c proj_conf_test
