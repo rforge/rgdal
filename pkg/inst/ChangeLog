@@ -1,3 +1,11 @@
+2012-04-22 12:43  rsbivand
+
+	* configure, configure.ac: correct if nesting in configure
+
+2012-04-22 12:29  rsbivand
+
+	* ChangeLog, inst/ChangeLog: tidy
+
 2012-04-22 12:29  rsbivand
 
 	* DESCRIPTION, configure, configure.ac: correct if nesting in
