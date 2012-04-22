@@ -1,3 +1,12 @@
+2012-04-22 12:29  rsbivand
+
+	* DESCRIPTION, configure, configure.ac: correct if nesting in
+	  configure
+
+2012-04-21 11:07  rsbivand
+
+	* ChangeLog, inst/ChangeLog: tidy
+
 2012-04-21 11:06  rsbivand
 
 	* configure, configure.ac: add data readability tests to
