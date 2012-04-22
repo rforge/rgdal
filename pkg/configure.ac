@@ -321,9 +321,9 @@ echo "Copy data for:"
     if test -d "${proj_lib}" ; then
       cp -r "${proj_lib}" "${R_PACKAGE_DIR}"
       echo "  PROJ.4: ${proj_lib}"
-    else
-      AC_MSG_ERROR([PROJ.4 data files not found.])
     fi
+    else
+      AC_MSG_ERROR([PROJ.4 data files not found; set environment variable PROJ_LIB=DIR or --with-proj-data=DIR.])
   fi
 
   if test -d "${GDAL_DATADIR}" ; then
