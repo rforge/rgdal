@@ -185,7 +185,7 @@ int main() {
 }
 _EOCONF]
 
-${CC} ${CFLAGS} ${PKG_CPPFLAGS} -o proj_conf_test proj_conf_test.c ${PKG_LIBS}
+${CC} ${CFLAGS} ${CPPFLAGS} -o proj_conf_test proj_conf_test.c ${LIBS}
 ./proj_conf_test
 
 proj_version=`echo $?`
@@ -227,7 +227,7 @@ int main() {
 _EOCONF]
 fi
 
-${CC} ${CFLAGS} ${PKG_CPPFLAGS} -o proj_conf_test proj_conf_test.c ${PKG_LIBS} -lproj
+${CC} ${CFLAGS} ${CPPFLAGS} -o proj_conf_test proj_conf_test.c ${LIBS} -lproj
 ./proj_conf_test
 
 proj_share=`echo $?`
@@ -279,7 +279,7 @@ int main() {
 _EOCONF]
 fi
 
-${CC} ${CFLAGS} ${PKG_CPPFLAGS} -o proj_conf_test proj_conf_test.c ${PKG_LIBS} -lproj
+${CC} ${CFLAGS} ${CPPFLAGS} -o proj_conf_test proj_conf_test.c ${LIBS} -lproj
 ./proj_conf_test
 
 proj_share=`echo $?`
