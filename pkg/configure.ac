@@ -99,13 +99,17 @@ GDALAllRegister();
 #endif
 _EOCONF]
 
+AC_MSG_CHECKING(gdal: linking with --libs only)
 ${CXX} ${CPPFLAGS} -o gdal_test gdal_test.c ${LIBS} 2> errors.txt
 if test `echo $?` -ne 0 ; then
 gdalok=no
-echo "gdal: linking with --libs only failed"
+AC_MSG_RESULT(no)
+else
+AC_MSG_RESULT(yes)
 fi
 
 if test "${gdalok}" = no; then
+AC_MSG_CHECKING(gdal: linking with --libs and --dep-libs)
 LIBS="${LIBS} ${GDAL_DEP_LIBS}"
 gdalok=yes
 ${CXX} ${CPPFLAGS} -o gdal_test gdal_test.c ${LIBS} 2>> errors.txt
@@ -115,9 +119,9 @@ echo ""
 fi
 if test "${gdalok}" = yes; then
     NEED_DEPS=yes
-    echo "gdal: linking with --libs and --dep-libs succeeded"
+    AC_MSG_RESULT(yes)
 else
-    AC_MSG_WARN([gdal: dependencies not satisfied.])
+    AC_MSG_RESULT(no)
 fi
 fi
 
@@ -127,10 +131,13 @@ fi
 
 rm -f gdal_test errors.txt gdal_test.c
 
+
 GDAL_DATA_TEST_FILE="${GDAL_DATADIR}/epsg.wkt"
+AC_MSG_CHECKING(GDAL: ${GDAL_DATADIR}/epsg.wkt readable)
 if test -r "${GDAL_DATA_TEST_FILE}" ; then
-  echo "GDAL: ${GDAL_DATA_TEST_FILE} is readable"
+  AC_MSG_RESULT(yes)
 else
+  AC_MSG_RESULT(no)
   AC_MSG_ERROR([epsg.wkt not found in GDAL data directory.])
 fi
 
@@ -147,7 +154,7 @@ fi
 # honor PKG_xx overrides
 # for CPPFLAGS we will superfluously double R's flags
 # since we'll set PKG_CPPFLAGS with this, but that shouldn't hurt
-CPPFLAGS="${CPPFLAGS} ${PKG_CPPFLAGS}"
+CPPFLAGS="${INCPPFLAGS} ${PKG_CPPFLAGS}"
 
 
 proj4ok=yes
@@ -163,8 +170,7 @@ AC_ARG_WITH([proj-lib],
                [the location of proj libraries]),
                [proj_lib_path=$withval])
 if test [ -n "$proj_lib_path" ] ; then
-    AC_SUBST([LIBS],[" -L${proj_lib_path} ${LIBS}"])
-    AC_SUBST([PKG_LIBS], [" -L${proj_lib_path} ${INPKG_LIBS}"])
+    AC_SUBST([PKG_LIBS], ["-L${proj_lib_path} ${INPKG_LIBS}"])
 fi
 
 LIBS="${INLIBS} ${PKG_LIBS}"
@@ -174,6 +180,12 @@ AC_CHECK_LIB(proj,pj_init_plus,,proj4ok=no)
 if test "${proj4ok}" = no; then
    AC_MSG_ERROR([libproj not found in standard or given locations.])
 fi
+
+
+PKG_LIBS="${PKG_LIBS} -lproj"
+echo "DEBUG: CFLAGS ${CFLAGS}, IN_CPPFLAGS ${INCPPFLAGS}, CPPFLAGS ${CPPFLAGS}, PKG_CPPFLAGS ${PKG_CPPFLAGS}"
+echo "DEBUG: LIBS ${LIBS}, INLIBS ${INLIBS} PKG_LIBS ${PKG_LIBS}"
+
 
 [cat > proj_conf_test.c <<_EOCONF
 #include <stdio.h>
@@ -185,16 +197,17 @@ int main() {
 }
 _EOCONF]
 
-${CC} ${CFLAGS} ${CPPFLAGS} -o proj_conf_test proj_conf_test.c ${LIBS}
+${CC} ${CFLAGS} ${PKG_CPPFLAGS} -o proj_conf_test proj_conf_test.c ${PKG_LIBS}
 ./proj_conf_test
 
 proj_version=`echo $?`
 
+AC_MSG_CHECKING(PROJ.4 Version 4.7 or earlier)
 if test ${proj_version} -eq 1; then
-  echo "PROJ.4 Version 4.8 or later"
+  AC_MSG_RESULT(no)
   AC_SUBST([PKG_CPPFLAGS],["-DP4CTX=${proj_version} ${PKG_CPPFLAGS}"])
 else
-  echo "PROJ.4 Version 4.7 or earlier"
+  AC_MSG_RESULT(yes)
 fi
 
 if test ${proj_version} -eq 1; then
@@ -227,14 +240,16 @@ int main() {
 _EOCONF]
 fi
 
-${CC} ${CFLAGS} ${CPPFLAGS} -o proj_conf_test proj_conf_test.c ${LIBS} -lproj
+${CC} ${CFLAGS} ${PKG_CPPFLAGS} -o proj_conf_test proj_conf_test.c ${PKG_LIBS}
 ./proj_conf_test
 
 proj_share=`echo $?`
+AC_MSG_CHECKING(PROJ.4: epsg found and readable)
 if test ${proj_share} -eq 1 ; then
+    AC_MSG_RESULT(no)
     STOP="stop"
 else
-    echo "PROJ.4: epsg found and readable"
+    AC_MSG_RESULT(yes)
 fi
 
 rm -f proj_conf_test.c proj_conf_test
@@ -279,14 +294,16 @@ int main() {
 _EOCONF]
 fi
 
-${CC} ${CFLAGS} ${CPPFLAGS} -o proj_conf_test proj_conf_test.c ${LIBS} -lproj
+${CC} ${CFLAGS} ${PKG_CPPFLAGS} -o proj_conf_test proj_conf_test.c ${PKG_LIBS}
 ./proj_conf_test
 
 proj_share=`echo $?`
+AC_MSG_CHECKING(PROJ.4: conus found and readable)
 if test ${proj_share} -eq 1 ; then
     WARN="warn"
+    AC_MSG_RESULT(no)
 else
-    echo "PROJ.4: conus found and readable"
+    AC_MSG_RESULT(yes)
 fi
 
 rm -f proj_conf_test.c proj_conf_test
@@ -300,10 +317,10 @@ fi
 
 # Optional local copy of GDAL datadir and PROJ_LIB
 
-do_data_copy=no
+data_copy=no
 AC_ARG_WITH([data-copy],
     AC_HELP_STRING([--with-data-copy=yes/no],
-               [local copy of data directories in package]),
+               [local copy of data directories in package, default no]),
                [data_copy=$withval])
 if test "${data_copy}" = "yes" ; then
 echo "Copy data for:"
