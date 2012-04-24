@@ -1344,8 +1344,12 @@ if test  -n "$gdal_config"  ; then
     GDAL_CONFIG="${gdal_config}"
 
 fi
-echo "gdal-config: ${GDAL_CONFIG}"
 
+{ echo "$as_me:$LINENO: gdal-config: ${GDAL_CONFIG}" >&5
+echo "$as_me: gdal-config: ${GDAL_CONFIG}" >&6;}
+
+echo "$as_me:$LINENO: checking gdal-config usability" >&5
+echo $ECHO_N "checking gdal-config usability... $ECHO_C" >&6
 if test `${GDAL_CONFIG} --version`;
 then
 
@@ -1354,9 +1358,11 @@ then
         GDAL_VERSION=`${GDAL_CONFIG} --version`
         GDAL_DEP_LIBS=`${GDAL_CONFIG} --dep-libs`
         GDAL_DATADIR=`${GDAL_CONFIG} --datadir`
-
+        echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
 else
-
+        echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
 	echo "Error: gdal-config not found"
 	echo "The gdal-config script distributed with GDAL could not be found."
 	echo "If you have not installed the GDAL libraries, you can"
@@ -1372,13 +1378,20 @@ else
 
 fi
 
-echo "GDAL: $GDAL_VERSION"
+{ echo "$as_me:$LINENO: GDAL: ${GDAL_VERSION}" >&5
+echo "$as_me: GDAL: ${GDAL_VERSION}" >&6;}
+echo "$as_me:$LINENO: checking GDAL version > 1.5.4" >&5
+echo $ECHO_N "checking GDAL version > 1.5.4... $ECHO_C" >&6
 GDAL_VER_DOT=`echo $GDAL_VERSION | tr -d "."`
 if test ${GDAL_VER_DOT} -lt 160 ; then
-    echo "Error: GDAL version less than 1.6.0"
-    echo "Upgrade GDAL to at least 1.6.0"
-
-    exit 1
+  echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+  { { echo "$as_me:$LINENO: error: upgrade GDAL to 1.6.0 or later" >&5
+echo "$as_me: error: upgrade GDAL to 1.6.0 or later" >&2;}
+   { (exit 1); exit 1; }; }
+else
+  echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
 fi
 
 INLIBS="${LIBS}"
@@ -3009,7 +3022,6 @@ gdalok=yes
 ${CXX} ${CPPFLAGS} -o gdal_test gdal_test.c ${LIBS} 2>> errors.txt
 if test `echo $?` -ne 0 ; then
 gdalok=no
-echo ""
 fi
 if test "${gdalok}" = yes; then
     NEED_DEPS=yes
@@ -3322,9 +3334,6 @@ fi
 
 
 PKG_LIBS="${PKG_LIBS} -lproj"
-echo "DEBUG: CFLAGS ${CFLAGS}, IN_CPPFLAGS ${INCPPFLAGS}, CPPFLAGS ${CPPFLAGS}, PKG_CPPFLAGS ${PKG_CPPFLAGS}"
-echo "DEBUG: LIBS ${LIBS}, INLIBS ${INLIBS} PKG_LIBS ${PKG_LIBS}"
-
 
 cat > proj_conf_test.c <<_EOCONF
 #include <stdio.h>
@@ -3474,7 +3483,8 @@ if test "${with_data_copy+set}" = set; then
   data_copy=$withval
 fi;
 if test "${data_copy}" = "yes" ; then
-echo "Copy data for:"
+{ echo "$as_me:$LINENO: Copy data for:" >&5
+echo "$as_me: Copy data for:" >&6;}
   proj_lib0="${PROJ_LIB}"
 
 # Check whether --with-proj-data or --without-proj-data was given.
@@ -3490,7 +3500,8 @@ fi;
   if test -n "${proj_lib}" ; then
     if test -d "${proj_lib}" ; then
       cp -r "${proj_lib}" "${R_PACKAGE_DIR}"
-      echo "  PROJ.4: ${proj_lib}"
+      { echo "$as_me:$LINENO:   PROJ.4: ${proj_lib}" >&5
+echo "$as_me:   PROJ.4: ${proj_lib}" >&6;}
     else
       { { echo "$as_me:$LINENO: error: PROJ.4 data files not found; set environment variable PROJ_LIB=DIR or --with-proj-data=DIR." >&5
 echo "$as_me: error: PROJ.4 data files not found; set environment variable PROJ_LIB=DIR or --with-proj-data=DIR." >&2;}
@@ -3504,7 +3515,8 @@ echo "$as_me: error: PROJ.4 data files not found; set environment variable PROJ_
 
   if test -d "${GDAL_DATADIR}" ; then
     cp -r "${GDAL_DATADIR}" "${R_PACKAGE_DIR}"
-    echo "  GDAL: ${GDAL_DATADIR}"
+    { echo "$as_me:$LINENO:   GDAL: ${GDAL_DATADIR}" >&5
+echo "$as_me:   GDAL: ${GDAL_DATADIR}" >&6;}
   else
     { { echo "$as_me:$LINENO: error: GDAL data files not found." >&5
 echo "$as_me: error: GDAL data files not found." >&2;}
@@ -3539,8 +3551,10 @@ fi
 PKG_LIBS="${PKG_LIBS} -lproj"
 
 
-echo "Package CPP flags: $PKG_CPPFLAGS"
-echo "Package LIBS: $PKG_LIBS"
+{ echo "$as_me:$LINENO: Package CPP flags: ${PKG_CPPFLAGS}" >&5
+echo "$as_me: Package CPP flags: ${PKG_CPPFLAGS}" >&6;}
+{ echo "$as_me:$LINENO: Package LIBS: ${PKG_LIBS}" >&5
+echo "$as_me: Package LIBS: ${PKG_LIBS}" >&6;}
 
           ac_config_files="$ac_config_files src/Makevars"
 

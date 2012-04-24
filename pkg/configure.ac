@@ -28,8 +28,10 @@ AC_ARG_WITH([gdal-config],
 if test [ -n "$gdal_config" ] ; then
     AC_SUBST([GDAL_CONFIG],["${gdal_config}"])
 fi
-echo "gdal-config: ${GDAL_CONFIG}"
 
+AC_MSG_NOTICE([gdal-config: ${GDAL_CONFIG}])
+
+AC_MSG_CHECKING(gdal-config usability)
 if test `${GDAL_CONFIG} --version`;
 then
 
@@ -38,9 +40,9 @@ then
         GDAL_VERSION=`${GDAL_CONFIG} --version`
         GDAL_DEP_LIBS=`${GDAL_CONFIG} --dep-libs`
         GDAL_DATADIR=`${GDAL_CONFIG} --datadir`
-
+        AC_MSG_RESULT(yes)
 else
-
+        AC_MSG_RESULT(no)
 	echo "Error: gdal-config not found"
 	echo "The gdal-config script distributed with GDAL could not be found."
 	echo "If you have not installed the GDAL libraries, you can"
@@ -56,13 +58,14 @@ else
 
 fi
 
-echo "GDAL: $GDAL_VERSION"
+AC_MSG_NOTICE([GDAL: ${GDAL_VERSION}])
+AC_MSG_CHECKING([GDAL version > 1.5.4])
 GDAL_VER_DOT=`echo $GDAL_VERSION | tr -d "."`
 if test ${GDAL_VER_DOT} -lt 160 ; then
-    echo "Error: GDAL version less than 1.6.0"
-    echo "Upgrade GDAL to at least 1.6.0"
-
-    exit 1
+  AC_MSG_RESULT(no)
+  AC_MSG_ERROR([upgrade GDAL to 1.6.0 or later])
+else
+  AC_MSG_RESULT(yes)
 fi
 
 INLIBS="${LIBS}"
@@ -115,7 +118,6 @@ gdalok=yes
 ${CXX} ${CPPFLAGS} -o gdal_test gdal_test.c ${LIBS} 2>> errors.txt
 if test `echo $?` -ne 0 ; then
 gdalok=no
-echo ""
 fi
 if test "${gdalok}" = yes; then
     NEED_DEPS=yes
@@ -183,9 +185,6 @@ fi
 
 
 PKG_LIBS="${PKG_LIBS} -lproj"
-echo "DEBUG: CFLAGS ${CFLAGS}, IN_CPPFLAGS ${INCPPFLAGS}, CPPFLAGS ${CPPFLAGS}, PKG_CPPFLAGS ${PKG_CPPFLAGS}"
-echo "DEBUG: LIBS ${LIBS}, INLIBS ${INLIBS} PKG_LIBS ${PKG_LIBS}"
-
 
 [cat > proj_conf_test.c <<_EOCONF
 #include <stdio.h>
@@ -323,7 +322,7 @@ AC_ARG_WITH([data-copy],
                [local copy of data directories in package, default no]),
                [data_copy=$withval])
 if test "${data_copy}" = "yes" ; then
-echo "Copy data for:"
+AC_MSG_NOTICE([Copy data for:])
   proj_lib0="${PROJ_LIB}"
   AC_ARG_WITH([proj-data],
     AC_HELP_STRING([--with-proj-data=DIR],
@@ -337,7 +336,7 @@ echo "Copy data for:"
   if test -n "${proj_lib}" ; then
     if test -d "${proj_lib}" ; then
       cp -r "${proj_lib}" "${R_PACKAGE_DIR}"
-      echo "  PROJ.4: ${proj_lib}"
+      AC_MSG_NOTICE([  PROJ.4: ${proj_lib}])
     else
       AC_MSG_ERROR([PROJ.4 data files not found; set environment variable PROJ_LIB=DIR or --with-proj-data=DIR.])
     fi
@@ -347,7 +346,7 @@ echo "Copy data for:"
 
   if test -d "${GDAL_DATADIR}" ; then
     cp -r "${GDAL_DATADIR}" "${R_PACKAGE_DIR}"
-    echo "  GDAL: ${GDAL_DATADIR}"
+    AC_MSG_NOTICE([  GDAL: ${GDAL_DATADIR}])
   else
     AC_MSG_ERROR([GDAL data files not found.])
   fi
@@ -373,8 +372,8 @@ AC_SUBST([PKG_LIBS], ["${PKG_LIBS} -L${proj_lib_path}"])
 fi
 AC_SUBST([PKG_LIBS], ["${PKG_LIBS} -lproj"])
 
-echo "Package CPP flags: $PKG_CPPFLAGS"
-echo "Package LIBS: $PKG_LIBS"
+AC_MSG_NOTICE([Package CPP flags: ${PKG_CPPFLAGS}])
+AC_MSG_NOTICE([Package LIBS: ${PKG_LIBS}])
 
 AC_CONFIG_FILES(src/Makevars)
 AC_OUTPUT
