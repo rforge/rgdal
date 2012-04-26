@@ -3065,7 +3065,7 @@ if test "${with_proj_include+set}" = set; then
   proj_include_path=$withval
 fi;
 if test  -n "$proj_include_path"  ; then
-   CPPFLAGS="-I${proj_include_path} ${CPPFLAGS}"
+   PKG_CPPFLAGS="-I${proj_include_path} ${INPKG_CPPFLAGS}"
 
 fi
 

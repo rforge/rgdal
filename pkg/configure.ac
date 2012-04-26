@@ -150,7 +150,7 @@ AC_ARG_WITH([proj-include],
                    [location of proj header files]),
     [proj_include_path=$withval])
 if test [ -n "$proj_include_path" ] ; then
-   AC_SUBST([CPPFLAGS],["-I${proj_include_path} ${CPPFLAGS}"])
+   AC_SUBST([PKG_CPPFLAGS],["-I${proj_include_path} ${INPKG_CPPFLAGS}"])
 fi
 
 # honor PKG_xx overrides
