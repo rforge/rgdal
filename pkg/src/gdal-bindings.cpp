@@ -7,6 +7,8 @@
 #include <ogrsf_frmts.h>
 #include <cpl_error.h>
 
+#include <gdal_version.h>
+
 // R headers moved outside extern "C" 070808 RSB re. note from BDR
 // #ifdef __cplusplus
 // extern "C" {
@@ -249,6 +251,22 @@ RGDAL_GDALVersionInfo(SEXP str) {
 
     return(ans);
 }
+
+SEXP
+RGDAL_GDALHeaderVersionInfo() {
+    SEXP ans;
+
+    PROTECT(ans=NEW_INTEGER(3));
+
+    INTEGER_POINTER(ans)[0] = GDAL_VERSION_MAJOR;
+    INTEGER_POINTER(ans)[1] = GDAL_VERSION_MINOR;
+    INTEGER_POINTER(ans)[2] = GDAL_VERSION_REV;
+
+    UNPROTECT(1);
+
+    return(ans);
+}
+
 
 SEXP
 RGDAL_GDAL_DATA_Info(void) {

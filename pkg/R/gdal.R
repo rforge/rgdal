@@ -36,6 +36,11 @@ getGDALVersionInfo <- function(str="--version") {
     .Call("RGDAL_GDALVersionInfo", str, PACKAGE="rgdal")
 }
 
+getGDALHeaderVersionInfo <- function() {
+    res <- .Call("RGDAL_GDALHeaderVersionInfo", PACKAGE="rgdal")
+    paste(res, collapse=".")
+}
+
 getGDAL_DATA_Path <- function() {
     res <- .Call("RGDAL_GDAL_DATA_Info", PACKAGE="rgdal")
     res <- sub("prime_meridian.csv", "", res)
