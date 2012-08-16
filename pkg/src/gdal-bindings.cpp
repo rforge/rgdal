@@ -253,14 +253,15 @@ RGDAL_GDALVersionInfo(SEXP str) {
 }
 
 SEXP
-RGDAL_GDALHeaderVersionInfo() {
+RGDAL_GDALCheckVersion() {
     SEXP ans;
 
-    PROTECT(ans=NEW_INTEGER(3));
+    PROTECT(ans=NEW_LOGICAL(1));
 
-    INTEGER_POINTER(ans)[0] = GDAL_VERSION_MAJOR;
-    INTEGER_POINTER(ans)[1] = GDAL_VERSION_MINOR;
-    INTEGER_POINTER(ans)[2] = GDAL_VERSION_REV;
+    installErrorHandler();
+    LOGICAL_POINTER(ans)[0] = GDALCheckVersion(GDAL_VERSION_MAJOR,
+        GDAL_VERSION_MINOR, NULL);
+    uninstallErrorHandlerAndTriggerError();
 
     UNPROTECT(1);
 

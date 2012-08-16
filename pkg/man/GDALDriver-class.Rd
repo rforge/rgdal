@@ -8,7 +8,7 @@
 \alias{initialize,GDALDriver-method}
 \alias{getGDALVersionInfo}
 \alias{getGDAL_DATA_Path}
-\alias{getGDALHeaderVersionInfo}
+\alias{getGDALCheckVersion}
 \title{Class "GDALDriver": GDAL Driver Object}
 
 \description{\code{GDALDriver} objects encapsulate GDAL file format
@@ -37,7 +37,7 @@ gdalDrivers()
 getDriverName(driver)
 getDriverLongName(driver)
 getGDALVersionInfo(str = "--version")
-getGDALHeaderVersionInfo()
+getGDALCheckVersion()
 }
 \arguments{
   \item{driver}{An object inheriting from class 'GDALDriver'}
@@ -53,11 +53,11 @@ getGDALHeaderVersionInfo()
 
     \item{\code{getDriverLongName}:}{returns a longer driver name.}
     \item{\code{getGDALVersionInfo}:}{returns the version of the GDAL runtime shared object.}
-    \item{\code{getGDALHeaderVersionInfo}:}{returns the version of the GDAL headers used when building the package - if the two versions differ, problems may arise, and rgdal should be re-installed}
+    \item{\code{getGDALCheckVersion}:}{checks the version of the GDAL headers used when building the package (GDAL_VERSION_MAJOR, GDAL_VERSION_MINOR) - if the two versions differ, problems may arise (the C++ API/ABI may have changed), and rgdal should be re-installed}
 }
 }
 
-\note{Loading the rgdal package changes the \code{GDAL\_DATA} environmental variable to the GDAL support files bundles with the package.}
+\note{Loading the rgdal package changes the \code{GDAL\_DATA} environmental variable to the GDAL support files bundled with the package.}
 
 \author{Timothy H. Keitt, modified by Roger Bivand}
 

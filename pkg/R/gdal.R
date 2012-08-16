@@ -36,9 +36,8 @@ getGDALVersionInfo <- function(str="--version") {
     .Call("RGDAL_GDALVersionInfo", str, PACKAGE="rgdal")
 }
 
-getGDALHeaderVersionInfo <- function() {
-    res <- .Call("RGDAL_GDALHeaderVersionInfo", PACKAGE="rgdal")
-    paste(res, collapse=".")
+getGDALCheckVersion <- function() {
+    .Call("RGDAL_GDALCheckVersion", PACKAGE="rgdal")
 }
 
 getGDAL_DATA_Path <- function() {

@@ -76,7 +76,7 @@ if (!isGeneric("spTransform"))
               use_ob_tran <- FALSE
               warning("project: use_ob_tran set FALSE")
             } else use_ob_tran <- TRUE
-          }
+          } else use_ob_tran <- FALSE
         } else use_ob_tran <- FALSE
 	crds <- coordinates(x)
 	crds.names <- dimnames(crds)[[2]] # crds is matrix
@@ -104,7 +104,7 @@ setMethod("spTransform", signature("SpatialPoints", "CRS"), spTransform.SpatialP
 
 "spTransform.SpatialPointsDataFrame" <- function(x, CRSobj, ...) {
 	xSP <- as(x, "SpatialPoints")
-	resSP <- spTransform(xSP, CRSobj)
+	resSP <- spTransform(xSP, CRSobj, ...)
 	# xDF <- as(x, "data.frame")
 	xDF <- x@data # little need to add unique row.names here!
 	res <- SpatialPointsDataFrame(coords=coordinates(resSP), data=xDF,
@@ -180,7 +180,7 @@ setMethod("spTransform", signature("SpatialGridDataFrame", "CRS"),
               use_ob_tran <- FALSE
               warning("project: use_ob_tran set FALSE")
             } else use_ob_tran <- TRUE
-          }
+          } else use_ob_tran <- FALSE
         } else use_ob_tran <- FALSE
 	input <- slot(x, "lines")
 	n <- length(input)
@@ -194,7 +194,7 @@ setMethod("spTransform", signature("SpatialGridDataFrame", "CRS"),
 setMethod("spTransform", signature("SpatialLines", "CRS"), spTransform.SpatialLines)
 "spTransform.SpatialLinesDataFrame" <- function(x, CRSobj, ...) {
 	xSP <- as(x, "SpatialLines")
-	resSP <- spTransform(xSP, CRSobj)
+	resSP <- spTransform(xSP, CRSobj, ...)
 	xDF <- as(x, "data.frame")
 	res <- SpatialLinesDataFrame(sl=resSP, data=xDF, match.ID = FALSE)
 	res
@@ -255,7 +255,7 @@ setMethod("spTransform", signature("SpatialLinesDataFrame", "CRS"), spTransform.
               use_ob_tran <- FALSE
               warning("project: use_ob_tran set FALSE")
             } else use_ob_tran <- TRUE
-          }
+          } else use_ob_tran <- FALSE
         } else use_ob_tran <- FALSE
 	input <- slot(x, "polygons")
 	n <- length(input)
@@ -271,7 +271,7 @@ setMethod("spTransform", signature("SpatialPolygons", "CRS"), spTransform.Spatia
 
 "spTransform.SpatialPolygonsDataFrame" <- function(x, CRSobj, ...) {
 	xSP <- as(x, "SpatialPolygons")
-	resSP <- spTransform(xSP, CRSobj)
+	resSP <- spTransform(xSP, CRSobj, ...)
 	xDF <- as(x, "data.frame")
 	res <- SpatialPolygonsDataFrame(Sr=resSP, data=xDF, match.ID = FALSE)
 	res

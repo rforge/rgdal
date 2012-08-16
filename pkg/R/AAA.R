@@ -24,10 +24,8 @@ assign(".rgdal_old.GDAL_DATA", "", envir=.RGDAL_CACHE)
   library.dynam('rgdal', pkg, lib)
 
   .Call('RGDAL_Init', PACKAGE="rgdal")
-  hver <- getGDALHeaderVersionInfo()
+  ver_ok <- getGDALCheckVersion()
   rver <- getGDALVersionInfo()
-  rver0 <- strsplit(strsplit(rver, ",")[[1]][1], " ")[[1]][2]
-  
 
   gdl <- getGDAL_DATA_Path()
   pl <- getPROJ4libPath()
@@ -35,8 +33,8 @@ assign(".rgdal_old.GDAL_DATA", "", envir=.RGDAL_CACHE)
 
   Smess <- paste('Geospatial Data Abstraction Library ',
     'extensions to R successfully loaded\n',
-    'Loaded GDAL runtime: ', rver, ifelse(hver==rver0, '\n',
-    paste("but rgdal built with", hver, "headers; re-install rgdal!!\n")),
+    'Loaded GDAL runtime: ', rver, ifelse(ver_ok, '\n',
+    'but rgdal build and GDAL runtime not in sync:\n   ... consider re-installing rgdal!!\n'),
     paste("Path to GDAL shared files: ", gdl[1], sep=""), "\n",
     'Loaded PROJ.4 runtime: ', getPROJ4VersionInfo(), '\n',
     paste("Path to PROJ.4 shared files: ", pl[1], sep=""), "\n", sep="")
