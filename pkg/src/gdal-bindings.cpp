@@ -427,7 +427,9 @@ RGDAL_CloseHandle(SEXP sxpHandle) {
   installErrorHandler();
   if (pDataset != NULL) {
 
-    pDataset->~GDALDataset();
+// Even Roualt 120816
+      GDALClose((GDALDatasetH)pDataset);
+//    pDataset->~GDALDataset();
 
     R_ClearExternalPtr(sxpHandle);
 
