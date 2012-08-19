@@ -34,7 +34,7 @@ assign(".rgdal_old.GDAL_DATA", "", envir=.RGDAL_CACHE)
   Smess <- paste('Geospatial Data Abstraction Library ',
     'extensions to R successfully loaded\n',
     'Loaded GDAL runtime: ', rver, ifelse(ver_ok, '\n',
-    'but rgdal build and GDAL runtime not in sync:\n   ... consider re-installing rgdal!!\n'),
+    '\n   but rgdal build and GDAL runtime not in sync:\n   ... consider re-installing rgdal!!\n'),
     paste("Path to GDAL shared files: ", gdl[1], sep=""), "\n",
     'Loaded PROJ.4 runtime: ', getPROJ4VersionInfo(), '\n',
     paste("Path to PROJ.4 shared files: ", pl[1], sep=""), "\n", sep="")
