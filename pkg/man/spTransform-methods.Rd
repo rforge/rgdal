@@ -129,7 +129,7 @@ a <- spTransform(spPoint, CRS(paste("+proj=ob_tran +o_proj=longlat",
  "+o_lon_p=-162 +o_lat_p=39.25 +lon_0=180 +ellps=sphere +no_defs")),
  use_ob_tran=TRUE)
 a
-#should be (-5.917698  -1.87195)
+#should be (-5.917698, -1.87195)
 spTransform(a, CRS("+proj=longlat +ellps=sphere +no_defs"),
  use_ob_tran=TRUE)
 crds1 <- matrix(data=c(7, 51, 8, 52, 9, 52, 10, 51, 7, 51), ncol=2,
