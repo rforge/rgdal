@@ -39,6 +39,7 @@ export(spTransform, spTransform.SpatialPoints,
   spTransform.SpatialPointsDataFrame, spTransform.SpatialLines, 
   spTransform.SpatialLinesDataFrame, spTransform.SpatialPolygons, 
   spTransform.SpatialPolygonsDataFrame)
+export(checkCRSArgs)
 
 export(OGRSpatialRef, GDALSpatialRef)
 

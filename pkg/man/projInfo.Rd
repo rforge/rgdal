@@ -3,6 +3,7 @@
 \alias{getPROJ4VersionInfo}
 \alias{getPROJ4libPath}
 \alias{projNAD}
+\alias{checkCRSArgs}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{List PROJ.4 tag information}
 \description{
@@ -13,10 +14,12 @@ projInfo(type = "proj")
 getPROJ4VersionInfo()
 getPROJ4libPath()
 projNAD()
+checkCRSArgs(uprojargs)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{type}{One of these tags: \code{c("proj", "ellps", "datum")}}
+  \item{uprojargs}{ proj4string arguments to be checked for validity }
 }
 \details{
  The output data frame lists the information given by the proj application with flags -lp, -le or -ld.

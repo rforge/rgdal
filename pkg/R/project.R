@@ -1,5 +1,9 @@
 # Copyright (c) 2003-12 by Barry Rowlingson, Roger Bivand, and Edzer Pebesma
 
+checkCRSArgs = function(uprojargs) {
+	.Call("checkCRSArgs", uprojargs, PACKAGE="rgdal")
+}
+
 getPROJ4VersionInfo <- function() {
     res0 <- .Call("PROJ4VersionInfo", PACKAGE="rgdal")
     res <- paste(res0[[1]], ", [PJ_VERSION: ", res0[[2]], "]", sep="")
