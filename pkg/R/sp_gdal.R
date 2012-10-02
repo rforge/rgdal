@@ -83,8 +83,8 @@ GDALinfo <- function(fname, silent=FALSE, returnRAT=FALSE, returnCategoryNames=F
             df <- data.frame(GDType=GDType, hasNoDataValue=hasNoDataValues,
                 NoDataValue=NoDataValues, blockSize1=blockSize1,
                 blockSize2=blockSize2)
-            if (returnStats) sdf <- data.frame(Bmin=Bmin,
-                Bmax=Bmax, Bmean=Bmn, Bsd=Bsd)
+            if (returnStats) df <- cbind(df, data.frame(Bmin=Bmin,
+                Bmax=Bmax, Bmean=Bmn, Bsd=Bsd))
         }
         
 	GDAL.close(x)
@@ -105,7 +105,7 @@ GDALinfo <- function(fname, silent=FALSE, returnRAT=FALSE, returnCategoryNames=F
 	attr(res, "projection") <- p4s 
 	attr(res, "file") <- fname
         attr(res, "df") <- df
-        attr(res, "sdf") <- sdf
+        attr(res, "sdf") <- returnStats
         attr(res, "mdata") <- mdata
         attr(res, "subdsmdata") <- subdsmdata
         if (returnRAT) attr(res, "RATlist") <- RATlist
@@ -132,11 +132,11 @@ print.GDALobj <- function(x, ...) {
 	cat("file       ", attr(x, "file"), "\n")
         if (!is.null(attr(x, "df"))) {
             cat("apparent band summary:\n")
-            print(attr(x, "df"))
+            print(attr(x, "df")[,1:5])
         }
-        if (!is.null(attr(x, "sdf"))) {
+        if (attr(x, "sdf")) {
             cat("apparent band statistics:\n")
-            print(attr(x, "sdf"))
+            print(attr(x, "df")[,6:9])
         }
         if (!is.null(attr(x, "mdata"))) {
             cat("Metadata:\n")
