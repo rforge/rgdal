@@ -169,9 +169,13 @@ readOGR <- function(dsn, layer, verbose=TRUE, p4s=NULL,
                         thisPL <- Polygons(.Call("make_Polygonlist",
                             iG, PACKAGE="rgdal"),
                             ID=as.character(fids[i]))
-                        if (addCommentsToPolygons) 
+                        if (addCommentsToPolygons) {
                             comment(thisPL) <- paste(gComments[[i]],
                                 collapse=" ")
+                            if (!isTRUE(all.equal(as.logical(gComments[[i]]),
+                              sapply(slot(thisPL, "Polygons"), slot, "hole"))))
+                              warning("comment/hole mismatch, geometry:", i)
+                        }
 			plList[[i]] <- thisPL
                     }
             } else {
@@ -192,9 +196,13 @@ readOGR <- function(dsn, layer, verbose=TRUE, p4s=NULL,
 				pllist[[j]] <- Polygon(cmat)
 			}
                         thisPL <- Polygons(pllist, ID=as.character(fids[i]))
-                        if (addCommentsToPolygons) 
+                        if (addCommentsToPolygons) {
                             comment(thisPL) <- paste(gComments[[i]],
                                 collapse=" ")
+                            if (!isTRUE(all.equal(as.logical(gComments[[i]]),
+                              sapply(slot(thisPL, "Polygons"), slot, "hole"))))
+                              warning("comment/hole mismatch, geometry:", i)
+                        }
 			plList[[i]] <- thisPL
                     }
 		}
