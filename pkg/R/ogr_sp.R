@@ -166,15 +166,16 @@ readOGR <- function(dsn, layer, verbose=TRUE, p4s=NULL,
 		plList <- vector(mode="list", length=n)
 		for (i in 1:n) {
 			iG <- gFeatures[[i]]
-                        thisPL <- Polygons(.Call("make_Polygonlist",
-                            iG, PACKAGE="rgdal"),
-                            ID=as.character(fids[i]))
                         if (addCommentsToPolygons) {
+                            thisPL <- Polygons(.Call("make_Polygonlist",
+                                iG, gComments[[i]], PACKAGE="rgdal"),
+                                ID=as.character(fids[i]))
                             comment(thisPL) <- paste(gComments[[i]],
                                 collapse=" ")
-                            if (!isTRUE(all.equal(as.logical(gComments[[i]]),
-                              sapply(slot(thisPL, "Polygons"), slot, "hole"))))
-                              warning("comment/hole mismatch, geometry:", i)
+                        } else {
+                            thisPL <- Polygons(.Call("make_Polygonlist",
+                                iG, NULL, PACKAGE="rgdal"),
+                                ID=as.character(fids[i]))
                         }
 			plList[[i]] <- thisPL
                     }
