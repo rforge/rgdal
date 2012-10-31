@@ -20,7 +20,7 @@ exportClass(SpatialGDAL, SpatialGDALWrite)
 
 export(project, make_EPSG, projInfo, getPROJ4VersionInfo, getPROJ4libPath,
   projNAD)
-export(CRSargs)
+export(CRSargs, checkCRSArgs)
 export(putRasterData, saveDataset, copyDataset, deleteDataset, saveDatasetAs)
 export(getGDALDriverNames, getDriverName, getDriverLongName, gdalDrivers)
 export(getDescription)

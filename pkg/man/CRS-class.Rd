@@ -3,6 +3,7 @@
 \alias{CRS-class}
 \alias{CRS}
 \alias{CRSargs}
+\alias{checkCRSArgs}
 \alias{print.CRS}
 \alias{show,CRS-method}
 \alias{RGDAL_checkCRSArgs}
@@ -21,6 +22,13 @@ Objects can be created by calls of the form \code{CRS("projargs")}, where "proja
   \describe{
     \item{show}{\code{signature(object = "CRS")}: print projection arguments in object }
   }
+}
+
+\usage{
+checkCRSArgs(uprojargs)
+}
+\arguments{
+  \item{uprojargs}{character string PROJ.4 projection arguments}
 }
 \references{\url{http://proj.maptools.org/}}
 \author{Roger Bivand \email{Roger.Bivand@nhh.no}}
