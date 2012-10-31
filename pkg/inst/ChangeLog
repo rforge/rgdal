@@ -1,5 +1,9 @@
 2012-10-19 19:36  rsbivand
 
+	* ChangeLog, inst/ChangeLog: comment/hole matching
+
+2012-10-19 19:36  rsbivand
+
 	* R/ogr_sp.R, man/writeOGR.Rd, src/init.c, src/local_stubs.c,
 	  src/ogr_geom.cpp, src/ogr_polygons.c, src/rgdal.h: comment/hole
 	  matching
