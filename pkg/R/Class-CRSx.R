@@ -33,3 +33,6 @@
 	} else return(as.character(NA))
 }
 
+RGDAL_checkCRSArgs = function(arg) {
+	.Call("checkCRSArgs", arg, PACKAGE="rgdal")
+}

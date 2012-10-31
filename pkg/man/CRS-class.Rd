@@ -5,6 +5,7 @@
 \alias{CRSargs}
 \alias{print.CRS}
 \alias{show,CRS-method}
+\alias{RGDAL_checkCRSArgs}
 \title{Class "CRS" of coordinate reference system arguments}
 \description{Interface class to the PROJ.4 projection system. The class is defined as an empty stub accepting value NA in the sp package. If the rgdal package is available, then the class will permit spatial data to be associated with coordinate reference systems}
 \section{Objects from the Class}{
