@@ -1,3 +1,29 @@
+2012-11-03 13:45  rsbivand
+
+	* DESCRIPTION, NAMESPACE, R/AAA.R, R/gdal.R, R/sgdf_gdal.R,
+	  R/sp_gdal.R, R/subs.R, man/GDALRasterBand-class.Rd,
+	  man/readGDAL.Rd: work-around for GDAL 1.8.0+ datum dropping
+
+2012-10-31 18:10  rsbivand
+
+	* NAMESPACE: tidy
+
+2012-10-31 17:59  rsbivand
+
+	* DESCRIPTION, NAMESPACE, R/Class-CRSx.R, man/CRS-class.Rd,
+	  man/projInfo.Rd: reverting checkCRSargs
+
+2012-10-31 17:53  edzer
+
+	* inst/ChangeLog: cl
+
+2012-10-31 17:52  edzer
+
+	* ChangeLog, DESCRIPTION, NAMESPACE, R/Class-CRSx.R,
+	  man/CRS-class.Rd: NAMESPACE, Class-CRSx.R, CRS-class: export
+	  RGDAL_CRSArgs;
+	  DESCRIPTION: version bump, removed lazyLoad;
+
 2012-10-19 19:36  rsbivand
 
 	* ChangeLog, inst/ChangeLog: comment/hole matching
