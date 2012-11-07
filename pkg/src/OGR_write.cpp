@@ -148,11 +148,8 @@ SEXP OGR_write(SEXP inp)
             }
             uninstallErrorHandlerAndTriggerError();
             installErrorHandler();
-            if (!strcmp(CHAR(STRING_ELT(VECTOR_ELT(inp, 3), 0)),
-                "ESRI Shapefile")) {
-                if (LOGICAL_POINTER(VECTOR_ELT(inp, 11))[0]) {
+            if (LOGICAL_POINTER(VECTOR_ELT(inp, 11))[0]) {
                     hSRS.morphToESRI();
-                }
             }
             uninstallErrorHandlerAndTriggerError();
             installErrorHandler();
