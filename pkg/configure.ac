@@ -1,5 +1,5 @@
 # dnl Process this file with autoconf to produce a configure script.
-AC_INIT(rgdal, 0.7-10, Roger.Bivand@nhh.no)
+AC_INIT(rgdal, 0.7-23, Roger.Bivand@nhh.no)
 AC_CONFIG_SRCDIR(src/gdal-bindings.cpp)
 
 # find R home and set correct compiler + flags

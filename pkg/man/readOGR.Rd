@@ -30,7 +30,7 @@ readOGR(dsn, layer, verbose = TRUE, p4s=NULL,
  stringsAsFactors=default.stringsAsFactors(), 
  drop_unsupported_fields=FALSE, input_field_name_encoding=NULL,
  pointDropZ=FALSE, dropNULLGeometries=TRUE,
- useC=TRUE, disambiguateFIDs=FALSE, addCommentsToPolygons=TRUE)
+ useC=TRUE, disambiguateFIDs=FALSE, addCommentsToPolygons=TRUE, encoding=NULL)
 ogrInfo(dsn, layer, input_field_name_encoding=NULL)
 ogrFIDs(dsn, layer)
 ogrDrivers()
@@ -52,6 +52,7 @@ ogrListLayers(dsn)
   \item{useC}{default TRUE, if FALSE use original interpreted code in a loop}
   \item{disambiguateFIDs}{default FALSE, if TRUE, and FID values are not unique, they will be set to unique values 1:N for N features; problem observed in GML files}
   \item{addCommentsToPolygons}{default TRUE, may be set FALSE for legacy behaviour; used to indicate which interior rings are holes in which exterior rings in conformance with OGC SFS specifications}
+  \item{encoding}{default NULL, if set to a character string, the driver is \dQuote{ESRI Shapefile}, and the environment variable SHAPE_ENCODING is not already set, it is passed to the environment variable immediately before reading the DBF of a shapefile, and unset afterwards.}
   \item{x}{ogrinfo object}
   \item{...}{other arguments to print method}
 }
