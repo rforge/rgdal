@@ -31,7 +31,7 @@ readOGR(dsn, layer, verbose = TRUE, p4s=NULL,
  drop_unsupported_fields=FALSE, input_field_name_encoding=NULL,
  pointDropZ=FALSE, dropNULLGeometries=TRUE,
  useC=TRUE, disambiguateFIDs=FALSE, addCommentsToPolygons=TRUE, encoding=NULL)
-ogrInfo(dsn, layer, input_field_name_encoding=NULL)
+ogrInfo(dsn, layer, encoding=NULL, input_field_name_encoding=NULL)
 ogrFIDs(dsn, layer)
 ogrDrivers()
 OGRSpatialRef(dsn, layer)
