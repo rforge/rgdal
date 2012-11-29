@@ -27,7 +27,7 @@ Error : Null external pointer
 > try(GDAL.open(logo))
 An object of class "GDALReadOnlyDataset"
 Slot "handle":
-<pointer: 0x2f910b0>
+<pointer: 0x181ac140>
 
 > try(GDAL.close(x))
 > try(new('GDALDriver', "GeoTIFF"))
@@ -75,4 +75,4 @@ Error in writeOGR(cities, td, "cities", driver = "ESRI_Shapefile") :
 > 
 > proc.time()
    user  system elapsed 
-  0.695   0.025   0.727 
+  0.970   0.057   1.022 
