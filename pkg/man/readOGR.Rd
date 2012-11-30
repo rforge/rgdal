@@ -74,6 +74,10 @@ In addition, from 0.6-9 date and time fields are read as strings rather than bei
 For reading GPX files, refer to the OGR GPX format documentation for the use of layer tags: \dQuote{waypoints}, \dQuote{tracks}, \dQuote{routes}, \dQuote{track_points} and \dQuote{route_points} - reading GPX files requires a build of GDAL/OGR with the expat XML library. 
 
 From 0.6-10, attempts are made to detect deleted features still present in the layer, but not read. Apparently features deleted in Qgis are only marked as deleted, but are still in the layer. These are not NULL geometries, but still need to be handled. An attempt is made to check the FID values, and \code{ogrFIDs} now returns attributes permitting this oddity to be detected. Such deleted features were seen as NULL in 0.6-9, but are not such.
+
+From 0.7-24, if the layer has no fields, a single field containing the FID values is placed in the data slot of the returned object.
+
+From 0.7-24, attempts are begun to provide users with arguments to control reading from OGR/shapefile driver when the encoding is inappropriate (especially the setting of LDID in shapefile DBFs, and the SHAPE_ENCODING environment variable).
 }
 \seealso{\code{\link[sp]{SpatialPointsDataFrame-class}}, \code{\link[sp]{SpatialLinesDataFrame-class}}, \code{\link[sp]{SpatialPolygonsDataFrame-class}}, \code{\link[maptools]{readShapePoly}}, \code{\link[base]{iconv}}}
 \examples{

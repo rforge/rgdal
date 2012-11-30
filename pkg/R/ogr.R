@@ -1,5 +1,5 @@
 # Copyright 2003 (c) Barry Rowlingson
-# Modified 2006-9 Roger Bivand
+# Modified 2006-12 Roger Bivand
 ###
 ###
 ###  Routines for ogr layer data source 
@@ -118,7 +118,7 @@ print.ogrinfo <- function(x, ...) {
   if (nchar(x$p4s > 1)) cat(x$p4s, "\n")
   if (!is.null(attr(x, "LDID"))) cat("LDID:", attr(x, "LDID"), "\n")
   cat("Number of fields:", x$nitems, "\n")
-  print(as.data.frame(x$iteminfo))
+  if (x$nitems > 0) print(as.data.frame(x$iteminfo))
   invisible(x)
 }
 

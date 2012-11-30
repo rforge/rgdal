@@ -26,19 +26,26 @@ readOGR <- function(dsn, layer, verbose=TRUE, p4s=NULL,
         }
         
 	ogr_info <- ogrInfo(dsn=dsn, layer=layer, encoding=encoding)
-        keep <- ogr_info$iteminfo$typeName %in% c("Integer", "Real",
+# 121130 RSB trap no field case (from PostGIS, Mathieu Basille)
+        if (ogr_info$nitems > 0) {
+          nodata_flag <- FALSE
+          keep <- ogr_info$iteminfo$typeName %in% c("Integer", "Real",
             "String", "Date", "Time", "DateTime")
-        if (drop_unsupported_fields) {
+          if (drop_unsupported_fields) {
              iflds <- as.integer((1:ogr_info$nitems)-1)
              iflds <- iflds[keep]
              fldnms <- ogr_info$iteminfo$name[keep]
              if (any(!keep)) warning(paste("Fields dropped:", 
                  paste(ogr_info$iteminfo$name[!keep], collapse=" ")))
-        } else {
+          } else {
              if (any(!keep)) stop(paste("Unsupported field type:", 
                  paste(ogr_info$iteminfo$typeName[!keep], collapse=" ")))
              iflds <- as.integer((1:ogr_info$nitems)-1)
              fldnms <- ogr_info$iteminfo$name
+          }
+        } else {
+          nodata_flag <- TRUE
+          iflds <- integer(0)
         }
 	fids <- ogrFIDs(dsn=dsn, layer=layer)
         if (attr(fids, "i") != attr(fids, "nf")) {
@@ -83,17 +90,21 @@ readOGR <- function(dsn, layer, verbose=TRUE, p4s=NULL,
             == "") {
             Sys.setenv("SHAPE_ENCODING"=encoding)
         }
-	dlist <- .Call("ogrDataFrame", as.character(dsn), as.character(layer), 
-		as.integer(fids), iflds, PACKAGE="rgdal")
-        if (!use_iconv && !is.null(encoding) && Sys.getenv("SHAPE_ENCODING") ==
-            encoding) {
-            Sys.unsetenv("SHAPE_ENCODING")
-        }
-	names(dlist) <- make.names(fldnms ,unique=TRUE)
-        if (use_iconv && !is.null(encoding)) {
-            for (i in seq(along=dlist)) {
-                if (is.character(dlist[[i]]))
-                    dlist[[i]] <- iconv(dlist[[i]], from=encoding)
+	if (nodata_flag) {
+            dlist <- list(FID=as.integer(fids))
+        } else {
+            dlist <- .Call("ogrDataFrame", as.character(dsn),
+                as.character(layer), as.integer(fids), iflds, PACKAGE="rgdal")
+            if (!use_iconv && !is.null(encoding) && 
+                Sys.getenv("SHAPE_ENCODING") == encoding) {
+                Sys.unsetenv("SHAPE_ENCODING")
+            }
+	    names(dlist) <- make.names(fldnms ,unique=TRUE)
+            if (use_iconv && !is.null(encoding)) {
+                for (i in seq(along=dlist)) {
+                    if (is.character(dlist[[i]]))
+                        dlist[[i]] <- iconv(dlist[[i]], from=encoding)
+                }
             }
         }
 	geometry <- .Call("R_OGR_CAPI_features", as.character(dsn), 
