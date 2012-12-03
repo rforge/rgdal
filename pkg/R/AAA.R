@@ -31,10 +31,9 @@ assign(".rgdal_old.GDAL_DATA", "", envir=.RGDAL_CACHE)
   gdl <- getGDAL_DATA_Path()
   pl <- getPROJ4libPath()
   if (nchar(pl) == 0) pl <- "(autodetected)"
-  fn <- system.file("SVN_VERSION", package="rgeos")
+  fn <- system.file("SVN_VERSION", package="rgdal")
   if (file.exists(fn)) {
-    svn_version <- scan(system.file("SVN_VERSION", package="rgeos"),
-      what=character(1), sep="\n", quiet=TRUE)
+    svn_version <- scan(fn, what=character(1), sep="\n", quiet=TRUE)
   } else {
     svn_version <- "(unknown)"
   }
