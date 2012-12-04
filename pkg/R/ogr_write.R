@@ -48,7 +48,7 @@ writeOGR <- function(obj, dsn, layer, driver, dataset_options=NULL, layer_option
     }
 
     if (is.null(check_exists)) {
-        if (getGDALVersionInfo("VERSION_NUM") >= "1800") {
+        if (as.integer(getGDALVersionInfo("VERSION_NUM")) >= 1800L) {
             check_exists <- TRUE
         } else {
             check_exists <- FALSE
