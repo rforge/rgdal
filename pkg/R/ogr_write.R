@@ -57,10 +57,10 @@ writeOGR <- function(obj, dsn, layer, driver, dataset_options=NULL, layer_option
 
     if (check_exists) {
         already_exists <- FALSE
-        ogrI <- try(.Call("ogrInfo", as.character(dsn),
-            as.character(layer), PACKAGE = "rgdal"), silent=TRUE)
-        if (class(ogrI) != "try-error") {
-            if (driver == ogrI[[4]]) already_exists <- TRUE
+        ogrI <- .Call("ogrCheckExists", as.character(dsn),
+            as.character(layer), PACKAGE = "rgdal")
+        if (ogrI) {
+            if (driver == attr(ogrI, "driver")) already_exists <- TRUE
         }
         if (already_exists) {
             if (overwrite_layer) {
