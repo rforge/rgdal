@@ -53,6 +53,8 @@ extern "C" {
     uninstallErrorHandlerAndTriggerError();
 
     if(poDS==NULL){
+      OGRDataSource::DestroyDataSource( poDS );
+//    delete poDS;
       error("Cannot open file");
     }
 
@@ -61,6 +63,8 @@ extern "C" {
     uninstallErrorHandlerAndTriggerError();
 
     if(poLayer == NULL){
+      OGRDataSource::DestroyDataSource( poDS );
+//    delete poDS;
       error("Cannot open layer");
     }
 
