@@ -388,10 +388,6 @@ AC_SUBST([PKG_LIBS], ["${PKG_LIBS} -lproj"])
 AC_MSG_NOTICE([Package CPP flags: ${PKG_CPPFLAGS}])
 AC_MSG_NOTICE([Package LIBS: ${PKG_LIBS}])
 
-if test -e ".svn" ; then
-  svnversion -n > inst/SVN_VERSION
-fi
-
 AC_CONFIG_FILES(src/Makevars)
 AC_OUTPUT
 
