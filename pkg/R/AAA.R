@@ -38,7 +38,8 @@ assign(".rgdal_old.GDAL_DATA", "", envir=.RGDAL_CACHE)
     svn_version <- "(unknown)"
   }
 
-  Smess <- paste('rgdal: (SVN revision ', svn_version, ')\n',
+  Smess <- paste('rgdal: version: ', utils::packageVersion("rgdal"),
+    ', (SVN revision ', svn_version, ')\n',
     'Geospatial Data Abstraction Library ',
     'extensions to R successfully loaded\n',
     'Loaded GDAL runtime: ', rver, ifelse(ver_ok, '\n',
