@@ -1,3 +1,16 @@
+2012-12-08 17:19  rsbivand
+
+	* configure, configure.ac: version in configure
+
+2012-12-08 17:02  rsbivand
+
+	* R/AAA.R, configure, configure.ac, inst/README: versions in
+	  configure
+
+2012-12-04 10:17  rsbivand
+
+	* ChangeLog, inst/ChangeLog: tidy
+
 2012-12-04 10:16  rsbivand
 
 	* R/ogr_write.R, src/init.c, src/ogrsource.cpp, src/rgdal.h: add
