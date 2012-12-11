@@ -142,7 +142,7 @@ writeOGR <- function(obj, dsn, layer, driver, dataset_options=NULL, layer_option
         as.logical(morphToESRI))
     res <- .Call("OGR_write", pre, PACKAGE="rgdal")
     if (use_foreign) {
-        fn <- paste(dsn, .Platform$path.sep, layer, ".dbf", sep="")
+        fn <- paste(dsn, .Platform$file.sep, layer, ".dbf", sep="")
         df <- as.data.frame(ldata)
         names(df) <- as.character(fld_names)
         write.dbf(df, fn)

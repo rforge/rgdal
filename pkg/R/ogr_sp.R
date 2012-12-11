@@ -99,7 +99,7 @@ readOGR <- function(dsn, layer, verbose=TRUE, p4s=NULL,
             dlist <- list(FID=as.integer(fids))
         } else {
             if (use_foreign) {
-              fn <- paste(dsn, .Platform$path.sep, layer, ".dbf", sep="")
+              fn <- paste(dsn, .Platform$file.sep, layer, ".dbf", sep="")
               dlist <- as.list(read.dbf(fn, as.is=TRUE))
             } else {
               dlist <- .Call("ogrDataFrame", as.character(dsn),
