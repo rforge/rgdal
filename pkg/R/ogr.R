@@ -7,15 +7,17 @@
 ###
 
 #
-ogrInfo <- function(dsn, layer, encoding=NULL, input_field_name_encoding=NULL){
+ogrInfo <- function(dsn, layer, encoding=NULL, input_field_name_encoding=NULL,
+  use_iconv=NULL) {
   if (missing(dsn)) stop("missing dsn")
   if (nchar(dsn) == 0) stop("empty name")
   if (missing(layer)) stop("missing layer")
   if (nchar(layer) == 0) stop("empty name")
 # a list with various ogr data source information
   
-  use_iconv <- ifelse(as.integer(getGDALVersionInfo("VERSION_NUM")) < 1900L,
-    TRUE, FALSE)
+  if (is.null(use_iconv))
+    use_iconv <- ifelse(as.integer(getGDALVersionInfo("VERSION_NUM")) < 1900L,
+      TRUE, FALSE)
   if (!is.null(encoding)) {
     stopifnot(is.character(encoding))
     stopifnot(length(encoding) == 1)

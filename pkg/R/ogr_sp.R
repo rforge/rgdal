@@ -4,14 +4,16 @@ readOGR <- function(dsn, layer, verbose=TRUE, p4s=NULL,
         stringsAsFactors=default.stringsAsFactors(),
         drop_unsupported_fields=FALSE, input_field_name_encoding=NULL,
 	pointDropZ=FALSE, dropNULLGeometries=TRUE, useC=TRUE,
-        disambiguateFIDs=FALSE, addCommentsToPolygons=TRUE, encoding=NULL) {
+        disambiguateFIDs=FALSE, addCommentsToPolygons=TRUE, encoding=NULL,
+        use_foreign=FALSE, use_iconv=NULL) {
 	if (missing(dsn)) stop("missing dsn")
 	if (nchar(dsn) == 0) stop("empty name")
 	if (missing(layer)) stop("missing layer")
 	if (nchar(layer) == 0) stop("empty name")
 # adding argument for SHAPE_ENCODING environment variable 121124
-        use_iconv <- ifelse(as.integer(getGDALVersionInfo("VERSION_NUM"))
-            < 1900L, TRUE, FALSE)
+        if (is.null(use_iconv))
+            use_iconv <- ifelse(as.integer(getGDALVersionInfo("VERSION_NUM"))
+                < 1900L, TRUE, FALSE)
         if (!is.null(encoding)) {
             stopifnot(is.character(encoding))
             stopifnot(length(encoding) == 1)
@@ -25,7 +27,8 @@ readOGR <- function(dsn, layer, verbose=TRUE, p4s=NULL,
             if (is.null(encoding)) encoding <- input_field_name_encoding
         }
         
-	ogr_info <- ogrInfo(dsn=dsn, layer=layer, encoding=encoding)
+	ogr_info <- ogrInfo(dsn=dsn, layer=layer, encoding=encoding,
+            use_iconv=use_iconv)
 # 121130 RSB trap no field case (from PostGIS, Mathieu Basille)
         if (ogr_info$nitems > 0) {
           nodata_flag <- FALSE
@@ -80,22 +83,30 @@ readOGR <- function(dsn, layer, verbose=TRUE, p4s=NULL,
 	    p4s <- .Call("ogrP4S", as.character(dsn), as.character(layer), 
 		PACKAGE="rgdal")
 	if (!is.na(p4s) && nchar(p4s) == 0) p4s <- as.character(NA)
-# adding argument for SHAPE_ENCODING environment variable 121124
-        if (!use_iconv && ogr_info$driver != "ESRI Shapefile" &&
-            !is.null(encoding)) {
-            encoding <- NULL
-            warning("readOGR: encoding set to NULL for driver", ogr_info$driver)
+
+        stopifnot(is.logical(use_foreign))
+        if (use_foreign && ogr_info$driver != "ESRI Shapefile") {
+            warning("use_foreign only applies to ESRI Shapefile")
+            use_foreign <- FALSE
         }
-        if (!use_iconv && !is.null(encoding) && Sys.getenv("SHAPE_ENCODING")
-            == "") {
+# adding argument for SHAPE_ENCODING environment variable 121124
+        if (!use_iconv && !is.null(encoding) && 
+            ogr_info$driver == "ESRI Shapefile" &&
+            Sys.getenv("SHAPE_ENCODING") == "") {
             Sys.setenv("SHAPE_ENCODING"=encoding)
         }
 	if (nodata_flag) {
             dlist <- list(FID=as.integer(fids))
         } else {
-            dlist <- .Call("ogrDataFrame", as.character(dsn),
+            if (use_foreign) {
+              fn <- paste(dsn, .Platform$path.sep, layer, ".dbf", sep="")
+              dlist <- as.list(read.dbf(fn, as.is=TRUE))
+            } else {
+              dlist <- .Call("ogrDataFrame", as.character(dsn),
                 as.character(layer), as.integer(fids), iflds, PACKAGE="rgdal")
+            }
             if (!use_iconv && !is.null(encoding) && 
+                ogr_info$driver == "ESRI Shapefile" && 
                 Sys.getenv("SHAPE_ENCODING") == encoding) {
                 Sys.unsetenv("SHAPE_ENCODING")
             }

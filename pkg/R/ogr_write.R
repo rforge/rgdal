@@ -1,4 +1,4 @@
-writeOGR <- function(obj, dsn, layer, driver, dataset_options=NULL, layer_options=NULL, verbose=FALSE, check_exists=NULL, overwrite_layer=FALSE, delete_dsn=FALSE, morphToESRI=NULL) {
+writeOGR <- function(obj, dsn, layer, driver, dataset_options=NULL, layer_options=NULL, verbose=FALSE, check_exists=NULL, overwrite_layer=FALSE, delete_dsn=FALSE, morphToESRI=NULL, use_foreign=FALSE) {
     drvs <- ogrDrivers()
     mch <- match(driver, drvs$name)
     if (is.na(mch) || length(mch) > 1L)
@@ -81,6 +81,12 @@ writeOGR <- function(obj, dsn, layer, driver, dataset_options=NULL, layer_option
     stopifnot(is.logical(morphToESRI))
     stopifnot(length(morphToESRI) == 1)
 
+    stopifnot(is.logical(use_foreign))
+    if (use_foreign && driver != "ESRI Shapefile") {
+        use_foreign <- FALSE
+        warning("use_foreign only applies to ESRI Shapefile")
+    }
+
     nf <- length(dfcls)
     ldata <- vector(mode="list", length=nf)
     ogr_ftype <- integer(nf)
@@ -135,6 +141,12 @@ writeOGR <- function(obj, dsn, layer, driver, dataset_options=NULL, layer_option
         as.character(dataset_options), as.character(layer_options),
         as.logical(morphToESRI))
     res <- .Call("OGR_write", pre, PACKAGE="rgdal")
+    if (use_foreign) {
+        fn <- paste(dsn, .Platform$path.sep, layer, ".dbf", sep="")
+        df <- as.data.frame(ldata)
+        names(df) <- as.character(fld_names)
+        write.dbf(df, fn)
+    }
     if (verbose) {
         res <- list(object_type=res, output_dsn=dsn, output_layer=layer,
             output_diver=driver, output_n=nobj, output_nfields=nf,
