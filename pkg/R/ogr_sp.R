@@ -100,22 +100,22 @@ readOGR <- function(dsn, layer, verbose=TRUE, p4s=NULL,
         } else {
             if (use_foreign) {
               fn <- paste(dsn, .Platform$file.sep, layer, ".dbf", sep="")
-              dlist <- as.list(read.dbf(fn, as.is=TRUE))
+              dlist <- as.list(read.dbf(fn, as.is=TRUE))[iflds]
             } else {
               dlist <- .Call("ogrDataFrame", as.character(dsn),
                 as.character(layer), as.integer(fids), iflds, PACKAGE="rgdal")
+	      names(dlist) <- make.names(fldnms ,unique=TRUE)
+              if (use_iconv && !is.null(encoding)) {
+                for (i in seq(along=dlist)) {
+                    if (is.character(dlist[[i]]))
+                        dlist[[i]] <- iconv(dlist[[i]], from=encoding)
+                }
+            }
             }
             if (!use_iconv && !is.null(encoding) && 
                 ogr_info$driver == "ESRI Shapefile" && 
                 Sys.getenv("SHAPE_ENCODING") == encoding) {
                 Sys.unsetenv("SHAPE_ENCODING")
-            }
-	    names(dlist) <- make.names(fldnms ,unique=TRUE)
-            if (use_iconv && !is.null(encoding)) {
-                for (i in seq(along=dlist)) {
-                    if (is.character(dlist[[i]]))
-                        dlist[[i]] <- iconv(dlist[[i]], from=encoding)
-                }
             }
         }
 	geometry <- .Call("R_OGR_CAPI_features", as.character(dsn), 
