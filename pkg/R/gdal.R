@@ -698,3 +698,23 @@ set_OVERRIDE_PROJ_DATUM_WITH_TOWGS84 <- function(value) {
         assign("OVERRIDE_PROJ_DATUM_WITH_TOWGS84", value, envir = .RGDAL_CACHE)
         get_OVERRIDE_PROJ_DATUM_WITH_TOWGS84()
 }
+
+getCPLConfigOption <- function(ConfigOption) {
+    stopifnot(is.character(ConfigOption))
+    stopifnot(length(ConfigOption) == 1)
+    .Call("RGDAL_CPLGetConfigOption", ConfigOption, PACKAGE="rgdal")
+}
+
+setCPLConfigOption <- function(ConfigOption, value) {
+    stopifnot(is.character(ConfigOption))
+    stopifnot(length(ConfigOption) == 1)
+    stopifnot(is.character(value))
+    stopifnot(length(value) == 1)
+    .Call("RGDAL_CPLSetConfigOption", ConfigOption, value, PACKAGE="rgdal")
+    .Call("RGDAL_CPLGetConfigOption", ConfigOption, PACKAGE="rgdal")
+}
+
+GDAL_iconv <- function() {
+    .Call("RGDAL_CPL_RECODE_ICONV", PACKAGE="rgdal")
+}
+
