@@ -30,14 +30,14 @@ ogrInfo <- function(dsn, layer, encoding=NULL, input_field_name_encoding=NULL,
        stop("encoding and input_field_name_encoding differ")
     if (is.null(encoding)) encoding <- input_field_name_encoding
   }
-  if (!use_iconv && !is.null(encoding) && Sys.getenv("SHAPE_ENCODING") == "") {
-    Sys.setenv("SHAPE_ENCODING"=encoding)
+  if (!use_iconv && !is.null(encoding)) {
+    oSE <- getCPLConfigOption("SHAPE_ENCODING")
+    tull <- setCPLConfigOption("SHAPE_ENCODING", encoding)
   }
   ogrinfo <- .Call("ogrInfo",as.character(dsn), as.character(layer),
     PACKAGE = "rgdal")
-  if (!use_iconv && !is.null(encoding) && Sys.getenv("SHAPE_ENCODING") ==
-    encoding) {
-    Sys.unsetenv("SHAPE_ENCODING")
+  if (!use_iconv && !is.null(encoding) && !is.null(oSE)) {
+    tull <- setCPLConfigOption("SHAPE_ENCODING", oSE)
   }
   fids <- ogrFIDs(dsn=dsn, layer=layer)
   if (attr(fids, "i") != attr(fids, "nf")) {

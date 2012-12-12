@@ -91,9 +91,9 @@ readOGR <- function(dsn, layer, verbose=TRUE, p4s=NULL,
         }
 # adding argument for SHAPE_ENCODING environment variable 121124
         if (!use_iconv && !is.null(encoding) && 
-            ogr_info$driver == "ESRI Shapefile" &&
-            Sys.getenv("SHAPE_ENCODING") == "") {
-            Sys.setenv("SHAPE_ENCODING"=encoding)
+            ogr_info$driver == "ESRI Shapefile") {
+            oSE <- getCPLConfigOption("SHAPE_ENCODING")
+            tull <- setCPLConfigOption("SHAPE_ENCODING", encoding)
         }
 	if (nodata_flag) {
             dlist <- list(FID=as.integer(fids))
@@ -112,10 +112,9 @@ readOGR <- function(dsn, layer, verbose=TRUE, p4s=NULL,
                 }
             }
             }
-            if (!use_iconv && !is.null(encoding) && 
-                ogr_info$driver == "ESRI Shapefile" && 
-                Sys.getenv("SHAPE_ENCODING") == encoding) {
-                Sys.unsetenv("SHAPE_ENCODING")
+            if (!use_iconv && !is.null(encoding) && !is.null(oSE) && 
+                ogr_info$driver == "ESRI Shapefile") {
+                tull <- setCPLConfigOption("SHAPE_ENCODING", oSE)
             }
         }
 	geometry <- .Call("R_OGR_CAPI_features", as.character(dsn), 
