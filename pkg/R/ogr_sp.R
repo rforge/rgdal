@@ -5,7 +5,7 @@ readOGR <- function(dsn, layer, verbose=TRUE, p4s=NULL,
         drop_unsupported_fields=FALSE, input_field_name_encoding=NULL,
 	pointDropZ=FALSE, dropNULLGeometries=TRUE, useC=TRUE,
         disambiguateFIDs=FALSE, addCommentsToPolygons=TRUE, encoding=NULL,
-        use_foreign=FALSE, use_iconv=NULL) {
+        use_iconv=NULL) {
 	if (missing(dsn)) stop("missing dsn")
 	if (nchar(dsn) == 0) stop("empty name")
 	if (missing(layer)) stop("missing layer")
@@ -84,11 +84,6 @@ readOGR <- function(dsn, layer, verbose=TRUE, p4s=NULL,
 		PACKAGE="rgdal")
 	if (!is.na(p4s) && nchar(p4s) == 0) p4s <- as.character(NA)
 
-        stopifnot(is.logical(use_foreign))
-        if (use_foreign && ogr_info$driver != "ESRI Shapefile") {
-            warning("use_foreign only applies to ESRI Shapefile")
-            use_foreign <- FALSE
-        }
 # adding argument for SHAPE_ENCODING environment variable 121124
         if (!use_iconv && !is.null(encoding) && 
             ogr_info$driver == "ESRI Shapefile") {
@@ -98,11 +93,7 @@ readOGR <- function(dsn, layer, verbose=TRUE, p4s=NULL,
 	if (nodata_flag) {
             dlist <- list(FID=as.integer(fids))
         } else {
-            if (use_foreign) {
-              fn <- paste(dsn, .Platform$file.sep, layer, ".dbf", sep="")
-              dlist <- as.list(read.dbf(fn, as.is=TRUE))[iflds]
-            } else {
-              dlist <- .Call("ogrDataFrame", as.character(dsn),
+            dlist <- .Call("ogrDataFrame", as.character(dsn),
                 as.character(layer), as.integer(fids), iflds, PACKAGE="rgdal")
 	      names(dlist) <- make.names(fldnms ,unique=TRUE)
               if (use_iconv && !is.null(encoding)) {
@@ -110,7 +101,6 @@ readOGR <- function(dsn, layer, verbose=TRUE, p4s=NULL,
                     if (is.character(dlist[[i]]))
                         dlist[[i]] <- iconv(dlist[[i]], from=encoding)
                 }
-            }
             }
             if (!use_iconv && !is.null(encoding) && !is.null(oSE) && 
                 ogr_info$driver == "ESRI Shapefile") {

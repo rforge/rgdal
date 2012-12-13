@@ -3,7 +3,6 @@ useDynLib(rgdal)
 
 import(methods)
 import(sp)
-importFrom(foreign, read.dbf, write.dbf)
 
 exportMethods(spTransform)
 exportMethods(closeDataset)
