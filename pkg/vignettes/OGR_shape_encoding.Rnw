@@ -1,0 +1,51 @@
+%\VignetteIndexEntry{OGR shapefile encoding}
+%\VignetteDepends{}
+%\VignetteKeywords{spatial}
+%\VignettePackage{rgdal}
+\documentclass[a4paper,10pt]{article} 
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+%\usepackage[dvips]{graphicx,color}
+\usepackage{times}
+\usepackage{hyperref}
+\usepackage{natbib}
+\usepackage[english]{babel}
+\usepackage{xspace}
+
+\usepackage{Sweave}
+\usepackage{mathptm}
+\usepackage{natbib}
+
+\setkeys{Gin}{width=0.95\textwidth}
+\newcommand{\strong}[1]{{\normalfont\fontseries{b}\selectfont #1}}
+\let\pkg=\strong
+\RequirePackage{alltt}
+\newenvironment{example}{\begin{alltt}}{\end{alltt}}
+\newenvironment{smallexample}{\begin{alltt}\small}{\end{alltt}}
+\newcommand{\code}[1]{\texttt{\small #1}}
+\def\RR{\textsf{R}\xspace}
+\def\SP{\texttt{S-PLUS}\xspace}
+\def\SS{\texttt{S}\xspace}
+
+\title{OGR shapefile encoding} 
+\author{Roger Bivand} 
+
+\begin{document} 
+
+\maketitle 
+
+\section{Introduction}
+
+
+
+\section{GDAL with iconv}
+
+
+
+\section{GDAL without iconv}
+
+
+
+
+\end{document}
+
