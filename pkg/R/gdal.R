@@ -100,12 +100,14 @@ getDriverLongName <- function(driver) {
 setMethod('initialize', 'GDALReadOnlyDataset',
           def = function(.Object, filename, silent=FALSE, handle = NULL) {
             if (is.null(handle)) {
+              filename <- as.character(filename)
 	      if (nchar(filename) == 0) stop("empty file name")
               silent <- as.logical(silent)
               if (length(silent) != 1L || is.na(silent) || !is.logical(silent))
                   stop("options(warn) not set")
               slot(.Object, 'handle') <- {
-                .Call('RGDAL_OpenDataset', as.character(filename), 
+                .Call('RGDAL_OpenDataset',
+                        normalizePath(filename, mustWork=FALSE), 
 			TRUE, silent, PACKAGE="rgdal")
               }
             } else {
@@ -120,12 +122,14 @@ setMethod('initialize', 'GDALReadOnlyDataset',
 setMethod('initialize', 'GDALDataset',
           def = function(.Object, filename, silent=FALSE, handle = NULL) {
             if (is.null(handle)) {
+              filename <- as.character(filename)
 	      if (nchar(filename) == 0) stop("empty file name")
               silent <- as.logical(silent)
               if (length(silent) != 1L || is.na(silent) || !is.logical(silent))
                   stop("options(warn) not set")
               slot(.Object, 'handle') <- {
-                .Call('RGDAL_OpenDataset', as.character(filename), 
+                .Call('RGDAL_OpenDataset', 
+                        normalizePath(filename, mustWork=FALSE), 
 			FALSE, silent, PACKAGE="rgdal")
               }
             } else {
@@ -213,11 +217,13 @@ saveDataset <- function(dataset, filename, options=NULL, returnNewObj=FALSE) {
   if (!is.null(options) && !is.character(options))
     stop("options not character")
   
+  filename <- as.character(filename)
   if (nchar(filename) == 0) stop("empty file name")
   new.obj <- new(new.class,
                  handle = .Call('RGDAL_CopyDataset',
                    dataset, getDriver(dataset),
-                   FALSE, options, filename, PACKAGE="rgdal"))
+                   FALSE, options, normalizePath(filename, mustWork=FALSE),
+                   PACKAGE="rgdal"))
 
   if (returnNewObj) return(new.obj)
   invisible(GDAL.close(new.obj))
@@ -254,13 +260,16 @@ saveDatasetAs <- function(dataset, filename, driver = NULL, options=NULL) {
 
   assertClass(dataset, 'GDALReadOnlyDataset')
   
+  filename <- as.character(filename)
+  if (nchar(filename) == 0) stop("empty file name")
   if (is.null(driver)) driver <- getDriver(dataset)
   if (!is.null(options) && !is.character(options))
     stop("options not character")
   
   new.obj <- new('GDALReadOnlyDataset',
                  handle = .Call('RGDAL_CopyDataset',
-                   dataset, driver, FALSE, options, filename, PACKAGE="rgdal"))
+                   dataset, driver, FALSE, options,
+                   normalizePath(filename, mustWork=FALSE), PACKAGE="rgdal"))
   
   closeDataset(new.obj)
   
