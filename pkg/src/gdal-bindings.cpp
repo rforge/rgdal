@@ -1802,7 +1802,10 @@ SEXP RGDAL_CPLGetConfigOption(SEXP inOption) {
 
 SEXP RGDAL_CPLSetConfigOption(SEXP inOption, SEXP value) {
     installErrorHandler();
-    CPLSetConfigOption(asString(inOption), asString(value));
+    if (value == R_NilValue)
+        CPLSetConfigOption(asString(inOption), NULL);
+    else
+        CPLSetConfigOption(asString(inOption), asString(value));
     uninstallErrorHandlerAndTriggerError();
     return(R_NilValue);
 }

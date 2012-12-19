@@ -36,7 +36,7 @@ ogrInfo <- function(dsn, layer, encoding=NULL, input_field_name_encoding=NULL,
   }
   ogrinfo <- .Call("ogrInfo",as.character(dsn), as.character(layer),
     PACKAGE = "rgdal")
-  if (!use_iconv && !is.null(encoding) && !is.null(oSE)) {
+  if (!use_iconv && !is.null(encoding)) {
     tull <- setCPLConfigOption("SHAPE_ENCODING", oSE)
   }
   fids <- ogrFIDs(dsn=dsn, layer=layer)

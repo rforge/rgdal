@@ -717,8 +717,10 @@ getCPLConfigOption <- function(ConfigOption) {
 setCPLConfigOption <- function(ConfigOption, value) {
     stopifnot(is.character(ConfigOption))
     stopifnot(length(ConfigOption) == 1)
-    stopifnot(is.character(value))
-    stopifnot(length(value) == 1)
+    if (!is.null(value)) {
+        stopifnot(is.character(value))
+        stopifnot(length(value) == 1)
+    }
     .Call("RGDAL_CPLSetConfigOption", ConfigOption, value, PACKAGE="rgdal")
     .Call("RGDAL_CPLGetConfigOption", ConfigOption, PACKAGE="rgdal")
 }

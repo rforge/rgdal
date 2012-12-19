@@ -102,7 +102,7 @@ readOGR <- function(dsn, layer, verbose=TRUE, p4s=NULL,
                         dlist[[i]] <- iconv(dlist[[i]], from=encoding)
                 }
             }
-            if (!use_iconv && !is.null(encoding) && !is.null(oSE) && 
+            if (!use_iconv && !is.null(encoding) && 
                 ogr_info$driver == "ESRI Shapefile") {
                 tull <- setCPLConfigOption("SHAPE_ENCODING", oSE)
             }
