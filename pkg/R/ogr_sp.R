@@ -165,6 +165,7 @@ readOGR <- function(dsn, layer, verbose=TRUE, p4s=NULL,
                 gFeatures <- gFeatures[!isNULL]
 	        data <- data[!isNULL, , drop=FALSE]
                 fids <- fids[!isNULL]
+                gComments <- gComments[!isNULL]
             } else {
                 warning(paste("Null geometries found:", paste(which(isNULL),
                     collapse=", ")))
