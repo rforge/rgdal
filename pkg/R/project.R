@@ -322,7 +322,7 @@ setMethod("spTransform", signature("SpatialPolygons", "CRS"), spTransform.Spatia
 setMethod("spTransform", signature("SpatialPolygonsDataFrame", "CRS"), spTransform.SpatialPolygonsDataFrame)
 
 projInfo <- function(type="proj") {
-    opts <- c("proj", "ellps", "datum")
+    opts <- c("proj", "ellps", "datum", "units")
     if (!(type %in% opts)) stop("unknown type")
     t <- as.integer(match(type[1], opts) - 1)
     if (is.na(t)) stop("unknown type")
