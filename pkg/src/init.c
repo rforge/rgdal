@@ -83,6 +83,8 @@ static R_CallMethodDef CallEntries[] = {
     {"RGDAL_SetProject", (DL_FUNC) &RGDAL_SetProject, 2},
     {"RGDAL_SetNoDataValue", (DL_FUNC) &RGDAL_SetNoDataValue, 2},
     {"RGDAL_SetStatistics", (DL_FUNC) &RGDAL_SetStatistics, 2},
+    {"RGDAL_SetRasterColorTable", (DL_FUNC) &RGDAL_SetRasterColorTable, 4},
+    {"RGDAL_SetCategoryNames", (DL_FUNC) &RGDAL_SetCategoryNames, 2},
     {NULL, NULL, 0}
 };
 

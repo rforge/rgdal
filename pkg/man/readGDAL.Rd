@@ -20,10 +20,14 @@ readGDAL(fname, offset, region.dim, output.dim, band, p4s=NULL, ...,
 asSGDF_GROD(x, offset, region.dim, output.dim, p4s=NULL, ...,
  half.cell=c(0.5,0.5), OVERRIDE_PROJ_DATUM_WITH_TOWGS84=NULL)
 writeGDAL(dataset, fname, drivername = "GTiff", type = "Float32",
- mvFlag = NA, options=NULL, copy_drivername = "GTiff", setStatistics=FALSE)
+ mvFlag = NA, options=NULL, copy_drivername = "GTiff", setStatistics=FALSE,
+ colorTables = NULL, catNames=NULL)
 create2GDAL(dataset, drivername = "GTiff", type = "Float32", mvFlag = NA,
- options=NULL, fname = NULL, setStatistics=FALSE)
-GDALinfo(fname, silent=FALSE, returnRAT=FALSE, returnCategoryNames=FALSE, returnStats=TRUE, returnColorTable=FALSE, OVERRIDE_PROJ_DATUM_WITH_TOWGS84=NULL)
+ options=NULL, fname = NULL, setStatistics=FALSE, colorTables = NULL,
+ catNames=NULL)
+GDALinfo(fname, silent=FALSE, returnRAT=FALSE, returnCategoryNames=FALSE,
+ returnStats=TRUE, returnColorTable=FALSE,
+ OVERRIDE_PROJ_DATUM_WITH_TOWGS84=NULL)
 GDALSpatialRef(fname, silent=FALSE, OVERRIDE_PROJ_DATUM_WITH_TOWGS84=NULL)
 }
 
@@ -69,6 +73,8 @@ and so on; see Details below.}
 see Details below}
 \item{setStatistics}{default FALSE, if TRUE, attempt to set per-band 
 statistics in the output file (driver-dependent)}
+\item{colorTables}{default NULL, if not NULL, a list of length equal to the number of bands, with NULL components for bands with no color table, or an integer matrix of red, green, blue and alpha values (0-255), with the number of entries equal to the number of unique values in the raster including the missing value coded last. The band must be of type \dQuote{Byte}, so only 0:255 0-based colors are available; see example below}
+\item{catNames}{default NULL, if not NULL, a list of length equal to the number of bands, with NULL components for bands with no category names, or a string vector of category names}
 \item{returnRAT}{default FALSE, if TRUE, return a list with a Raster 
 Attribute Table or NULL for each band}
 \item{returnCategoryNames}{default FALSE, if TRUE, return a list with a character vector of CategoryNames or NULL for each band}
@@ -232,5 +238,21 @@ image(t1, red=1, green=2, blue=3)
 title(main="output PNG RGB")
 par(opar)
 
+t0 <- meuse.grid["ffreq"]
+fullgrid(t0) <- TRUE
+t0$ffreq <- as.integer(t0$ffreq)-1
+# convert factor to zero-base integer
+CT <- t(col2rgb(c("red", "orange", "green", "transparent")))
+CT
+cN <- c("annual", "2-5 years", "infrequent")
+tf <- tempfile()
+writeGDAL(t0, tf, type="Byte", colorTable=list(CT), catNames=list(cN),
+ mvFlag=3L)
+attr(GDALinfo(tf, returnStats=FALSE, returnCategoryNames=TRUE),
+ "CATlist")[[1]]
+ds <- GDAL.open(tf)
+displayDataset(ds)
+t(col2rgb(getColorTable(ds)[1:4]))
+GDAL.close(ds)
 }
 \keyword{spatial}

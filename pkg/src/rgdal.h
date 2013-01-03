@@ -84,6 +84,8 @@ SEXP RGDAL_GetBandMinimum(SEXP sxpRasterBand);
 SEXP RGDAL_GetBandMaximum(SEXP sxpRasterBand);
 SEXP RGDAL_GetBandNoDataValue(SEXP sxpRasterBand);
 SEXP RGDAL_SetStatistics(SEXP sxpRasterBand, SEXP statistics);
+SEXP RGDAL_SetRasterColorTable(SEXP raster, SEXP icT, SEXP ricT, SEXP cicT);
+SEXP RGDAL_SetCategoryNames(SEXP sxpRasterBand, SEXP sxpNames);
 
 SEXP RGDAL_GetRAT(SEXP sxpRasterBand);
 SEXP RGDAL_CPLSetConfigOption(SEXP inOption, SEXP value);

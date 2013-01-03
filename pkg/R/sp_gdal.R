@@ -354,7 +354,7 @@ readGDAL = function(fname, offset, region.dim, output.dim, band, p4s=NULL, ..., 
 
 writeGDAL = function(dataset, fname, drivername = "GTiff", type = "Float32", 
 		mvFlag = NA, options=NULL, copy_drivername = "GTiff",
-                setStatistics=FALSE)
+                setStatistics=FALSE, colorTables=NULL, catNames=NULL)
 {
 	if (nchar(fname) == 0) stop("empty file name")
         x <- gdalDrivers()
@@ -362,7 +362,8 @@ writeGDAL = function(dataset, fname, drivername = "GTiff", type = "Float32",
         if (drivername %in% copy_only) {
 	    tds.create <- create2GDAL(dataset=dataset,
                 drivername=copy_drivername, type=type,
-                mvFlag=mvFlag, fname=NULL, setStatistics=setStatistics)
+                mvFlag=mvFlag, fname=NULL, setStatistics=setStatistics,
+                colorTables=colorTables, catNames=catNames)
             tds.copy <- copyDataset(tds.create, driver=drivername, fname=fname)
             GDAL.close(tds.create)
 	    saveDataset(tds.copy, fname, options=options)
@@ -371,7 +372,8 @@ writeGDAL = function(dataset, fname, drivername = "GTiff", type = "Float32",
         } else {
 	    tds.out <- create2GDAL(dataset=dataset, drivername=drivername, 
 		type=type, mvFlag=mvFlag, options=options, fname=fname,
-                setStatistics=setStatistics)
+                setStatistics=setStatistics,  colorTables=colorTables,
+                catNames=catNames)
 	    saveDataset(tds.out, fname, options=options)
 # RSB 120921
             GDAL.close(tds.out)
@@ -382,7 +384,7 @@ writeGDAL = function(dataset, fname, drivername = "GTiff", type = "Float32",
 	invisible(fname)
 }
 
-create2GDAL = function(dataset, drivername = "GTiff", type = "Float32", mvFlag = NA, options=NULL, fname=NULL, setStatistics=FALSE)
+create2GDAL = function(dataset, drivername = "GTiff", type = "Float32", mvFlag = NA, options=NULL, fname=NULL, setStatistics=FALSE, colorTables=NULL, catNames=NULL)
 {
 	stopifnot(gridded(dataset))
 	fullgrid(dataset) = TRUE
@@ -418,6 +420,18 @@ create2GDAL = function(dataset, drivername = "GTiff", type = "Float32", mvFlag =
             if (getDriverName(getDriver(tds.out)) == "RST") 
                 stop("RST files must have a valid coordinate reference system")
         }
+        if (!is.null(colorTables)) {
+            stopifnot(is.list(colorTables))
+            stopifnot(length(colorTables) == nbands)
+            if (type != "Byte") {
+                colorTables <- NULL
+                warning("colorTables valid for Byte type only")
+            }
+        }
+        if (!is.null(catNames)) {
+            stopifnot(is.list(catNames))
+            stopifnot(length(catNames) == nbands)
+        }
 	for (i in 1:nbands) {
 		band = as.matrix(dataset[i])
 		if (!is.numeric(band)) stop("Numeric bands required")
@@ -439,9 +453,39 @@ create2GDAL = function(dataset, drivername = "GTiff", type = "Float32", mvFlag =
                     .Call("RGDAL_SetStatistics", tds.out_b,
                         as.double(statistics), PACKAGE = "rgdal")
                 }
+                if (!is.null(colorTables)) {
+                    icT <- colorTables[[i]]
+                    if (!is.null(icT)) {
+                        tds.out_b <- getRasterBand(dataset=tds.out, band=i)
+                        GDALsetCT(tds.out_b, icT, band)
+                    }
+                }
+                if (!is.null(catNames)) {
+                   icN <- catNames[[i]]
+                   if (!is.null(icT)) {
+                       stopifnot(is.character(icN))
+                       tds.out_b <- getRasterBand(dataset=tds.out, band=i)
+                       .Call("RGDAL_SetCategoryNames", tds.out_b, icN,
+                           PACKAGE = "rgdal")
+                    }       
+                }
 	}
 	tds.out
 }
+
+GDALsetCT <- function(tds.out_b, icT, band) {
+    stopifnot(is.matrix(icT))
+    stopifnot(storage.mode(icT) == "integer")
+    ricT <- nrow(icT)
+    uniBand <- unique(c(band))
+    stopifnot(all(uniBand >= 0) && all(uniBand <= 255))
+    stopifnot(ricT == length(uniBand))
+    cicT <- ncol(icT)
+    stopifnot(cicT > 2 && cicT < 5)
+    .Call("RGDAL_SetRasterColorTable", tds.out_b, icT, ricT, cicT,
+        PACKAGE = "rgdal")
+}
+
 
 gdalDrivers <- function() getGDALDriverNames()
 
