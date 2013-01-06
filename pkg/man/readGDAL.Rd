@@ -254,5 +254,39 @@ ds <- GDAL.open(tf)
 displayDataset(ds)
 t(col2rgb(getColorTable(ds)[1:4]))
 GDAL.close(ds)
+
+fn <- system.file("pictures/test_envi_class.envi", package = "rgdal")[1]
+Gi <- GDALinfo(fn, returnColorTable=TRUE, returnCategoryNames=TRUE)
+CT <- attr(Gi, "ColorTable")[[1]]
+CT
+attr(Gi, "CATlist")[[1]]
+with <- readGDAL(fn)
+with <- readGDAL(fn, silent=TRUE)
+table(with$band1)
+table(as.numeric(with$band1))
+with1 <- readGDAL(fn, as.is=TRUE)
+table(with1$band1)
+# beware 0-base table
+ind <- sort(unique(na.omit(with1$band1)))+1
+spplot(with, col.regions=CT[ind])
+tf <- tempfile()
+cN <- levels(with$band1)
+CTi <- t(col2rgb(CT[ind]))
+# beware 0-base table
+with$band1 <- as.integer(with$band1)-1
+writeGDAL(with, tf, drivername="ENVI", type="Int16", colorTable=list(CTi),
+ catNames=list(cN), mvFlag=7L)
+cat(paste(readLines(paste(tf, "hdr", sep=".")), "\n", sep=""), "\n")
+wGi <- GDALinfo(tf, returnColorTable=TRUE, returnCategoryNames=TRUE)
+CTN <- attr(wGi, "ColorTable")[[1]]
+CTN
+attr(wGi, "CATlist")[[1]]
+withN <- readGDAL(tf)
+table(withN$band1)
+withN1 <- readGDAL(tf, as.is=TRUE)
+table(withN1$band1)
+# beware 0-base table
+ind <- sort(unique(na.omit(withN1$band1)))+1
+spplot(withN, col.regions=CTN[ind])
 }
 \keyword{spatial}

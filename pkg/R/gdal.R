@@ -477,13 +477,20 @@ getRasterData <- function(dataset,
     catNames <- .Call('RGDAL_GetCategoryNames', raster, PACKAGE="rgdal")
   
     if (!is.null(catNames)) {
-      ux <- unique(x)
-      if (length(ux) == length(catNames)) {
-        levels <- sort(ux)
-        x <- array(factor(x, levels, catNames), dim = dim(x),
+      ux <- sort(unique(na.omit(c(x))))
+      lCN <- length(catNames)
+      incls <- ((1:lCN)-1) %in% ux
+      back_incls <- ux %in% ((1:lCN)-1)
+      if (all(back_incls)) {
+        levels <- ux
+        x <- array(factor(x, levels, catNames[incls]), dim = dim(x),
                  dimnames = dimnames(x))
+        if (!get("silent", envir=.RGDAL_CACHE)) {
+            cat("Input level values and names\n")
+            cat(paste(levels, " ", catNames[incls], "\n", sep=""), sep="")
+        }
       } else {
-        warning("Assign CategoryNames manually, level/label length mismatch")
+        warning("Assign CategoryNames manually, level/label mismatch")
       }
     }
 

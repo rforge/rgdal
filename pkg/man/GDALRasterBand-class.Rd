@@ -76,7 +76,7 @@ set_OVERRIDE_PROJ_DATUM_WITH_TOWGS84(value)
 
 \details{
   \describe{
-    \item{\code{getRasterData}:}{retrieves data from the dataset as array.}
+    \item{\code{getRasterData}:}{retrieves data from the dataset as array; will try to convert data to factor if category names are available in the GDAL driver.}
     
     \item{\code{getRasterTable}:}{retrieves data from the dataset as data frame.}
     

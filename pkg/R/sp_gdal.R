@@ -298,6 +298,8 @@ readGDAL = function(fname, offset, region.dim, output.dim, band, p4s=NULL, ..., 
 	gt = .Call('RGDAL_GetGeoTransform', x, PACKAGE="rgdal")
         if (attr(gt, "CE_Failure")) warning("GeoTransform values not available")
 	# [1] 178400     40      0 334000      0    -40
+        opSilent <- get("silent", envir=.RGDAL_CACHE)
+        assign("silent", silent, envir=.RGDAL_CACHE)
 	if (any(gt[c(3,5)] != 0.0)) {
 		data = getRasterTable(x, band=band, offset=offset, 
 			region.dim=region.dim, ...)
@@ -349,6 +351,7 @@ readGDAL = function(fname, offset, region.dim, output.dim, band, p4s=NULL, ..., 
 		data = SpatialGridDataFrame(grid = grid, 
 			data = data.frame(df), proj4string=CRS(p4s))
 	}
+        assign("silent", opSilent, envir=.RGDAL_CACHE)
 	return(data)
 }
 
@@ -424,8 +427,8 @@ create2GDAL = function(dataset, drivername = "GTiff", type = "Float32", mvFlag =
             stopifnot(is.list(colorTables))
             stopifnot(length(colorTables) == nbands)
             if (type != "Byte") {
-                colorTables <- NULL
-                warning("colorTables valid for Byte type only")
+#                colorTables <- NULL
+                warning("colorTables valid for Byte type only in some drivers")
             }
         }
         if (!is.null(catNames)) {
