@@ -190,7 +190,7 @@ asGDALROD_SGDF <- function(from) {
 	gt = .Call('RGDAL_GetGeoTransform', x, PACKAGE="rgdal")
         if (attr(gt, "CE_Failure")) warning("GeoTransform values not available")
 	if (any(gt[c(3,5)] != 0.0)) stop("Diagonal grid not permitted")
-	data = getRasterData(x)
+	data = getRasterData(x, list_out=TRUE)
 	cellsize = abs(c(gt[2],gt[6]))
 	ysign <- sign(gt[6])
 	co.x <- gt[1] + (offset[2] + half.cell[2]) * cellsize[1]
@@ -200,17 +200,18 @@ asGDALROD_SGDF <- function(from) {
 		abs(cellsize[2]))
 	cellcentre.offset <- c(x=co.x, y=co.y)
 	grid = GridTopology(cellcentre.offset, cellsize, rev(output.dim))
-	if (length(d) == 2L)
-		df = list(band1 = as.vector(data))
-	else {
-		df <- vector(mode="list", length=d[3])
-		df[[1]] <- as.vector(data[,,1, drop = FALSE])
-		for (band in 2:d[3])
-			df[[band]] <- as.vector(data[,,band, drop = FALSE])
-		names(df) = paste("band", 1:d[3], sep="")
-	}
+#	if (length(d) == 2L)
+#		df = list(band1 = as.vector(data))
+#	else {
+#		df <- vector(mode="list", length=d[3])
+#		df[[1]] <- as.vector(data[,,1, drop = FALSE])
+#		for (band in 2:d[3])
+#			df[[band]] <- as.vector(data[,,band, drop = FALSE])
+#		names(df) = paste("band", 1:d[3], sep="")
+#	}
 	return(SpatialGridDataFrame(grid = grid, 
-		data = data.frame(df), proj4string=CRS(p4s)))
+		data = as.data.frame(data), proj4string=CRS(p4s)))
+#		data = data.frame(df), proj4string=CRS(p4s)))
 }
 
 setAs("GDALReadOnlyDataset", "SpatialGridDataFrame", asGDALROD_SGDF)
@@ -237,7 +238,7 @@ asSGDF_GROD <- function(x, offset, region.dim, output.dim, p4s=NULL, ..., half.c
         if (attr(gt, "CE_Failure")) warning("GeoTransform values not available")
 	if (any(gt[c(3,5)] != 0.0)) stop("Diagonal grid not permitted")
 	data = getRasterData(x, offset=offset, 
-		region.dim=region.dim, output.dim=output.dim, ...)
+		region.dim=region.dim, output.dim=output.dim, ..., list_out=TRUE)
 	if (!odim_flag) cellsize = abs(c(gt[2],gt[6]))
 	else {
 		icellsize = abs(c(gt[2],gt[6]))
@@ -252,16 +253,17 @@ asSGDF_GROD <- function(x, offset, region.dim, output.dim, p4s=NULL, ..., half.c
 		abs(cellsize[2]))
 	cellcentre.offset <- c(x=co.x, y=co.y)
 	grid = GridTopology(cellcentre.offset, cellsize, rev(output.dim))
-	if (length(d) == 2L)
-		df = list(band1 = as.vector(data))
-	else {
-		df <- vector(mode="list", length=d[3])
-		df[[1]] <- as.vector(data[,,1, drop = FALSE])
-		for (band in 2:d[3])
-			df[[band]] <- as.vector(data[,,band, drop = FALSE])
-		names(df) = paste("band", 1:d[3], sep="")
-	}
-	df1 <- data.frame(df)
+#	if (length(d) == 2L)
+#		df = list(band1 = as.vector(data))
+#	else {
+#		df <- vector(mode="list", length=d[3])
+#		df[[1]] <- as.vector(data[,,1, drop = FALSE])
+#		for (band in 2:d[3])
+#			df[[band]] <- as.vector(data[,,band, drop = FALSE])
+#		names(df) = paste("band", 1:d[3], sep="")
+#	}
+#	df1 <- data.frame(df)
+	df1 <- as.data.frame(data)
 	data = SpatialGridDataFrame(grid = grid, 
 		data = df1, proj4string=CRS(p4s))
 	return(data)
@@ -336,20 +338,20 @@ readGDAL = function(fname, offset, region.dim, output.dim, band, p4s=NULL, ..., 
 			rev(output.dim))
 #			rev(region.dim))
 		data = getRasterData(x, band=band, offset=offset, 
-			region.dim=region.dim, output.dim=output.dim, ...)
+			region.dim=region.dim, output.dim=output.dim, ..., list_out=TRUE)
 		GDAL.close(x)
-		if (length(d) == 2L)
-			df = list(band1 = as.vector(data))
-		else {
-			df <- vector(mode="list", length=d[3])
-			df[[1]] <- as.vector(data[,,1, drop = FALSE])
-			for (band in 2:d[3])
-				df[[band]] <- as.vector(data[,,band, drop = FALSE])
+#		if (length(d) == 2L)
+#			df = list(band1 = as.vector(data))
+#		else {
+#			df <- vector(mode="list", length=d[3])
+#			df[[1]] <- as.vector(data[,,1, drop = FALSE])
+#			for (band in 2:d[3])
+#				df[[band]] <- as.vector(data[,,band, drop = FALSE])
 #			df = as.data.frame(df)
-			names(df) = paste("band", 1:d[3], sep="")
-		}
+#			names(df) = paste("band", 1:d[3], sep="")
+#		}
 		data = SpatialGridDataFrame(grid = grid, 
-			data = data.frame(df), proj4string=CRS(p4s))
+			data = as.data.frame(data), proj4string=CRS(p4s))
 	}
         assign("silent", opSilent, envir=.RGDAL_CACHE)
 	return(data)
@@ -446,47 +448,28 @@ create2GDAL = function(dataset, drivername = "GTiff", type = "Float32", mvFlag =
 		if (!is.na(mvFlag))
 			band[is.na(band)] = mvFlag
 		putRasterData(tds.out, band, i)
+                tds.out_b <- getRasterBand(dataset=tds.out, band=i)
 		if (!is.na(mvFlag)) {
-		    tds.out_b <- getRasterBand(dataset=tds.out, band=i)
 		    .Call("RGDAL_SetNoDataValue", tds.out_b, as.double(mvFlag),
 		        PACKAGE = "rgdal")
 		}
                 if (setStatistics) {
-                    tds.out_b <- getRasterBand(dataset=tds.out, band=i)
-                    .Call("RGDAL_SetStatistics", tds.out_b,
-                        as.double(statistics), PACKAGE = "rgdal")
+                    .gd_SetStatistics(tds.out_b, as.double(statistics))
                 }
                 if (!is.null(colorTables)) {
                     icT <- colorTables[[i]]
                     if (!is.null(icT)) {
-                        tds.out_b <- getRasterBand(dataset=tds.out, band=i)
-                        GDALsetCT(tds.out_b, icT, band)
+                        .gd_SetRasterColorTable(tds.out_b, icT)
                     }
                 }
                 if (!is.null(catNames)) {
-                   icN <- catNames[[i]]
-                   if (!is.null(icT)) {
-                       stopifnot(is.character(icN))
-                       tds.out_b <- getRasterBand(dataset=tds.out, band=i)
-                       .Call("RGDAL_SetCategoryNames", tds.out_b, icN,
-                           PACKAGE = "rgdal")
+                    icN <- catNames[[i]]
+                    if (!is.null(icN)) {
+                        .gd_SetCategoryNames(tds.out_b, icN)
                     }       
                 }
 	}
 	tds.out
-}
-
-GDALsetCT <- function(tds.out_b, icT, band) {
-    stopifnot(is.matrix(icT))
-    stopifnot(storage.mode(icT) == "integer")
-    ricT <- nrow(icT)
-    uniBand <- unique(c(band))
-    stopifnot(all(uniBand >= 0) && all(uniBand <= 255))
-    stopifnot(ricT == length(uniBand))
-    cicT <- ncol(icT)
-    stopifnot(cicT > 2 && cicT < 5)
-    .Call("RGDAL_SetRasterColorTable", tds.out_b, icT, ricT, cicT,
-        PACKAGE = "rgdal")
 }
 
 
