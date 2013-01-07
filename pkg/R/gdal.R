@@ -455,14 +455,25 @@ getRasterData <- function(dataset,
     x <- array(dim = as.integer(c(rev(output.dim), length(band))))
     for (i in seq(along = band)) {
 
-       raster <- getRasterBand(dataset, band[i])
+        raster <- getRasterBand(dataset, band[i])
 
-       x[,,i] <- .Call('RGDAL_GetRasterData', raster,
+        x[,,i] <- .Call('RGDAL_GetRasterData', raster,
                       as.integer(c(offset, region.dim)),
                       as.integer(output.dim),
                       as.integer(interleave),
                       PACKAGE="rgdal")
   
+    }
+    if (!as.is) {
+        for (i in seq(along = band)) {
+
+            raster <- getRasterBand(dataset, band[i])
+            scale <- .Call('RGDAL_GetScale', raster, PACKAGE="rgdal")
+            offset <- .Call('RGDAL_GetOffset', raster, PACKAGE="rgdal")
+
+            if (scale != 1) x[,,i] <- x[,,i] * scale
+            if (offset != 0) x[,,i] <- x[,,i] + offset
+        }
     }
     if (!list_out) {
         if (length(band) == 1L) x <- drop(x)
@@ -478,11 +489,6 @@ getRasterData <- function(dataset,
             if (!as.is) {
   
                 raster <- getRasterBand(dataset, band[i])
-                scale <- .Call('RGDAL_GetScale', raster, PACKAGE="rgdal")
-                offset <- .Call('RGDAL_GetOffset', raster, PACKAGE="rgdal")
-
-                if (scale != 1) X[[i]] <- X[[i]] * scale
-                if (offset != 0) X[[i]] <- X[[i]] + offset
     
                 catNames <- .Call('RGDAL_GetCategoryNames', raster,
                     PACKAGE="rgdal")

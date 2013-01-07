@@ -45,7 +45,7 @@ sub.GDROD = function(x, i, j, ... , drop = FALSE) {
 	if (is.null(gdal.args$interleave))
 		gdal.args$interleave = c(0, 0)
 	if (is.null(gdal.args$as.is))
-		gdal.args$as.is = FALSE
+		gdal.args$as.is = TRUE
 	
 	# retrieve topology:
 	gt = .Call('RGDAL_GetGeoTransform', x, PACKAGE="rgdal")
