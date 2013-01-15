@@ -26,6 +26,9 @@ assign(".rgdal_old.GDAL_DATA", "", envir=.RGDAL_CACHE)
   library.dynam('rgdal', pkg, lib)
 
   .Call('RGDAL_Init', PACKAGE="rgdal")
+}
+
+.onAttach <- function(lib, pkg) {
   ver_ok <- getGDALCheckVersion()
   rver <- getGDALVersionInfo()
 
