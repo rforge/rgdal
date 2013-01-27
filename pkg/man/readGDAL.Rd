@@ -50,7 +50,7 @@ from the GDAL data set}
 usually as default, but may be set to c=(0,0) if needed; presently ordered (y,x) - this may change}
 \item{silent}{ logical; if TRUE, comment and non-fatal CPL driver errors 
 suppressed }
-\item{OVERRIDE_PROJ_DATUM_WITH_TOWGS84}{logical value, default NULL, which case the cached option set by \code{set_OVERRIDE_PROJ_DATUM_WITH_TOWGS84} is used. Ignored if the GDAL version is less than \dQuote{1.8.0} or if the envirnment variable is already set; see \code{\link{getProjectionRef}} for further details}
+\item{OVERRIDE_PROJ_DATUM_WITH_TOWGS84}{logical value, default NULL, which case the cached option set by \code{set_OVERRIDE_PROJ_DATUM_WITH_TOWGS84} is used. Ignored if the GDAL version is less than \dQuote{1.8.0} or if the CPLConfigOption variable is already set; see \code{\link{getProjectionRef}} for further details}
 \item{...}{ arguments passed to either \code{getRasterData}, or
 \code{getRasterTable}, depending on rotation angles (see below);
 see the rgdal documentation for the available options (subsetting
