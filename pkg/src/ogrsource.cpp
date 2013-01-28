@@ -108,7 +108,7 @@ extern "C" {
         REAL(dvec)[0] = oExt.MinX;
         REAL(dvec)[1] = oExt.MinY;
         REAL(dvec)[2] = oExt.MaxX;
-        REAL(dvec)[3] = oExt.MaxX;
+        REAL(dvec)[3] = oExt.MaxY;
         SET_VECTOR_ELT(ans,4,dvec);
     }
     uninstallErrorHandlerAndTriggerError();
