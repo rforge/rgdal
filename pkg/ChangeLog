@@ -1,3 +1,11 @@
+2013-02-04 19:45  rsbivand
+
+	* ChangeLog, inst/ChangeLog: tidy
+
+2013-02-04 19:44  rsbivand
+
+	* DESCRIPTION: tidy
+
 2013-01-29 20:52  edzer
 
 	* DESCRIPTION: updated Date field, to trigger rebuild on r-forge.
