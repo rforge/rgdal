@@ -27,7 +27,7 @@ create2GDAL(dataset, drivername = "GTiff", type = "Float32", mvFlag = NA,
  catNames=NULL)
 GDALinfo(fname, silent=FALSE, returnRAT=FALSE, returnCategoryNames=FALSE,
  returnStats=TRUE, returnColorTable=FALSE,
- OVERRIDE_PROJ_DATUM_WITH_TOWGS84=NULL, returnScaleOffset=TRUE)
+ OVERRIDE_PROJ_DATUM_WITH_TOWGS84=NULL, returnScaleOffset=TRUE, returnScaleOffset=TRUE)
 GDALSpatialRef(fname, silent=FALSE, OVERRIDE_PROJ_DATUM_WITH_TOWGS84=NULL)
 }
 
@@ -81,6 +81,7 @@ Attribute Table or NULL for each band}
 \item{returnCategoryNames}{default FALSE, if TRUE, return a list with a character vector of CategoryNames or NULL for each band}
 \item{returnStats}{default TRUE, return band-wise statistics if avaliable (from 0.7-20 set to NA if not available)}
 \item{returnColorTable}{default FALSE; if TRUE return band-wise colour tables in a list attribute \dQuote{ColorTables}}
+\item{returnScaleOffset}{default TRUE; if TRUE return band-wise scale and offset values}
 %\item{clone}{if not NULL, a grid file to clone}
 }
 \details{In \code{writeGDAL}, if types other than \sQuote{Int32},
@@ -283,5 +284,13 @@ table(withN$band1)
 withN1 <- readGDAL(tf, as.is=TRUE)
 table(withN1$band1)
 spplot(withN, col.regions=CTN)
+
+
+# a file with scale and offset
+fn <- system.file("pictures/scaleoffset.vrt", package = "rgdal")[1]
+g <- GDALinfo(fn)
+attr(g, 'ScaleOffset')
+g
+
 }
 \keyword{spatial}
