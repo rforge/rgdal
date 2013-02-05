@@ -160,8 +160,13 @@ print.GDALobj <- function(x, ...) {
             print(attr(x, "df")[,6:9])
         }
         if (!is.null(attr(x, "ScaleOffset"))) {
-            cat("ScaleOffset:\n")
-            print(attr(x, "ScaleOffset"))
+            somat <- attr(x, "ScaleOffset")
+            rws <- which(somat[,1] != 1 || somat[,2] != 0)
+            if (any(rws)) {
+                cat("ScaleOffset:\n")
+                rownames(somat) <- paste("band", 1:nrow(somat), sep="")
+                print(somat[rws,])
+            }
         }
         if (!is.null(attr(x, "mdata"))) {
             cat("Metadata:\n")
