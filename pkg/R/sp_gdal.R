@@ -35,6 +35,16 @@ GDALinfo <- function(fname, silent=FALSE, returnRAT=FALSE, returnCategoryNames=F
                 CATlist <- vector(mode="list", length=nbands)
             if (returnColorTable)
                 colTabs <- vector(mode="list", length=nbands)
+				
+			#RH 4feb2013
+			# this is intended to be an argument to the function
+			returnScaleOffset <- TRUE
+			if (returnScaleOffset) {
+				scaleOffset <- matrix(ncol=2, nrow=nbands)
+				colnames(scaleOffset) <- c('scale', 'offset')
+			}
+				
+	
             for (i in seq(along = band)) {
 
                 raster <- getRasterBand(x, band[i])
@@ -70,6 +80,13 @@ GDALinfo <- function(fname, silent=FALSE, returnRAT=FALSE, returnCategoryNames=F
                 if (returnColorTable) {
                     colTabs[[i]] <- getBandColorTable(raster)
                 }
+				
+				#RH 4feb2013
+				if (returnScaleOffset) {
+				    scaleOffset[i,1] <- .Call('RGDAL_GetScale', raster, PACKAGE="rgdal")
+					scaleOffset[i,2] <- .Call('RGDAL_GetOffset', raster, PACKAGE="rgdal")
+				}
+				
                 NDV <- .Call("RGDAL_GetBandNoDataValue", raster,
                     PACKAGE="rgdal")
                 if (is.null(NDV)) {
@@ -112,6 +129,9 @@ GDALinfo <- function(fname, silent=FALSE, returnRAT=FALSE, returnCategoryNames=F
         if (returnRAT) attr(res, "RATlist") <- RATlist
         if (returnCategoryNames) attr(res, "CATlist") <- CATlist
         if (returnColorTable) attr(res, "ColorTables") <- colTabs
+		
+		#RH 4feb2013    
+		if (returnScaleOffset) attr(res, "ScaleOffset") <- scaleOffset
 	class(res) <- "GDALobj"
 	res
 }
