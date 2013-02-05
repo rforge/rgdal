@@ -27,7 +27,7 @@ create2GDAL(dataset, drivername = "GTiff", type = "Float32", mvFlag = NA,
  catNames=NULL)
 GDALinfo(fname, silent=FALSE, returnRAT=FALSE, returnCategoryNames=FALSE,
  returnStats=TRUE, returnColorTable=FALSE,
- OVERRIDE_PROJ_DATUM_WITH_TOWGS84=NULL)
+ OVERRIDE_PROJ_DATUM_WITH_TOWGS84=NULL, returnScaleOffset=TRUE)
 GDALSpatialRef(fname, silent=FALSE, OVERRIDE_PROJ_DATUM_WITH_TOWGS84=NULL)
 }
 
@@ -51,6 +51,7 @@ usually as default, but may be set to c=(0,0) if needed; presently ordered (y,x)
 \item{silent}{ logical; if TRUE, comment and non-fatal CPL driver errors 
 suppressed }
 \item{OVERRIDE_PROJ_DATUM_WITH_TOWGS84}{logical value, default NULL, which case the cached option set by \code{set_OVERRIDE_PROJ_DATUM_WITH_TOWGS84} is used. Ignored if the GDAL version is less than \dQuote{1.8.0} or if the CPLConfigOption variable is already set; see \code{\link{getProjectionRef}} for further details}
+\item{returnScaleOffset}{default TRUE, return a matrix of bandwise scales and offsets}
 \item{...}{ arguments passed to either \code{getRasterData}, or
 \code{getRasterTable}, depending on rotation angles (see below);
 see the rgdal documentation for the available options (subsetting
