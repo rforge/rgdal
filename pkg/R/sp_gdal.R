@@ -161,7 +161,7 @@ print.GDALobj <- function(x, ...) {
         }
         if (!is.null(attr(x, "ScaleOffset"))) {
             somat <- attr(x, "ScaleOffset")
-            rws <- which(somat[,1] != 1 || somat[,2] != 0)
+            rws <- which(somat[,1] != 1 | somat[,2] != 0)
             if (any(rws)) {
                 cat("ScaleOffset:\n")
                 rownames(somat) <- paste("band", 1:nrow(somat), sep="")
