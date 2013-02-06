@@ -1,3 +1,33 @@
+2013-02-05 19:01  rhijmans
+
+	* man/readGDAL.Rd:
+
+2013-02-05 18:58  rhijmans
+
+	* inst/pictures/scaleoffset.dat, inst/pictures/scaleoffset.vrt,
+	  man/readGDAL.Rd:
+
+2013-02-05 18:24  rhijmans
+
+	* R/sp_gdal.R:
+
+2013-02-05 18:04  rsbivand
+
+	* R/sp_gdal.R: add returnScaleOffset to GDALinfo
+
+2013-02-05 17:57  rsbivand
+
+	* R/sp_gdal.R, man/readGDAL.Rd: add returnScaleOffset to GDALinfo
+
+2013-02-05 00:54  rhijmans
+
+	* R/sp_gdal.R: added "returnScaleOffset" to GDALinfo. Currently
+	  always TRUE, but should become an argument
+
+2013-02-04 19:50  rsbivand
+
+	* ChangeLog, inst/ChangeLog: tidy
+
 2013-02-04 19:49  rsbivand
 
 	* DESCRIPTION: tidy
