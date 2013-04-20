@@ -1,3 +1,11 @@
+2013-04-20 17:39  rsbivand
+
+	* tests/tests.Rout.save: tidy
+
+2013-04-20 17:31  rsbivand
+
+	* ChangeLog, inst/ChangeLog: tidy
+
 2013-04-20 17:28  rsbivand
 
 	* R/gdal.R, configure, src/gdal-bindings.cpp, src/projectit.cpp:
