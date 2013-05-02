@@ -23,7 +23,7 @@ SEXP OGR_write(SEXP inp)
 //  SEXP inp is an input list built in ogr_write() and documented
 //  in code there
 
-// setFID((long) INTEGER_POINTER(VECTOR_ELT(inp, 12))[i]) 130502
+// poFeature->SetFID((long) INTEGER_POINTER(VECTOR_ELT(inp, 12))[i]) 130502
 
     OGRSFDriver *poDriver;
     OGRDataSource *poDS;
@@ -249,9 +249,13 @@ SEXP OGR_write(SEXP inp)
             if (z > 2) pt.setZ( NUMERIC_POINTER(crds)[i+(2*nobs)] );
 
             poFeature->SetGeometry( &pt ); 
+            if(poFeature->SetFID((long) INTEGER_POINTER(VECTOR_ELT(inp, 12))[i])  != OGRERR_NONE ) {
+               OGRDataSource::DestroyDataSource( poDS );
+               uninstallErrorHandlerAndTriggerError();
+               error( "Failed to set FID" );
+            } 
 
             if( poLayer->CreateFeature( poFeature ) != OGRERR_NONE ) {
-               installErrorHandler();
                OGRDataSource::DestroyDataSource( poDS );
                uninstallErrorHandlerAndTriggerError();
                error( "Failed to create feature" );
@@ -296,6 +300,13 @@ SEXP OGR_write(SEXP inp)
                OGRDataSource::DestroyDataSource( poDS );
                uninstallErrorHandlerAndTriggerError();
                error( "Failed to set geometry" );
+            } 
+
+            if(poFeature->SetFID((long) INTEGER_POINTER(VECTOR_ELT(inp, 12))[i])  != OGRERR_NONE ) {
+               installErrorHandler();
+               OGRDataSource::DestroyDataSource( poDS );
+               uninstallErrorHandlerAndTriggerError();
+               error( "Failed to set FID" );
             } 
 
             if( poLayer->CreateFeature( poFeature ) != OGRERR_NONE ) {
@@ -363,6 +374,13 @@ SEXP OGR_write(SEXP inp)
                error( "Failed to set geometry" );
             } 
 
+            if(poFeature->SetFID((long) INTEGER_POINTER(VECTOR_ELT(inp, 12))[i])  != OGRERR_NONE ) {
+               installErrorHandler();
+               OGRDataSource::DestroyDataSource( poDS );
+               uninstallErrorHandlerAndTriggerError();
+               error( "Failed to set FID" );
+            } 
+
             if( poLayer->CreateFeature( poFeature ) != OGRERR_NONE ) {
                installErrorHandler();
                OGRDataSource::DestroyDataSource( poDS );
@@ -413,6 +431,13 @@ SEXP OGR_write(SEXP inp)
                OGRDataSource::DestroyDataSource( poDS );
                uninstallErrorHandlerAndTriggerError();
                error( "Failed to set geometry" );
+            } 
+
+            if(poFeature->SetFID((long) INTEGER_POINTER(VECTOR_ELT(inp, 12))[i])  != OGRERR_NONE ) {
+               installErrorHandler();
+               OGRDataSource::DestroyDataSource( poDS );
+               uninstallErrorHandlerAndTriggerError();
+               error( "Failed to set FID" );
             } 
 
             if( poLayer->CreateFeature( poFeature ) != OGRERR_NONE ) {
@@ -475,6 +500,13 @@ SEXP OGR_write(SEXP inp)
                OGRDataSource::DestroyDataSource( poDS );
                uninstallErrorHandlerAndTriggerError();
                error( "Failed to set geometry" );
+            } 
+
+            if(poFeature->SetFID((long) INTEGER_POINTER(VECTOR_ELT(inp, 12))[i])  != OGRERR_NONE ) {
+               installErrorHandler();
+               OGRDataSource::DestroyDataSource( poDS );
+               uninstallErrorHandlerAndTriggerError();
+               error( "Failed to set FID" );
             } 
 
 	    // EJP:
