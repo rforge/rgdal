@@ -23,6 +23,8 @@ SEXP OGR_write(SEXP inp)
 //  SEXP inp is an input list built in ogr_write() and documented
 //  in code there
 
+// setFID((long) INTEGER_POINTER(VECTOR_ELT(inp, 12))[i]) 130502
+
     OGRSFDriver *poDriver;
     OGRDataSource *poDS;
     OGRLayer *poLayer;
