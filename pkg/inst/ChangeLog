@@ -1,3 +1,16 @@
+2013-06-22 13:59  rsbivand
+
+	* DESCRIPTION, man/readOGR.Rd, man/writeOGR.Rd: tidy
+
+2013-05-23 19:29  edzer
+
+	* man/spTransform-methods.Rd: out-commented spTransform(ANY)
+	  method, as it is not defined anyway (sp now does this)
+
+2013-05-23 14:18  rsbivand
+
+	* ChangeLog, inst/ChangeLog: tidy
+
 2013-05-23 14:17  rsbivand
 
 	* man/readGDAL.Rd: fixs FIDs typo
