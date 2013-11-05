@@ -333,9 +333,9 @@ GDAL.close <- function(dataset) {
                 filename <- getDescription(dataset)
             }
             .setCollectorFun(slot(dataset, 'handle'), NULL)
-            if (isTrans) .Call("RGDAL_DeleteHandle", slot(dataset, 'handle'),
+            .Call('RGDAL_CloseDataset', dataset, PACKAGE="rgdal")
+            .Call("RGDAL_CloseHandle", slot(dataset, 'handle'),
                 PACKAGE="rgdal")
-            else .Call('RGDAL_CloseDataset', dataset, PACKAGE="rgdal")
             if (isTrans) {
                 basen <- basename(filename)
                 dirn <- dirname(filename)
