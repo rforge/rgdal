@@ -330,20 +330,21 @@ GDAL.close <- function(dataset) {
             isTrans <- is(dataset, "GDALTransientDataset")
             if (isTrans) {
                 if (isObjPtrNULL(dataset)) stop("object already closed")
-                filename <- getDescription(dataset)
+#                filename <- getDescription(dataset)
             }
             .setCollectorFun(slot(dataset, 'handle'), NULL)
             .Call('RGDAL_CloseDataset', dataset, PACKAGE="rgdal")
-            .Call("RGDAL_CloseHandle", slot(dataset, 'handle'),
-                PACKAGE="rgdal")
-            if (isTrans) {
-                basen <- basename(filename)
-                dirn <- dirname(filename)
-                lf <- list.files(path=dirn, pattern=basen)
-                flf <- paste(dirn, lf, sep="/")
-                unlink(flf)
-            }
-            invisible(gc())
+#            .Call("RGDAL_CloseHandle", slot(dataset, 'handle'),
+#                PACKAGE="rgdal")
+             invisible(NULL)
+#            if (isTrans) {
+#                basen <- basename(filename)
+#                dirn <- dirname(filename)
+#                lf <- list.files(path=dirn, pattern=basen)
+#                flf <- paste(dirn, lf, sep="/")
+#                unlink(flf)
+#            }
+#            invisible(gc())
 }
 
 setMethod('dim', 'GDALReadOnlyDataset',
