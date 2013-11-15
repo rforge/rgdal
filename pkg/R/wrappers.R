@@ -41,7 +41,7 @@
 }
 
 
-gdal_call <- function(object, option, ...) {
+GDALcall <- function(object, option, ...) {
 	if (option == 'SetNoDataValue') {
 		.gd_SetNoDataValue(object, ...)
 	} else if (option == 'SetGeoTransform') {
