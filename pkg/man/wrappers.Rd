@@ -1,4 +1,5 @@
 \name{GDALcall}
+
 \alias{GDALcall}
 \alias{rawTransform}
 
@@ -16,10 +17,10 @@ rawTransform(projfrom, projto, n, x, y, z=NULL)
 
 
 \arguments{
-  \item{object}{GDALDataset}
-  \item{option}{character. One of 'SetNoDataValue', 'SetGeoTransform', 'SetProject', 'SetStatistics', 'SetRasterColorTable' or 'SetCategoryNames') }
-  \item{...}{additional arguments}
-  \item{projfrom}{character. PROJ.4 CRS description}
+  \item{object}{GDALTransientDataset (option = 'SetGeoTransform', 'SetProject') or GDALRasterBand (the other options)}
+  \item{option}{character. One of 'SetGeoTransform', 'SetProject', 'SetNoDataValue', 'SetStatistics', 'SetRasterColorTable' or 'SetCategoryNames') }
+  \item{...}{additional arguments. The values to be set}
+  \item{projfrom}{character. PROJ.4 coordinate reference system (CRS) description}
   \item{projto}{character. PROJ.4 CRS description}
   \item{n}{number of coordinates}
   \item{x}{x coordinates}
@@ -29,7 +30,8 @@ rawTransform(projfrom, projto, n, x, y, z=NULL)
 }
 
 \value{
-GDALDataset
+GDALcall does not return anything. 
+rawTransform returns a matrix of transformed coordinates.
 }
 
 \author{Robert Hijmans}
