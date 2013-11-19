@@ -12,8 +12,6 @@ Authors@R: c(
 	person("Edzer", "Pebesma", role = "ctb"),
 	person("Michael", "Sumner", role = "ctb"),
 	person("Robert", "Hijmans", role = "ctb"))
-Author: Tim Keitt, Barry Rowlingson and Roger Bivand
-Maintainer: Roger Bivand <Roger.Bivand@nhh.no>
 License: GPL (>= 2)
 URL: http://www.gdal.org, https://r-forge.r-project.org/projects/rgdal/
 SystemRequirements: for building from source: GDAL >= 1.6.3 library from http://trac.osgeo.org/gdal/wiki/DownloadSource and PROJ.4 (proj >= 4.4.9) from http://trac.osgeo.org/proj/; GDAL OSX frameworks built by William Kyngesburye at http://www.kyngchaos.com/ may be used for source installs on OSX.
