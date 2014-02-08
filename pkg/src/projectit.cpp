@@ -388,10 +388,10 @@ SEXP checkCRSArgs(SEXP args, SEXP init_found) {
 	SET_VECTOR_ELT(res, 0, NEW_LOGICAL(1));
 	SET_VECTOR_ELT(res, 1, NEW_CHARACTER(1));
 	LOGICAL_POINTER(VECTOR_ELT(res, 0))[0] = FALSE;
-        if (LOGICAL_POINTER(init_found)[0] && PJ_VERSION == 490) {
-            pj = pj_init_plus("+init=epsg:4326");
-	//pj_set_errno(0);
-	}
+//        if (LOGICAL_POINTER(init_found)[0] && PJ_VERSION == 490) {
+//            pj = pj_init_plus("+init=epsg:4326");
+//pj_set_errno(0);
+//	}
 	if (!(pj = pj_init_plus(CHAR(STRING_ELT(args, 0))))) {
 
 		SET_STRING_ELT(VECTOR_ELT(res, 1), 0, 
