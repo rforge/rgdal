@@ -379,40 +379,22 @@ SEXP transform(SEXP fromargs, SEXP toargs, SEXP npts, SEXP x, SEXP y, SEXP z) {
 	return(res);
 }
 
-SEXP checkCRSArgs(SEXP args, SEXP init_found) {
+SEXP checkCRSArgs(SEXP args) {
 	SEXP res;
 	projPJ pj;
         char cbuf[512], cbuf1[512], c;
         int i, k;
-/*#if PJ_VERSION >= 480
-        projCtx ctx = pj_ctx_alloc();
-#endif*/
 	PROTECT(res = NEW_LIST(2));
 	SET_VECTOR_ELT(res, 0, NEW_LOGICAL(1));
 	SET_VECTOR_ELT(res, 1, NEW_CHARACTER(1));
 	LOGICAL_POINTER(VECTOR_ELT(res, 0))[0] = FALSE;
-//        if (LOGICAL_POINTER(init_found)[0] && PJ_VERSION == 490) {
-//            pj = pj_init_plus("+init=epsg:4326");
-//pj_set_errno(0);
-//	}
-/*#if PJ_VERSION >= 480
-        pj = pj_init_plus_ctx(ctx, CHAR(STRING_ELT(args, 0)));
-#else*/
         pj = pj_init_plus(CHAR(STRING_ELT(args, 0)));
-//#endif
 	if (!(pj)) {
 
 		SET_STRING_ELT(VECTOR_ELT(res, 1), 0, 
-/*#if PJ_VERSION >= 480
-			COPY_TO_USER_STRING(pj_strerrno(pj_ctx_get_errno(ctx)))
-#else*/
 			COPY_TO_USER_STRING(pj_strerrno(*pj_get_errno_ref()))
-//#endif
                 );
 		pj_free(pj);
-/*#if PJ_VERSION >= 480
-                pj_ctx_free(ctx);
-#endif*/
 		UNPROTECT(1);
 		return(res);
 	}
@@ -432,9 +414,6 @@ SEXP checkCRSArgs(SEXP args, SEXP init_found) {
 	
 	LOGICAL_POINTER(VECTOR_ELT(res, 0))[0] = TRUE;
 	pj_free(pj);
-/*#if PJ_VERSION >= 480
-        pj_ctx_free(ctx);
-#endif*/
 	UNPROTECT(1);
 	return(res);
 }

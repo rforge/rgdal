@@ -33,8 +33,7 @@
 }
 
 checkCRSArgs <- function(uprojargs) {
-  init_found <- isTRUE(grep("init", uprojargs) != 0L)
-  res <- .Call("checkCRSArgs", uprojargs, init_found, PACKAGE="rgdal")
+  res <- .Call("checkCRSArgs", uprojargs, PACKAGE="rgdal")
   res[[2]] <- sub("^\\s+", "", res[[2]])
   res
 }
