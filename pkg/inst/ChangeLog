@@ -1,3 +1,30 @@
+2014-03-08 15:52  rsbivand
+
+	* DESCRIPTION,
+	  R/Class-CRSx.R, src/init.c, src/projectit.cpp, src/rgdal.h:
+	  removing PROJ workaround for +init
+
+2014-02-08 14:42  rsbivand
+
+	* DESCRIPTION,
+	  src/projectit.cpp: proj init bug
+
+2014-02-08 11:40  rsbivand
+
+	* DESCRIPTION,
+	  src/projectit.cpp: proj init bug
+
+2014-02-07 08:22  rsbivand
+
+	* DESCRIPTION,
+	  R/Class-CRSx.R, man/CRS-class.Rd, src/init.c, src/projectit.cpp,
+	  src/rgdal.h: temporary fix for PROJ 490 init bug
+
+2014-02-05 21:47  rsbivand
+
+	* ChangeLog,
+	  inst/ChangeLog: tidy
+
 2014-02-05 19:54  rsbivand
 
 	* DESCRIPTION,
