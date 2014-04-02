@@ -77,14 +77,16 @@ ogrInfo <- function(dsn, layer, encoding=NULL, input_field_name_encoding=NULL,
       paste((u_with_z + 2), collapse=":")))
   if (u_with_z < 0 || u_with_z > 1) stop(
     paste("Invalid # dimensions:", (u_with_z + 2)))
+  WKB <- c("wkbPoint", "wkbLineString", "wkbPolygon", "wkbMultiPoint",
+    "wkbMultiLineString", "wkbMultiPolygon", "wkbGeometryCollection")
   if (length(u_eType) > 2L) stop(
     paste("Multiple incompatible geometries:", 
-      paste(u_eType, collapse=":")))
+      paste(WKB[u_eType], collapse=":")))
   if (length(u_eType) == 2L) {
     if (u_eType[1] == 2 && u_eType[2] == 5) u_eType = 2
     else if (u_eType[1] == 3 && u_eType[2] == 6) u_eType = 3
     else stop(paste("Multiple incompatible geometries:", 
-      paste(u_eType, collapse=":")))
+      paste(WKB[u_eType], collapse=":")))
   }
   names(ogrinfo) <- c("nrows","nitems","iteminfo","driver","extent")
   if (ogrinfo$driver == "ESRI Shapefile") {
