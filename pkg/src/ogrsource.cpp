@@ -35,11 +35,12 @@ extern "C" {
   SEXP ogrInfo(SEXP ogrsourcename, SEXP Layer){
     // return FIDs, nFields, fieldInfo
 
-    SEXP ans,vec,/*mat,*/drv, dvec;
+    SEXP ans, vec1, vec2, vec3,/*mat,*/drv, dvec;
     SEXP itemlist, itemnames, itemwidth, itemtype, itemTypeNames;
+    SEXP itemlistmaxcount;
     /*SEXP geotype;*/
 
-    int nFIDs, nFields, iField, pc=0;
+    int nFIDs, nFields, iField, *nCount, pc=0;
 
     OGRDataSource *poDS;
     OGRLayer *poLayer;
@@ -77,7 +78,7 @@ extern "C" {
     uninstallErrorHandlerAndTriggerError();
 
     // allocate a list for return values   
-    PROTECT(ans=allocVector(VECSXP,5)); pc++;
+    PROTECT(ans=allocVector(VECSXP,6)); pc++;
 
     PROTECT(drv=allocVector(STRSXP,1)); pc++;
     installErrorHandler();
@@ -86,9 +87,9 @@ extern "C" {
     SET_VECTOR_ELT(ans,3,drv);
 
     // store number of FIDs
-    PROTECT(vec=allocVector(INTSXP,1)); pc++;
-    INTEGER(vec)[0]=nFIDs;
-    SET_VECTOR_ELT(ans,0,vec);
+    PROTECT(vec1=allocVector(INTSXP,1)); pc++;
+    INTEGER(vec1)[0]=nFIDs;
+    SET_VECTOR_ELT(ans,0,vec1);
 
 
     // store other stuff....
@@ -98,9 +99,9 @@ extern "C" {
     uninstallErrorHandlerAndTriggerError();
 
     // store number of fields
-    PROTECT(vec=allocVector(INTSXP,1)); pc++;
-    INTEGER(vec)[0]=nFields;
-    SET_VECTOR_ELT(ans,1,vec);
+    PROTECT(vec2=allocVector(INTSXP,1)); pc++;
+    INTEGER(vec2)[0]=nFields;
+    SET_VECTOR_ELT(ans,1,vec2);
     installErrorHandler();
     OGREnvelope oExt;
     if (poLayer->GetExtent(&oExt, TRUE) == OGRERR_NONE) {
@@ -116,23 +117,70 @@ extern "C" {
     PROTECT(itemnames=allocVector(STRSXP,nFields)); pc++;
     PROTECT(itemtype=allocVector(INTSXP,nFields)); pc++;
     PROTECT(itemwidth=allocVector(INTSXP,nFields)); pc++;
+// try List types
+    PROTECT(itemlistmaxcount=allocVector(INTSXP,nFields)); pc++;
     PROTECT(itemTypeNames=allocVector(STRSXP,nFields)); pc++;
+    int listFieldCount=0;
 
     installErrorHandler();
     for(iField=0;iField<nFields;iField++){
       OGRFieldDefn *poField = poDefn->GetFieldDefn(iField);
       SET_STRING_ELT(itemnames,iField,mkChar(poField->GetNameRef()));
       INTEGER(itemtype)[iField]=poField->GetType();
+      if (INTEGER(itemtype)[iField] == OFTIntegerList ||
+         INTEGER(itemtype)[iField] == OFTRealList ||
+         INTEGER(itemtype)[iField] == OFTStringList) listFieldCount++;
       INTEGER(itemwidth)[iField]=poField->GetWidth();
       SET_STRING_ELT(itemTypeNames,iField,mkChar(poField->GetFieldTypeName(
         poField->GetType())));
+      INTEGER(itemlistmaxcount)[iField] = 0;
     }
     uninstallErrorHandlerAndTriggerError();
-    PROTECT(itemlist=allocVector(VECSXP,4)); pc++;
+
+    PROTECT(vec3=allocVector(INTSXP,1)); pc++;
+    INTEGER(vec3)[0]=listFieldCount;
+    SET_VECTOR_ELT(ans,5,vec3);
+    PROTECT(itemlist=allocVector(VECSXP,5)); pc++;
     SET_VECTOR_ELT(itemlist,0,itemnames);
     SET_VECTOR_ELT(itemlist,1,itemtype);
     SET_VECTOR_ELT(itemlist,2,itemwidth);
     SET_VECTOR_ELT(itemlist,3,itemTypeNames);
+// try List types
+    if (listFieldCount > 0) {
+
+        poLayer->ResetReading();
+        OGRFeature* poFeature;
+
+        nCount = (int *) R_alloc((size_t) nFields, sizeof(int));
+        for (iField=0; iField<nFields; iField++) nCount[iField] = 0;
+        installErrorHandler();
+        OGRField* psField;
+        while( (poFeature = poLayer->GetNextFeature()) != NULL ){
+            for(iField=0; iField<nFields; iField++){
+                if (INTEGER(itemtype)[iField] == OFTIntegerList) {
+                    psField = poFeature->GetRawFieldRef(iField);
+                    nCount[iField] = psField->IntegerList.nCount;
+                    if (nCount[iField] > INTEGER(itemlistmaxcount)[iField])
+                        INTEGER(itemlistmaxcount)[iField] = nCount[iField];
+                } else if (INTEGER(itemtype)[iField] == OFTRealList) {
+                    psField = poFeature->GetRawFieldRef(iField);
+                    nCount[iField] = psField->RealList.nCount;
+                    if (nCount[iField] > INTEGER(itemlistmaxcount)[iField])
+                        INTEGER(itemlistmaxcount)[iField] = nCount[iField];
+                } else if (INTEGER(itemtype)[iField] == OFTStringList) {
+                    psField = poFeature->GetRawFieldRef(iField);
+                    nCount[iField] = psField->StringList.nCount;
+                    if (nCount[iField] > INTEGER(itemlistmaxcount)[iField])
+                        INTEGER(itemlistmaxcount)[iField] = nCount[iField];
+                }
+            }
+            OGRFeature::DestroyFeature( poFeature );
+//    delete poFeature;
+        }
+        uninstallErrorHandlerAndTriggerError();
+
+    }
+    SET_VECTOR_ELT(itemlist,4,itemlistmaxcount);
     SET_VECTOR_ELT(ans,2,itemlist);
 
     UNPROTECT(pc);

@@ -88,7 +88,7 @@ ogrInfo <- function(dsn, layer, encoding=NULL, input_field_name_encoding=NULL,
     else stop(paste("Multiple incompatible geometries:", 
       paste(WKB[u_eType], collapse=":")))
   }
-  names(ogrinfo) <- c("nrows","nitems","iteminfo","driver","extent")
+  names(ogrinfo) <- c("nrows","nitems","iteminfo","driver","extent","nListFields")
   if (ogrinfo$driver == "ESRI Shapefile") {
       DSN <- dsn
       if (!file.info(DSN)$isdir) DSN <- dirname(normalizePath(dsn))
@@ -98,7 +98,7 @@ ogrInfo <- function(dsn, layer, encoding=NULL, input_field_name_encoding=NULL,
       attr(ogrinfo, "LDID") <- ldid
       close(con)
   }
-  names(ogrinfo$iteminfo) <- c("name","type","length","typeName")
+  names(ogrinfo$iteminfo) <- c("name","type","length","typeName","maxListCount")
   if (use_iconv && !is.null(encoding))
     ogrinfo$iteminfo$name <- iconv(ogrinfo$iteminfo$name, from=encoding)
   ogrinfo$eType <- u_eType
@@ -126,7 +126,10 @@ print.ogrinfo <- function(x, ...) {
   if ((nchar(x$p4s) > 1) && !is.na(x$p4s)) cat("CRS:", x$p4s, "\n")
   if (!is.null(attr(x, "LDID"))) cat("LDID:", attr(x, "LDID"), "\n")
   cat("Number of fields:", x$nitems, "\n")
-  if (x$nitems > 0) print(as.data.frame(x$iteminfo))
+  if (is.null(x$nListFields)) x$nListFields <- 0
+  if (x$nListFields > 0) cat("Number of list fields:", x$nListFields, "\n")
+  if (x$nitems > 0 && x$nListFields == 0) print(as.data.frame(x$iteminfo)[,1:4])
+  if (x$nitems > 0 && x$nListFields > 0) print(as.data.frame(x$iteminfo))
   invisible(x)
 }
 
