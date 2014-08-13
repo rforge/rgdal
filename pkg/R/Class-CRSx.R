@@ -35,5 +35,16 @@
 checkCRSArgs <- function(uprojargs) {
   res <- .Call("checkCRSArgs", uprojargs, PACKAGE="rgdal")
   res[[2]] <- sub("^\\s+", "", res[[2]])
+# fix for pj_get_def() +no_uoff/+no_off bug
+  no_uoff <- length(grep("+no_uoff", uprojargs, fixed=TRUE) > 0)
+  no_off <- length(grep("+no_off", uprojargs, fixed=TRUE) > 0)
+  if (no_uoff) {
+      if( length(grep("+no_uoff", res[[2]], fixed=TRUE)) == 0) 
+          res[[2]] <- sub("+no_defs", "+no_uoff +no_defs", res[[2]], fixed=TRUE)
+  }
+  if (no_off) {
+      if (length(grep("+no_off", res[[2]], fixed=TRUE)) == 0)
+          res[[2]] <- sub("+no_defs", "+no_off +no_defs", res[[2]], fixed=TRUE)
+  }
   res
 }

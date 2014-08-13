@@ -299,18 +299,10 @@ SEXP transform(SEXP fromargs, SEXP toargs, SEXP npts, SEXP x, SEXP y, SEXP z) {
 	if (have_z) {
             SET_VECTOR_ELT(res, 2, NEW_NUMERIC(n));
             SET_VECTOR_ELT(res, 3, NEW_CHARACTER(1));
-	    SET_STRING_ELT(VECTOR_ELT(res, 3), 0, 
-		COPY_TO_USER_STRING(pj_get_def(fromPJ, 0)));
 	    SET_VECTOR_ELT(res, 4, NEW_CHARACTER(1));
-	    SET_STRING_ELT(VECTOR_ELT(res, 4), 0, 
-		COPY_TO_USER_STRING(pj_get_def(toPJ, 0)));
         } else {
             SET_VECTOR_ELT(res, 2, NEW_CHARACTER(1));
-	    SET_STRING_ELT(VECTOR_ELT(res, 2), 0, 
-		COPY_TO_USER_STRING(pj_get_def(fromPJ, 0)));
 	    SET_VECTOR_ELT(res, 3, NEW_CHARACTER(1));
-	    SET_STRING_ELT(VECTOR_ELT(res, 3), 0, 
-		COPY_TO_USER_STRING(pj_get_def(toPJ, 0)));
         }
 
         if (ob_tran != 0) {
@@ -341,6 +333,17 @@ SEXP transform(SEXP fromargs, SEXP toargs, SEXP npts, SEXP x, SEXP y, SEXP z) {
                     pj_strerrno(*pj_get_errno_ref()));
 	      }
             }
+        }
+	if (have_z) {
+	    SET_STRING_ELT(VECTOR_ELT(res, 3), 0, 
+		COPY_TO_USER_STRING(pj_get_def(fromPJ, 0)));
+	    SET_STRING_ELT(VECTOR_ELT(res, 4), 0, 
+		COPY_TO_USER_STRING(pj_get_def(toPJ, 0)));
+        } else {
+	    SET_STRING_ELT(VECTOR_ELT(res, 2), 0, 
+		COPY_TO_USER_STRING(pj_get_def(fromPJ, 0)));
+	    SET_STRING_ELT(VECTOR_ELT(res, 3), 0, 
+		COPY_TO_USER_STRING(pj_get_def(toPJ, 0)));
         }
 
         pj_free(fromPJ);
