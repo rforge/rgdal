@@ -29,6 +29,7 @@ readOGR <- function(dsn, layer, verbose=TRUE, p4s=NULL,
         
 	ogr_info <- ogrInfo(dsn=dsn, layer=layer, encoding=encoding,
             use_iconv=use_iconv)
+        if (!ogr_info$have_features) stop("no features found")
 # 121130 RSB trap no field case (from PostGIS, Mathieu Basille)
         if (ogr_info$nitems > 0) {
           nodata_flag <- FALSE
