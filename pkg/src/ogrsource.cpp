@@ -525,7 +525,7 @@ extern "C" {
     nListFields = getAttrib(iFields, mkString("nListFields"));
 
     // reserve a list for the result
-    if (nListFields == 0) {
+    if (INTEGER_POINTER(nListFields)[0] == 0) {
         PROTECT(ans=allocVector(VECSXP,length(iFields))); pc++;
     } else {
         nflds = INTEGER_POINTER(getAttrib(iFields, mkString("nflds")))[0];
@@ -534,7 +534,7 @@ extern "C" {
     }
     // now set each element of the list
     installErrorHandler();
-    if (nListFields == 0) {
+    if (INTEGER_POINTER(nListFields)[0] == 0) {
       for(iField=0;iField<length(iFields);iField++){
         SET_VECTOR_ELT(ans,iField,ogrReadColumn(poLayer, FIDs, INTEGER(iFields)[iField]));
       }
