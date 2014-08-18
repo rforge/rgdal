@@ -5,7 +5,7 @@ readOGR <- function(dsn, layer, verbose=TRUE, p4s=NULL,
         drop_unsupported_fields=FALSE, input_field_name_encoding=NULL,
 	pointDropZ=FALSE, dropNULLGeometries=TRUE, useC=TRUE,
         disambiguateFIDs=FALSE, addCommentsToPolygons=TRUE, encoding=NULL,
-        use_iconv=NULL) {
+        use_iconv=NULL, swapAxisOrder=FALSE) {
 	if (missing(dsn)) stop("missing dsn")
 	if (nchar(dsn) == 0) stop("empty name")
 	if (missing(layer)) stop("missing layer")
@@ -28,7 +28,7 @@ readOGR <- function(dsn, layer, verbose=TRUE, p4s=NULL,
         }
         
 	ogr_info <- ogrInfo(dsn=dsn, layer=layer, encoding=encoding,
-            use_iconv=use_iconv)
+            use_iconv=use_iconv, swapAxisOrder=swapAxisOrder)
         if (!ogr_info$have_features) stop("no features found")
         if (is.null(ogr_info$nListFields)) nListFields <- 0
         else nListFields <- ogr_info$nListFields
@@ -202,12 +202,23 @@ readOGR <- function(dsn, layer, verbose=TRUE, p4s=NULL,
 
 	if (u_eType == 1) { # points
 		if (u_with_z == 0 || pointDropZ) {
+                    if (swapAxisOrder) {
+			coords <- do.call("rbind", lapply(gFeatures, 
+				function(x) c(x[[1]][[2]], x[[1]][[1]])))
+                    } else {
 			coords <- do.call("rbind", lapply(gFeatures, 
 				function(x) c(x[[1]][[1]], x[[1]][[2]])))
+                    }
 		} else {
+                    if (swapAxisOrder) {
+			coords <- do.call("rbind", lapply(gFeatures, 
+				function(x) c(x[[1]][[2]], x[[1]][[1]],
+				x[[1]][[3]])))
+                    } else {
 			coords <- do.call("rbind", lapply(gFeatures, 
 				function(x) c(x[[1]][[1]], x[[1]][[2]],
 				x[[1]][[3]])))
+                    }  
 		}
 #		data <- data.frame(dlist)
 		row.names(data) <- NULL
@@ -223,7 +234,11 @@ readOGR <- function(dsn, layer, verbose=TRUE, p4s=NULL,
 			lnlist <- vector(mode="list", length=m)
 			for (j in 1:m) {
 				jG <- iG[[j]]
-				lnlist[[j]] <- Line(cbind(jG[[1]], jG[[2]]))
+                                if (swapAxisOrder) {
+				  lnlist[[j]] <- Line(cbind(jG[[2]], jG[[1]]))
+                                } else {
+				  lnlist[[j]] <- Line(cbind(jG[[1]], jG[[2]]))
+                                }
 			}
 			lnList[[i]] <- Lines(lnlist, ID=as.character(fids[i]))
 		}
@@ -239,6 +254,11 @@ readOGR <- function(dsn, layer, verbose=TRUE, p4s=NULL,
 		plList <- vector(mode="list", length=n)
 		for (i in 1:n) {
 			iG <- gFeatures[[i]]
+                        if (swapAxisOrder) {
+                          iG <- lapply(iG, function(x) {
+                            tmp <- x[[1]]; x[[1]] <- x[[2]]; x[[2]] <- tmp
+                          })
+                        }
                         if (addCommentsToPolygons) {
                             thisPL <- Polygons(.Call("make_Polygonlist",
                                 iG, gComments[[i]], PACKAGE="rgdal"),
@@ -257,6 +277,11 @@ readOGR <- function(dsn, layer, verbose=TRUE, p4s=NULL,
 		plList <- vector(mode="list", length=n)
 		for (i in 1:n) {
 			iG <- gFeatures[[i]]
+                        if (swapAxisOrder) {
+                          iG <- lapply(iG, function(x) {
+                            tmp <- x[[1]]; x[[1]] <- x[[2]]; x[[2]] <- tmp
+                          })
+                        }
 			m <- length(iG)
 			pllist <- vector(mode="list", length=m)
 			for (j in 1:m) {

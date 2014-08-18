@@ -8,7 +8,7 @@
 
 #
 ogrInfo <- function(dsn, layer, encoding=NULL, input_field_name_encoding=NULL,
-  use_iconv=NULL) {
+  use_iconv=NULL, swapAxisOrder=FALSE) {
   if (missing(dsn)) stop("missing dsn")
   if (nchar(dsn) == 0) stop("empty name")
   if (missing(layer)) stop("missing layer")
@@ -39,6 +39,9 @@ ogrInfo <- function(dsn, layer, encoding=NULL, input_field_name_encoding=NULL,
   if (!use_iconv && !is.null(encoding)) {
     tull <- setCPLConfigOption("SHAPE_ENCODING", oSE)
   }
+
+  if (swapAxisOrder) ogrinfo[[5]] <- ogrinfo[[5]][c(2,1,4,3)]
+
   fids <- ogrFIDs(dsn=dsn, layer=layer)
   nrows_i <- attr(fids, "i")
   have_features <- nrows_i > 0

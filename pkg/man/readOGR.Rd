@@ -31,9 +31,9 @@ readOGR(dsn, layer, verbose = TRUE, p4s=NULL,
  drop_unsupported_fields=FALSE, input_field_name_encoding=NULL,
  pointDropZ=FALSE, dropNULLGeometries=TRUE,
  useC=TRUE, disambiguateFIDs=FALSE, addCommentsToPolygons=TRUE,
- encoding=NULL, use_iconv=NULL)
+ encoding=NULL, use_iconv=NULL, swapAxisOrder=FALSE)
 ogrInfo(dsn, layer, encoding=NULL, input_field_name_encoding=NULL,
- use_iconv=NULL)
+ use_iconv=NULL, swapAxisOrder=FALSE)
 ogrFIDs(dsn, layer)
 ogrDrivers()
 OGRSpatialRef(dsn, layer)
@@ -56,6 +56,7 @@ ogrListLayers(dsn)
   \item{addCommentsToPolygons}{default TRUE, may be set FALSE for legacy behaviour; used to indicate which interior rings are holes in which exterior rings in conformance with OGC SFS specifications}
   \item{encoding}{default NULL, if set to a character string, and the driver is \dQuote{ESRI Shapefile}, it is passed to the CPL Option \dQuote{SHAPE_ENCODING} immediately before reading the DBF of a shapefile. The empty character string \dQuote{} turns off OGR's encoding functionality, and may be used when GDAL is not built with iconv support.}
   \item{use_iconv}{default NULL, in which case the use of iconv is controlled by the GDAL version (TRUE < 1.9). If set to a logical value, this test will be overridden.}
+  \item{swapAxisOrder}{default FALSE, if TRUE, treat y coordinate as Easting, x as Northing, that is the opposite to the assumed order; this may be needed if some OGR read drivers do not behave as expected}
   \item{x}{ogrinfo object}
   \item{...}{other arguments to print method}
 }
