@@ -761,7 +761,7 @@ SEXP ogrListLayers (SEXP ogrSource) {
     OGRSFDriver *poDriver;
     OGRLayer *poLayer;
     int i, nlayers;
-    SEXP ans;
+    SEXP ans, debug;
     int pc=0;
 
     installErrorHandler();
@@ -773,9 +773,12 @@ SEXP ogrListLayers (SEXP ogrSource) {
       error("Cannot open data source");
     }
 
+    debug = getAttrib(ogrSource, mkString("debug"));
     installErrorHandler();
     nlayers = poDS->GetLayerCount();
     uninstallErrorHandlerAndTriggerError();
+    if (LOGICAL_POINTER(debug)[0] == TRUE)
+        Rprintf("ogrListLayers: nlayers %d\n", nlayers);
 
     PROTECT(ans=NEW_CHARACTER(nlayers+1)); pc++;
 
@@ -784,10 +787,16 @@ SEXP ogrListLayers (SEXP ogrSource) {
         poLayer = poDS->GetLayer(i);
 
         if(poLayer == NULL){
-            uninstallErrorHandlerAndTriggerError();
-            error("Cannot open layer");
+            if (LOGICAL_POINTER(debug)[0] == TRUE) {
+                SET_STRING_ELT(ans, i, mkChar(""));
+                Rprintf("ogrListLayers: NULL layer %d\n", i);
+            } else {
+                uninstallErrorHandlerAndTriggerError();
+                error("Cannot open layer");
+            }
+        } else {
+            SET_STRING_ELT(ans, i, mkChar(poLayer->GetLayerDefn()->GetName()));
         }
-        SET_STRING_ELT(ans, i, mkChar(poLayer->GetLayerDefn()->GetName()));
         uninstallErrorHandlerAndTriggerError();
     }
 
