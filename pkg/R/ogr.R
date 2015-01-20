@@ -87,14 +87,17 @@ ogrInfo <- function(dsn, layer, encoding=NULL, input_field_name_encoding=NULL,
     paste("Invalid # dimensions:", (u_with_z + 2)))
   WKB <- c("wkbPoint", "wkbLineString", "wkbPolygon", "wkbMultiPoint",
     "wkbMultiLineString", "wkbMultiPolygon", "wkbGeometryCollection")
+  t_eType <- table(eType)
   if (length(u_eType) > 2L) stop(
     paste("Multiple incompatible geometries:", 
-      paste(WKB[u_eType], collapse=":")))
+      paste(paste(WKB[as.integer(names(t_eType))], t_eType, sep=": "),
+        collapse="; ")))
   if (length(u_eType) == 2L) {
     if (u_eType[1] == 2 && u_eType[2] == 5) u_eType = 2
     else if (u_eType[1] == 3 && u_eType[2] == 6) u_eType = 3
     else stop(paste("Multiple incompatible geometries:", 
-      paste(WKB[u_eType], collapse=":")))
+      paste(paste(WKB[as.integer(names(t_eType))], t_eType, sep=": "),
+        collapse="; ")))
   }
   }
   names(ogrinfo) <- c("nrows","nitems","iteminfo","driver","extent","nListFields")
