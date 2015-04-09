@@ -16,6 +16,7 @@ extern "C" {
 
 SEXP make_Polygonlist(SEXP iG, SEXP iGc);
 SEXP make_Polygon(SEXP jG, SEXP jGc);
+SEXP rgdal_sp_linkingTo_version(void);
 
 void installErrorHandler();
 void uninstallErrorHandlerAndTriggerError();

@@ -87,6 +87,7 @@ static R_CallMethodDef CallEntries[] = {
     {"RGDAL_SetRasterColorTable", (DL_FUNC) &RGDAL_SetRasterColorTable, 4},
     {"RGDAL_SetCategoryNames", (DL_FUNC) &RGDAL_SetCategoryNames, 2},
     {"isGDALObjPtrNULL", (DL_FUNC) &isGDALObjPtrNULL, 1},
+    {"rgdal_sp_linkingTo_version", (DL_FUNC) &rgdal_sp_linkingTo_version, 0},
     {NULL, NULL, 0}
 };
 
