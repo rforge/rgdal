@@ -35,7 +35,7 @@
 checkCRSArgs <- function(uprojargs) {
 # RSB 2015-05-21
 # fix for omission of proj_defs.dat in PROJ.4 4.9.1
-  if (!get("has_proj_defs.dat", envir=.RGDAL_CACHE)) {
+  if (!get("has_proj_def.dat", envir=.RGDAL_CACHE)) {
     if (length(grep("no_defs", uprojargs)) == 0L) {
       if (length(grep("ellps", uprojargs)) == 0L) {
         tags <- sapply(strsplit(strsplit("+proj=longlat +no_defs",
