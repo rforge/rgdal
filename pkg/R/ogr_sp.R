@@ -46,7 +46,7 @@ readOGR <- function(dsn, layer, verbose=TRUE, p4s=NULL,
           nodata_flag <- FALSE
           keep <- ogr_info$iteminfo$typeName %in% c("Integer", "Real",
             "String", "Date", "Time", "DateTime", "IntegerList",
-            "RealList", "StringList")
+            "RealList", "StringList", "Integer64", "Integer64List")
           if (nListFields > 0)
               ListFields <- as.integer(ogr_info$iteminfo$maxListCount)
           if (drop_unsupported_fields) {
