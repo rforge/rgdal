@@ -329,9 +329,11 @@ extern "C" {
     case OFTInteger:
       PROTECT(ans=allocVector(INTSXP,nRows));
       break;
+#ifdef GDALV2
     case OFTInteger64:
       PROTECT(ans=allocVector(INTSXP,nRows));
       break;
+#endif
     case OFTReal:
       PROTECT(ans=allocVector(REALSXP,nRows));
       break;
@@ -380,11 +382,13 @@ extern "C" {
           INTEGER(ans)[iRow]=poFeature->GetFieldAsInteger(iField);
 	else INTEGER(ans)[iRow]=NA_INTEGER;
 	break;
+#ifdef GDALV2
       case OFTInteger64:
 	if (poFeature->IsFieldSet(iField)) 
           INTEGER(ans)[iRow]=poFeature->GetFieldAsInteger(iField);
 	else INTEGER(ans)[iRow]=NA_INTEGER;
 	break;
+#endif
       case OFTReal:
 	if (poFeature->IsFieldSet(iField)) 
           REAL(ans)[iRow]=poFeature->GetFieldAsDouble(iField);

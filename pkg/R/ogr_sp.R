@@ -44,9 +44,15 @@ readOGR <- function(dsn, layer, verbose=TRUE, p4s=NULL,
 # 121130 RSB trap no field case (from PostGIS, Mathieu Basille)
         if (ogr_info$nitems > 0) {
           nodata_flag <- FALSE
-          keep <- ogr_info$iteminfo$typeName %in% c("Integer", "Real",
-            "String", "Date", "Time", "DateTime", "IntegerList",
-            "RealList", "StringList", "Integer64", "Integer64List")
+          if (strsplit(getGDALVersionInfo(), " ")[[1]][2] < "2") {
+            keep <- ogr_info$iteminfo$typeName %in% c("Integer", "Real",
+              "String", "Date", "Time", "DateTime", "IntegerList",
+              "RealList", "StringList")
+          } else {
+            keep <- ogr_info$iteminfo$typeName %in% c("Integer", "Real",
+              "String", "Date", "Time", "DateTime", "IntegerList",
+              "RealList", "StringList", "Integer64", "Integer64List")
+          }
           if (nListFields > 0)
               ListFields <- as.integer(ogr_info$iteminfo$maxListCount)
           if (drop_unsupported_fields) {
