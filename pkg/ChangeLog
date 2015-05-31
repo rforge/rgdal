@@ -1,3 +1,14 @@
+2015-05-31 16:34  rsbivand
+
+	* DESCRIPTION, R/ogr_sp.R, configure, configure.ac,
+	  man/writeOGR.Rd, src/OGR_write.cpp, src/ogr_proj.cpp,
+	  src/ogrdrivers.cpp, src/ogrsource.cpp, src/rgdal.h: first pass at
+	  accommodating GDAL 2
+
+2015-05-21 09:11  rsbivand
+
+	* ChangeLog, inst/ChangeLog: tidy
+
 2015-05-21 09:09  rsbivand
 
 	* R/AAA.R, R/Class-CRSx.R: work-around for missing proj_def.dat
