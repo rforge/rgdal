@@ -100,7 +100,11 @@ extern "C" {
 
     PROTECT(drv=allocVector(STRSXP,1)); pc++;
     installErrorHandler();
+#ifdef GDALV2
     SET_STRING_ELT(drv, 0, mkChar(poDriver->GetDescription()));
+#else
+    SET_STRING_ELT(drv, 0, mkChar(poDriver->GetName()));
+#endif
     uninstallErrorHandlerAndTriggerError();
     SET_VECTOR_ELT(ans,3,drv);
 
