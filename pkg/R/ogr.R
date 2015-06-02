@@ -191,8 +191,16 @@ ogrFIDs <- function(dsn, layer){
 }
 
 ogrDrivers <- function() {
-  res <- .Call("ogr_GetDriverNames", PACKAGE="rgdal")
-  res <- as.data.frame(res)
+  if (strsplit(getGDALVersionInfo(), " ")[[1]][2] < "2") {
+    res <- .Call("ogr_GetDriverNames", PACKAGE="rgdal")
+    res <- as.data.frame(res, stringsAsFactors=FALSE)
+  } else {
+      res <- .Call('RGDAL_GetDriverNames', PACKAGE="rgdal")
+      if (!is.null(attr(res, "isVector"))) res$isVector <- attr(res, "isVector")
+      res <- as.data.frame(res, stringsAsFactors=FALSE)
+      res <- res[res$isVector,]
+      names(res)[3] <- "write"
+  }
   res <- res[order(res$name),]
   row.names(res) <- NULL
   res

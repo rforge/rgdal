@@ -796,7 +796,14 @@ SEXP ogrDeleteLayer (SEXP ogrSource, SEXP Layer, SEXP ogrDriver) {
 
     installErrorHandler();
 #ifdef GDALV2
-    poDS=(GDALDataset*) GDALOpenEx(CHAR(STRING_ELT(ogrSource, 0)), GDAL_OF_VECTOR, (char **) (CHAR(STRING_ELT(ogrDriver, 0)), NULL), NULL, NULL);
+    poDS=(GDALDataset*) GDALOpenEx(CHAR(STRING_ELT(ogrSource, 0)), GDAL_OF_VECTOR, NULL, NULL, NULL);
+//Rprintf("ogrDeleteLayer: %s %s\n", CHAR(STRING_ELT(ogrDriver, 0)), poDS->GetDriver()->GetDescription());
+    if (!EQUAL(CHAR(STRING_ELT(ogrDriver, 0)),
+        poDS->GetDriver()->GetDescription())) {
+//Rprintf("ogrDeleteLayer: in condition\n");
+        GDALClose( poDS );
+        poDS = NULL;
+    }
 #else
     poDS = poDriver->Open(CHAR(STRING_ELT(ogrSource, 0)), 
 	TRUE);
@@ -810,17 +817,21 @@ SEXP ogrDeleteLayer (SEXP ogrSource, SEXP Layer, SEXP ogrDriver) {
     for(iLayer = 0; iLayer < poDS->GetLayerCount(); iLayer++) {
         poLayer = poDS->GetLayer(iLayer);
 /* poLayer->GetLayerDefn()->GetName() is poLayer->GetName() from 1.8 */
+#ifdef GDALV2
+        if (poLayer != NULL && EQUAL(poLayer->GetName(),
+#else
         if (poLayer != NULL && EQUAL(poLayer->GetLayerDefn()->GetName(),
+#endif
             CHAR(STRING_ELT(Layer, 0)))) {
             flag = 1;
             break;
         }
     }
     uninstallErrorHandlerAndTriggerError();
-
     installErrorHandler();
     if (flag != 0) {
-        if (poDS->DeleteLayer(iLayer) != OGRERR_NONE) {
+        int res = poDS->DeleteLayer(iLayer);
+        if (res != OGRERR_NONE) {
 #ifdef GDALV2
             GDALClose( poDS );
 #else
