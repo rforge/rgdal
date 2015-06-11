@@ -38,6 +38,9 @@ extern "C" {
     SEXP ans, vec1, vec2, vec3,/*mat,*/drv, dvec;
     SEXP itemlist, itemnames, itemwidth, itemtype, itemTypeNames;
     SEXP itemlistmaxcount;
+#ifdef GDALV2
+    SEXP dFIDs;
+#endif
     /*SEXP geotype;*/
 
     int nFIDs, nFields, iField, *nCount, pc=0;
@@ -91,10 +94,6 @@ extern "C" {
       error("Cannot open layer");
     }
 
-    installErrorHandler();
-    nFIDs   = poLayer->GetFeatureCount();
-    uninstallErrorHandlerAndTriggerError();
-
     // allocate a list for return values   
     PROTECT(ans=allocVector(VECSXP,6)); pc++;
 
@@ -108,10 +107,30 @@ extern "C" {
     uninstallErrorHandlerAndTriggerError();
     SET_VECTOR_ELT(ans,3,drv);
 
-    // store number of FIDs
     PROTECT(vec1=allocVector(INTSXP,1)); pc++;
+    installErrorHandler();
+#ifdef GDALV2
+    GIntBig nFIDs64 = poLayer->GetFeatureCount();
+    nFIDs = (nFIDs64 > INT_MAX) ? INT_MAX : 
+        (nFIDs64 < INT_MIN) ? INT_MIN : (int) nFIDs64;
+    if ((GIntBig) nFIDs != nFIDs64){
+        warning("ogrInfo: feature count overflow");
+        INTEGER(vec1)[0]=NA_INTEGER;      
+        PROTECT(dFIDs=NEW_NUMERIC(1)); pc++;
+        NUMERIC_POINTER(dFIDs)[0] = (double) nFIDs64;
+        setAttrib(vec1, install("dFIDs"), dFIDs);
+    } else {
+    // store number of FIDs
+        INTEGER(vec1)[0]=nFIDs;
+    }
+#else
+    nFIDs   = poLayer->GetFeatureCount();
+    // store number of FIDs
     INTEGER(vec1)[0]=nFIDs;
+#endif
+    uninstallErrorHandlerAndTriggerError();
     SET_VECTOR_ELT(ans,0,vec1);
+
 
 
     // store other stuff....
@@ -260,7 +279,17 @@ extern "C" {
     error("Cannot open layer");
   }
   installErrorHandler();
+#ifdef GDALV2
+  GIntBig nFIDs64 = poLayer->GetFeatureCount();
+  nFeatures = (nFIDs64 > INT_MAX) ? INT_MAX : 
+        (nFIDs64 < INT_MIN) ? INT_MIN : (int) nFIDs64;
+  if ((GIntBig) nFeatures != nFIDs64){
+        uninstallErrorHandlerAndTriggerError();
+        error("ogrFIDs: feature count overflow");
+  }
+#else
   nFeatures=poLayer->GetFeatureCount();
+#endif
   uninstallErrorHandlerAndTriggerError();
 
   PROTECT(fids=allocVector(INTSXP,nFeatures)); pc++;
@@ -310,7 +339,7 @@ extern "C" {
 #endif
 // extern "C" {
 
-  SEXP ogrReadColumn(OGRLayer *poLayer, SEXP FIDs, int iField){
+  SEXP ogrReadColumn(OGRLayer *poLayer, SEXP FIDs, int iField, int int64){
     // read feature data and return something according to the type
     OGRFeatureDefn *poDefn;
     OGRFieldDefn *poField;
@@ -335,7 +364,11 @@ extern "C" {
       break;
 #ifdef GDALV2
     case OFTInteger64:
-      PROTECT(ans=allocVector(INTSXP,nRows));
+      if (int64 ==3) {
+          PROTECT(ans=allocVector(STRSXP,nRows));
+      } else {
+         PROTECT(ans=allocVector(INTSXP,nRows));
+      }
       break;
 #endif
     case OFTReal:
@@ -388,9 +421,26 @@ extern "C" {
 	break;
 #ifdef GDALV2
       case OFTInteger64:
-	if (poFeature->IsFieldSet(iField)) 
-          INTEGER(ans)[iRow]=poFeature->GetFieldAsInteger(iField);
-	else INTEGER(ans)[iRow]=NA_INTEGER;
+	if (poFeature->IsFieldSet(iField)) {
+            if (int64 == 3) {
+                SET_STRING_ELT(ans, iRow, 
+                    mkChar(poFeature->GetFieldAsString(iField)));
+            } else {
+                GIntBig nVal64 = poFeature->GetFieldAsInteger64(iField);
+                int nVal = (nVal64 > INT_MAX) ? INT_MAX : 
+                    (nVal64 < INT_MIN) ? INT_MIN : (int) nVal64;
+                INTEGER(ans)[iRow]=nVal;
+                if (((GIntBig)nVal != nVal64) && int64 == 2) {
+                    warning("Integer64 value clamped: feature %d", iRow);
+                }
+            }
+        } else {
+            if (int64 == 3) {
+                SET_STRING_ELT(ans, iRow, NA_STRING);
+            } else {
+                INTEGER(ans)[iRow]=NA_INTEGER;
+            }
+        }
 	break;
 #endif
       case OFTReal:
@@ -451,7 +501,7 @@ extern "C" {
 #endif
 // extern "C" {
 
-  SEXP ogrReadListColumn(OGRLayer *poLayer, SEXP FIDs, int iField, int k){
+  SEXP ogrReadListColumn(OGRLayer *poLayer, SEXP FIDs, int iField, int k, int int64){
     // read feature data and return something according to the type
     OGRFeatureDefn *poDefn;
     OGRFieldDefn *poField;
@@ -474,6 +524,15 @@ extern "C" {
     case OFTIntegerList:
       PROTECT(ans=allocVector(INTSXP,nRows));
       break;
+#ifdef GDALV2
+    case OFTInteger64List:
+      if (int64 == 3) {
+          PROTECT(ans=allocVector(STRSXP,nRows));
+      } else {
+          PROTECT(ans=allocVector(INTSXP,nRows));
+      }
+      break;
+#endif
     case OFTRealList:
       PROTECT(ans=allocVector(REALSXP,nRows));
       break;
@@ -508,6 +567,34 @@ extern "C" {
             INTEGER(ans)[iRow] = psField->IntegerList.paList[k];
 	  else INTEGER(ans)[iRow]=NA_INTEGER;
 	  break;
+#ifdef GDALV2
+        case OFTInteger64List:
+          nlist = psField->Integer64List.nCount;
+	  if (k < nlist) {
+            if (int64 == 3) {
+                GIntBig nVal64 = psField->Integer64List.paList[k];
+                char szItem[32];
+                snprintf(szItem, sizeof(szItem), CPL_FRMT_GIB,
+                      psField->Integer64List.paList[k]);
+                SET_STRING_ELT(ans, iRow, mkChar(szItem));
+            } else {
+                GIntBig nVal64 = psField->Integer64List.paList[k];
+                int nVal = (nVal64 > INT_MAX) ? INT_MAX : 
+                    (nVal64 < INT_MIN) ? INT_MIN : (int) nVal64;
+                if (((GIntBig)nVal != nVal64) && int64 == 2) {
+                    warning("Integer64 value clamped: feature %d", iRow);
+                }
+                INTEGER(ans)[iRow]=nVal;
+            }
+          } else {
+            if (int64 == 3) {
+                SET_STRING_ELT(ans, iRow, NA_STRING);
+            } else {
+                INTEGER(ans)[iRow]=NA_INTEGER;
+            }
+          }
+	  break;
+#endif
 
         case OFTRealList:
           nlist = psField->RealList.nCount;
@@ -551,7 +638,7 @@ extern "C" {
   SEXP ogrDataFrame(SEXP ogrSource, SEXP Layer, SEXP FIDs, SEXP iFields){
     // query an OGR data source and return a list
     SEXP ans;
-    SEXP nListFields, ListFields;
+    SEXP nListFields, ListFields, int64;
     OGRLayer *poLayer;
 #ifdef GDALV2
     GDALDataset *poDS;
@@ -585,6 +672,7 @@ extern "C" {
       error("Cannot open layer");
     }
 
+    int64 = getAttrib(iFields, mkString("int64"));
     nListFields = getAttrib(iFields, mkString("nListFields"));
 
     // reserve a list for the result
@@ -599,20 +687,20 @@ extern "C" {
     installErrorHandler();
     if (INTEGER_POINTER(nListFields)[0] == 0) {
       for(iField=0;iField<length(iFields);iField++){
-        SET_VECTOR_ELT(ans,iField,ogrReadColumn(poLayer, FIDs, INTEGER(iFields)[iField]));
+        SET_VECTOR_ELT(ans,iField,ogrReadColumn(poLayer, FIDs, INTEGER(iFields)[iField], INTEGER(int64)[0]));
       }
     } else {
         j=0;
         for(iField=0;iField<length(iFields);iField++){
             if (INTEGER_POINTER(ListFields)[iField] == 0) {
                 SET_VECTOR_ELT(ans, j, 
-                    ogrReadColumn(poLayer, FIDs, INTEGER(iFields)[iField]));
+                    ogrReadColumn(poLayer, FIDs, INTEGER(iFields)[iField], INTEGER(int64)[0]));
                 j++;
             } else {
                 for (k=0; k < INTEGER_POINTER(ListFields)[iField]; k++) {
                     SET_VECTOR_ELT(ans, j, 
                         ogrReadListColumn(poLayer, FIDs,
-                        INTEGER(iFields)[iField], k));
+                        INTEGER(iFields)[iField], k, INTEGER(int64)[0]));
                     j++;
                 }
             }

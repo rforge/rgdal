@@ -296,10 +296,12 @@ SEXP OGR_write(SEXP inp)
             if (z > 2) pt.setZ( NUMERIC_POINTER(crds)[i+(2*nobs)] );
 
             poFeature->SetGeometry( &pt ); 
-            if(poFeature->SetFID((long) INTEGER_POINTER(VECTOR_ELT(inp, 12))[i])  != OGRERR_NONE ) {
 #ifdef GDALV2
+            if(poFeature->SetFID((GIntBig) INTEGER_POINTER(VECTOR_ELT(inp, 12))[i])  != OGRERR_NONE ) {
+               installErrorHandler();
                 GDALClose( poDS );
 #else
+            if(poFeature->SetFID((long) INTEGER_POINTER(VECTOR_ELT(inp, 12))[i])  != OGRERR_NONE ) {
                 OGRDataSource::DestroyDataSource( poDS );
 #endif
                 uninstallErrorHandlerAndTriggerError();
@@ -365,11 +367,13 @@ SEXP OGR_write(SEXP inp)
                 error( "Failed to set geometry" );
             } 
 
-            if(poFeature->SetFID((long) INTEGER_POINTER(VECTOR_ELT(inp, 12))[i])  != OGRERR_NONE ) {
-               installErrorHandler();
 #ifdef GDALV2
+            if(poFeature->SetFID((GIntBig) INTEGER_POINTER(VECTOR_ELT(inp, 12))[i])  != OGRERR_NONE ) {
+               installErrorHandler();
                 GDALClose( poDS );
 #else
+            if(poFeature->SetFID((long) INTEGER_POINTER(VECTOR_ELT(inp, 12))[i])  != OGRERR_NONE ) {
+               installErrorHandler();
                 OGRDataSource::DestroyDataSource( poDS );
 #endif
                 uninstallErrorHandlerAndTriggerError();
@@ -457,11 +461,13 @@ SEXP OGR_write(SEXP inp)
                 error( "Failed to set geometry" );
             } 
 
-            if(poFeature->SetFID((long) INTEGER_POINTER(VECTOR_ELT(inp, 12))[i])  != OGRERR_NONE ) {
-               installErrorHandler();
 #ifdef GDALV2
+            if(poFeature->SetFID((GIntBig) INTEGER_POINTER(VECTOR_ELT(inp, 12))[i])  != OGRERR_NONE ) {
+               installErrorHandler();
                 GDALClose( poDS );
 #else
+            if(poFeature->SetFID((long) INTEGER_POINTER(VECTOR_ELT(inp, 12))[i])  != OGRERR_NONE ) {
+               installErrorHandler();
                 OGRDataSource::DestroyDataSource( poDS );
 #endif
                 uninstallErrorHandlerAndTriggerError();
@@ -532,11 +538,13 @@ SEXP OGR_write(SEXP inp)
                 error( "Failed to set geometry" );
             } 
 
-            if(poFeature->SetFID((long) INTEGER_POINTER(VECTOR_ELT(inp, 12))[i])  != OGRERR_NONE ) {
-               installErrorHandler();
 #ifdef GDALV2
+            if(poFeature->SetFID((GIntBig) INTEGER_POINTER(VECTOR_ELT(inp, 12))[i])  != OGRERR_NONE ) {
+               installErrorHandler();
                 GDALClose( poDS );
 #else
+            if(poFeature->SetFID((long) INTEGER_POINTER(VECTOR_ELT(inp, 12))[i])  != OGRERR_NONE ) {
+               installErrorHandler();
                 OGRDataSource::DestroyDataSource( poDS );
 #endif
                 uninstallErrorHandlerAndTriggerError();
@@ -617,11 +625,14 @@ SEXP OGR_write(SEXP inp)
                error( "Failed to set geometry" );
             } 
 
-            if(poFeature->SetFID((long) INTEGER_POINTER(VECTOR_ELT(inp, 12))[i])  != OGRERR_NONE ) {
-               installErrorHandler();
+// FIXME
 #ifdef GDALV2
+            if(poFeature->SetFID((GIntBig) INTEGER_POINTER(VECTOR_ELT(inp, 12))[i])  != OGRERR_NONE ) {
+               installErrorHandler();
                 GDALClose( poDS );
 #else
+            if(poFeature->SetFID((long) INTEGER_POINTER(VECTOR_ELT(inp, 12))[i])  != OGRERR_NONE ) {
+               installErrorHandler();
                 OGRDataSource::DestroyDataSource( poDS );
 #endif
                uninstallErrorHandlerAndTriggerError();

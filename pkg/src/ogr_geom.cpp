@@ -105,7 +105,17 @@ SEXP R_OGR_CAPI_features(SEXP dsn, SEXP layer, SEXP comments)
 /* was projection */
 
     installErrorHandler();
+#ifdef GDALV2
+  GIntBig nFIDs64 = OGR_L_GetFeatureCount(Ogr_layer, 1);
+  nf = (nFIDs64 > INT_MAX) ? INT_MAX : 
+        (nFIDs64 < INT_MIN) ? INT_MIN : (int) nFIDs64;
+  if ((GIntBig) nf != nFIDs64){
+        uninstallErrorHandlerAndTriggerError();
+        error("R_OGR_CAPI_features: feature count overflow");
+  }
+#else
     nf = OGR_L_GetFeatureCount(Ogr_layer, 1);
+#endif
     uninstallErrorHandlerAndTriggerError();
 
     SET_VECTOR_ELT(ans, 3, NEW_INTEGER(nf));
@@ -400,7 +410,17 @@ SEXP R_OGR_types(SEXP dsn, SEXP layer)
 /* was projection */
 
     installErrorHandler();
+#ifdef GDALV2
+  GIntBig nFIDs64 = OGR_L_GetFeatureCount(Ogr_layer, 1);
+  nf = (nFIDs64 > INT_MAX) ? INT_MAX : 
+        (nFIDs64 < INT_MIN) ? INT_MIN : (int) nFIDs64;
+  if ((GIntBig) nf != nFIDs64){
+        uninstallErrorHandlerAndTriggerError();
+        error("R_OGR_types: feature count overflow");
+  }
+#else
     nf = OGR_L_GetFeatureCount(Ogr_layer, 1);
+#endif
     uninstallErrorHandlerAndTriggerError();
 
     SET_VECTOR_ELT(ans, 3, NEW_INTEGER(nf));

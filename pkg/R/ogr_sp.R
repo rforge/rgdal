@@ -5,11 +5,19 @@ readOGR <- function(dsn, layer, verbose=TRUE, p4s=NULL,
         drop_unsupported_fields=FALSE, input_field_name_encoding=NULL,
 	pointDropZ=FALSE, dropNULLGeometries=TRUE, useC=TRUE,
         disambiguateFIDs=FALSE, addCommentsToPolygons=TRUE, encoding=NULL,
-        use_iconv=NULL, swapAxisOrder=FALSE, require_geomType=NULL) {
+        use_iconv=NULL, swapAxisOrder=FALSE, require_geomType=NULL,
+        integer64="allow.loss") {
 	if (missing(dsn)) stop("missing dsn")
 	if (nchar(dsn) == 0) stop("empty name")
 	if (missing(layer)) stop("missing layer")
 	if (nchar(layer) == 0) stop("empty name")
+        integer64 <- match.arg(integer64,
+          c("allow.loss", "warn.loss", "no.loss"))
+        
+        int64 <- switch(integer64,
+          "allow.loss"=1L,
+          "warn.loss"=2L, 
+          "no.loss"=3L)
 # adding argument for SHAPE_ENCODING environment variable 121124
         if (is.null(use_iconv))
             use_iconv <- ifelse(as.integer(getGDALVersionInfo("VERSION_NUM"))
@@ -138,6 +146,7 @@ readOGR <- function(dsn, layer, verbose=TRUE, p4s=NULL,
                 fldnms <- fldnms1
             }
             attr(iflds, "nflds") <- as.integer(nflds)
+            attr(iflds, "int64") <- as.integer(int64)
             dlist <- .Call("ogrDataFrame", as.character(dsn),
                 as.character(layer), as.integer(fids), iflds, PACKAGE="rgdal")
 	    names(dlist) <- make.names(fldnms ,unique=TRUE)

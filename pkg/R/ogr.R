@@ -49,6 +49,13 @@ ogrInfo <- function(dsn, layer, encoding=NULL, input_field_name_encoding=NULL,
 
   if (swapAxisOrder) ogrinfo[[5]] <- ogrinfo[[5]][c(2,1,4,3)]
 
+  u_eType <- u_with_z <- null_geometries <- NULL
+  deleted_geometries <- NULL
+  retain <- NULL
+  have_features <- NULL
+
+  if (!is.na(ogrinfo[[1]])) {
+
   fids <- ogrFIDs(dsn=dsn, layer=layer)
   nrows_i <- attr(fids, "i")
   have_features <- nrows_i > 0
@@ -64,8 +71,6 @@ ogrInfo <- function(dsn, layer, encoding=NULL, input_field_name_encoding=NULL,
      retain <- NULL
   }
 #  attributes(fids) <- NULL
-  u_eType <- u_with_z <- null_geometries <- NULL
-
   if (have_features) {
     eTypes <- .Call("R_OGR_types",as.character(dsn), as.character(layer),
       PACKAGE = "rgdal")
@@ -119,6 +124,10 @@ ogrInfo <- function(dsn, layer, encoding=NULL, input_field_name_encoding=NULL,
         " of ", length(keepGeoms), " features\n",
         "    note that extent applies to all features")
     }
+  }
+  } else {
+    ogrinfo[[1]] <- attr(ogrinfo[[1]], "dFIDs")
+    warning("ogrInfo: feature count overflow")
   }
   names(ogrinfo) <- c("nrows", "nitems", "iteminfo", "driver", "extent",
     "nListFields")
