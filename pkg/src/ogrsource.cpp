@@ -59,6 +59,10 @@ extern "C" {
     installErrorHandler();
 #ifdef GDALV2
     poDS=(GDALDataset*) GDALOpenEx(CHAR(STRING_ELT(ogrsourcename, 0)), GDAL_OF_VECTOR, NULL, NULL, NULL);
+    if(poDS==NULL){
+      uninstallErrorHandlerAndTriggerError();
+      error("Cannot open data source");
+    }
     poDriver = poDS->GetDriver();
 #else
     poDS=OGRSFDriverRegistrar::Open(CHAR(STRING_ELT(ogrsourcename, 0)), 
@@ -885,6 +889,9 @@ SEXP ogrDeleteLayer (SEXP ogrSource, SEXP Layer, SEXP ogrDriver) {
     installErrorHandler();
 #ifdef GDALV2
     poDS=(GDALDataset*) GDALOpenEx(CHAR(STRING_ELT(ogrSource, 0)), GDAL_OF_VECTOR, NULL, NULL, NULL);
+    if(poDS==NULL){
+      error("Cannot open data source");
+    }
 //Rprintf("ogrDeleteLayer: %s %s\n", CHAR(STRING_ELT(ogrDriver, 0)), poDS->GetDriver()->GetDescription());
     if (!EQUAL(CHAR(STRING_ELT(ogrDriver, 0)),
         poDS->GetDriver()->GetDescription())) {
@@ -994,6 +1001,10 @@ SEXP ogrListLayers (SEXP ogrSource) {
     installErrorHandler();
 #ifdef GDALV2
     poDS=(GDALDataset*) GDALOpenEx(CHAR(STRING_ELT(ogrSource, 0)), GDAL_OF_VECTOR, NULL, NULL, NULL);
+    if(poDS==NULL){
+      uninstallErrorHandlerAndTriggerError();
+      error("Cannot open data source");
+    }
     poDriver = poDS->GetDriver();
 #else
     poDS=OGRSFDriverRegistrar::Open(CHAR(STRING_ELT(ogrSource, 0)), 

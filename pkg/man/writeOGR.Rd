@@ -48,7 +48,7 @@ cities <- readOGR(system.file("vectors", package = "rgdal")[1], "cities")
 is.na(cities$POPULATION) <- cities$POPULATION == -99
 summary(cities$POPULATION)
 td <- tempdir()
-if(nchar(Sys.getenv("OSGEO4W_ROOT") > 0)) {
+if(nchar(Sys.getenv("OSGEO4W_ROOT")) > 0) {
     OLDPWD <- getwd()
     setwd(td)
     td <- "."
@@ -99,7 +99,7 @@ writeOGR(scot_BNG, td, "scot_BNG", driver="MapInfo File",
 list.files(td)
 scot_BNG3 <- readOGR(paste(td, "scot_BNG.mif", sep="/"), "scot_BNG")
 summary(scot_BNG3)
-if(nchar(Sys.getenv("OSGEO4W_ROOT") > 0)) {
+if(nchar(Sys.getenv("OSGEO4W_ROOT")) > 0) {
     setwd(OLDPWD)
 }
 }

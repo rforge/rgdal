@@ -141,6 +141,18 @@ try(ogrInfo(dsn, "PacoursIKA2"))
 ogrInfo(dsn, "PacoursIKA2", require_geomType="wkbPoint")
 plot(readOGR(dsn, "PacoursIKA2", require_geomType="wkbLineString"), col="red")
 plot(readOGR(dsn, "PacoursIKA2", require_geomType="wkbPoint"), add=TRUE)
+odir <- getwd()
+setwd(system.file("vectors", package = "rgdal")[1])
+ow <- options("warn")$warn
+options("warn"=1)
+ogrInfo("test64.vrt", "test64")
+str(readOGR("test64.vrt", "test64", verbose=FALSE, integer64="allow.loss")$val)
+str(readOGR("test64.vrt", "test64", verbose=FALSE, integer64="warn.loss")$val)
+str(readOGR("test64.vrt", "test64", verbose=FALSE, integer64="no.loss")$val)
+str(readOGR("test64.vrt", "test64", verbose=FALSE, stringsAsFactors=FALSE,
+ integer64="no.loss")$val)
+options("warn"=ow)
+setwd(odir)
 }
 \keyword{spatial}
 

@@ -53,6 +53,8 @@ ogrInfo <- function(dsn, layer, encoding=NULL, input_field_name_encoding=NULL,
   deleted_geometries <- NULL
   retain <- NULL
   have_features <- NULL
+  all_NULL <- FALSE
+  keepGeoms <- NULL
 
   if (!is.na(ogrinfo[[1]])) {
 
@@ -85,29 +87,31 @@ ogrInfo <- function(dsn, layer, encoding=NULL, input_field_name_encoding=NULL,
     }
     null_geometries <- NULL
     if (any(isNULL)) {
+      all_NULL <- (sum(isNULL) == length(eType))
       eType <- eType[!isNULL]
       with_z <- with_z[!isNULL]
       null_geometries <- paste("Null geometry IDs:", 
         paste(which(isNULL), collapse=", "))
     }        
-    eType[eType == 5L] <- 2L
-    eType[eType == 6L] <- 3L
+    if (!all_NULL) {
+      eType[eType == 5L] <- 2L
+      eType[eType == 6L] <- 3L
 
-    u_eType <- unique(sort(eType))
-    u_with_z <- unique(sort(with_z))
-    if (length(u_with_z) != 1L) stop(
-      paste("Multiple # dimensions:", 
-        paste((u_with_z + 2), collapse=":")))
-    if (u_with_z < 0 || u_with_z > 1) stop(
-      paste("Invalid # dimensions:", (u_with_z + 2)))
+      u_eType <- unique(sort(eType))
+      u_with_z <- unique(sort(with_z))
+      if (length(u_with_z) != 1L) stop(
+        paste("Multiple # dimensions:", 
+          paste((u_with_z + 2), collapse=":")))
+      if (u_with_z < 0 || u_with_z > 1) stop(
+        paste("Invalid # dimensions:", (u_with_z + 2)))
 
-    t_eType <- table(eType)
-    if (is.null(require_geomType)) {
-      keepGeoms <- NULL
-      if (length(u_eType) > 1L) stop(
-        paste("Multiple incompatible geometries:", 
-          paste(paste(WKB[as.integer(names(t_eType))], t_eType, sep=": "),
-          collapse="; ")))
+      t_eType <- table(eType)
+      if (is.null(require_geomType)) {
+        keepGeoms <- NULL
+        if (length(u_eType) > 1L) stop(
+          paste("Multiple incompatible geometries:", 
+            paste(paste(WKB[as.integer(names(t_eType))], t_eType, sep=": "),
+            collapse="; ")))
 #  if (length(u_eType) == 2L) {
 #    if (u_eType[1] == 2 && u_eType[2] == 5) u_eType = 2
 #    else if (u_eType[1] == 3 && u_eType[2] == 6) u_eType = 3
@@ -115,14 +119,18 @@ ogrInfo <- function(dsn, layer, encoding=NULL, input_field_name_encoding=NULL,
 #      paste(paste(WKB[as.integer(names(t_eType))], t_eType, sep=": "),
 #        collapse="; ")))
 #   }
+      } else {
+        if (!require_geomType %in% WKB[as.integer(names(t_eType))])
+          stop(require_geomType, "not in", WKB[as.integer(names(t_eType))])
+        u_eType <- match(require_geomType, WKB)
+        keepGeoms <- WKB[eType] == require_geomType
+        message("NOTE: keeping only ", sum(keepGeoms), " ", require_geomType,
+          " of ", length(keepGeoms), " features\n",
+          "    note that extent applies to all features")
+      }
     } else {
-      if (!require_geomType %in% WKB[as.integer(names(t_eType))])
-        stop(require_geomType, "not in", WKB[as.integer(names(t_eType))])
-      u_eType <- match(require_geomType, WKB)
-      keepGeoms <- WKB[eType] == require_geomType
-      message("NOTE: keeping only ", sum(keepGeoms), " ", require_geomType,
-        " of ", length(keepGeoms), " features\n",
-        "    note that extent applies to all features")
+      have_features <- FALSE
+      warning("ogrInfo: all features NULL")
     }
   }
   } else {
@@ -134,11 +142,16 @@ ogrInfo <- function(dsn, layer, encoding=NULL, input_field_name_encoding=NULL,
   if (ogrinfo$driver == "ESRI Shapefile") {
       DSN <- dsn
       if (!file.info(DSN)$isdir) DSN <- dirname(normalizePath(dsn))
-      con <- file(paste(DSN, .Platform$file.sep, layer, ".dbf", sep=""), "rb")
-      vr <- readBin(con, "raw", n=32L)
-      ldid <- as.integer(vr[30])
-      attr(ogrinfo, "LDID") <- ldid
-      close(con)
+      DBF_fn <- paste(DSN, .Platform$file.sep, layer, ".dbf", sep = "")
+      if (file.exists(DBF_fn)) {
+        con <- file(DBF_fn, "rb")
+        vr <- readBin(con, "raw", n=32L)
+        ldid <- as.integer(vr[30])
+        attr(ogrinfo, "LDID") <- ldid
+        close(con)
+      } else {
+        warning("ogrInfo: ", DBF_fn, " not found", sep="")
+      }
   }
   names(ogrinfo$iteminfo) <- c("name","type","length","typeName","maxListCount")
   if (use_iconv && !is.null(encoding))
