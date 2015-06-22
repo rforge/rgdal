@@ -53,6 +53,7 @@ extern "C" {
     OGRSFDriver *poDriver;
 #endif
     OGRLayer *poLayer;
+    OGRFeature *poFeature;
     OGRFeatureDefn *poDefn;
   /*  OGRGeometry *poGeom;*/
 
@@ -133,6 +134,29 @@ extern "C" {
     INTEGER(vec1)[0]=nFIDs;
 #endif
     uninstallErrorHandlerAndTriggerError();
+
+    if (nFIDs == -1) {
+      int i=0;
+      installErrorHandler();
+      while( ((poFeature = poLayer->GetNextFeature()) != NULL) && i <= INT_MAX){
+        i++;
+        OGRFeature::DestroyFeature( poFeature );
+//    delete poFeature;
+      }
+      uninstallErrorHandlerAndTriggerError();
+      if (i == INT_MAX) {
+        error("ogrInfo: undeclared feature count overflow");
+      } else {
+        nFIDs = i;
+        warning("ogrInfo: feature count not given; %d counted", nFIDs);
+      }
+      installErrorHandler();
+      poLayer->ResetReading();
+      uninstallErrorHandlerAndTriggerError();
+
+      INTEGER(vec1)[0]=nFIDs;
+    }
+
     SET_VECTOR_ELT(ans,0,vec1);
 
 
@@ -295,6 +319,25 @@ extern "C" {
   nFeatures=poLayer->GetFeatureCount();
 #endif
   uninstallErrorHandlerAndTriggerError();
+
+  if (nFeatures == -1) {
+    i=0;
+    installErrorHandler();
+    while( ((poFeature = poLayer->GetNextFeature()) != NULL) && i <= INT_MAX){
+      i++;
+      OGRFeature::DestroyFeature( poFeature );
+//    delete poFeature;
+    }
+    uninstallErrorHandlerAndTriggerError();
+    installErrorHandler();
+    poLayer->ResetReading();
+    uninstallErrorHandlerAndTriggerError();
+    if (i == INT_MAX) {
+      error("ogrFIDs: feature count overflow");
+    } else {
+      nFeatures = i;
+    }
+  }
 
   PROTECT(fids=allocVector(INTSXP,nFeatures)); pc++;
   PROTECT(nf = NEW_INTEGER(1)); pc++;

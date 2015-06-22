@@ -174,7 +174,7 @@ ogrInfo <- function(dsn, layer, encoding=NULL, input_field_name_encoding=NULL,
 print.ogrinfo <- function(x, ...) {
   cat("Source: \"", x$dsn, '\", layer: \"', x$layer, "\"", '\n', sep='')
   cat("Driver:", x$driver)
-  if (x$have_features) cat(" number of rows", x$nrows, "\n")
+  if (x$have_features) cat("; number of rows:", x$nrows, "\n")
   WKB <- c("wkbPoint", "wkbLineString", "wkbPolygon", "wkbMultiPoint",
     "wkbMultiLineString", "wkbMultiPolygon", "wkbGeometryCollection")
   if (!is.null(attr(x, "require_geomType"))) {
