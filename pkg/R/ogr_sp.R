@@ -117,9 +117,17 @@ readOGR <- function(dsn, layer, verbose=TRUE, p4s=NULL,
                 cat("\n")
 	}
 # suggestion by Paul Hiemstra 070817
-	if (is.null(p4s)) 
-	    p4s <- .Call("ogrP4S", as.character(dsn), as.character(layer), 
+	prj <- .Call("ogrP4S", as.character(dsn), as.character(layer), 
 		PACKAGE="rgdal")
+	if (!is.null(p4s)) {
+            if (!is.na(prj)) {
+                warning("p4s= argument given as: ", p4s, "\n and read as: ", prj, 
+                "\n read string overridden by given p4s= argument value")
+            }
+        } else {
+            p4s <- prj
+        }
+
 	if (!is.na(p4s) && nchar(p4s) == 0) p4s <- as.character(NA)
 
 # adding argument for SHAPE_ENCODING environment variable 121124
