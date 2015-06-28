@@ -3,6 +3,10 @@ useDynLib(rgdal)
 
 import(methods)
 import(sp)
+importFrom(grDevices, gray, rgb, hsv, col2rgb)
+importFrom(graphics, par, image.default, text)
+importFrom(stats, sd, offset, na.omit)
+importFrom(utils, packageVersion)
 
 #exportMethods(spTransform)
 exportMethods(closeDataset)
