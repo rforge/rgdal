@@ -663,7 +663,7 @@ SEXP OGR_write(SEXP inp)
 
     installErrorHandler();
 #ifdef GDALV2
-    GDALClose( poDS );
+    GDALClose( (GDALDatasetH) poDS );
 #else
     OGRDataSource::DestroyDataSource( poDS );
 #endif
