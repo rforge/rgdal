@@ -55,7 +55,9 @@ checkCRSArgs <- function(uprojargs) {
 }
 
 proj_def_bug_fix <- function(uprojargs) {
-    if (length(grep("no_defs", uprojargs)) == 0L) {
+    if (length(grep("no_defs", uprojargs)) == 0L && 
+# corrected 20150904
+        length(grep("init", uprojargs)) == 0L) {
         if (length(grep("ellps", uprojargs)) == 0L) {
             tags <- sapply(strsplit(strsplit("+proj=longlat +no_defs",
                 "\\+")[[1]], "="), "[", 1)
@@ -65,4 +67,5 @@ proj_def_bug_fix <- function(uprojargs) {
            }
          }
     }
+    uprojargs
 }
