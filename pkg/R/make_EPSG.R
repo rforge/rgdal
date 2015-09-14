@@ -5,6 +5,7 @@ make_EPSG <- function(file) {
             if (n > 0) file <- tf
             else stop("Error opening epsg file")
        } else {
+# bug fix 20150914 Alain Benard
            if (file.exists(file)) {
                n <- length(readLines(file))
            } else {
