@@ -35,10 +35,11 @@ SEXP OGR_write(SEXP inp)
     OGRLayer *poLayer;
     char **papszCreateOptions = NULL;
     char **papszCreateOptionsLayer = NULL;
-    SEXP ans, oCard;
+    SEXP ans, oCard, wkbtype_attr;
     int pc=0, i, j, k;
 
     PROTECT(ans = NEW_CHARACTER(1)); pc++;
+    PROTECT(wkbtype_attr = NEW_INTEGER(1)); pc++;
 
     installErrorHandler();
 #ifdef GDALV2
@@ -229,6 +230,8 @@ SEXP OGR_write(SEXP inp)
     CSLDestroy(papszCreateOptionsLayer);
     uninstallErrorHandlerAndTriggerError();
 
+    INTEGER_POINTER(wkbtype_attr)[0] = wkbtype;
+    setAttrib(ans, install("wkbtype_attr"), wkbtype_attr);
 // create fields in layer
 
     int nf = INTEGER_POINTER(VECTOR_ELT(inp, 5))[0];
@@ -574,7 +577,7 @@ SEXP OGR_write(SEXP inp)
 // Multi polygon data
 
     } else if (wkbtype == wkbMultiPolygon) {
-	// Rprintf("Yes, multipolygons...\n");
+	 //Rprintf("Yes, multipolygons...\n");
 
         SEXP lns = GET_SLOT(obj, install("polygons"));
         if (length(lns) != nobs) {
@@ -595,11 +598,11 @@ SEXP OGR_write(SEXP inp)
             OGRFeature *poFeature;
             poFeature = new OGRFeature( poLayer->GetLayerDefn() );
 // RSB 081009
-            wrtDF(i, nf, fld_names, ldata, ogr_ftype, poFeature);
+//Rprintf("1 WKBtype: %d\n", poFeature->GetDefnRef()->GetGeomType());
 
             Lns = GET_SLOT(VECTOR_ELT(lns, i), install("Polygons"));
             Lns_l = length(Lns);
-
+//Rprintf("Polygons slot length: %d\n", Lns_l);
             OGRPolygon OGRply;
 
             for (k=0; k<Lns_l; k++) {
@@ -630,6 +633,16 @@ SEXP OGR_write(SEXP inp)
                error( "Failed to set geometry" );
             } 
 
+//Rprintf("2 WKBtype: %d\n", poFeature->GetDefnRef()->GetGeomType());
+
+	    // EJP:
+	    poFeature->SetGeometryDirectly(
+		OGRGeometryFactory::forceToMultiPolygon(
+		poFeature->StealGeometry() ) );
+//Rprintf("3 WKBtype: %d\n", poFeature->GetDefnRef()->GetGeomType());
+
+            wrtDF(i, nf, fld_names, ldata, ogr_ftype, poFeature);
+
 // FIXME
 #ifdef GDALV2
             if(poFeature->SetFID((GIntBig) INTEGER_POINTER(VECTOR_ELT(inp, 12))[i])  != OGRERR_NONE ) {
@@ -644,13 +657,9 @@ SEXP OGR_write(SEXP inp)
                error( "Failed to set FID" );
             } 
 
-	    // EJP:
-	    poFeature->SetGeometryDirectly(
-		OGRGeometryFactory::forceToMultiPolygon(
-		poFeature->StealGeometry() ) );
-
             if( poLayer->CreateFeature( poFeature ) != OGRERR_NONE ) {
                installErrorHandler();
+
 #ifdef GDALV2
                 GDALClose( poDS );
 #else
@@ -659,6 +668,7 @@ SEXP OGR_write(SEXP inp)
                uninstallErrorHandlerAndTriggerError();
                error( "Failed to create feature" );
             } 
+//Rprintf("4 WKBtype: %d\n", poFeature->GetDefnRef()->GetGeomType());
 
              OGRFeature::DestroyFeature( poFeature );
         } // i 
