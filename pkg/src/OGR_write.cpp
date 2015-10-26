@@ -35,7 +35,7 @@ SEXP OGR_write(SEXP inp)
     OGRLayer *poLayer;
     char **papszCreateOptions = NULL;
     char **papszCreateOptionsLayer = NULL;
-    SEXP ans, oCard, wkbtype_attr;
+    SEXP ans, oCard, wkbtype_attr, comms;
     int pc=0, i, j, k;
 
     PROTECT(ans = NEW_CHARACTER(1)); pc++;
@@ -125,18 +125,15 @@ SEXP OGR_write(SEXP inp)
             uninstallErrorHandlerAndTriggerError();
             error("number of objects mismatch");
         }
-        PROTECT(oCard = NEW_INTEGER(nobs)); pc++;
         int multi=0, Lns_l;
 	for (i=0; i<nobs; i++) {
             Lns_l = length(GET_SLOT(VECTOR_ELT(lns, i), install("Lines")));
-            INTEGER_POINTER(oCard)[i] = Lns_l;
             if (Lns_l > 1) multi=1;
 	}
         if (multi > 0) wkbtype = wkbMultiLineString;
     }
 
     if (wkbtype == wkbPolygon) {
-
         SEXP pls = GET_SLOT(obj, install("polygons"));
         if (length(pls) != nobs) {
             installErrorHandler();
@@ -148,12 +145,22 @@ SEXP OGR_write(SEXP inp)
             uninstallErrorHandlerAndTriggerError();
             error("number of objects mismatch");
         }
-        PROTECT(oCard = NEW_INTEGER(nobs)); pc++;
         int multi=0, Pls_l;
 	for (i=0; i<nobs; i++) {
-            Pls_l = length(GET_SLOT(VECTOR_ELT(pls, i), install("Polygons")));
-            INTEGER_POINTER(oCard)[i] = Pls_l;
-            if (Pls_l > 1) multi=1;
+            comms = SP_PREFIX(comment2comm)(VECTOR_ELT(pls, i));
+            if (comms == R_NilValue) {
+                Pls_l = length(GET_SLOT(VECTOR_ELT(pls, i),
+                    install("Polygons")));
+                if (Pls_l > 1) {
+                    multi=1;
+                    break;
+                }
+            } else {
+                if (length(comms) > 1) {
+                    multi=1;
+                    break;
+                }
+            }
 	}
         if (multi > 0) wkbtype = wkbMultiPolygon;
     }
@@ -501,8 +508,8 @@ SEXP OGR_write(SEXP inp)
 
     } else if (wkbtype == wkbPolygon) {
 
-        SEXP lns = GET_SLOT(obj, install("polygons"));
-        if (length(lns) != nobs) {
+        SEXP pls = GET_SLOT(obj, install("polygons"));
+        if (length(pls) != nobs) {
             installErrorHandler();
 #ifdef GDALV2
             GDALClose( poDS );
@@ -516,24 +523,43 @@ SEXP OGR_write(SEXP inp)
         installErrorHandler();
 	for (i=0; i<nobs; i++) {
 
+             
             OGRFeature *poFeature;
             poFeature = new OGRFeature( poLayer->GetLayerDefn() );
 // RSB 081009
             wrtDF(i, nf, fld_names, ldata, ogr_ftype, poFeature);
 
             SEXP crds, dim;
-            crds = GET_SLOT(VECTOR_ELT(GET_SLOT(VECTOR_ELT(lns, i),
-                install("Polygons")), 0), install("coords"));
-            dim = getAttrib(crds, install("dim"));
-            int ncrds = INTEGER_POINTER(dim)[0];
 
             OGRPolygon OGRply;
             OGRLinearRing OGRlr;
 
-            for (j=0; j<ncrds; j++) 
-                OGRlr.setPoint( j, NUMERIC_POINTER(crds)[j],
+// FIXME possible Polygons object Ering + Iring(s)
+            comms = SP_PREFIX(comment2comm)(VECTOR_ELT(pls, i));
+            if (comms == R_NilValue) {
+                crds = GET_SLOT(VECTOR_ELT(GET_SLOT(VECTOR_ELT(pls, i),
+                    install("Polygons")), 0), install("coords"));
+                dim = getAttrib(crds, install("dim"));
+                int ncrds = INTEGER_POINTER(dim)[0];
+                for (j=0; j<ncrds; j++) 
+                    OGRlr.setPoint( j, NUMERIC_POINTER(crds)[j],
                                    NUMERIC_POINTER(crds)[j+ncrds] );
-            OGRply.addRing( &OGRlr );
+                OGRply.addRing( &OGRlr ); 
+            } else {
+                for (k=0; k<length(VECTOR_ELT(comms, 0)); k++) {
+Rprintf("i %d, k %d, [k]-R_OFFSET %d\n", i, k, INTEGER_POINTER(VECTOR_ELT(comms,
+                        0))[k]-R_OFFSET);
+                    crds = GET_SLOT(VECTOR_ELT(GET_SLOT(VECTOR_ELT(pls, i),
+                        install("Polygons")), INTEGER_POINTER(VECTOR_ELT(comms,
+                        0))[k]-R_OFFSET), install("coords"));
+                    dim = getAttrib(crds, install("dim"));
+                    int ncrds = INTEGER_POINTER(dim)[0];
+                    for (j=0; j<ncrds; j++) 
+                        OGRlr.setPoint( j, NUMERIC_POINTER(crds)[j],
+                                   NUMERIC_POINTER(crds)[j+ncrds] );
+                    OGRply.addRing( &OGRlr ); // first is Ering, others Iring(s)
+                }
+            }
 
             if( poFeature->SetGeometry( &OGRply ) != OGRERR_NONE ) {
                installErrorHandler();
@@ -579,8 +605,8 @@ SEXP OGR_write(SEXP inp)
     } else if (wkbtype == wkbMultiPolygon) {
 	 //Rprintf("Yes, multipolygons...\n");
 
-        SEXP lns = GET_SLOT(obj, install("polygons"));
-        if (length(lns) != nobs) {
+        SEXP pls = GET_SLOT(obj, install("polygons"));
+        if (length(pls) != nobs) {
             installErrorHandler();
 #ifdef GDALV2
             GDALClose( poDS );
@@ -594,53 +620,96 @@ SEXP OGR_write(SEXP inp)
         int Lns_l;
         installErrorHandler();
 	for (i=0; i<nobs; i++) {
-
             OGRFeature *poFeature;
             poFeature = new OGRFeature( poLayer->GetLayerDefn() );
+// FIXME possible Polygons object Ering + Iring(s)
+// OGRGeometryFactory::organizePolygons
+            comms = SP_PREFIX(comment2comm)(VECTOR_ELT(pls, i));
+            if (comms == R_NilValue) {
 // RSB 081009
 //Rprintf("1 WKBtype: %d\n", poFeature->GetDefnRef()->GetGeomType());
-
-            Lns = GET_SLOT(VECTOR_ELT(lns, i), install("Polygons"));
-            Lns_l = length(Lns);
+                Lns = GET_SLOT(VECTOR_ELT(pls, i), install("Polygons"));
+                Lns_l = (int) length(Lns);
 //Rprintf("Polygons slot length: %d\n", Lns_l);
-            OGRPolygon OGRply;
+                OGRGeometry** papoPolygons = new OGRGeometry*[ Lns_l ];
+                for (k=0; k<Lns_l; k++) {
+                    OGRPolygon *OGRply;
+                    SEXP crds, dim;
+                    crds = GET_SLOT(VECTOR_ELT(GET_SLOT(VECTOR_ELT(pls, i),
+                        install("Polygons")), k), install("coords"));
+                    dim = getAttrib(crds, install("dim"));
+                    int ncrds = INTEGER_POINTER(dim)[0];
 
-            for (k=0; k<Lns_l; k++) {
-                SEXP crds, dim;
-                crds = GET_SLOT(VECTOR_ELT(GET_SLOT(VECTOR_ELT(lns, i),
-                    install("Polygons")), k), install("coords"));
-                dim = getAttrib(crds, install("dim"));
-                int ncrds = INTEGER_POINTER(dim)[0];
+                    OGRLinearRing OGRlr;
 
-                OGRLinearRing OGRlr;
-
-                for (j=0; j<ncrds; j++) 
-                    OGRlr.setPoint( j, NUMERIC_POINTER(crds)[j],
+                    for (j=0; j<ncrds; j++) 
+                        OGRlr.setPoint( j, NUMERIC_POINTER(crds)[j],
                                     NUMERIC_POINTER(crds)[j+ncrds] );
 
-                OGRply.addRing( &OGRlr );
-
-            } // k
-
-             if( poFeature->SetGeometry( &OGRply ) != OGRERR_NONE ) {
-               installErrorHandler();
+                    OGRply->addRing( &OGRlr );
+                    papoPolygons[k] = OGRply;
+                } // k
+                int bResultValidGeometry = FALSE;
+                OGRGeometry* poRet = OGRGeometryFactory::organizePolygons(
+                    papoPolygons, Lns_l, &bResultValidGeometry );
+                delete[] papoPolygons;
+                if( poFeature->SetGeometry( poRet ) != OGRERR_NONE ) {
+                    installErrorHandler();
 #ifdef GDALV2
-                GDALClose( poDS );
+                    GDALClose( poDS );
 #else
-                OGRDataSource::DestroyDataSource( poDS );
+                    OGRDataSource::DestroyDataSource( poDS );
 #endif
-               uninstallErrorHandlerAndTriggerError();
-               error( "Failed to set geometry" );
-            } 
+                    uninstallErrorHandlerAndTriggerError();
+                    error( "Failed to set geometry" );
+                } 
 
 //Rprintf("2 WKBtype: %d\n", poFeature->GetDefnRef()->GetGeomType());
 
 	    // EJP:
-	    poFeature->SetGeometryDirectly(
-		OGRGeometryFactory::forceToMultiPolygon(
-		poFeature->StealGeometry() ) );
+	        poFeature->SetGeometryDirectly(
+		    OGRGeometryFactory::forceToMultiPolygon(
+		    poFeature->StealGeometry() ) );
 //Rprintf("3 WKBtype: %d\n", poFeature->GetDefnRef()->GetGeomType());
 
+            } else {
+                int nExtRings = length(comms);
+                OGRMultiPolygon *poRet = new OGRMultiPolygon();
+                SEXP PLSi = GET_SLOT(VECTOR_ELT(pls, i), install("Polygons"));
+                for (int iER=0; iER<nExtRings; iER++) {
+                    OGRPolygon *OGRply = new OGRPolygon();
+                    int nthisiER = length(VECTOR_ELT(comms, iER));
+
+                    for (k=0; k<nthisiER; k++) {
+                        int thisk = INTEGER_POINTER(VECTOR_ELT(comms,
+                            iER))[k]-R_OFFSET;
+Rprintf("i %d, nExtRings %d, iER %d, nthisiER %d, k %d, thisk %d\n", i, nExtRings, iER, nthisiER, k, thisk);
+                        SEXP crds, dim;
+                        crds = GET_SLOT(VECTOR_ELT(PLSi, thisk),
+                            install("coords"));
+                        dim = getAttrib(crds, install("dim"));
+                        int ncrds = INTEGER_POINTER(dim)[0];
+                        OGRLinearRing OGRlr;
+                        for (j=0; j<ncrds; j++) 
+                           OGRlr.setPoint( j, NUMERIC_POINTER(crds)[j],
+                                   NUMERIC_POINTER(crds)[j+ncrds] );
+                        OGRply->addRing( &OGRlr ); 
+// first is Ering, others Iring(s)
+                    }
+                    poRet->addGeometry(OGRply);
+                    OGRply->empty();
+                }
+                if( poFeature->SetGeometry( poRet ) != OGRERR_NONE ) {
+                    installErrorHandler();
+#ifdef GDALV2
+                    GDALClose( poDS );
+#else
+                    OGRDataSource::DestroyDataSource( poDS );
+#endif
+                    uninstallErrorHandlerAndTriggerError();
+                    error( "Failed to set geometry" );
+                } 
+            }
             wrtDF(i, nf, fld_names, ldata, ogr_ftype, poFeature);
 
 // FIXME
