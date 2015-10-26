@@ -683,7 +683,7 @@ Rprintf("i %d, k %d, [k]-R_OFFSET %d\n", i, k, INTEGER_POINTER(VECTOR_ELT(comms,
                     for (k=0; k<nthisiER; k++) {
                         int thisk = INTEGER_POINTER(VECTOR_ELT(comms,
                             iER))[k]-R_OFFSET;
-Rprintf("i %d, nExtRings %d, iER %d, nthisiER %d, k %d, thisk %d\n", i, nExtRings, iER, nthisiER, k, thisk);
+//Rprintf("i %d, nExtRings %d, iER %d, nthisiER %d, k %d, thisk %d\n", i, nExtRings, iER, nthisiER, k, thisk);
                         SEXP crds, dim;
                         crds = GET_SLOT(VECTOR_ELT(PLSi, thisk),
                             install("coords"));
