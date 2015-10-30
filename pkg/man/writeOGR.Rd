@@ -39,7 +39,7 @@ For writing with the KML and GPX drivers, note that the geometries should be in 
 \section{Warning}{
 The \code{overwrite_layer} and \code{delete_dsn} arguments are provided only for experienced script writers who need to be able to destroy data, for example during repetetive simulation runs. They should never be used by anyone who is not confident about deleting files.
 }
-\references{\url{http://www.gdal.org/ogr/}, \url{http://www.gdal.org/ogr/ogr_formats.html}, \url{http://examples.oreilly.com/webmapping/}}
+\references{\url{http://www.gdal.org/ogr_formats.html}, \url{http://examples.oreilly.com/webmapping/}}
 \author{Roger Bivand}
 
 \seealso{\code{\link{readOGR}}}
