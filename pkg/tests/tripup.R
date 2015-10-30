@@ -1,4 +1,4 @@
-library(rgdal)
+suppressPackageStartupMessages(library(rgdal))
 load(system.file("etc/test_dfs.RData", package="rgdal"))
 load(system.file("etc/obj_with_comments.RData", package="rgdal"))
 drivers <- c("GeoJSON", "ESRI Shapefile")

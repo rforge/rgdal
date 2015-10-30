@@ -771,7 +771,8 @@ void wrtDF(int i, int nf, SEXP fld_names, SEXP ldata,
      }         
 }
 
-SEXP ogrOrganizeSpatialPolygons(SEXP obj) {
+/* FIXME return to this later
+ * SEXP ogrOrganizeSpatialPolygons(SEXP obj) {
         SEXP ans;
         SEXP pls = GET_SLOT(obj, install("polygons"));
         SEXP Lns, Pls;
@@ -820,7 +821,7 @@ SEXP ogrOrganizeSpatialPolygons(SEXP obj) {
 
                 
 
-}
+}*/
 
 #ifdef __cplusplus
 }

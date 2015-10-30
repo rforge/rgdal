@@ -15,15 +15,7 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
 
-> library(rgdal)
-Loading required package: sp
-rgdal: version: 1.1-01, (SVN revision 565M)
- Geospatial Data Abstraction Library extensions to R successfully loaded
- Loaded GDAL runtime: GDAL 2.0.1, released 2015/09/15
- Path to GDAL shared files: /usr/local/share/gdal
- Loaded PROJ.4 runtime: Rel. 4.9.2, 08 September 2015, [PJ_VERSION: 492]
- Path to PROJ.4 shared files: (autodetected)
- Linking to sp version: 1.2-2 
+> suppressPackageStartupMessages(library(rgdal))
 > load(system.file("etc/test_dfs.RData", package="rgdal"))
 > load(system.file("etc/obj_with_comments.RData", package="rgdal"))
 > drivers <- c("GeoJSON", "ESRI Shapefile")
@@ -119,4 +111,4 @@ aMPh with driver: ESRI Shapefile
 > 
 > proc.time()
    user  system elapsed 
-  2.358   0.028   2.380 
+  2.359   0.039   2.390 
