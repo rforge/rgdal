@@ -35,7 +35,7 @@ SEXP OGR_write(SEXP inp)
     OGRLayer *poLayer;
     char **papszCreateOptions = NULL;
     char **papszCreateOptionsLayer = NULL;
-    SEXP ans, oCard, wkbtype_attr, comms;
+    SEXP ans, wkbtype_attr, comms;
     int pc=0, i, j, k;
 
     PROTECT(ans = NEW_CHARACTER(1)); pc++;
