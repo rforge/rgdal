@@ -63,5 +63,15 @@ all.equal(nhh_utm_32N_P4, nhh_tmerc_P4, tolerance=1e-9, scale=1)
 # UTM == TMERC: PROJ4 <=4.9.2
 all.equal(nhh_utm_32N_P4, nhh_etmerc_P4, tolerance=1e-9, scale=1)
 # UTM == ETMERC: PROJ4 > 4.9.2
+unis <- matrix(c(15.653453, 78.222504), ncol=2)
+unis_utm_33N_P4 <- project(unis, "+init=epsg:3045")
+unis_tmerc_P4 <- project(unis, paste("+proj=tmerc +k=0.9996 +lon_0=15",
+ "+x_0=500000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"))
+unis_etmerc_P4 <- project(unis, paste("+proj=etmerc +k=0.9996 +lon_0=15",
+ "+x_0=500000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"))
+all.equal(unis_utm_33N_P4, unis_tmerc_P4, tolerance=1e-9, scale=1)
+# UTM == TMERC: PROJ4 <=4.9.2
+all.equal(unis_utm_33N_P4, unis_etmerc_P4, tolerance=1e-9, scale=1)
+# UTM == ETMERC: PROJ4 > 4.9.2
 }
 \keyword{spatial}

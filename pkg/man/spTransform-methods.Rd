@@ -200,6 +200,20 @@ all.equal(coordinates(nhh_utm_32N_P4), coordinates(nhh_tmerc_P4),
 all.equal(coordinates(nhh_utm_32N_P4), coordinates(nhh_etmerc_P4),
  tolerance=1e-9, scale=1)
 # UTM == ETMERC: PROJ4 > 4.9.2
+unis <- SpatialPointsDataFrame(matrix(c(15.653453, 78.222504), ncol=2),
+ proj4string=CRS("+init=epsg:4326"), data=data.frame(office="UNIS"))
+unis_utm_33N_P4 <- spTransform(unis, CRS("+init=epsg:3045"))
+unis_tmerc_P4 <- spTransform(unis, CRS(paste("+proj=tmerc +k=0.9996 +lon_0=15",
+ "+x_0=500000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs")))
+unis_etmerc_P4 <- spTransform(unis, CRS(paste("+proj=etmerc +k=0.9996",
+ "+lon_0=15 +x_0=500000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs")))
+all.equal(coordinates(unis_utm_33N_P4), coordinates(unis_tmerc_P4),
+ tolerance=1e-9, scale=1)
+# UTM == TMERC: PROJ4 <=4.9.2
+all.equal(coordinates(unis_utm_33N_P4), coordinates(unis_etmerc_P4),
+ tolerance=1e-9, scale=1)
+# UTM == ETMERC: PROJ4 > 4.9.2
+
 }
 
 \keyword{methods}
