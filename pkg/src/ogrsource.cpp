@@ -619,7 +619,8 @@ extern "C" {
           nlist = psField->Integer64List.nCount;
 	  if (k < nlist) {
             if (int64 == 3) {
-                GIntBig nVal64 = psField->Integer64List.paList[k];
+// FIXME clang++
+//                GIntBig nVal64 = psField->Integer64List.paList[k];
                 char szItem[32];
                 snprintf(szItem, sizeof(szItem), CPL_FRMT_GIB,
                       psField->Integer64List.paList[k]);
@@ -955,15 +956,36 @@ SEXP ogrDeleteLayer (SEXP ogrSource, SEXP Layer, SEXP ogrDriver) {
     for(iLayer = 0; iLayer < poDS->GetLayerCount(); iLayer++) {
         poLayer = poDS->GetLayer(iLayer);
 /* poLayer->GetLayerDefn()->GetName() is poLayer->GetName() from 1.8 */
+// FIXME
 #ifdef GDALV2
-        if (poLayer != NULL && EQUAL(poLayer->GetName(),
-#else
-        if (poLayer != NULL && EQUAL(poLayer->GetLayerDefn()->GetName(),
-#endif
+  #  if defined(WIN32)
+        if (poLayer != NULL && stricmp(poLayer->GetName(),
             CHAR(STRING_ELT(Layer, 0)))) {
             flag = 1;
             break;
         }
+  #else
+        if (poLayer != NULL && strcasecmp(poLayer->GetName(),
+            CHAR(STRING_ELT(Layer, 0)))) {
+            flag = 1;
+            break;
+        }
+  #endif
+#else
+  #  if defined(WIN32)
+        if (poLayer != NULL && stricmp(poLayer->GetLayerDefn()->GetName(),
+            CHAR(STRING_ELT(Layer, 0)))) {
+            flag = 1;
+            break;
+        }
+  #else
+        if (poLayer != NULL && strcasecmp(poLayer->GetLayerDefn()->GetName(),
+            CHAR(STRING_ELT(Layer, 0)))) {
+            flag = 1;
+            break;
+        }
+  #endif
+#endif
     }
     uninstallErrorHandlerAndTriggerError();
     installErrorHandler();

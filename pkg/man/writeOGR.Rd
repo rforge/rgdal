@@ -54,6 +54,8 @@ if(nchar(Sys.getenv("OSGEO4W_ROOT")) > 0) {
     td <- "."
 }
 writeOGR(cities, td, "cities", driver="ESRI Shapefile")
+try(writeOGR(cities, td, "cities", driver="ESRI Shapefile"))
+writeOGR(cities, td, "cities", driver="ESRI Shapefile", overwrite_layer=TRUE)
 cities2 <- readOGR(td, "cities")
 summary(cities2$POPULATION)
 if ("SQLite" \%in\% ogrDrivers()$name) {

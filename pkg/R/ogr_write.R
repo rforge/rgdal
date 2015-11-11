@@ -73,12 +73,20 @@ writeOGR <- function(obj, dsn, layer, driver, dataset_options=NULL, layer_option
                     dsn <- paste(dsn, "/", layer, ".shp", sep="")
                     if (verbose) warning(dsn, " substituted for ", odsn,
                         " for layer deletion")
+                    odelete_dsn <- delete_dsn
+                    delete_dsn <- TRUE
+                    owarnZZ <- options("warn")$warn
+                    options(warn=-1)
                 }
                 layer_del <- try(ogrDeleteLayer(dsn, layer, driver),
                     silent=TRUE)
                 if (class(layer_del) == "try-error" && delete_dsn) {
                     ogrDeleteDataSource(dsn, driver)
                     if (verbose) warning("existing data source removed")
+                }
+                if (exists("odelete_dsn")) {
+                    delete_dsn <- odelete_dsn
+                    options(warn=owarnZZ)
                 }
                 if (verbose) warning("existing layer removed")
             } else {
