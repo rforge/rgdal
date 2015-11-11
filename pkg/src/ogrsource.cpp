@@ -958,33 +958,33 @@ SEXP ogrDeleteLayer (SEXP ogrSource, SEXP Layer, SEXP ogrDriver) {
 /* poLayer->GetLayerDefn()->GetName() is poLayer->GetName() from 1.8 */
 // FIXME
 #ifdef GDALV2
-  #  if defined(WIN32)
+/*  #  if defined(WIN32)
         if (poLayer != NULL && stricmp(poLayer->GetName(),
             CHAR(STRING_ELT(Layer, 0)))) {
             flag = 1;
             break;
         }
-  #else
+  #else*/
         if (poLayer != NULL && strcasecmp(poLayer->GetName(),
             CHAR(STRING_ELT(Layer, 0)))) {
             flag = 1;
             break;
         }
-  #endif
+//  #endif
 #else
-  #  if defined(WIN32)
+/*  #  if defined(WIN32)
         if (poLayer != NULL && stricmp(poLayer->GetLayerDefn()->GetName(),
             CHAR(STRING_ELT(Layer, 0)))) {
             flag = 1;
             break;
         }
-  #else
+  #else*/
         if (poLayer != NULL && strcasecmp(poLayer->GetLayerDefn()->GetName(),
             CHAR(STRING_ELT(Layer, 0)))) {
             flag = 1;
             break;
         }
-  #endif
+//  #endif
 #endif
     }
     uninstallErrorHandlerAndTriggerError();
