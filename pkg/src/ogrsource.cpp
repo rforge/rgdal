@@ -972,7 +972,6 @@ SEXP ogrDeleteLayer (SEXP ogrSource, SEXP Layer, SEXP ogrDriver) {
     }
     uninstallErrorHandlerAndTriggerError();
     installErrorHandler();
-Rprintf("flag: %d\n", flag);
     if (flag != 0) {
         int res = poDS->DeleteLayer(iLayer);
         if (res != OGRERR_NONE) {
