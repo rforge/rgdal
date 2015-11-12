@@ -936,9 +936,8 @@ SEXP ogrDeleteLayer (SEXP ogrSource, SEXP Layer, SEXP ogrDriver) {
     if(poDS==NULL){
       error("Cannot open data source");
     }
-// replace EQUAL macro 151112
-    if (!(strcasecmp(CHAR(STRING_ELT(ogrDriver, 0)),
-        poDS->GetDriver()->GetDescription())==0)) {
+    if (!EQUAL(CHAR(STRING_ELT(ogrDriver, 0)),
+        poDS->GetDriver()->GetDescription())) {
         GDALClose( poDS );
         poDS = NULL;
     }
@@ -955,16 +954,14 @@ SEXP ogrDeleteLayer (SEXP ogrSource, SEXP Layer, SEXP ogrDriver) {
     for(iLayer = 0; iLayer < poDS->GetLayerCount(); iLayer++) {
         poLayer = poDS->GetLayer(iLayer);
 #ifdef GDALV2
-// replace EQUAL macro 151112
-        if (poLayer != NULL && (strcasecmp(poLayer->GetName(),
-            CHAR(STRING_ELT(Layer, 0)))==0)) {
+        if (poLayer != NULL && EQUAL(poLayer->GetName(),
+            CHAR(STRING_ELT(Layer, 0)))) {
             flag = 1;
             break;
         }
 #else
-// replace EQUAL macro 151112
-        if (poLayer != NULL && (strcasecmp(poLayer->GetLayerDefn()->GetName(),
-            CHAR(STRING_ELT(Layer, 0)))==0)) {
+        if (poLayer != NULL && EQUAL(poLayer->GetLayerDefn()->GetName(),
+            CHAR(STRING_ELT(Layer, 0)))) {
             flag = 1;
             break;
         }
