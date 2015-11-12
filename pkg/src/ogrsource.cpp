@@ -936,10 +936,9 @@ SEXP ogrDeleteLayer (SEXP ogrSource, SEXP Layer, SEXP ogrDriver) {
     if(poDS==NULL){
       error("Cannot open data source");
     }
-//Rprintf("ogrDeleteLayer: %s %s\n", CHAR(STRING_ELT(ogrDriver, 0)), poDS->GetDriver()->GetDescription());
-    if (!EQUAL(CHAR(STRING_ELT(ogrDriver, 0)),
-        poDS->GetDriver()->GetDescription())) {
-//Rprintf("ogrDeleteLayer: in condition\n");
+// replace EQUAL macro 151112
+    if (!(strcasecmp(CHAR(STRING_ELT(ogrDriver, 0)),
+        poDS->GetDriver()->GetDescription())==0)) {
         GDALClose( poDS );
         poDS = NULL;
     }
@@ -955,40 +954,25 @@ SEXP ogrDeleteLayer (SEXP ogrSource, SEXP Layer, SEXP ogrDriver) {
     installErrorHandler();
     for(iLayer = 0; iLayer < poDS->GetLayerCount(); iLayer++) {
         poLayer = poDS->GetLayer(iLayer);
-/* poLayer->GetLayerDefn()->GetName() is poLayer->GetName() from 1.8 */
-// FIXME
 #ifdef GDALV2
-/*  #  if defined(WIN32)
-        if (poLayer != NULL && stricmp(poLayer->GetName(),
-            CHAR(STRING_ELT(Layer, 0)))) {
+// replace EQUAL macro 151112
+        if (poLayer != NULL && (strcasecmp(poLayer->GetName(),
+            CHAR(STRING_ELT(Layer, 0)))==0)) {
             flag = 1;
             break;
         }
-  #else*/
-        if (poLayer != NULL && strcasecmp(poLayer->GetName(),
-            CHAR(STRING_ELT(Layer, 0)))) {
-            flag = 1;
-            break;
-        }
-//  #endif
 #else
-/*  #  if defined(WIN32)
-        if (poLayer != NULL && stricmp(poLayer->GetLayerDefn()->GetName(),
-            CHAR(STRING_ELT(Layer, 0)))) {
+// replace EQUAL macro 151112
+        if (poLayer != NULL && (strcasecmp(poLayer->GetLayerDefn()->GetName(),
+            CHAR(STRING_ELT(Layer, 0)))==0)) {
             flag = 1;
             break;
         }
-  #else*/
-        if (poLayer != NULL && strcasecmp(poLayer->GetLayerDefn()->GetName(),
-            CHAR(STRING_ELT(Layer, 0)))) {
-            flag = 1;
-            break;
-        }
-//  #endif
 #endif
     }
     uninstallErrorHandlerAndTriggerError();
     installErrorHandler();
+Rprintf("flag: %d\n", flag);
     if (flag != 0) {
         int res = poDS->DeleteLayer(iLayer);
         if (res != OGRERR_NONE) {
