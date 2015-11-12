@@ -1,3 +1,11 @@
+2015-11-12 11:09  rsbivand
+
+	* src/ogrsource.cpp: tidy
+
+2015-11-12 11:02  rsbivand
+
+	* ChangeLog, inst/ChangeLog: tidy
+
 2015-11-12 10:55  rsbivand
 
 	* inst/ChangeLog: tidy
