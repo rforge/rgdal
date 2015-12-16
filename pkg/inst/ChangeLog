@@ -1,3 +1,27 @@
+2015-12-16 17:12  rsbivand
+
+	* man/writeOGR.Rd: SFS Polygon bugfix
+
+2015-12-16 17:08  rsbivand
+
+	* man/writeOGR.Rd, src/OGR_write.cpp: SFS Polygon bugfix
+
+2015-12-03 11:23  rsbivand
+
+	* src/Makevars.win: updated Makevars.win
+
+2015-11-27 09:40  rsbivand
+
+	* data/GridsDatums.rda, man/GridsDatums.Rd: final G&D column
+
+2015-11-12 14:25  rsbivand
+
+	* src/ogrsource.cpp: clang++ EQUAL issue
+
+2015-11-12 11:10  rsbivand
+
+	* ChangeLog, inst/ChangeLog: tidy
+
 2015-11-12 11:09  rsbivand
 
 	* src/ogrsource.cpp: tidy
