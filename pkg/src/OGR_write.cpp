@@ -519,7 +519,6 @@ SEXP OGR_write(SEXP inp)
             uninstallErrorHandlerAndTriggerError();
             error("number of objects mismatch");
         }
-
         installErrorHandler();
 	for (i=0; i<nobs; i++) {
 
@@ -532,7 +531,6 @@ SEXP OGR_write(SEXP inp)
             SEXP crds, dim;
 
             OGRPolygon OGRply;
-            OGRLinearRing OGRlr;
 
             comms = SP_PREFIX(comment2comm)(VECTOR_ELT(pls, i));
             if (comms == R_NilValue) {
@@ -540,6 +538,7 @@ SEXP OGR_write(SEXP inp)
                     install("Polygons")), 0), install("coords"));
                 dim = getAttrib(crds, install("dim"));
                 int ncrds = INTEGER_POINTER(dim)[0];
+                OGRLinearRing OGRlr;
                 for (j=0; j<ncrds; j++) 
                     OGRlr.setPoint( j, NUMERIC_POINTER(crds)[j],
                                    NUMERIC_POINTER(crds)[j+ncrds] );
@@ -551,6 +550,7 @@ SEXP OGR_write(SEXP inp)
                         0))[k]-R_OFFSET), install("coords"));
                     dim = getAttrib(crds, install("dim"));
                     int ncrds = INTEGER_POINTER(dim)[0];
+                    OGRLinearRing OGRlr;
                     for (j=0; j<ncrds; j++) 
                         OGRlr.setPoint( j, NUMERIC_POINTER(crds)[j],
                                    NUMERIC_POINTER(crds)[j+ncrds] );
@@ -620,6 +620,7 @@ SEXP OGR_write(SEXP inp)
             poFeature = new OGRFeature( poLayer->GetLayerDefn() );
             comms = SP_PREFIX(comment2comm)(VECTOR_ELT(pls, i));
             if (comms == R_NilValue) {
+
 // RSB 081009
                 Lns = GET_SLOT(VECTOR_ELT(pls, i), install("Polygons"));
                 Lns_l = (int) length(Lns);
