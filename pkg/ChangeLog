@@ -1,3 +1,9 @@
+2015-12-17 14:32  rsbivand
+
+	* ChangeLog, configure, inst/ChangeLog,
+	  inst/etc/obj_with_comments.RData, tests/tripup.R,
+	  tests/tripup.Rout.save: tripup for Polygons bug
+
 2015-12-17 13:12  rsbivand
 
 	* DESCRIPTION, src/Makevars.in, src/Makevars.win,
