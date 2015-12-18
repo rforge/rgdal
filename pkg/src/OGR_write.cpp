@@ -36,6 +36,8 @@ SEXP OGR_write(SEXP inp)
     char **papszCreateOptions = NULL;
     char **papszCreateOptionsLayer = NULL;
     SEXP ans, wkbtype_attr, comms;
+    int verbose = INTEGER_POINTER(getAttrib(VECTOR_ELT(inp, 5),
+        install("verbose")))[0];
     int pc=0, i, j, k;
 
     PROTECT(ans = NEW_CHARACTER(1)); pc++;

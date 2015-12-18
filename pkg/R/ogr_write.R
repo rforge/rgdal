@@ -1,4 +1,5 @@
 writeOGR <- function(obj, dsn, layer, driver, dataset_options=NULL, layer_options=NULL, verbose=FALSE, check_exists=NULL, overwrite_layer=FALSE, delete_dsn=FALSE, morphToESRI=NULL) {
+    stopifnot(is.logical(verbose))
     drvs <- ogrDrivers()
     mch <- match(driver, drvs$name)
     if (is.na(mch) || length(mch) > 1L)
@@ -152,6 +153,7 @@ writeOGR <- function(obj, dsn, layer, driver, dataset_options=NULL, layer_option
     FIDs <- as.integer(row.names(obj))
     if (any(is.na(FIDs))) FIDs <- as.integer(0:(nobj-1))
     options("warn"=owarn$warn)
+    attr(nf, "verbose") <- as.logical(verbose)
     
     pre <- list(obj, as.character(dsn), as.character(layer), 
         as.character(driver), as.integer(nobj), nf,
