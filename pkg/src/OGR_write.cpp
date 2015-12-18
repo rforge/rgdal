@@ -105,9 +105,16 @@ SEXP OGR_write(SEXP inp)
     const char *cl = CHAR(asChar(getAttrib(obj, R_ClassSymbol)));
     OGRwkbGeometryType wkbtype = wkbUnknown;
 
-    if (!strcmp(cl, "SpatialPointsDataFrame")) wkbtype = wkbPoint;
-    else if (!strcmp(cl, "SpatialLinesDataFrame"))  wkbtype = wkbLineString;
-    else if (!strcmp(cl, "SpatialPolygonsDataFrame")) wkbtype = wkbPolygon;
+    if (!strcmp(cl, "SpatialPointsDataFrame")) {
+        wkbtype = wkbPoint;
+        if (verbose) Rprintf("Object initially classed as: wkbPoint\n");
+    } else if (!strcmp(cl, "SpatialLinesDataFrame")) {
+        wkbtype = wkbLineString;
+        if (verbose) Rprintf("Object initially classed as: wkbLineString\n");
+    } else if (!strcmp(cl, "SpatialPolygonsDataFrame")) {
+        wkbtype = wkbPolygon;
+        if (verbose) Rprintf("Object initially classed as: wkbPolygon\n");
+    }
 
     SET_STRING_ELT(ans, 0, COPY_TO_USER_STRING(cl));
 
@@ -132,7 +139,10 @@ SEXP OGR_write(SEXP inp)
             Lns_l = length(GET_SLOT(VECTOR_ELT(lns, i), install("Lines")));
             if (Lns_l > 1) multi=1;
 	}
-        if (multi > 0) wkbtype = wkbMultiLineString;
+        if (multi > 0) {
+            wkbtype = wkbMultiLineString;
+            if (verbose) Rprintf("Object reclassed as: wkbMultiLineString\n");
+        }
     }
 
     if (wkbtype == wkbPolygon) {
@@ -164,7 +174,10 @@ SEXP OGR_write(SEXP inp)
                 }
             }
 	}
-        if (multi > 0) wkbtype = wkbMultiPolygon;
+        if (multi > 0) {
+            wkbtype = wkbMultiPolygon;
+            if (verbose) Rprintf("Object reclassed as: wkbMultiPolygon\n");
+        }
     }
 
 //  retrieve and set spatial reference system
@@ -299,6 +312,7 @@ SEXP OGR_write(SEXP inp)
             error("number of objects mismatch");
         }
 
+        if (verbose) Rprintf("Writing %d wkbPoint objects\n", nobs);
         installErrorHandler();
         for (i=0; i<nobs; i++) {
             OGRFeature *poFeature;
@@ -355,6 +369,7 @@ SEXP OGR_write(SEXP inp)
             error("number of objects mismatch");
         }
 
+        if (verbose) Rprintf("Writing %d wkbLineString objects\n", nobs);
         installErrorHandler();
 	for (i=0; i<nobs; i++) {
 
@@ -429,6 +444,7 @@ SEXP OGR_write(SEXP inp)
         }
         SEXP Lns;
         int Lns_l;
+        if (verbose) Rprintf("Writing %d wkbMultiLineString objects\n", nobs);
         installErrorHandler();
 	for (i=0; i<nobs; i++) {
 
@@ -521,6 +537,7 @@ SEXP OGR_write(SEXP inp)
             uninstallErrorHandlerAndTriggerError();
             error("number of objects mismatch");
         }
+        if (verbose) Rprintf("Writing %d wkbPolygon objects\n", nobs);
         installErrorHandler();
 	for (i=0; i<nobs; i++) {
 
@@ -616,6 +633,7 @@ SEXP OGR_write(SEXP inp)
         }
         SEXP Lns;
         int Lns_l;
+        if (verbose) Rprintf("Writing %d wkbMultiPolygon objects\n", nobs);
         installErrorHandler();
 	for (i=0; i<nobs; i++) {
             OGRFeature *poFeature;

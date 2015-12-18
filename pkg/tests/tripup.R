@@ -7,7 +7,7 @@ tfbase <- tempfile()
 for (driver in drivers) {
 tf <- paste0(tfbase, driver, "P", sep=".")
 writeOGR(SpatialPolygonsDataFrame(P, data=df9), tf, "OGRGeoJSON",
- driver=driver)
+ driver=driver, verbose=TRUE)
 rP <- as(readOGR(tf, "OGRGeoJSON", verbose=FALSE), "SpatialPolygons")
 cat("P with driver:", driver, "\n")
 unlink(paste(tf, "*", sep=""), recursive=driver == "ESRI Shapefile")
@@ -16,7 +16,7 @@ cat(" coords", isTRUE(all.equal(lapply(slot(P, "polygons"), function(x) lapply(s
 cat(" holes", isTRUE(all.equal(lapply(slot(P, "polygons"), function(x) lapply(slot(x, "Polygons"), slot, "hole")), lapply(slot(rP, "polygons"), function(x) lapply(slot(x, "Polygons"), slot, "hole")), check.attributes=FALSE)), "\n")
 tf <- paste0(tfbase, driver, "Ph", sep=".")
 writeOGR(SpatialPolygonsDataFrame(Ph, data=df9), tf, "OGRGeoJSON",
- driver=driver)
+ driver=driver, verbose=TRUE)
 rP <- as(readOGR(tf, "OGRGeoJSON", verbose=FALSE), "SpatialPolygons")
 cat("Ph with driver:", driver, "\n")
 unlink(paste(tf, "*", sep=""), recursive=driver == "ESRI Shapefile")
@@ -25,7 +25,7 @@ cat(" coords", isTRUE(all.equal(lapply(slot(Ph, "polygons"), function(x) lapply(
 cat(" holes", isTRUE(all.equal(lapply(slot(Ph, "polygons"), function(x) lapply(slot(x, "Polygons"), slot, "hole")), lapply(slot(rP, "polygons"), function(x) lapply(slot(x, "Polygons"), slot, "hole")), check.attributes=FALSE)), "\n")
 tf <- paste0(tfbase, driver, "Phs", sep=".")
 writeOGR(SpatialPolygonsDataFrame(Phs, data=df9), tf, "OGRGeoJSON",
- driver=driver)
+ driver=driver, verbose=TRUE)
 rP <- as(readOGR(tf, "OGRGeoJSON", verbose=FALSE), "SpatialPolygons")
 cat("Phs with driver:", driver, "\n")
 unlink(paste(tf, "*", sep=""), recursive=driver == "ESRI Shapefile")
@@ -34,7 +34,7 @@ cat(" coords", isTRUE(all.equal(lapply(slot(Phs, "polygons"), function(x) lapply
 cat(" holes", isTRUE(all.equal(lapply(slot(Phs, "polygons"), function(x) lapply(slot(x, "Polygons"), slot, "hole")), lapply(slot(rP, "polygons"), function(x) lapply(slot(x, "Polygons"), slot, "hole")), check.attributes=FALSE)), "\n")
 tf <- paste0(tfbase, driver, "MP", sep=".")
 writeOGR(SpatialPolygonsDataFrame(MP, data=df3), tf, "OGRGeoJSON",
- driver=driver)
+ driver=driver, verbose=TRUE)
 rP <- as(readOGR(tf, "OGRGeoJSON", verbose=FALSE), "SpatialPolygons")
 cat("MP with driver:", driver, "\n")
 unlink(paste(tf, "*", sep=""), recursive=driver == "ESRI Shapefile")
@@ -43,7 +43,7 @@ cat(" coords", isTRUE(all.equal(lapply(slot(MP, "polygons"), function(x) lapply(
 cat(" holes", isTRUE(all.equal(lapply(slot(MP, "polygons"), function(x) lapply(slot(x, "Polygons"), slot, "hole")), lapply(slot(rP, "polygons"), function(x) lapply(slot(x, "Polygons"), slot, "hole")), check.attributes=FALSE)), "\n")
 tf <- paste0(tfbase, driver, "MPh", sep=".")
 writeOGR(SpatialPolygonsDataFrame(MPh, data=df3), tf, "OGRGeoJSON",
- driver=driver)
+ driver=driver, verbose=TRUE)
 rP <- as(readOGR(tf, "OGRGeoJSON", verbose=FALSE), "SpatialPolygons")
 cat("MPh with driver:", driver, "\n")
 unlink(paste(tf, "*", sep=""), recursive=driver == "ESRI Shapefile")
@@ -53,7 +53,7 @@ cat(" holes", isTRUE(all.equal(lapply(slot(MPh, "polygons"), function(x) lapply(
 load(system.file("etc/obj_without_comments.RData", package="rgdal"))
 tf <- paste0(tfbase, driver, "aP", sep=".")
 writeOGR(SpatialPolygonsDataFrame(aP, data=df9), tf, "OGRGeoJSON",
- driver=driver)
+ driver=driver, verbose=TRUE)
 rP <- as(readOGR(tf, "OGRGeoJSON", verbose=FALSE), "SpatialPolygons")
 cat("aP with driver:", driver, "\n")
 unlink(paste(tf, "*", sep=""), recursive=driver == "ESRI Shapefile")
@@ -61,7 +61,7 @@ cat(" coords", isTRUE(all.equal(lapply(slot(aP, "polygons"), function(x) lapply(
 cat(" holes", isTRUE(all.equal(lapply(slot(aP, "polygons"), function(x) lapply(slot(x, "Polygons"), slot, "hole")), lapply(slot(rP, "polygons"), function(x) lapply(slot(x, "Polygons"), slot, "hole")), check.attributes=FALSE)), "\n")
 tf <- paste0(tfbase, driver, "aPh", sep=".")
 writeOGR(SpatialPolygonsDataFrame(aPh, data=df9), tf, "OGRGeoJSON",
- driver=driver)
+ driver=driver, verbose=TRUE)
 rP <- as(readOGR(tf, "OGRGeoJSON", verbose=FALSE), "SpatialPolygons")
 cat("aPh with driver:", driver, "\n")
 unlink(paste(tf, "*", sep=""), recursive=driver == "ESRI Shapefile")
@@ -69,7 +69,7 @@ cat(" coords", isTRUE(all.equal(lapply(slot(aPh, "polygons"), function(x) lapply
 cat(" holes", isTRUE(all.equal(lapply(slot(aPh, "polygons"), function(x) lapply(slot(x, "Polygons"), slot, "hole")), lapply(slot(rP, "polygons"), function(x) lapply(slot(x, "Polygons"), slot, "hole")), check.attributes=FALSE)), "\n")
 tf <- paste0(tfbase, driver, "aMP", sep=".")
 writeOGR(SpatialPolygonsDataFrame(aMP, data=df3), tf, "OGRGeoJSON",
- driver=driver)
+ driver=driver, verbose=TRUE)
 rP <- as(readOGR(tf, "OGRGeoJSON", verbose=FALSE), "SpatialPolygons")
 cat("aMP with driver:", driver, "\n")
 unlink(paste(tf, "*", sep=""), recursive=driver == "ESRI Shapefile")
@@ -77,7 +77,7 @@ cat(" coords", isTRUE(all.equal(lapply(slot(aMP, "polygons"), function(x) lapply
 cat(" holes", isTRUE(all.equal(lapply(slot(aMP, "polygons"), function(x) lapply(slot(x, "Polygons"), slot, "hole")), lapply(slot(rP, "polygons"), function(x) lapply(slot(x, "Polygons"), slot, "hole")), check.attributes=FALSE)), "\n")
 tf <- paste0(tfbase, driver, "aMPh", sep=".")
 writeOGR(SpatialPolygonsDataFrame(aMPh, data=df3), tf, "OGRGeoJSON",
- driver=driver)
+ driver=driver, verbose=TRUE)
 rP <- as(readOGR(tf, "OGRGeoJSON", verbose=FALSE), "SpatialPolygons")
 cat("aMPh with driver:", driver, "\n")
 unlink(paste(tf, "*", sep=""), recursive=driver == "ESRI Shapefile")
