@@ -157,7 +157,7 @@ SEXP OGR_write(SEXP inp)
             uninstallErrorHandlerAndTriggerError();
             error("number of objects mismatch");
         }
-        int multi=0, Pls_l;
+        int multi=0, Pls_l, icomms=0;
 	for (i=0; i<nobs; i++) {
             comms = SP_PREFIX(comment2comm)(VECTOR_ELT(pls, i));
             if (comms == R_NilValue) {
@@ -168,12 +168,17 @@ SEXP OGR_write(SEXP inp)
                     break;
                 }
             } else {
+                icomms = 1;
                 if (length(comms) > 1) {
                     multi=1;
                     break;
                 }
             }
 	}
+        if (verbose) {
+            if (icomms == 0) Rprintf("No SFS comments in Polygons objects\n");
+            else Rprintf("SFS comments in Polygons objects\n");
+        }
         if (multi > 0) {
             wkbtype = wkbMultiPolygon;
             if (verbose) Rprintf("Object reclassed as: wkbMultiPolygon\n");

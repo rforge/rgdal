@@ -102,24 +102,28 @@ Type 'q()' to quit R.
 + cat(" holes", isTRUE(all.equal(lapply(slot(aMPh, "polygons"), function(x) lapply(slot(x, "Polygons"), slot, "hole")), lapply(slot(rP, "polygons"), function(x) lapply(slot(x, "Polygons"), slot, "hole")), check.attributes=FALSE)), "\n")
 + }
 Object initially classed as: wkbPolygon
+SFS comments in Polygons objects
 Writing 9 wkbPolygon objects
 P with driver: GeoJSON 
  comment TRUE 
  coords TRUE 
  holes TRUE 
 Object initially classed as: wkbPolygon
+SFS comments in Polygons objects
 Writing 9 wkbPolygon objects
 Ph with driver: GeoJSON 
  comment TRUE 
  coords TRUE 
  holes TRUE 
 Object initially classed as: wkbPolygon
+SFS comments in Polygons objects
 Writing 9 wkbPolygon objects
 Phs with driver: GeoJSON 
  comment TRUE 
  coords TRUE 
  holes TRUE 
 Object initially classed as: wkbPolygon
+SFS comments in Polygons objects
 Object reclassed as: wkbMultiPolygon
 Writing 3 wkbMultiPolygon objects
 MP with driver: GeoJSON 
@@ -127,6 +131,7 @@ MP with driver: GeoJSON
  coords TRUE 
  holes TRUE 
 Object initially classed as: wkbPolygon
+SFS comments in Polygons objects
 Object reclassed as: wkbMultiPolygon
 Writing 3 wkbMultiPolygon objects
 MPh with driver: GeoJSON 
@@ -134,47 +139,55 @@ MPh with driver: GeoJSON
  coords TRUE 
  holes TRUE 
 Object initially classed as: wkbPolygon
+No SFS comments in Polygons objects
 Writing 9 wkbPolygon objects
 aP with driver: GeoJSON 
  coords TRUE 
  holes TRUE 
 Object initially classed as: wkbPolygon
+No SFS comments in Polygons objects
 Object reclassed as: wkbMultiPolygon
 Writing 9 wkbMultiPolygon objects
 aPh with driver: GeoJSON 
  coords TRUE 
  holes TRUE 
 Object initially classed as: wkbPolygon
+No SFS comments in Polygons objects
 Object reclassed as: wkbMultiPolygon
 Writing 3 wkbMultiPolygon objects
 aMP with driver: GeoJSON 
  coords TRUE 
  holes TRUE 
 Object initially classed as: wkbPolygon
+No SFS comments in Polygons objects
 Object reclassed as: wkbMultiPolygon
 Writing 3 wkbMultiPolygon objects
 aMPh with driver: GeoJSON 
  coords TRUE 
  holes TRUE 
 Object initially classed as: wkbPolygon
+SFS comments in Polygons objects
 Writing 9 wkbPolygon objects
 P with driver: ESRI Shapefile 
  comment TRUE 
  coords TRUE 
  holes TRUE 
 Object initially classed as: wkbPolygon
+SFS comments in Polygons objects
 Writing 9 wkbPolygon objects
 Ph with driver: ESRI Shapefile 
  comment TRUE 
  coords TRUE 
  holes TRUE 
 Object initially classed as: wkbPolygon
+SFS comments in Polygons objects
 Writing 9 wkbPolygon objects
 Phs with driver: ESRI Shapefile 
  comment TRUE 
  coords TRUE 
  holes TRUE 
 Object initially classed as: wkbPolygon
+SFS comments in Polygons objects
 Object reclassed as: wkbMultiPolygon
 Writing 3 wkbMultiPolygon objects
 MP with driver: ESRI Shapefile 
@@ -182,6 +195,7 @@ MP with driver: ESRI Shapefile
  coords TRUE 
  holes TRUE 
 Object initially classed as: wkbPolygon
+SFS comments in Polygons objects
 Object reclassed as: wkbMultiPolygon
 Writing 3 wkbMultiPolygon objects
 MPh with driver: ESRI Shapefile 
@@ -189,23 +203,27 @@ MPh with driver: ESRI Shapefile
  coords TRUE 
  holes TRUE 
 Object initially classed as: wkbPolygon
+No SFS comments in Polygons objects
 Writing 9 wkbPolygon objects
 aP with driver: ESRI Shapefile 
  coords TRUE 
  holes TRUE 
 Object initially classed as: wkbPolygon
+No SFS comments in Polygons objects
 Object reclassed as: wkbMultiPolygon
 Writing 9 wkbMultiPolygon objects
 aPh with driver: ESRI Shapefile 
  coords TRUE 
  holes TRUE 
 Object initially classed as: wkbPolygon
+No SFS comments in Polygons objects
 Object reclassed as: wkbMultiPolygon
 Writing 3 wkbMultiPolygon objects
 aMP with driver: ESRI Shapefile 
  coords TRUE 
  holes TRUE 
 Object initially classed as: wkbPolygon
+No SFS comments in Polygons objects
 Object reclassed as: wkbMultiPolygon
 Writing 3 wkbMultiPolygon objects
 aMPh with driver: ESRI Shapefile 
@@ -214,4 +232,4 @@ aMPh with driver: ESRI Shapefile
 > 
 > proc.time()
    user  system elapsed 
-  2.654   0.028   2.673 
+  2.769   0.037   2.809 
