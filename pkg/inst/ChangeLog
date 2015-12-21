@@ -1,3 +1,21 @@
+2015-12-18 17:41  rsbivand
+
+	* src/OGR_write.cpp, tests/tripup.Rout.save: adding verbose reports
+
+2015-12-18 17:22  rsbivand
+
+	* src/OGR_write.cpp, tests/tripup.R, tests/tripup.Rout.save: adding
+	  verbose reports
+
+2015-12-18 14:14  rsbivand
+
+	* R/ogr_write.R, src/OGR_write.cpp: adding verbose tracking to
+	  writeOGR
+
+2015-12-17 18:11  rsbivand
+
+	* ChangeLog, inst/ChangeLog: tidy
+
 2015-12-17 14:32  rsbivand
 
 	* ChangeLog, configure, inst/ChangeLog,
