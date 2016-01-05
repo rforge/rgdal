@@ -384,12 +384,24 @@ readOGR <- function(dsn, layer, verbose=TRUE, p4s=NULL,
 showWKT <- function(p4s, file=NULL, morphToESRI=TRUE) {
 
 	if (!is.character(p4s)) stop("invalid p4s object")
+        stopifnot(length(p4s) == 1)
 	if (!is.logical(morphToESRI)) stop("invalid morphToESRI object")
 	res <- .Call("p4s_to_wkt", as.character(p4s), as.integer(morphToESRI), 
 		PACKAGE="rgdal")
 	if (!is.null(file)) cat(res, "\n", sep="", file=file)
 	res
 }
+
+showP4 <- function(wkt, morphFromESRI=TRUE) {
+
+	if (!is.character(wkt)) stop("invalid wkt object")
+        stopifnot(length(wkt) == 1)
+	if (!is.logical(morphFromESRI)) stop("invalid morphFromESRI object")
+	res <- .Call("wkt_to_p4s", as.character(wkt),
+                as.integer(morphFromESRI), PACKAGE="rgdal")
+	res
+}
+
 
 showEPSG <- function(p4s) {
 
