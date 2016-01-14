@@ -159,21 +159,21 @@ readOGR <- function(dsn, layer, verbose=TRUE, p4s=NULL,
                 as.character(layer), as.integer(fids), iflds, PACKAGE="rgdal")
 	    names(dlist) <- make.names(fldnms ,unique=TRUE)
 # FIXME names
-            if (ogr_info$driver %in% c("GPKG", "SQLite")) {
-                for (i in seq(along=dlist)) {
-                    if (is.character(dlist[[i]])) {
-                        Encoding(dlist[[i]]) <- "UTF-8"
-                        dlist[[i]] <- enc2native(dlist[[i]])
-                    }
-                }
-            } else {
+#            if (ogr_info$driver %in% c("GPKG", "SQLite")) {
+#                for (i in seq(along=dlist)) {
+#                    if (is.character(dlist[[i]])) {
+#                        Encoding(dlist[[i]]) <- "UTF-8"
+#                        dlist[[i]] <- enc2native(dlist[[i]])
+#                    }
+#                }
+#            } else {
                 if (use_iconv && !is.null(encoding)) {
                     for (i in seq(along=dlist)) {
                         if (is.character(dlist[[i]]))
                             dlist[[i]] <- iconv(dlist[[i]], from=encoding)
                     }
                 }
-            }
+#            }
             if (!use_iconv && !is.null(encoding) && 
                 ogr_info$driver == "ESRI Shapefile") {
                 tull <- setCPLConfigOption("SHAPE_ENCODING", oSE)

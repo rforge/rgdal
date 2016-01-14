@@ -131,23 +131,23 @@ writeOGR <- function(obj, dsn, layer, driver, dataset_options=NULL, layer_option
             ogr_ftype[i] <- as.integer(0) #"OFTInteger"
         } else stop(paste(dfcls[i], dftof[i], "unknown data type"))
     }
-    if (driver %in% c("GPKG", "SQLite")) {
-        this_charset <- localeToCharset(Sys.getlocale("LC_CTYPE"))
-        for (i in 1:nf) {
-            if (ogr_ftype[i] == 4L) {
-                Enc_i <- Encoding(ldata[[i]])
-                if (all(Enc_i != "UTF-8")) {
-                    if (all(Enc_i == "unknown")) {
-                        Encoding(ldata[[i]]) <- this_charset[1]
-                        ldata[[i]] <- iconv(ldata[[i]], this_charset[1],
-                            "UTF-8")
-                    } else {
-                        ldata[[i]] <- enc2utf8(ldata[[i]])
-                    }
-                }
-            }
-        }
-    }
+#    if (driver %in% c("GPKG", "SQLite")) {
+#        this_charset <- localeToCharset(Sys.getlocale("LC_CTYPE"))
+#        for (i in 1:nf) {
+#            if (ogr_ftype[i] == 4L) {
+#                Enc_i <- Encoding(ldata[[i]])
+#                if (all(Enc_i != "UTF-8")) {
+#                    if (all(Enc_i == "unknown")) {
+#                        Encoding(ldata[[i]]) <- this_charset[1]
+#                        ldata[[i]] <- iconv(ldata[[i]], this_charset[1],
+#                            "UTF-8")
+#                    } else {
+#                        ldata[[i]] <- enc2utf8(ldata[[i]])
+#                    }
+#                }
+#            }
+#        }
+#    }
     fld_names <- names(dfcls)
     if (driver == "ESRI Shapefile") {
         if (any(nchar(fld_names) > 10)) {
