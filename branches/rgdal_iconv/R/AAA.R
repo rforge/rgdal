@@ -23,6 +23,7 @@ assign(".rgdal_old.GDAL_DATA", "", envir=.RGDAL_CACHE)
   assign("OVERRIDE_PROJ_DATUM_WITH_TOWGS84", TRUE, envir=.RGDAL_CACHE)
   assign("silent", TRUE, envir=.RGDAL_CACHE)
   assign("has_proj_def.dat", .Call("PROJ4_proj_def_dat_Installed", PACKAGE="rgdal"), envir=.RGDAL_CACHE)
+  assign("ENCODING_DEBUG", FALSE, envir=.RGDAL_CACHE)
 
   library.dynam('rgdal', pkg, lib)
 
