@@ -386,7 +386,7 @@ extern "C" {
 #endif
 // extern "C" {
 
-  SEXP ogrReadColumn(OGRLayer *poLayer, SEXP FIDs, int iField, int int64){
+  SEXP ogrReadColumn(OGRLayer *poLayer, SEXP FIDs, int iField, int int64, int ENC_DEBUG){
     // read feature data and return something according to the type
     OGRFeatureDefn *poDefn;
     OGRFieldDefn *poField;
@@ -496,9 +496,22 @@ extern "C" {
 	else REAL(ans)[iRow]=NA_REAL;
 	break;
       case OFTString:
-	if (poFeature->IsFieldSet(iField)) 
-          SET_STRING_ELT(ans,iRow,mkChar(poFeature->GetFieldAsString(iField)));
-	else SET_STRING_ELT(ans, iRow, NA_STRING);
+// ENC
+        char str[4096];
+        size_t stln;
+	if (poFeature->IsFieldSet(iField)) {
+          stln = CPLStrnlen(poFeature->GetFieldAsString(iField), 4096);
+          CPLStrlcpy(str, (const char *) poFeature->GetFieldAsString(iField),
+              4096);
+          SET_STRING_ELT(ans, iRow, mkChar(str));
+	} else SET_STRING_ELT(ans, iRow, NA_STRING);
+        if (ENC_DEBUG) {
+            Rprintf("iField: %d, iRow: %d stln %u Enc %s ", iField,
+                iRow, stln, CPLIsUTF8(str, (int) stln)?"UTF-8":"other");
+            for (int si=0; si < (int) stln; si++) 
+                Rprintf("%x ", (unsigned char) str[si]);
+            Rprintf("\n");
+        } /* FIXME */
 	break;
       case OFTDate:
 	if (poFeature->IsFieldSet(iField)) 
@@ -722,6 +735,9 @@ extern "C" {
 
     int64 = getAttrib(iFields, mkString("int64"));
     nListFields = getAttrib(iFields, mkString("nListFields"));
+    SEXP ENC_attr = getAttrib(iFields, mkString("ENCODING_DEBUG"));
+    
+    int ENC_DEBUG = LOGICAL_POINTER(ENC_attr)[0];
 
     // reserve a list for the result
     if (INTEGER_POINTER(nListFields)[0] == 0) {
@@ -735,14 +751,14 @@ extern "C" {
     installErrorHandler();
     if (INTEGER_POINTER(nListFields)[0] == 0) {
       for(iField=0;iField<length(iFields);iField++){
-        SET_VECTOR_ELT(ans,iField,ogrReadColumn(poLayer, FIDs, INTEGER(iFields)[iField], INTEGER(int64)[0]));
+        SET_VECTOR_ELT(ans,iField,ogrReadColumn(poLayer, FIDs, INTEGER(iFields)[iField], INTEGER(int64)[0], ENC_DEBUG));
       }
     } else {
         j=0;
         for(iField=0;iField<length(iFields);iField++){
             if (INTEGER_POINTER(ListFields)[iField] == 0) {
                 SET_VECTOR_ELT(ans, j, 
-                    ogrReadColumn(poLayer, FIDs, INTEGER(iFields)[iField], INTEGER(int64)[0]));
+                    ogrReadColumn(poLayer, FIDs, INTEGER(iFields)[iField], INTEGER(int64)[0], ENC_DEBUG));
                 j++;
             } else {
                 for (k=0; k < INTEGER_POINTER(ListFields)[iField]; k++) {

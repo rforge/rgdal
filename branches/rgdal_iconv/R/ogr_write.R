@@ -1,4 +1,4 @@
-writeOGR <- function(obj, dsn, layer, driver, dataset_options=NULL, layer_options=NULL, verbose=FALSE, check_exists=NULL, overwrite_layer=FALSE, delete_dsn=FALSE, morphToESRI=NULL) {
+writeOGR <- function(obj, dsn, layer, driver, dataset_options=NULL, layer_options=NULL, verbose=FALSE, check_exists=NULL, overwrite_layer=FALSE, delete_dsn=FALSE, morphToESRI=NULL, encoding=NULL) {
     stopifnot(is.logical(verbose))
     drvs <- ogrDrivers()
     mch <- match(driver, drvs$name)
@@ -130,25 +130,20 @@ writeOGR <- function(obj, dsn, layer, driver, dataset_options=NULL, layer_option
             ldata[[i]] <- as.integer(slot(obj, "data")[,i])
             ogr_ftype[i] <- as.integer(0) #"OFTInteger"
         } else stop(paste(dfcls[i], dftof[i], "unknown data type"))
+        if (!is.null(encoding)) {
+            if (ogr_ftype[i] == 4L) {
+                ldata[[i]] <- iconv(ldata[[i]], from=encoding, to="UTF-8")
+            }
+        }
     }
-#    if (driver %in% c("GPKG", "SQLite")) {
-#        this_charset <- localeToCharset(Sys.getlocale("LC_CTYPE"))
-#        for (i in 1:nf) {
-#            if (ogr_ftype[i] == 4L) {
-#                Enc_i <- Encoding(ldata[[i]])
-#                if (all(Enc_i != "UTF-8")) {
-#                    if (all(Enc_i == "unknown")) {
-#                        Encoding(ldata[[i]]) <- this_charset[1]
-#                        ldata[[i]] <- iconv(ldata[[i]], this_charset[1],
-#                            "UTF-8")
-#                    } else {
-#                        ldata[[i]] <- enc2utf8(ldata[[i]])
-#                    }
-#                }
-#            }
-#        }
-#    }
     fld_names <- names(dfcls)
+    if (!is.null(encoding)) {
+        fld_names <- iconv(fld_names, from=encoding, to="UTF-8")
+    }
+    if (get("ENCODING_DEBUG", envir=.RGDAL_CACHE)) {
+        cat("### ENC ###", ifelse(GDAL_iconv(), "GDAL can use iconv",
+            "GDAL does not use iconv"),"\n")
+    }
     if (driver == "ESRI Shapefile") {
         if (any(nchar(fld_names) > 10)) {
             fld_names <- abbreviate(fld_names, minlength=7)
@@ -171,10 +166,15 @@ writeOGR <- function(obj, dsn, layer, driver, dataset_options=NULL, layer_option
     if (any(is.na(FIDs))) FIDs <- as.integer(0:(nobj-1))
     options("warn"=owarn$warn)
     attr(nf, "verbose") <- as.logical(verbose)
+    fld_names <- as.character(fld_names)
+    if (get("ENCODING_DEBUG", envir=.RGDAL_CACHE))
+        attr(fld_names, "ENCODING_DEBUG") <- TRUE
+    else
+        attr(fld_names, "ENCODING_DEBUG") <- FALSE
     
     pre <- list(obj, as.character(dsn), as.character(layer), 
         as.character(driver), as.integer(nobj), nf,
-        as.character(fld_names), as.integer(ogr_ftype), ldata, 
+        fld_names, as.integer(ogr_ftype), ldata, 
         as.character(dataset_options), as.character(layer_options),
         as.logical(morphToESRI), as.integer(FIDs))
     res <- .Call("OGR_write", pre, PACKAGE="rgdal")

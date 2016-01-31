@@ -15,7 +15,7 @@ extern "C" {
 #endif
 
 // RSB 081009
-void wrtDF(int, int, SEXP, SEXP, SEXP, OGRFeature*);
+void wrtDF(int, int, SEXP, SEXP, SEXP, OGRFeature*, int);
 
 SEXP OGR_write(SEXP inp)
 {
@@ -264,6 +264,10 @@ SEXP OGR_write(SEXP inp)
     int nf = INTEGER_POINTER(VECTOR_ELT(inp, 5))[0];
     SEXP fld_names = VECTOR_ELT(inp, 6);
     SEXP ogr_ftype = VECTOR_ELT(inp, 7);
+    SEXP ENC_attr = getAttrib(fld_names, mkString("ENCODING_DEBUG"));
+    
+    int ENC_DEBUG = LOGICAL_POINTER(ENC_attr)[0];
+
     int OGR_type;
 
     for (i=0; i<nf; i++) {
@@ -324,7 +328,7 @@ SEXP OGR_write(SEXP inp)
             poFeature = new OGRFeature( poLayer->GetLayerDefn() );
 
 // RSB 081009
-            wrtDF(i, nf, fld_names, ldata, ogr_ftype, poFeature);
+            wrtDF(i, nf, fld_names, ldata, ogr_ftype, poFeature, ENC_DEBUG);
 
             OGRPoint pt;
             pt.setX( NUMERIC_POINTER(crds)[i] );
@@ -381,7 +385,7 @@ SEXP OGR_write(SEXP inp)
             OGRFeature *poFeature;
             poFeature = new OGRFeature( poLayer->GetLayerDefn() );
 // RSB 081009
-            wrtDF(i, nf, fld_names, ldata, ogr_ftype, poFeature);
+            wrtDF(i, nf, fld_names, ldata, ogr_ftype, poFeature, ENC_DEBUG);
 
             SEXP crds, dim;
             crds = GET_SLOT(VECTOR_ELT(GET_SLOT(VECTOR_ELT(lns, i),
@@ -456,7 +460,7 @@ SEXP OGR_write(SEXP inp)
             OGRFeature *poFeature;
             poFeature = new OGRFeature( poLayer->GetLayerDefn() );
 // RSB 081009
-            wrtDF(i, nf, fld_names, ldata, ogr_ftype, poFeature);
+            wrtDF(i, nf, fld_names, ldata, ogr_ftype, poFeature, ENC_DEBUG);
 
             Lns = GET_SLOT(VECTOR_ELT(lns, i), install("Lines"));
             Lns_l = length(Lns);
@@ -550,7 +554,7 @@ SEXP OGR_write(SEXP inp)
             OGRFeature *poFeature;
             poFeature = new OGRFeature( poLayer->GetLayerDefn() );
 // RSB 081009
-            wrtDF(i, nf, fld_names, ldata, ogr_ftype, poFeature);
+            wrtDF(i, nf, fld_names, ldata, ogr_ftype, poFeature, ENC_DEBUG);
 
             SEXP crds, dim;
 
@@ -730,7 +734,7 @@ SEXP OGR_write(SEXP inp)
                 } 
             }
             uninstallErrorHandlerAndTriggerError();
-            wrtDF(i, nf, fld_names, ldata, ogr_ftype, poFeature);
+            wrtDF(i, nf, fld_names, ldata, ogr_ftype, poFeature, ENC_DEBUG);
 
 // FIXME
 #ifdef GDALV2
@@ -775,8 +779,10 @@ SEXP OGR_write(SEXP inp)
 
 // RSB 081009
 void wrtDF(int i, int nf, SEXP fld_names, SEXP ldata,
-     SEXP ogr_ftype, OGRFeature* poFeature) {
+     SEXP ogr_ftype, OGRFeature* poFeature, int ENC_DEBUG) {
      int j, OGR_type;
+     char str[4096];
+     size_t stln;
      for (j=0; j<nf; j++) {
          installErrorHandler();
          OGR_type = INTEGER_POINTER(ogr_ftype)[j];
@@ -785,9 +791,22 @@ void wrtDF(int i, int nf, SEXP fld_names, SEXP ldata,
                  poFeature->SetField( CHAR(STRING_ELT(fld_names, j)),
                      NUMERIC_POINTER(VECTOR_ELT(ldata, j))[i] );
          } else if (OGR_type == 4) {
-             if (STRING_ELT(VECTOR_ELT(ldata, j), i) != NA_STRING)
-                 poFeature->SetField( CHAR(STRING_ELT(fld_names, j)),
-                     CHAR(STRING_ELT(VECTOR_ELT(ldata, j), i)) );
+             if (STRING_ELT(VECTOR_ELT(ldata, j), i) != NA_STRING) {
+// ENC
+                 stln = CPLStrnlen(CHAR(STRING_ELT(VECTOR_ELT(ldata, j),
+                     i)), 4096);
+                 CPLStrlcpy(str, (const char *) CHAR(STRING_ELT(
+                     VECTOR_ELT(ldata, j), i)), 4096);
+                 if (ENC_DEBUG) {
+                     Rprintf("iField: %d, iRow: %d stln %u Enc %s ", j,
+                         i, stln, CPLIsUTF8(str,
+                         (int) stln)?"UTF-8":"other");
+                     for (int si=0; si < (int) stln; si++) 
+                         Rprintf("%x ", (unsigned char) str[si]);
+                     Rprintf("\n");
+                 }
+                 poFeature->SetField( CHAR(STRING_ELT(fld_names, j)), str);
+             }
          } else if (OGR_type == 0) {
               if (INTEGER_POINTER(VECTOR_ELT(ldata, j))[i] != NA_INTEGER)
                   poFeature->SetField( CHAR(STRING_ELT(fld_names, j)),

@@ -2,10 +2,10 @@
 
 readOGR <- function(dsn, layer, verbose=TRUE, p4s=NULL, 
         stringsAsFactors=default.stringsAsFactors(),
-        drop_unsupported_fields=FALSE, input_field_name_encoding=NULL,
+        drop_unsupported_fields=FALSE,
 	pointDropZ=FALSE, dropNULLGeometries=TRUE, useC=TRUE,
         disambiguateFIDs=FALSE, addCommentsToPolygons=TRUE, encoding=NULL,
-        use_iconv=NULL, swapAxisOrder=FALSE, require_geomType=NULL,
+        use_iconv=FALSE, swapAxisOrder=FALSE, require_geomType=NULL,
         integer64="allow.loss") {
 	if (missing(dsn)) stop("missing dsn")
 	if (nchar(dsn) == 0) stop("empty name")
@@ -19,9 +19,8 @@ readOGR <- function(dsn, layer, verbose=TRUE, p4s=NULL,
           "warn.loss"=2L, 
           "no.loss"=3L)
 # adding argument for SHAPE_ENCODING environment variable 121124
-        if (is.null(use_iconv))
-            use_iconv <- ifelse(as.integer(getGDALVersionInfo("VERSION_NUM"))
-                < 1900L, TRUE, FALSE)
+        stopifnot(is.logical(use_iconv))
+        stopifnot(length(use_iconv) == 1)
         if (!is.null(encoding)) {
             stopifnot(is.character(encoding))
             stopifnot(length(encoding) == 1)
@@ -34,13 +33,11 @@ readOGR <- function(dsn, layer, verbose=TRUE, p4s=NULL,
           m_require_geomType <- match(require_geomType, WKB)
           stopifnot(!is.na(m_require_geomType) || m_require_geomType <= 3)
         }
-        if (!is.null(input_field_name_encoding)) {
-            warning("input_field_name_encoding= deprecated, use encoding=")
-            stopifnot(is.character(input_field_name_encoding))
-            stopifnot(length(input_field_name_encoding) == 1)
-            if (!is.null(encoding) && (encoding != input_field_name_encoding))
-                stop("encoding and input_field_name_encoding differ")
-            if (is.null(encoding)) encoding <- input_field_name_encoding
+# ENC
+        if (get("ENCODING_DEBUG", envir=.RGDAL_CACHE)) {
+            cat("### ENC ### encoding:", encoding, "use_iconv:",
+                use_iconv, ifelse(GDAL_iconv(), "GDAL can use iconv",
+                "GDAL does not use iconv"),"\n")
         }
         
 	suppressMessages(ogr_info <- ogrInfo(dsn=dsn, layer=layer,
@@ -155,31 +152,44 @@ readOGR <- function(dsn, layer, verbose=TRUE, p4s=NULL,
             }
             attr(iflds, "nflds") <- as.integer(nflds)
             attr(iflds, "int64") <- as.integer(int64)
+            if (get("ENCODING_DEBUG", envir=.RGDAL_CACHE))
+                attr(iflds, "ENCODING_DEBUG") <- TRUE
+            else
+                attr(iflds, "ENCODING_DEBUG") <- FALSE
             dlist <- .Call("ogrDataFrame", as.character(dsn),
                 as.character(layer), as.integer(fids), iflds, PACKAGE="rgdal")
 	    names(dlist) <- make.names(fldnms ,unique=TRUE)
-# FIXME names
-#            if (ogr_info$driver %in% c("GPKG", "SQLite")) {
-#                for (i in seq(along=dlist)) {
-#                    if (is.character(dlist[[i]])) {
-#                        Encoding(dlist[[i]]) <- "UTF-8"
-#                        dlist[[i]] <- enc2native(dlist[[i]])
-#                    }
-#                }
-#            } else {
-                if (use_iconv && !is.null(encoding)) {
-                    for (i in seq(along=dlist)) {
-                        if (is.character(dlist[[i]]))
-                            dlist[[i]] <- iconv(dlist[[i]], from=encoding)
+# ENC
+            if (get("ENCODING_DEBUG", envir=.RGDAL_CACHE)) {
+                for (i in seq(along=dlist)) {
+                    if (is.character(dlist[[i]])) {
+                        for(ii in 1:length(dlist[[i]])) {
+                            cat("### ENC ### var", i, "obs", ii,
+                                charToRaw(dlist[[i]][ii]), "\n")
+                        }
                     }
                 }
-#            }
-            if (!use_iconv && !is.null(encoding) && 
-                ogr_info$driver == "ESRI Shapefile") {
-                tull <- setCPLConfigOption("SHAPE_ENCODING", oSE)
             }
-
+            if (use_iconv && !is.null(encoding)) {
+                for (i in seq(along=dlist)) {
+                    if (is.character(dlist[[i]])) {
+                       dlist[[i]] <- iconv(dlist[[i]], from=encoding)
+# ENC
+                       if (get("ENCODING_DEBUG", envir=.RGDAL_CACHE)) {
+                            for(ii in 1:length(dlist[[i]])) {
+                                cat("### ENC ### var", i, "obs", ii,
+                                    charToRaw(dlist[[i]][ii]), "\n")
+                            }
+                        }
+                    }
+                }
+            }
         }
+        if (!use_iconv && !is.null(encoding) && 
+            ogr_info$driver == "ESRI Shapefile") {
+            tull <- setCPLConfigOption("SHAPE_ENCODING", oSE)
+        }
+
 
 	geometry <- .Call("R_OGR_CAPI_features", as.character(dsn), 
 		as.character(layer), comments=addCommentsToPolygons,
