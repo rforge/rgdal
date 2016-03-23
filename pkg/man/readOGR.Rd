@@ -85,6 +85,8 @@ From 0.7-24, if the layer has no fields, a single field containing the FID value
 
 From 0.7-24, attempts are begun to provide users with arguments to control reading from OGR/shapefile driver when the encoding is inappropriate (especially the setting of LDID in shapefile DBFs, and the SHAPE_ENCODING environment variable).
 
+While there is no certainty, newer drivers such as KML, GML, SQLite and Geopackage (GPKG) may encode string fields as UTF-8. Users are advised to explore this on a case to case basis using \code{\link[base]{Encoding}} on string fields of input objects.
+
 Because of the representation of DateTime data in OGR, decimal seconds in input data are rounded to integer seconds, see: \url{http://trac.osgeo.org/gdal/ticket/2680}.
 
 Because some drivers support reading string, integer and real list fields, support has been introduced into \code{ogrInfo} from version 0.9-1 to report their presence and the maximum counts of list items. This may lead to the introduction of the \code{-splitlistfields} facility from the command line utility \code{ogrinfo}. In addition, \code{ogrInfo} reports that there are no features when counting FIDs in a while loop over features in \code{ogrFIDs} never enters the loop, despite the layer feature count reporting at least one feature.
@@ -101,6 +103,7 @@ ogrInfo(dsn="cities.shp", layer="cities")
 setwd(owd)
 cities <- readOGR(dsn=dsn, layer="cities")
 summary(cities)
+table(Encoding(as.character(cities$NAME)))
 ogrInfo(dsn=dsn, layer="kiritimati_primary_roads")
 OGRSpatialRef(dsn=dsn, layer="kiritimati_primary_roads")
 kiritimati_primary_roads <- readOGR(dsn=dsn, layer="kiritimati_primary_roads")

@@ -1,9 +1,9 @@
 Package: rgdal
 Title: Bindings for the Geospatial Data Abstraction Library
-Version: 1.1-6
-Date: 2016-02-01
+Version: 1.1-7
+Date: 2016-03-24
 Depends: R (>= 2.14.0), methods, sp (>= 1.1-0)
-Imports: grDevices, graphics, stats, utils, tau
+Imports: grDevices, graphics, stats, utils
 LinkingTo: sp
 Description: Provides bindings to Frank Warmerdam's Geospatial Data Abstraction Library (GDAL) (>= 1.6.3) and access to projection/transformation operations from the PROJ.4 library. The GDAL and PROJ.4 libraries are external to the package, and, when installing the package from source, must be correctly installed first. Both GDAL raster and OGR vector map data can be imported into R, and GDAL raster data and OGR vector data exported. Use is made of classes defined in the sp package. Windows and Mac Intel OS X binaries (including GDAL, PROJ.4 and Expat) are provided on CRAN. 
 Authors@R: c(
