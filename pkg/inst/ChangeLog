@@ -1,3 +1,11 @@
+2016-03-26 11:12  rsbivand
+
+	* inst/pictures/Rlogo.jpg, inst/pictures/logo.jpg: smaller logo
+
+2016-03-24 11:31  rsbivand
+
+	* ChangeLog, inst/ChangeLog: tidy
+
 2016-03-24 10:55  rsbivand
 
 	* src/ogrsource.cpp: C++98 ll issue
