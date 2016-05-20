@@ -9,7 +9,7 @@ Description: Provides bindings to Frank Warmerdam's Geospatial Data Abstraction 
 Authors@R: c(
 	person("Roger", "Bivand", role = c("cre", "aut"), email = "Roger.Bivand@nhh.no"),
 	person("Tim", "Keitt", role = "aut"),
-	person("Barry", "Rowlingson", role = "aut"),
+	person("Barry", "Rowlingson", role = c("aut", "ctb")),
 	person("Edzer", "Pebesma", role = "ctb"),
 	person("Michael", "Sumner", role = "ctb"),
 	person("Robert", "Hijmans", role = "ctb"),
