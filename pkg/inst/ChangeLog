@@ -1,3 +1,8 @@
+2016-10-19 11:57  rsbivand
+
+	* ChangeLog, DESCRIPTION, configure, inst/ChangeLog,
+	  tests/test_proj.Rout.save: Memory issues Bill Dunlap 161019
+
 2016-10-19 11:56  rsbivand
 
 	* src/ogr_geom.cpp, src/ogr_polygons.c, src/ogr_proj.cpp: Memory
