@@ -1,3 +1,16 @@
+2016-10-21 08:01  rsbivand
+
+	* configure: move inverse proj tests to example
+
+2016-10-21 08:00  rsbivand
+
+	* DESCRIPTION, man/project.Rd, tests/test_proj.R,
+	  tests/test_proj.Rout.save: move inverse proj tests to example
+
+2016-10-19 11:59  rsbivand
+
+	* ChangeLog, inst/ChangeLog: Memory issues Bill Dunlap 161019
+
 2016-10-19 11:57  rsbivand
 
 	* ChangeLog, DESCRIPTION, configure, inst/ChangeLog,
