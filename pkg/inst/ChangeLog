@@ -1,3 +1,14 @@
+2016-11-02 17:02  rsbivand
+
+	* R/gdal.R, R/sgdf_gdal.R, R/sp_gdal.R,
+	  man/GDALReadOnlyDataset-class.Rd, man/SpatialGDAL-class.Rd,
+	  man/readGDAL.Rd, src/gdal-bindings.cpp, src/init.c, src/rgdal.h:
+	  adding allowed drivers to GDAL.open
+
+2016-11-02 10:02  rsbivand
+
+	* ChangeLog, inst/ChangeLog: tidy
+
 2016-11-02 10:01  rsbivand
 
 	* src/gdal-bindings.cpp: GDALOpenEx for rasters; no.loss for vector
