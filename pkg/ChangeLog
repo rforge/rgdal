@@ -1,3 +1,17 @@
+2016-11-02 09:30  rsbivand
+
+	* DESCRIPTION, R/gdal.R, R/ogr.R, R/ogr_sp.R, R/sgdf_gdal.R,
+	  R/sp_gdal.R, configure, configure.ac, inst/vectors/SOURCES,
+	  man/GDALReadOnlyDataset-class.Rd, man/SpatialGDAL-class.Rd,
+	  man/readGDAL.Rd, man/readOGR.Rd, src/gdal-bindings.cpp,
+	  src/init.c, src/ogrsource.cpp, src/rgdal.h,
+	  tests/tests.Rout.save: readOGR modification making layer
+	  optional, add open options for GDAL.open through GDALOpenEx
+
+2016-10-21 08:03  rsbivand
+
+	* ChangeLog, inst/ChangeLog: tidy
+
 2016-10-21 08:01  rsbivand
 
 	* configure: move inverse proj tests to example
