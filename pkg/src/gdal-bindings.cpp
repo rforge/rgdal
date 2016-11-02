@@ -621,8 +621,6 @@ RGDAL_OpenDataset(SEXP filename, SEXP read_only, SEXP silent, SEXP sOpts) {
 
   const char *fn = asString(filename);
 
-  GDALAccess RWFlag;
-
 #ifdef GDALV2
   int i;
   char **papszOpenOptions = NULL;
@@ -636,10 +634,19 @@ RGDAL_OpenDataset(SEXP filename, SEXP read_only, SEXP silent, SEXP sOpts) {
   uninstallErrorHandlerAndTriggerError();
 #endif
 
+#ifdef GDALV2
+  unsigned int RWFlag;
+  if (asLogical(read_only))
+    RWFlag = GDAL_OF_RASTER | GDAL_OF_READONLY;
+  else
+    RWFlag = GDAL_OF_RASTER | GDAL_OF_UPDATE;
+#else
+  GDALAccess RWFlag;
   if (asLogical(read_only))
     RWFlag = GA_ReadOnly;
   else
     RWFlag = GA_Update;
+#endif
 
 /* Modification suggested by Even Rouault, 2009-08-08: */
 
