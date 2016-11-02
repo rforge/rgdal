@@ -1,3 +1,12 @@
+2016-11-02 10:01  rsbivand
+
+	* src/gdal-bindings.cpp: GDALOpenEx for rasters; no.loss for vector
+	  Integer64
+
+2016-11-02 09:31  rsbivand
+
+	* ChangeLog, inst/ChangeLog: tidy
+
 2016-11-02 09:30  rsbivand
 
 	* DESCRIPTION, R/gdal.R, R/ogr.R, R/ogr_sp.R, R/sgdf_gdal.R,
