@@ -45,7 +45,8 @@ Class \code{"GDALMajorObject"}, directly.
 }
 \usage{
 GDAL.close(dataset)
-GDAL.open(filename, read.only = TRUE, silent=FALSE, options=NULL)
+GDAL.open(filename, read.only = TRUE, silent=FALSE,
+                 allowedDrivers = NULL, options=NULL)
 getDriver(dataset)
 %displayDataset(x, offset = c(0, 0), region.dim = dim(x),
 %                           reduction = 1, band = NULL, col = NULL,
@@ -71,6 +72,7 @@ getGeoTransFunc(dataset)
 \item{read.only}{A logical flag indicating whether to open the file as a
   \code{GDALReadOnlyDataset} or as a writable \code{GDALDataset}}
 \item{silent}{ logical; if TRUE, comment and non-fatal CPL driver errors suppressed }
+\item{allowedDrivers}{a character vector of suggested driver short names may be provided starting from GDAL 2.0}
 \item{options}{open options may be passed to raster drivers starting from GDAL 2.0; very few drivers support these options}
 }
 \details{

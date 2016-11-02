@@ -617,20 +617,25 @@ RGDAL_CreateDataset(SEXP sxpDriver, SEXP sDim, SEXP sType,
 }
 
 SEXP
-RGDAL_OpenDataset(SEXP filename, SEXP read_only, SEXP silent, SEXP sOpts) {
+RGDAL_OpenDataset(SEXP filename, SEXP read_only, SEXP silent, SEXP allowedDr, SEXP sOpts) {
 
   const char *fn = asString(filename);
 
 #ifdef GDALV2
   int i;
   char **papszOpenOptions = NULL;
+  char **papszAllowedDrivers = NULL;
   installErrorHandler();
   for (i=0; i < length(sOpts); i++) papszOpenOptions = CSLAddString( 
     papszOpenOptions, CHAR(STRING_ELT(sOpts, i)) );
-#ifdef RGDALDEBUG
   for (i=0; i < CSLCount(papszOpenOptions); i++)
     Rprintf("option %d: %s\n", i, CSLGetField(papszOpenOptions, i));
-#endif
+  uninstallErrorHandlerAndTriggerError();
+  installErrorHandler();
+  for (i=0; i < length(allowedDr); i++) papszAllowedDrivers = CSLAddString( 
+    papszAllowedDrivers, CHAR(STRING_ELT(allowedDr, i)) );
+  for (i=0; i < CSLCount(papszAllowedDrivers); i++)
+    Rprintf("driver %d: %s\n", i, CSLGetField(papszAllowedDrivers, i));
   uninstallErrorHandlerAndTriggerError();
 #endif
 
@@ -657,8 +662,8 @@ RGDAL_OpenDataset(SEXP filename, SEXP read_only, SEXP silent, SEXP sOpts) {
      installErrorHandler();
 
 #ifdef GDALV2
-  GDALDataset *pDataset = (GDALDataset *) GDALOpenEx(fn, RWFlag, NULL,
-    papszOpenOptions, NULL);
+  GDALDataset *pDataset = (GDALDataset *) GDALOpenEx(fn, RWFlag,
+    papszAllowedDrivers, papszOpenOptions, NULL);
 #else
   GDALDataset *pDataset = (GDALDataset *) GDALOpen(fn, RWFlag);
 #endif
@@ -675,6 +680,7 @@ RGDAL_OpenDataset(SEXP filename, SEXP read_only, SEXP silent, SEXP sOpts) {
 #ifdef GDALV2
   installErrorHandler();
   CSLDestroy(papszOpenOptions);
+  CSLDestroy(papszAllowedDrivers);
   uninstallErrorHandlerAndTriggerError();
 #endif
 

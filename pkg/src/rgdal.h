@@ -44,7 +44,7 @@ SEXP RGDAL_CloseHandle(SEXP sxpHandle);
 //SEXP RGDAL_DeleteHandle(SEXP sxpHandle);
 
 SEXP RGDAL_OpenDataset(SEXP filename, SEXP read_only, SEXP silent,
-  SEXP options);
+  SEXP allowedDr, SEXP options);
 SEXP RGDAL_CreateDataset(SEXP sxpDriver, SEXP sDim, SEXP sType,
   SEXP sOpts, SEXP sFile);
 SEXP RGDAL_GetDatasetDriver(SEXP sDataset);
