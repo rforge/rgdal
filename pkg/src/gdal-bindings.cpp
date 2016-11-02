@@ -617,11 +617,24 @@ RGDAL_CreateDataset(SEXP sxpDriver, SEXP sDim, SEXP sType,
 }
 
 SEXP
-RGDAL_OpenDataset(SEXP filename, SEXP read_only, SEXP silent) {
+RGDAL_OpenDataset(SEXP filename, SEXP read_only, SEXP silent, SEXP sOpts) {
 
   const char *fn = asString(filename);
 
   GDALAccess RWFlag;
+
+#ifdef GDALV2
+  int i;
+  char **papszOpenOptions = NULL;
+  installErrorHandler();
+  for (i=0; i < length(sOpts); i++) papszOpenOptions = CSLAddString( 
+    papszOpenOptions, CHAR(STRING_ELT(sOpts, i)) );
+#ifdef RGDALDEBUG
+  for (i=0; i < CSLCount(papszOpenOptions); i++)
+    Rprintf("option %d: %s\n", i, CSLGetField(papszOpenOptions, i));
+#endif
+  uninstallErrorHandlerAndTriggerError();
+#endif
 
   if (asLogical(read_only))
     RWFlag = GA_ReadOnly;
@@ -636,7 +649,13 @@ RGDAL_OpenDataset(SEXP filename, SEXP read_only, SEXP silent) {
   else
      installErrorHandler();
 
+#ifdef GDALV2
+  GDALDataset *pDataset = (GDALDataset *) GDALOpenEx(fn, RWFlag, NULL,
+    papszOpenOptions, NULL);
+#else
   GDALDataset *pDataset = (GDALDataset *) GDALOpen(fn, RWFlag);
+#endif
+
 
   if (pDataset == NULL)
     error("%s\n", CPLGetLastErrorMsg());
@@ -645,6 +664,12 @@ RGDAL_OpenDataset(SEXP filename, SEXP read_only, SEXP silent) {
     CPLPopErrorHandler();
   else
     uninstallErrorHandlerAndTriggerError();
+
+#ifdef GDALV2
+  installErrorHandler();
+  CSLDestroy(papszOpenOptions);
+  uninstallErrorHandlerAndTriggerError();
+#endif
 
 /* Similarly to SWIG bindings, the following lines will cause
 RGDAL_OpenDataset() to fail on - uncleared - errors even if pDataset is not

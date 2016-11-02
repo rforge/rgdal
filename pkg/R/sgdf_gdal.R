@@ -8,10 +8,10 @@ setClass("SpatialGDAL",
 )
 setClass("SpatialGDALWrite", "SpatialGDAL")
 
-open.SpatialGDAL = function(con, ..., silent = FALSE) {
+open.SpatialGDAL = function(con, ..., silent = FALSE, options=NULL) {
 	if (nchar(con) == 0) stop("empty file name")
 
-	grod = GDAL.open(con, read.only = TRUE, silent=silent)
+	grod = GDAL.open(con, read.only = TRUE, silent=silent, options=options)
 
 	d = dim(grod)
 	if (!silent) {

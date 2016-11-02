@@ -16,7 +16,7 @@ be able to save to GDAL driver formats that only permit copying rather
 than creation.}
 \usage{ 
 readGDAL(fname, offset, region.dim, output.dim, band, p4s=NULL, ...,
- half.cell=c(0.5, 0.5), silent = FALSE, OVERRIDE_PROJ_DATUM_WITH_TOWGS84=NULL)
+ half.cell=c(0.5, 0.5), silent = FALSE, OVERRIDE_PROJ_DATUM_WITH_TOWGS84=NULL, options=NULL)
 asSGDF_GROD(x, offset, region.dim, output.dim, p4s=NULL, ...,
  half.cell=c(0.5,0.5), OVERRIDE_PROJ_DATUM_WITH_TOWGS84=NULL)
 writeGDAL(dataset, fname, drivername = "GTiff", type = "Float32",
@@ -27,8 +27,8 @@ create2GDAL(dataset, drivername = "GTiff", type = "Float32", mvFlag = NA,
  catNames=NULL)
 GDALinfo(fname, silent=FALSE, returnRAT=FALSE, returnCategoryNames=FALSE,
  returnStats=TRUE, returnColorTable=FALSE,
- OVERRIDE_PROJ_DATUM_WITH_TOWGS84=NULL, returnScaleOffset=TRUE)
-GDALSpatialRef(fname, silent=FALSE, OVERRIDE_PROJ_DATUM_WITH_TOWGS84=NULL)
+ OVERRIDE_PROJ_DATUM_WITH_TOWGS84=NULL, returnScaleOffset=TRUE, options=NULL)
+GDALSpatialRef(fname, silent=FALSE, OVERRIDE_PROJ_DATUM_WITH_TOWGS84=NULL, options=NULL)
 }
 
 \arguments{
@@ -69,8 +69,8 @@ value works for \sQuote{Int32}, \sQuote{Float32}, \sQuote{Float64}, but
 suitable in-range value that fits the data type should be used for other 
 data types, for example 255 for \sQuote{Byte}, -32768 for \sQuote{Int16}, 
 and so on; see Details below.}
-\item{options}{driver-specific options to be passed to the GDAL driver; 
-see Details below}
+\item{options}{driver-specific options to be passed to the GDAL driver; only available for opening datasets from GDAL 2.0; 
+see copying and creation details below}
 \item{setStatistics}{default FALSE, if TRUE, attempt to set per-band 
 statistics in the output file (driver-dependent)}
 \item{colorTables}{default NULL, if not NULL, a list of length equal to the number of bands, with NULL components for bands with no color table, or either an integer matrix of red, green, blue and alpha values (0-255), or a character vector of colours. The number of colours permitted may vary with driver.}

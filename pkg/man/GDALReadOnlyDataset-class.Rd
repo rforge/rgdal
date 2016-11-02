@@ -45,7 +45,7 @@ Class \code{"GDALMajorObject"}, directly.
 }
 \usage{
 GDAL.close(dataset)
-GDAL.open(filename, read.only = TRUE, silent=FALSE)
+GDAL.open(filename, read.only = TRUE, silent=FALSE, options=NULL)
 getDriver(dataset)
 %displayDataset(x, offset = c(0, 0), region.dim = dim(x),
 %                           reduction = 1, band = NULL, col = NULL,
@@ -71,6 +71,7 @@ getGeoTransFunc(dataset)
 \item{read.only}{A logical flag indicating whether to open the file as a
   \code{GDALReadOnlyDataset} or as a writable \code{GDALDataset}}
 \item{silent}{ logical; if TRUE, comment and non-fatal CPL driver errors suppressed }
+\item{options}{open options may be passed to raster drivers starting from GDAL 2.0; very few drivers support these options}
 }
 \details{
 \code{GDAL.open} and \code{GDAL.close} are shorter versions of \code{new("GDALReadOnlyDataset", ...)} and \code{closeDataset()}. Because \code{GDAL.close} through \code{closeDataset()} uses the finalization mechanism to destroy the handles to the dataset and its driver, messages such as:
