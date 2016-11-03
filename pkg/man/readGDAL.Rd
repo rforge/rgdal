@@ -16,7 +16,8 @@ be able to save to GDAL driver formats that only permit copying rather
 than creation.}
 \usage{ 
 readGDAL(fname, offset, region.dim, output.dim, band, p4s=NULL, ...,
- half.cell=c(0.5, 0.5), silent = FALSE, OVERRIDE_PROJ_DATUM_WITH_TOWGS84=NULL, allowedDrivers = NULL, options=NULL)
+ half.cell=c(0.5, 0.5), silent = FALSE, OVERRIDE_PROJ_DATUM_WITH_TOWGS84=NULL,
+ allowedDrivers = NULL, options=NULL)
 asSGDF_GROD(x, offset, region.dim, output.dim, p4s=NULL, ...,
  half.cell=c(0.5,0.5), OVERRIDE_PROJ_DATUM_WITH_TOWGS84=NULL)
 writeGDAL(dataset, fname, drivername = "GTiff", type = "Float32",
@@ -27,8 +28,10 @@ create2GDAL(dataset, drivername = "GTiff", type = "Float32", mvFlag = NA,
  catNames=NULL)
 GDALinfo(fname, silent=FALSE, returnRAT=FALSE, returnCategoryNames=FALSE,
  returnStats=TRUE, returnColorTable=FALSE,
- OVERRIDE_PROJ_DATUM_WITH_TOWGS84=NULL, returnScaleOffset=TRUE, allowedDrivers = NULL, options=NULL)
-GDALSpatialRef(fname, silent=FALSE, OVERRIDE_PROJ_DATUM_WITH_TOWGS84=NULL, allowedDrivers = NULL, options=NULL)
+ OVERRIDE_PROJ_DATUM_WITH_TOWGS84=NULL, returnScaleOffset=TRUE,
+ allowedDrivers = NULL, options=NULL)
+GDALSpatialRef(fname, silent=FALSE, OVERRIDE_PROJ_DATUM_WITH_TOWGS84=NULL,
+ allowedDrivers = NULL, options=NULL)
 }
 
 \arguments{
