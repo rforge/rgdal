@@ -16,8 +16,9 @@ ogrInfo <- function(dsn, layer, encoding=NULL,
     if (length(layers) == 0L) stop("missing layer")
     if (length(layers) > 0L) layer <- c(layers[1])
     if (length(layers) > 1L)
-      warning("First layer read; multiple layers present in ", dsn,
-        "\ncheck layers with ogrListLayers()")
+      warning("First layer ", layer,
+        " read; multiple layers present in\n", dsn,
+        ", check layers with ogrListLayers()")
     
   }
   if (nchar(layer) == 0) stop("empty name")

@@ -1,4 +1,4 @@
-# Copyright 2006-2012 Roger Bivand
+# Copyright 2006-2016 Roger Bivand
 
 readOGR <- function(dsn, layer, verbose=TRUE, p4s=NULL, 
         stringsAsFactors=default.stringsAsFactors(),
@@ -12,8 +12,9 @@ readOGR <- function(dsn, layer, verbose=TRUE, p4s=NULL,
           if (length(layers) == 0L) stop("missing layer")
           if (length(layers) > 0L) layer <- c(layers[1])
           if (length(layers) > 1L)
-            warning("First layer read; multiple layers present in ", dsn,
-              "\ncheck layers with ogrListLayers()")
+            warning("First layer ", layer,
+              " read; multiple layers present in\n", dsn,
+              ", check layers with ogrListLayers()")
         }
 # stop("missing dsn")
 	if (nchar(dsn) == 0) stop("empty name")
