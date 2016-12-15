@@ -540,7 +540,7 @@ extern "C" {
 //#endif
     }
     if (warn_int64 == 1) {
-        warning("Integer64 values larger than ", %g, " lost significance after conversion to double", dbl_max_int64);
+        warning("Integer64 values larger than %g lost significance after conversion to double", dbl_max_int64);
     }
     uninstallErrorHandlerAndTriggerError();
     UNPROTECT(1);
