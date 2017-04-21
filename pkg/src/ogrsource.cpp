@@ -465,7 +465,7 @@ extern "C" {
       // now get the value using the right type:
       switch(poField->GetType()){
       case OFTInteger:
-#if (GDAL_VERSION_MINOR >= 2 || GDAL_VERSION_MAJOR > 2)
+#if ((GDAL_VERSION_MAJOR == 2 && GDAL_VERSION_MINOR >= 2) || GDAL_VERSION_MAJOR > 2)
         if (poFeature->IsFieldSetAndNotNull(iField))
 #else
 	if (poFeature->IsFieldSet(iField)) 
@@ -505,7 +505,7 @@ extern "C" {
 	break;
 #endif
       case OFTReal:
-#if (GDAL_VERSION_MINOR >= 2 || GDAL_VERSION_MAJOR > 2)
+#if ((GDAL_VERSION_MAJOR == 2 && GDAL_VERSION_MINOR >= 2) || GDAL_VERSION_MAJOR > 2)
         if (poFeature->IsFieldSetAndNotNull(iField))
 #else
 	if (poFeature->IsFieldSet(iField)) 
@@ -514,7 +514,7 @@ extern "C" {
 	else REAL(ans)[iRow]=NA_REAL;
 	break;
       case OFTString:
-#if (GDAL_VERSION_MINOR >= 2 || GDAL_VERSION_MAJOR > 2)
+#if ((GDAL_VERSION_MAJOR == 2 && GDAL_VERSION_MINOR >= 2) || GDAL_VERSION_MAJOR > 2)
         if (poFeature->IsFieldSetAndNotNull(iField))
 #else
 	if (poFeature->IsFieldSet(iField)) 
@@ -523,7 +523,7 @@ extern "C" {
 	else SET_STRING_ELT(ans, iRow, NA_STRING);
 	break;
       case OFTDate:
-#if (GDAL_VERSION_MINOR >= 2 || GDAL_VERSION_MAJOR > 2)
+#if ((GDAL_VERSION_MAJOR == 2 && GDAL_VERSION_MINOR >= 2) || GDAL_VERSION_MAJOR > 2)
         if (poFeature->IsFieldSetAndNotNull(iField))
 #else
 	if (poFeature->IsFieldSet(iField)) 
@@ -532,7 +532,7 @@ extern "C" {
 	else SET_STRING_ELT(ans, iRow, NA_STRING);
 	break;
       case OFTDateTime:
-#if (GDAL_VERSION_MINOR >= 2 || GDAL_VERSION_MAJOR > 2)
+#if ((GDAL_VERSION_MAJOR == 2 && GDAL_VERSION_MINOR >= 2) || GDAL_VERSION_MAJOR > 2)
         if (poFeature->IsFieldSetAndNotNull(iField))
 #else
 	if (poFeature->IsFieldSet(iField)) 
@@ -541,7 +541,7 @@ extern "C" {
 	else SET_STRING_ELT(ans, iRow, NA_STRING);
 	break;
       case OFTTime:
-#if (GDAL_VERSION_MINOR >= 2 || GDAL_VERSION_MAJOR > 2)
+#if ((GDAL_VERSION_MAJOR == 2 && GDAL_VERSION_MINOR >= 2) || GDAL_VERSION_MAJOR > 2)
         if (poFeature->IsFieldSetAndNotNull(iField))
 #else
 	if (poFeature->IsFieldSet(iField)) 
@@ -643,7 +643,7 @@ extern "C" {
     double DINT_MIN = -2251799813685248.0;
 
     while((poFeature = poLayer->GetNextFeature()) != NULL) {
-#if (GDAL_VERSION_MINOR >= 2 || GDAL_VERSION_MAJOR > 2)
+#if ((GDAL_VERSION_MAJOR == 2 && GDAL_VERSION_MINOR >= 2) || GDAL_VERSION_MAJOR > 2)
         if (poFeature->IsFieldSetAndNotNull(iField)) {
 #else
 	if (poFeature->IsFieldSet(iField)) {
