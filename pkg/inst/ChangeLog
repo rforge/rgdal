@@ -1,3 +1,11 @@
+2017-09-13 13:17  rsbivand
+
+	* configure, configure.ac: stop proj checks false positive
+
+2017-06-28 13:04  rsbivand
+
+	* ChangeLog, inst/ChangeLog: tidy
+
 2017-06-28 13:01  rsbivand
 
 	* DESCRIPTION, R/project.R, man/project.Rd,
