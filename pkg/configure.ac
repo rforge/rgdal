@@ -211,11 +211,11 @@ if test [ -n "$proj_lib_path" ] ; then
     AC_SUBST([PKG_LIBS], ["-L${proj_lib_path} ${INPKG_LIBS}"])
 fi
 
+
 LIBS="${INLIBS} ${PKG_LIBS}"
-
-
-
 PKG_LIBS="${PKG_LIBS} -lproj"
+AC_MSG_NOTICE([${CFLAGS} ${PKG_CPPFLAGS}])
+AC_MSG_CHECKING(proj_api.h presence and usability)
 # FIXME re-using names
 [cat > proj_conf_test1.c <<_EOCONF
 #include <stdio.h>
@@ -227,18 +227,15 @@ int main() {
 }
 _EOCONF]
 
-${CC} ${CFLAGS} ${PKG_CPPFLAGS} -o proj_conf_test1 proj_conf_test1.c ${PKG_LIBS}
+if test `${CC} ${CFLAGS} ${PKG_CPPFLAGS} -o proj_conf_test1 proj_conf_test1.c ${PKG_LIBS} 2> /dev/null; echo $?` = 0; then
+  AC_MSG_RESULT(yes)
+else
+  AC_MSG_RESULT(no)
+  AC_MSG_NOTICE([proj_api.h not found in standard or given locations.])
+  exit 1
+fi
 
 proj_version=`./proj_conf_test1`
-proj_api=`echo $?`
-
-AC_MSG_CHECKING(proj_api.h presence and usability)
-if test ${proj_api} -eq 1 ; then
-    AC_MSG_RESULT([proj_api.h not found in standard or given locations.])
-    exit 1
-else
-    AC_MSG_RESULT(yes)
-fi
 
 AC_MSG_CHECKING([PROJ.4 version: ])
 if test ${proj_version} -eq 480; then
