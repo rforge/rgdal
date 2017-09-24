@@ -75,7 +75,6 @@ else
   fi
 fi
 
-
 AC_MSG_CHECKING(gdal-config usability)
 if test `${GDAL_CONFIG} --version`;
 then
@@ -85,6 +84,7 @@ then
         GDAL_VERSION=`${GDAL_CONFIG} --version`
         GDAL_DEP_LIBS=`${GDAL_CONFIG} --dep-libs`
         GDAL_DATADIR=`${GDAL_CONFIG} --datadir`
+        gdalok=yes
         AC_MSG_RESULT(yes)
 else
         AC_MSG_RESULT(no)
@@ -126,11 +126,6 @@ AC_SUBST([PKG_LIBS], ["${INPKG_LIBS} ${GDAL_LIBS}"])
 # since we'll set PKG_CPPFLAGS with this, but that shouldn't hurt
 CPPFLAGS="${INCPPFLAGS} ${PKG_CPPFLAGS}"
 
-gdalok=yes
-AC_CHECK_HEADERS(gdal.h,,gdalok=no)
-if test "${gdalok}" = no; then
-   AC_MSG_ERROR([gdal.h not found in given locations.])
-fi
 
 NEED_DEPS=no
 LIBS="${INLIBS} ${PKG_LIBS}"
@@ -206,12 +201,6 @@ fi
 CPPFLAGS="${INCPPFLAGS} ${PKG_CPPFLAGS}"
 
 
-proj4ok=yes
-AC_CHECK_HEADERS(proj_api.h,,proj4ok=no)
-if test "${proj4ok}" = no; then
-   AC_MSG_ERROR([proj_api.h not found in standard or given locations.])
-fi
-
           
 # dnl ditto for a library path
 AC_ARG_WITH([proj-lib],
@@ -224,11 +213,6 @@ fi
 
 LIBS="${INLIBS} ${PKG_LIBS}"
 
-proj4ok=yes
-AC_CHECK_LIB(proj,pj_init_plus,,proj4ok=no)
-if test "${proj4ok}" = no; then
-   AC_MSG_ERROR([libproj not found in standard or given locations.])
-fi
 
 
 PKG_LIBS="${PKG_LIBS} -lproj"
@@ -246,15 +230,25 @@ _EOCONF]
 ${CC} ${CFLAGS} ${PKG_CPPFLAGS} -o proj_conf_test1 proj_conf_test1.c ${PKG_LIBS}
 
 proj_version=`./proj_conf_test1`
+proj_api=`echo $?`
 
+AC_MSG_CHECKING(proj_api.h presence and usability)
+if test ${proj_api} -eq 1 ; then
+    AC_MSG_RESULT([proj_api.h not found in standard or given locations.])
+    exit 1
+else
+    AC_MSG_RESULT(yes)
+fi
+
+AC_MSG_CHECKING([PROJ.4 version: ])
 if test ${proj_version} -eq 480; then
-  AC_MSG_NOTICE([PROJ.4 version: 4.8.0])
+  AC_MSG_RESULT([4.8.0])
   AC_SUBST([PKG_CPPFLAGS],["-DP4CTX=1 ${PKG_CPPFLAGS}"])
 else if test ${proj_version} -ge 490; then
-  AC_MSG_NOTICE([PROJ.4 version: > 4.8.0])
+  AC_MSG_RESULT([> 4.8.0])
   AC_SUBST([PKG_CPPFLAGS],["-DP4CTX=1 ${PKG_CPPFLAGS}"])
 else
-  AC_MSG_NOTICE([PROJ.4 version: < 4.8.0])
+  AC_MSG_RESULT([< 4.8.0])
 fi
 fi
 
