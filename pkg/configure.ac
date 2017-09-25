@@ -231,8 +231,7 @@ if test `${CC} ${CFLAGS} ${PKG_CPPFLAGS} -o proj_conf_test1 proj_conf_test1.c ${
   AC_MSG_RESULT(yes)
 else
   AC_MSG_RESULT(no)
-  AC_MSG_NOTICE([proj_api.h not found in standard or given locations.])
-  exit 1
+  AC_MSG_ERROR([proj_api.h not found in standard or given locations.])
 fi
 
 proj_version=`./proj_conf_test1`
