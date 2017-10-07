@@ -1,3 +1,13 @@
+2017-10-07 12:31  rsbivand
+
+	* src/ogrsource.cpp: fix omitted Integer64List counts in ogrInfo C
+	  level
+
+2017-10-07 12:20  rsbivand
+
+	* ChangeLog, configure, inst/ChangeLog: fix omitted Integer64List
+	  counts in ogrInfo C level
+
 2017-10-07 10:25  rsbivand
 
 	* DESCRIPTION, src/ogrsource.cpp: fix omitted Integer64List counts
