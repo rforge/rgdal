@@ -198,7 +198,8 @@ extern "C" {
       INTEGER(itemtype)[iField]=poField->GetType();
       if (INTEGER(itemtype)[iField] == OFTIntegerList ||
          INTEGER(itemtype)[iField] == OFTRealList ||
-         INTEGER(itemtype)[iField] == OFTStringList) listFieldCount++;
+         INTEGER(itemtype)[iField] == OFTStringList ||
+         INTEGER(itemtype)[iField] == OFTInteger64List) listFieldCount++;
       INTEGER(itemwidth)[iField]=poField->GetWidth();
       SET_STRING_ELT(itemTypeNames,iField,mkChar(poField->GetFieldTypeName(
         poField->GetType())));
@@ -236,6 +237,10 @@ extern "C" {
                     if (nCount[iField] > INTEGER(itemlistmaxcount)[iField])
                         INTEGER(itemlistmaxcount)[iField] = nCount[iField];
                 } else if (INTEGER(itemtype)[iField] == OFTStringList) {
+                    nCount[iField] = psField->StringList.nCount;
+                    if (nCount[iField] > INTEGER(itemlistmaxcount)[iField])
+                        INTEGER(itemlistmaxcount)[iField] = nCount[iField];
+                } else if (INTEGER(itemtype)[iField] == OFTInteger64List) {
                     nCount[iField] = psField->StringList.nCount;
                     if (nCount[iField] > INTEGER(itemlistmaxcount)[iField])
                         INTEGER(itemlistmaxcount)[iField] = nCount[iField];
