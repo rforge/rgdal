@@ -22,6 +22,8 @@ exportClass(GDALReadOnlyDataset)
 exportClass(GDALTransientDataset)
 exportClass(SpatialGDAL, SpatialGDALWrite)
 
+export(rgdal_extSoftVersion)
+
 export(project, make_EPSG, projInfo, getPROJ4VersionInfo, getPROJ4libPath,
   projNAD)
 export(CRSargs, checkCRSArgs)

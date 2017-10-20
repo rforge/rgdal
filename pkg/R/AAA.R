@@ -76,3 +76,7 @@ assign(".rgdal_old.GDAL_DATA", "", envir=.RGDAL_CACHE)
   .Call('RGDAL_Exit', PACKAGE="rgdal")
 }
 
+rgdal_extSoftVersion <- function() {
+  res <- c("PROJ.4"=getPROJ4VersionInfo(), "GDAL"=getGDALVersionInfo(), "GDAL_with_GEOS"=as.character(getGDALwithGEOS()), "sp"=version_sp_linkingTo())
+  res
+}

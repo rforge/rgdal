@@ -12,6 +12,7 @@
 \alias{getGDALwithGEOS}
 \alias{getCPLConfigOption}
 \alias{setCPLConfigOption}
+\alias{rgdal_extSoftVersion}
 \title{Class "GDALDriver": GDAL Driver Object}
 
 \description{\code{GDALDriver} objects encapsulate GDAL file format
@@ -42,6 +43,7 @@ getDriverLongName(driver)
 getGDALVersionInfo(str = "--version")
 getGDALCheckVersion()
 getGDALwithGEOS()
+rgdal_extSoftVersion()
 getCPLConfigOption(ConfigOption)
 setCPLConfigOption(ConfigOption, value)
 }
