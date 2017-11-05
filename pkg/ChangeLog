@@ -1,3 +1,16 @@
+2017-11-05 15:30  rsbivand
+
+	* R/ogr_write.R, src/OGR_write.cpp: adding warning that field names
+	  changed
+
+2017-11-04 15:09  rsbivand
+
+	* configure: tidy
+
+2017-11-04 15:08  rsbivand
+
+	* ChangeLog, inst/ChangeLog: tidy
+
 2017-11-04 15:07  rsbivand
 
 	* DESCRIPTION, src/OGR_write.cpp: fix shapefile writing bug for
