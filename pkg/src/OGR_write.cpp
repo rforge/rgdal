@@ -33,9 +33,10 @@ SEXP OGR_write(SEXP inp)
     OGRDataSource *poDS;
 #endif
     OGRLayer *poLayer;
+    OGRFeatureDefn *poDefn;
     char **papszCreateOptions = NULL;
     char **papszCreateOptionsLayer = NULL;
-    SEXP ans, wkbtype_attr, comms;
+    SEXP ans, wkbtype_attr, comms, ofld_nms;
     int verbose = INTEGER_POINTER(getAttrib(VECTOR_ELT(inp, 5),
         install("verbose")))[0];
     int pc=0, i, j, k;
@@ -266,6 +267,7 @@ SEXP OGR_write(SEXP inp)
     SEXP ogr_ftype = VECTOR_ELT(inp, 7);
     int OGR_type;
 
+
     for (i=0; i<nf; i++) {
         OGR_type = INTEGER_POINTER(ogr_ftype)[i];
         if (OGR_type != 0 && OGR_type != 2 && OGR_type != 4) {
@@ -296,6 +298,22 @@ SEXP OGR_write(SEXP inp)
         }
         uninstallErrorHandlerAndTriggerError();
     }
+    
+    installErrorHandler();
+    poDefn = poLayer->GetLayerDefn();
+    int nFields =  poDefn->GetFieldCount();
+    uninstallErrorHandlerAndTriggerError();
+
+    PROTECT(ofld_nms = NEW_CHARACTER(nFields)); pc++;
+
+    installErrorHandler();
+    for (i=0; i<nFields; i++) {
+      OGRFieldDefn *poField = poDefn->GetFieldDefn(i);
+      SET_STRING_ELT(ofld_nms, i, COPY_TO_USER_STRING(poField->GetNameRef()));
+    }
+    uninstallErrorHandlerAndTriggerError();
+        
+    setAttrib(ans, install("ofld_nms"), ofld_nms);
 
     SEXP ldata = VECTOR_ELT(inp, 8);
 
