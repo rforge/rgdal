@@ -1,3 +1,11 @@
+2017-11-20 09:48  rsbivand
+
+	* DESCRIPTION: tidy
+
+2017-11-05 15:32  rsbivand
+
+	* ChangeLog, inst/ChangeLog: tidy
+
 2017-11-05 15:30  rsbivand
 
 	* R/ogr_write.R, src/OGR_write.cpp: adding warning that field names
