@@ -1,3 +1,12 @@
+2017-11-21 12:58  rsbivand
+
+	* DESCRIPTION, R/ogr_write.R, src/OGR_write.cpp: reverse field
+	  number bugfix for all drivers but ESRI Shapefile
+
+2017-11-20 09:49  rsbivand
+
+	* ChangeLog, inst/ChangeLog: tidy
+
 2017-11-20 09:48  rsbivand
 
 	* DESCRIPTION: tidy
