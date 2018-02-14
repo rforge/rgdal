@@ -7,6 +7,11 @@ readOGR <- function(dsn, layer, verbose=TRUE, p4s=NULL,
         disambiguateFIDs=FALSE, addCommentsToPolygons=TRUE, encoding=NULL,
         use_iconv=FALSE, swapAxisOrder=FALSE, require_geomType=NULL,
         integer64="no.loss", GDAL1_integer64_policy=FALSE) {
+	if (missing(dsn)) stop("missing dsn")
+        stopifnot(is.character(dsn))
+        stopifnot(length(dsn) == 1L)
+        dsn <- normalizePath(dsn)
+	if (nchar(dsn) == 0) stop("empty name")
 	if (missing(layer)){
           layers <- ogrListLayers(dsn=dsn)
           if (length(layers) == 0L) stop("missing layer")
@@ -17,7 +22,6 @@ readOGR <- function(dsn, layer, verbose=TRUE, p4s=NULL,
               ", check layers with ogrListLayers()")
         }
 # stop("missing dsn")
-	if (nchar(dsn) == 0) stop("empty name")
 	if (missing(layer)) stop("missing layer")
 	if (nchar(layer) == 0) stop("empty name")
         integer64 <- match.arg(integer64,

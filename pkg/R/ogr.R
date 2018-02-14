@@ -10,7 +10,10 @@
 ogrInfo <- function(dsn, layer, encoding=NULL,
   use_iconv=FALSE, swapAxisOrder=FALSE, require_geomType=NULL) {
   if (missing(dsn)) stop("missing dsn")
-  if (nchar(dsn) == 0) stop("empty name")
+  stopifnot(is.character(dsn))
+  stopifnot(length(dsn) == 1L)
+  dsn <- normalizePath(dsn)
+  if (nchar(dsn) == 0) stop("empty dsn")
   if (missing(layer)) {
     layers <- ogrListLayers(dsn=dsn)
     if (length(layers) == 0L) stop("missing layer")
@@ -204,6 +207,9 @@ print.ogrinfo <- function(x, ...) {
 
 ogrFIDs <- function(dsn, layer){
   if (missing(dsn)) stop("missing dsn")
+  stopifnot(is.character(dsn))
+  stopifnot(length(dsn) == 1L)
+  dsn <- normalizePath(dsn)
   if (nchar(dsn) == 0) stop("empty name")
   if (missing(layer)) stop("missing layer")
   if (nchar(layer) == 0) stop("empty name")
@@ -229,6 +235,9 @@ ogrDrivers <- function() {
 }
 
 "OGRSpatialRef" <- function(dsn, layer) {
+  stopifnot(is.character(dsn))
+  stopifnot(length(dsn) == 1L)
+  dsn <- normalizePath(dsn)
     .Call("ogrP4S", as.character(dsn), as.character(layer),
         PACKAGE="rgdal")
 }
@@ -237,6 +246,7 @@ ogrListLayers <- function(dsn) {
   if (missing(dsn)) stop("missing dsn")
   stopifnot(is.character(dsn))
   stopifnot(length(dsn) == 1)
+  dsn <- normalizePath(dsn)
   if (nchar(dsn) == 0) stop("empty name")
   if (!is.null(attr(dsn, "debug"))) {
     stopifnot(is.logical(attr(dsn, "debug")))
