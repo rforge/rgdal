@@ -1,3 +1,8 @@
+2018-02-14 10:47  rsbivand
+
+	* ChangeLog, R/ogr.R, R/ogr_sp.R, R/ogr_write.R, inst/ChangeLog:
+	  add normalizePath() to OGR
+
 2018-02-10 15:54  rsbivand
 
 	* ChangeLog, inst/ChangeLog: add new Windows drivers
