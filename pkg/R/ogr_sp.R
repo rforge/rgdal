@@ -140,7 +140,7 @@ readOGR <- function(dsn, layer, verbose=TRUE, p4s=NULL,
 
 	}
 # suggestion by Paul Hiemstra 070817
-	prj <- .Call("ogrP4S", as.character(dsn), as.character(layer), 
+	prj <- .Call("ogrP4S", as.character(dsn), enc2utf8(as.character(layer)), 
 		PACKAGE="rgdal")
 	if (!is.null(p4s)) {
             if (!is.na(prj)) {
@@ -179,7 +179,7 @@ readOGR <- function(dsn, layer, verbose=TRUE, p4s=NULL,
             attr(iflds, "nflds") <- as.integer(nflds)
             attr(iflds, "int64") <- as.integer(int64)
             dlist <- .Call("ogrDataFrame", as.character(dsn),
-                as.character(layer), as.integer(fids), iflds, PACKAGE="rgdal")
+                enc2utf8(as.character(layer)), as.integer(fids), iflds, PACKAGE="rgdal")
 	    names(dlist) <- make.names(fldnms ,unique=TRUE)
 
             if (use_iconv && !is.null(encoding)) {
@@ -197,7 +197,7 @@ readOGR <- function(dsn, layer, verbose=TRUE, p4s=NULL,
 
 
 	geometry <- .Call("R_OGR_CAPI_features", as.character(dsn), 
-		as.character(layer), comments=addCommentsToPolygons,
+		enc2utf8(as.character(layer)), comments=addCommentsToPolygons,
                 PACKAGE="rgdal")
 	if (is.null(retain)) {
 	    eType <- geometry[[4]]
