@@ -1,3 +1,11 @@
+2018-02-15 09:00  rsbivand
+
+	* R/ogr.R, R/ogr_sp.R: add enc2utf8 to OGR readers
+
+2018-02-14 10:47  rsbivand
+
+	* ChangeLog, inst/ChangeLog: tidy
+
 2018-02-14 10:47  rsbivand
 
 	* ChangeLog, R/ogr.R, R/ogr_sp.R, R/ogr_write.R, inst/ChangeLog:
