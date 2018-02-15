@@ -10,7 +10,8 @@ readOGR <- function(dsn, layer, verbose=TRUE, p4s=NULL,
 	if (missing(dsn)) stop("missing dsn")
         stopifnot(is.character(dsn))
         stopifnot(length(dsn) == 1L)
-        dsn <- normalizePath(dsn)
+# copy sf::st_read.default usage
+        dsn <- enc2utf8(normalizePath(dsn))
 	if (nchar(dsn) == 0) stop("empty name")
 	if (missing(layer)){
           layers <- ogrListLayers(dsn=dsn)
@@ -20,9 +21,9 @@ readOGR <- function(dsn, layer, verbose=TRUE, p4s=NULL,
             warning("First layer ", layer,
               " read; multiple layers present in\n", dsn,
               ", check layers with ogrListLayers()")
-        }
+        }  else layer <- enc2utf8(layer)
 # stop("missing dsn")
-	if (missing(layer)) stop("missing layer")
+#	if (missing(layer)) stop("missing layer")
 	if (nchar(layer) == 0) stop("empty name")
         integer64 <- match.arg(integer64,
           c("allow.loss", "warn.loss", "no.loss"))

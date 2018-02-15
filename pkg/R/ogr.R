@@ -12,18 +12,19 @@ ogrInfo <- function(dsn, layer, encoding=NULL,
   if (missing(dsn)) stop("missing dsn")
   stopifnot(is.character(dsn))
   stopifnot(length(dsn) == 1L)
-  dsn <- normalizePath(dsn)
+# copy sf::st_read.default usage
+  dsn <- enc2utf8(normalizePath(dsn))
   if (nchar(dsn) == 0) stop("empty dsn")
   if (missing(layer)) {
     layers <- ogrListLayers(dsn=dsn)
     if (length(layers) == 0L) stop("missing layer")
-    if (length(layers) > 0L) layer <- c(layers[1])
+    if (length(layers) > 0L) layer <- enc2utf8(c(layers[1]))
     if (length(layers) > 1L)
       warning("First layer ", layer,
         " read; multiple layers present in\n", dsn,
         ", check layers with ogrListLayers()")
     
-  }
+  } else layer <- enc2utf8(layer)
   if (nchar(layer) == 0) stop("empty name")
   WKB <- c("wkbPoint", "wkbLineString", "wkbPolygon", "wkbMultiPoint",
     "wkbMultiLineString", "wkbMultiPolygon", "wkbGeometryCollection")
@@ -144,7 +145,7 @@ ogrInfo <- function(dsn, layer, encoding=NULL,
     "nListFields")
   if (ogrinfo$driver == "ESRI Shapefile") {
       DSN <- dsn
-      if (!file.info(DSN)$isdir) DSN <- dirname(normalizePath(dsn))
+      if (!file.info(DSN)$isdir) DSN <- dirname(enc2utf8(normalizePath(dsn)))
       DBF_fn <- paste(DSN, .Platform$file.sep, layer, ".dbf", sep = "")
       if (file.exists(DBF_fn)) {
         con <- file(DBF_fn, "rb")
@@ -209,9 +210,11 @@ ogrFIDs <- function(dsn, layer){
   if (missing(dsn)) stop("missing dsn")
   stopifnot(is.character(dsn))
   stopifnot(length(dsn) == 1L)
-  dsn <- normalizePath(dsn)
+# copy sf::st_read.default usage
+  dsn <- enc2utf8(normalizePath(dsn))
   if (nchar(dsn) == 0) stop("empty name")
   if (missing(layer)) stop("missing layer")
+  layer <- enc2utf8(layer)
   if (nchar(layer) == 0) stop("empty name")
   fids <- .Call("ogrFIDs",as.character(dsn),as.character(layer), PACKAGE = "rgdal")
   if (attr(fids, "i") == 0L) warning("no features found")
@@ -237,8 +240,10 @@ ogrDrivers <- function() {
 "OGRSpatialRef" <- function(dsn, layer) {
   stopifnot(is.character(dsn))
   stopifnot(length(dsn) == 1L)
-  dsn <- normalizePath(dsn)
-    .Call("ogrP4S", as.character(dsn), as.character(layer),
+# copy sf::st_read.default usage
+  dsn <- enc2utf8(normalizePath(dsn))
+  layer <- enc2utf8(layer)
+  .Call("ogrP4S", as.character(dsn), as.character(layer),
         PACKAGE="rgdal")
 }
 
@@ -246,7 +251,8 @@ ogrListLayers <- function(dsn) {
   if (missing(dsn)) stop("missing dsn")
   stopifnot(is.character(dsn))
   stopifnot(length(dsn) == 1)
-  dsn <- normalizePath(dsn)
+# copy sf::st_read.default usage
+  dsn <- enc2utf8(normalizePath(dsn))
   if (nchar(dsn) == 0) stop("empty name")
   if (!is.null(attr(dsn, "debug"))) {
     stopifnot(is.logical(attr(dsn, "debug")))
