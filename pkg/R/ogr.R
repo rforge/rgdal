@@ -264,6 +264,8 @@ ogrListLayers <- function(dsn) {
   n <- length(layers)
   tmp <- layers[n]
   layers <- layers[-n]
+  Encoding(layers) <- "UTF-8"
+  layers <- enc2native(layers)
   attr(layers, "driver") <- tmp
   attr(layers, "nlayers") <- (n-1)
   layers
