@@ -1,3 +1,11 @@
+2018-03-13 14:09  rsbivand
+
+	* R/Class-CRSx.R: WebMerc on 4.9.3
+
+2018-03-13 13:07  rsbivand
+
+	* ChangeLog, inst/ChangeLog: tidy
+
 2018-03-13 13:06  rsbivand
 
 	* configure: work-around for proj 5.0.0 Web Mercator bug
