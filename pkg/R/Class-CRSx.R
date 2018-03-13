@@ -34,9 +34,9 @@
 
 checkCRSArgs <- function(uprojargs) {
 # RSB Web Mercator bug 180313 (for 5.0.0)
+  drop_nadgrids <- FALSE
   if (strsplit(strsplit(getPROJ4VersionInfo(), ",")[[1]][1], " ")[[1]][2]
     == "5.0.0") {
-    drop_nadgrids <- FALSE
     if (length(grep("+init=epsg:3857", uprojargs)) > 0L) drop_nadgrids <- TRUE
   }
 # RSB 2015-05-21
