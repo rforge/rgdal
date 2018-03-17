@@ -459,8 +459,6 @@ SEXP checkCRSArgs(SEXP args) {
 	SEXP res;
 	projPJ pj;
         char *cp=NULL;
-        char *cbuf, c;
-        int i, k;
 	PROTECT(res = NEW_LIST(2));
 	SET_VECTOR_ELT(res, 0, NEW_LOGICAL(1));
 	SET_VECTOR_ELT(res, 1, NEW_CHARACTER(1));
@@ -477,14 +475,10 @@ SEXP checkCRSArgs(SEXP args) {
 	}
 
         cp = pj_get_def(pj, 0); 
-        c = cp[0];
-        if (isspace(c)) {
-            k = (int) strlen(cp);
-            cbuf = (char *) R_alloc((size_t) k+3, sizeof(char));
-            for (i=0; i<(k-1); i++) cbuf[i] = cp[i+1];
-            cbuf[(k-1)] = '\0';
+// Thanks to Brian Ripley for resolving poor coding issue found in GCC 8
+        if (isspace(cp[0])) {
 	    SET_STRING_ELT(VECTOR_ELT(res, 1), 0, 
-		COPY_TO_USER_STRING(cbuf));
+		COPY_TO_USER_STRING(cp+1));
         } else {
 	    SET_STRING_ELT(VECTOR_ELT(res, 1), 0, 
 		COPY_TO_USER_STRING(cp));
