@@ -36,6 +36,17 @@ else
 fi
 AC_MSG_NOTICE([svn revision: ${SVN_VERSION}])
 
+DEPRECATED="no"
+
+AC_ARG_ENABLE([deprecated],
+    AC_HELP_STRING([--enable-deprecated=yes/no],
+           [attempt to install with GDAL < 2.1.2 and/or PROJ < 4.9.2]),
+           [deprecated=$withval])
+if test [ -n "$deprecated" ] ; then
+    AC_SUBST([DEPRECATED_PERMITTED],["${deprecated}"])
+    AC_MSG_NOTICE(DEPRECATED ACTIVE)
+fi
+
 #GDAL
 
 GDAL_CONFIG="gdal-config"
@@ -75,6 +86,7 @@ else
   fi
 fi
 
+
 AC_MSG_CHECKING(gdal-config usability)
 if test `${GDAL_CONFIG} --version`;
 then
@@ -104,11 +116,22 @@ else
 fi
 
 AC_MSG_NOTICE([GDAL: ${GDAL_VERSION}])
-AC_MSG_CHECKING([GDAL version >= 1.6.3])
+
+AC_MSG_CHECKING([GDAL version >= 2.1.0])
 GDAL_VER_DOT=`echo $GDAL_VERSION | tr -d "."`
-if test ${GDAL_VER_DOT} -lt 163 ; then
+if test ${GDAL_VER_DOT} -lt 210 ; then
   AC_MSG_RESULT(no)
-  AC_MSG_ERROR([upgrade GDAL to 1.6.3 or later])
+  if test "${DEPRECATED}" != "yes" ; then
+    AC_MSG_ERROR([upgrade GDAL to 2.1.0 or later])
+  else
+    AC_MSG_CHECKING([GDAL version >= 1.6.3])
+    if test ${GDAL_VER_DOT} -lt 163 ; then
+      AC_MSG_RESULT(no)
+      AC_MSG_ERROR([upgrade GDAL to 1.6.3 or later])
+    else
+      AC_MSG_RESULT(yes)
+    fi
+  fi
 else
   AC_MSG_RESULT(yes)
 fi
@@ -238,6 +261,27 @@ proj_version=`./proj_conf_test1`
 
 rm -f proj_conf_test1.c proj_conf_test1
 
+
+AC_MSG_CHECKING([PROJ version >= 4.9.2])
+if test ${proj_version} -lt 492 ; then
+  AC_MSG_RESULT(no)
+  if test "${DEPRECATED}" != "yes" ; then
+    AC_MSG_ERROR([upgrade PROJ to 4.9.2 or later])
+  else
+    AC_MSG_CHECKING([PROJ version >= 449])
+    if test ${proj_version} -lt 449 ; then
+      AC_MSG_RESULT(no)
+      AC_MSG_ERROR([upgrade PROJ to 4.4.9 or later])
+    else
+      AC_MSG_RESULT(yes)
+    fi
+  fi
+else
+  AC_MSG_RESULT(yes)
+fi
+
+
+
 AC_MSG_CHECKING(projects.h presence and usability)
 # FIXME re-using names
 [cat > proj_conf_test1a.c <<_EOCONF
@@ -253,10 +297,18 @@ if test `${CC} ${CFLAGS} ${PKG_CPPFLAGS} -o proj_conf_test1a proj_conf_test1a.c 
   AC_MSG_RESULT(yes)
 else
   AC_MSG_RESULT(no)
-  AC_MSG_ERROR([projects.h not found in standard or given locations.])
+  STOP = "stop"
 fi
 rm -f proj_conf_test1a.c proj_conf_test1a
 
+if test "$STOP" = "stop" ; then
+    echo "projects.h not found in standard or given locations."
+    echo "PROJ 4.8.0 was bundled wrongly, and did not provide"
+    echo "the file. A copy is provided in init/etc in the source"
+    echo "package for the users to place in the same directory"
+    echo "as proj_api.h manually."
+    exit 1
+fi
 
 AC_MSG_CHECKING([PROJ.4 version: ])
 if test ${proj_version} -eq 480; then
