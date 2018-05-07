@@ -36,16 +36,6 @@ else
 fi
 AC_MSG_NOTICE([svn revision: ${SVN_VERSION}])
 
-DEPRECATED="no"
-
-AC_ARG_ENABLE([deprecated],
-    AC_HELP_STRING([--enable-deprecated=yes/no],
-           [attempt to install with GDAL < 2.1.2 and/or PROJ < 4.9.2]),
-           [deprecated=$withval])
-if test [ -n "$deprecated" ] ; then
-    AC_SUBST([DEPRECATED_PERMITTED],["${deprecated}"])
-    AC_MSG_NOTICE(DEPRECATED ACTIVE)
-fi
 
 #GDAL
 
@@ -117,23 +107,20 @@ fi
 
 AC_MSG_NOTICE([GDAL: ${GDAL_VERSION}])
 
-AC_MSG_CHECKING([GDAL version >= 2.1.0])
-GDAL_VER_DOT=`echo $GDAL_VERSION | tr -d "."`
-if test ${GDAL_VER_DOT} -lt 210 ; then
-  AC_MSG_RESULT(no)
-  if test "${DEPRECATED}" != "yes" ; then
-    AC_MSG_ERROR([upgrade GDAL to 2.1.0 or later])
-  else
-    AC_MSG_CHECKING([GDAL version >= 1.6.3])
-    if test ${GDAL_VER_DOT} -lt 163 ; then
-      AC_MSG_RESULT(no)
-      AC_MSG_ERROR([upgrade GDAL to 1.6.3 or later])
-    else
-      AC_MSG_RESULT(yes)
-    fi
-  fi
-else
+AC_MSG_CHECKING([GDAL version >= 1.11.4])
+#GDAL_VER_DOT=`echo $GDAL_VERSION | tr -d "."`
+GDAL_MAJOR=`echo $GDAL_VERSION | cut -f1 -d"."`
+GDAL_MINOR=`echo $GDAL_VERSION | cut -f2 -d"."`
+GDAL_PATCH=`echo $GDAL_VERSION | cut -f3 -d"."`
+if test ${GDAL_MAJOR} -gt 1 ; then
   AC_MSG_RESULT(yes)
+else
+  if test ${GDAL_MAJOR} = 1 -a ${GDAL_MINOR} = 11 -a ${GDAL_PATCH} -ge 4 ; then
+    AC_MSG_RESULT(yes)
+  else
+    AC_MSG_RESULT(no)
+    AC_MSG_ERROR([upgrade GDAL to 1.11.4 or later])
+  fi
 fi
 
 INLIBS="${LIBS}"
@@ -210,12 +197,38 @@ fi
 
 # PROJ.4
 
+# copied from sf/configure.ac
+
+PROJ_CONFIG="pkg-config proj"
+
+if `$PROJ_CONFIG --exists` ; then
+  AC_MSG_NOTICE([pkg-config proj exists, will use it])
+  proj_config_ok=yes
+else
+  proj_config_ok=no
+fi
+
+PROJ_VERSION=""
+
+if test "${proj_config_ok}" = yes; then
+  PROJ_VERSION=`${PROJ_CONFIG} --modversion`
+  AC_MSG_NOTICE([PROJ version: ${PROJ_VERSION}])
+fi
+
+
 AC_ARG_WITH([proj-include],
     AC_HELP_STRING([--with-proj-include=DIR],
                    [location of proj header files]),
     [proj_include_path=$withval])
 if test [ -n "$proj_include_path" ] ; then
-   AC_SUBST([PKG_CPPFLAGS],["-I${proj_include_path} ${INPKG_CPPFLAGS}"])
+   proj_include_path="-I${proj_include_path}"
+   AC_SUBST([PKG_CPPFLAGS],["${proj_include_path} ${INPKG_CPPFLAGS}"])
+else
+  if test "${proj_config_ok}" = yes; then
+    PROJ_INCLUDE_PATH=`${PROJ_CONFIG} --cflags`
+    proj_include_path=${PROJ_INCLUDE_PATH}
+    AC_SUBST([PKG_CPPFLAGS],["${PROJ_INCLUDE_PATH} ${INPKG_CPPFLAGS}"])
+  fi
 fi
 
 # honor PKG_xx overrides
@@ -232,12 +245,18 @@ AC_ARG_WITH([proj-lib],
                [proj_lib_path=$withval])
 if test [ -n "$proj_lib_path" ] ; then
     AC_SUBST([PKG_LIBS], ["-L${proj_lib_path} ${INPKG_LIBS}"])
+  if test "${proj_config_ok}" = yes; then
+    PROJ_LIB_PATH=`${PROJ_CONFIG} --libs`
+    AC_SUBST([PKG_LIBS], ["${PROJ_LIB_PATH} ${INPKG_LIBS}"])
+  else
+    AC_SUBST([PKG_LIBS], ["${INPKG_LIBS} -lproj"])
+  fi
 fi
 
 
 LIBS="${INLIBS} ${PKG_LIBS}"
-PKG_LIBS="${PKG_LIBS} -lproj"
-AC_MSG_NOTICE([${CFLAGS} ${PKG_CPPFLAGS}])
+#PKG_LIBS="${PKG_LIBS} -lproj"
+#AC_MSG_NOTICE([${CFLAGS} ${PKG_CPPFLAGS}])
 AC_MSG_CHECKING(proj_api.h presence and usability)
 # FIXME re-using names
 [cat > proj_conf_test1.c <<_EOCONF
@@ -257,30 +276,39 @@ else
   AC_MSG_ERROR([proj_api.h not found in standard or given locations.])
 fi
 
-proj_version=`./proj_conf_test1`
+PROJ_VERSION_H=`./proj_conf_test1`
 
 rm -f proj_conf_test1.c proj_conf_test1
 
+#AC_MSG_NOTICE(["${PROJ_VERSION} ${PROJ_VERSION_H}"])
 
-AC_MSG_CHECKING([PROJ version >= 4.9.2])
-if test ${proj_version} -lt 492 ; then
-  AC_MSG_RESULT(no)
-  if test "${DEPRECATED}" != "yes" ; then
-    AC_MSG_ERROR([upgrade PROJ to 4.9.2 or later])
+if test -n ${PROJ_VERSION}$ ; then
+  AC_MSG_CHECKING([PROJ version agreement])
+  PROJ_VERSION_DOT=`echo ${PROJ_VERSION} | tr -d "."`
+  if test ${PROJ_VERSION_DOT}$ = ${PROJ_VERSION_H}$; then
+    AC_MSG_RESULT(yes)
   else
-    AC_MSG_CHECKING([PROJ version >= 449])
-    if test ${proj_version} -lt 449 ; then
-      AC_MSG_RESULT(no)
-      AC_MSG_ERROR([upgrade PROJ to 4.4.9 or later])
-    else
-      AC_MSG_RESULT(yes)
-    fi
+    AC_MSG_RESULT(no)
+    AC_MSG_ERROR([proj_api.h and pkg-config give different versions])
   fi
+fi
+
+AC_MSG_CHECKING([PROJ version >= 4.8.0])
+if test ${PROJ_VERSION_H} -lt 480 ; then
+  AC_MSG_RESULT(no)
+  AC_MSG_ERROR([upgrade PROJ to 4.8.0 or later])
 else
   AC_MSG_RESULT(yes)
 fi
 
+if test ${PROJ_VERSION_H} = 480 ; then
+  ADDED_PKG_INCL_480=`pwd`"/inst/include"
+  AC_SUBST([PKG_CPPFLAGS],["${PKG_CPPFLAGS} -I${ADDED_PKG_INCL_480}"])
+  proj_include_path="${PKG_CPPFLAGS} -I${ADDED_PKG_INCL_480}"
+  CPPFLAGS="${INCPPFLAGS} ${PKG_CPPFLAGS}"
+fi
 
+#AC_MSG_NOTICE([${CFLAGS} ${PKG_CPPFLAGS}])
 
 AC_MSG_CHECKING(projects.h presence and usability)
 # FIXME re-using names
@@ -297,31 +325,20 @@ if test `${CC} ${CFLAGS} ${PKG_CPPFLAGS} -o proj_conf_test1a proj_conf_test1a.c 
   AC_MSG_RESULT(yes)
 else
   AC_MSG_RESULT(no)
-  STOP = "stop"
+  STOP="stop"
 fi
 rm -f proj_conf_test1a.c proj_conf_test1a
 
 if test "$STOP" = "stop" ; then
     echo "projects.h not found in standard or given locations."
     echo "PROJ 4.8.0 was bundled wrongly, and did not provide"
-    echo "the file. A copy is provided in init/etc in the source"
+    echo "the file. A copy is provided in init/include in the source"
     echo "package for the users to place in the same directory"
     echo "as proj_api.h manually."
     exit 1
 fi
 
-AC_MSG_CHECKING([PROJ.4 version: ])
-if test ${proj_version} -eq 480; then
-  AC_MSG_RESULT([4.8.0])
-  AC_SUBST([PKG_CPPFLAGS],["-DP4CTX=1 ${PKG_CPPFLAGS}"])
-else if test ${proj_version} -ge 490; then
-  AC_MSG_RESULT([> 4.8.0])
-  AC_SUBST([PKG_CPPFLAGS],["-DP4CTX=1 ${PKG_CPPFLAGS}"])
-else
-  AC_MSG_RESULT([< 4.8.0])
-fi
-fi
-
+AC_SUBST([PKG_CPPFLAGS],["-DP4CTX=1 ${PKG_CPPFLAGS}"])
 
 AC_ARG_WITH([proj-share],
     AC_HELP_STRING([--with-proj-share=SHARE_PATH],
@@ -335,7 +352,6 @@ fi
 
 
 
-if test ${proj_version} -ge 480; then
 [cat > proj_conf_test2.c <<_EOCONF
 #include <stdio.h>
 #include <proj_api.h>
@@ -344,7 +360,7 @@ FILE *pj_open_lib(projCtx, const char *, const char *);
 #endif
 
 int main() {
-#if PJ_VERSION <= 480
+#if PJ_VERSION == 480
     FILE *fp;
 #else
     PAFile fp;
@@ -353,7 +369,7 @@ int main() {
     ctx = pj_get_default_ctx();
     fp = pj_open_lib(ctx, "epsg", "rb");
     if (fp == NULL) exit(1);
-#if PJ_VERSION <= 480
+#if PJ_VERSION == 480
     fclose(fp);
 #else
     pj_ctx_fclose(ctx, fp);
@@ -361,21 +377,6 @@ int main() {
     exit(0);
 }
 _EOCONF]
-else
-[cat > proj_conf_test2.c <<_EOCONF
-#include <stdio.h>
-#include <proj_api.h>
-FILE *pj_open_lib(const char *, const char *);
-
-int main() {
-    FILE *fp;
-    fp = pj_open_lib("epsg", "rb");
-    if (fp == NULL) exit(1);
-    fclose(fp);
-    exit(0);
-}
-_EOCONF]
-fi
 
 ${CC} ${CFLAGS} ${PKG_CPPFLAGS} -o proj_conf_test2 proj_conf_test2.c ${PKG_LIBS}
 if test [ -n "$proj_share_path" ] ; then
@@ -407,7 +408,6 @@ if test "$STOP" = "stop" ; then
 fi
 
 
-if test ${proj_version} -ge 480; then
 [cat > proj_conf_test3.c <<_EOCONF
 #include <stdio.h>
 #include <proj_api.h>
@@ -416,7 +416,7 @@ FILE *pj_open_lib(projCtx, const char *, const char *);
 #endif
 
 int main() {
-#if PJ_VERSION <= 480
+#if PJ_VERSION == 480
     FILE *fp;
 #else
     PAFile fp;
@@ -425,7 +425,7 @@ int main() {
     ctx = pj_get_default_ctx();
     fp = pj_open_lib(ctx, "conus", "rb");
     if (fp == NULL) exit(1);
-#if PJ_VERSION <= 480
+#if PJ_VERSION == 480
     fclose(fp);
 #else
     pj_ctx_fclose(ctx, fp);
@@ -433,21 +433,6 @@ int main() {
     exit(0);
 }
 _EOCONF]
-else
-[cat > proj_conf_test3.c <<_EOCONF
-#include <stdio.h>
-#include <proj_api.h>
-FILE *pj_open_lib(const char *, const char *);
-
-int main() {
-    FILE *fp;
-    fp = pj_open_lib("conus", "rb");
-    if (fp == NULL) exit(1);
-    fclose(fp);
-    exit(0);
-}
-_EOCONF]
-fi
 
 ${CC} ${CFLAGS} ${PKG_CPPFLAGS} -o proj_conf_test3 proj_conf_test3.c ${PKG_LIBS}
 if test [ -n "$proj_share_path" ] ; then
@@ -518,7 +503,7 @@ fi
 
 AC_SUBST([PKG_CPPFLAGS], ["${INPKG_CPPFLAGS} ${GDAL_CPPFLAGS}"])
 if test [ -n "$proj_include_path" ] ; then
-AC_SUBST([PKG_CPPFLAGS], ["${PKG_CPPFLAGS} -I${proj_include_path}"])
+AC_SUBST([PKG_CPPFLAGS], ["${PKG_CPPFLAGS} ${proj_include_path}"])
 fi
 
 AC_SUBST([PKG_LIBS], ["${INPKG_LIBS} ${GDAL_LIBS}"])
