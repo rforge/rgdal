@@ -1,3 +1,20 @@
+2018-05-07 12:51  rsbivand
+
+	* DESCRIPTION, configure, configure.ac, inst/include,
+	  inst/include/projects.h: updating ext-dep limits
+
+2018-04-30 13:29  rsbivand
+
+	* DESCRIPTION, configure, configure.ac: add enable deprecated
+
+2018-04-06 07:09  rsbivand
+
+	* ChangeLog, inst/ChangeLog: add geojson string test
+
+2018-04-06 07:08  rsbivand
+
+	* tests/tests.R, tests/tests.Rout.save: add geojson string test
+
 2018-04-05 11:21  rsbivand
 
 	* DESCRIPTION: check before normalizePath() in OGR access
