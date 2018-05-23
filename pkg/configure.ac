@@ -282,9 +282,10 @@ rm -f proj_conf_test1.c proj_conf_test1
 
 #AC_MSG_NOTICE(["${PROJ_VERSION} ${PROJ_VERSION_H}"])
 
-if test -n ${PROJ_VERSION}$ ; then
+if test ${PROJ_VERSION} = "" ; then
   AC_MSG_CHECKING([PROJ version agreement])
   PROJ_VERSION_DOT=`echo ${PROJ_VERSION} | tr -d "."`
+#echo "|${PROJ_VERSION}| |${PROJ_VERSION_DOT}| |${PROJ_VERSION_H}|"
   if test ${PROJ_VERSION_DOT}$ = ${PROJ_VERSION_H}$; then
     AC_MSG_RESULT(yes)
   else
