@@ -59,11 +59,9 @@ SEXP wkt_to_p4s(SEXP wkt, SEXP esri) {
     if (hSRS.importFromWkt((const char **) ppszInput) != OGRERR_NONE) 
 #endif
     {
-        CSLDestroy(ppszInput);
         uninstallErrorHandlerAndTriggerError();
 	error("Can't parse WKT-style parameter string");
     }
-    CSLDestroy(ppszInput);//FIXME VG
     uninstallErrorHandlerAndTriggerError();
 
     installErrorHandler();
