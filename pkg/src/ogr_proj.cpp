@@ -53,7 +53,12 @@ SEXP wkt_to_p4s(SEXP wkt, SEXP esri) {
     ppszInput = CSLAddString(ppszInput, CHAR(STRING_ELT(wkt, 0)));
 
     installErrorHandler();
-    if (hSRS.importFromWkt(ppszInput) != OGRERR_NONE) {
+#if GDAL_VERSION_MAJOR <= 2 && GDAL_VERSION_MINOR <= 2
+    if (hSRS.importFromWkt(ppszInput) != OGRERR_NONE) 
+#else
+    if (hSRS.importFromWkt((const char **) ppszInput) != OGRERR_NONE) 
+#endif
+    {
         uninstallErrorHandlerAndTriggerError();
 	error("Can't parse WKT-style parameter string");
     }

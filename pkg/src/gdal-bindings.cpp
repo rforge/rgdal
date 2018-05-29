@@ -838,7 +838,11 @@ RGDAL_GetProjectionRef(SEXP sDataset) {
   uninstallErrorHandlerAndTriggerError();
 
   installErrorHandler();
+#if GDAL_VERSION_MAJOR <= 2 && GDAL_VERSION_MINOR <= 2
   oSRS.importFromWkt( &pszSRS_WKT );
+#else
+  oSRS.importFromWkt( (const char*) &pszSRS_WKT );
+#endif
   oSRS.exportToProj4( &pszSRS_WKT );
   uninstallErrorHandlerAndTriggerError();
   PROTECT(ans = NEW_CHARACTER(1));
