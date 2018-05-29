@@ -221,7 +221,7 @@ SEXP project(SEXP n, SEXP xlon, SEXP ylat, SEXP projarg, SEXP ob_tran) {
   SEXP res;
   double ixlon, iylat;
   
-  if (!(pj = pj_init_plus(CHAR(STRING_ELT(projarg, 0))))) 
+  if (!(pj = pj_init_plus(CHAR(STRING_ELT(projarg, 0))))) //FIXME VG poss
     error(pj_strerrno(*pj_get_errno_ref()));
 //Rprintf("pj_fwd: %s\n", pj_get_def(pj, 0));
   PROTECT(res = NEW_LIST(2));
@@ -281,7 +281,8 @@ SEXP project_inv(SEXP n, SEXP x, SEXP y, SEXP projarg, SEXP ob_tran) {
   SEXP res;
   double ix, iy;
 
-  if (!(pj = pj_init_plus(CHAR(STRING_ELT(projarg, 0))))) {
+  pj = pj_init_plus((const char*) CHAR(STRING_ELT(projarg, 0)));//FIXME VG poss
+  if (!(pj)) {
     pj_free(pj);
     error(pj_strerrno(*pj_get_errno_ref()));
   }

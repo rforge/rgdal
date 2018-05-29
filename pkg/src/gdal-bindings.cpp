@@ -338,7 +338,7 @@ RGDAL_GDALwithGEOS(void) {
     OGRGeometryFactory::createFromWkt( (const char*) pszWKT, NULL, &poGeometry2 );
 #endif
     withGEOS = 1;
-    if (poGeometry1->Union(poGeometry2) == NULL) withGEOS = 0;
+    if (poGeometry1->Union(poGeometry2) == NULL) withGEOS = 0;//FIXME VG
     OGRGeometryFactory::destroyGeometry(poGeometry1);
     OGRGeometryFactory::destroyGeometry(poGeometry2);
 
@@ -1715,7 +1715,7 @@ RGDAL_SetCategoryNames(SEXP sxpRasterBand, SEXP sxpNames) {
   int i;
   installErrorHandler();
   for (i = 0; i < length(sxpNames); ++i)
-    nameList = CSLAddString(nameList, asString(sxpNames, i));
+    nameList = CSLAddString(nameList, asString(sxpNames, i));//FIXME VG
   uninstallErrorHandlerAndTriggerError();
 
   installErrorHandler();
@@ -1740,7 +1740,7 @@ RGDAL_GetCategoryNames(SEXP sxpRasterBand) {
   if (pcCNames == NULL) return(R_NilValue);
 
   installErrorHandler();
-  pcCNames = CSLDuplicate(pcCNames);
+  pcCNames = CSLDuplicate(pcCNames);//FIXME VG
   uninstallErrorHandlerAndTriggerError();
 
   SEXP sxpCNames;
@@ -1884,7 +1884,7 @@ SEXP RGDAL_SetRasterColorTable(SEXP raster, SEXP icT, SEXP ricT, SEXP cicT) {
     GDALRasterBand* target = getGDALRasterPtr(raster);
 		
     installErrorHandler();
-    GDALColorTableH ctab = GDALCreateColorTable(GPI_RGB);
+    GDALColorTableH ctab = GDALCreateColorTable(GPI_RGB);//FIXME VG
     uninstallErrorHandlerAndTriggerError();
 
     for (i=0; i<nr; i++) {
