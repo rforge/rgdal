@@ -326,9 +326,17 @@ RGDAL_GDALwithGEOS(void) {
     OGRGeometry *poGeometry1, *poGeometry2;
     char* pszWKT;
     pszWKT = (char*) "POINT (10 20)";
+#if GDAL_VERSION_MAJOR <= 2 && GDAL_VERSION_MINOR <= 2
     OGRGeometryFactory::createFromWkt( &pszWKT, NULL, &poGeometry1 );
+#else
+    OGRGeometryFactory::createFromWkt( (const char*) pszWKT, NULL, &poGeometry1 );
+#endif
     pszWKT = (char*) "POINT (30 20)";
+#if GDAL_VERSION_MAJOR <= 2 && GDAL_VERSION_MINOR <= 2
     OGRGeometryFactory::createFromWkt( &pszWKT, NULL, &poGeometry2 );
+#else
+    OGRGeometryFactory::createFromWkt( (const char*) pszWKT, NULL, &poGeometry2 );
+#endif
     withGEOS = 1;
     if (poGeometry1->Union(poGeometry2) == NULL) withGEOS = 0;
     OGRGeometryFactory::destroyGeometry(poGeometry1);
