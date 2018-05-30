@@ -215,6 +215,7 @@ if test "${proj_config_ok}" = yes; then
   AC_MSG_NOTICE([PROJ version: ${PROJ_VERSION}])
 fi
 
+PKG_CPPFLAGS=""
 
 AC_ARG_WITH([proj-include],
     AC_HELP_STRING([--with-proj-include=DIR],
@@ -236,7 +237,7 @@ fi
 # since we'll set PKG_CPPFLAGS with this, but that shouldn't hurt
 CPPFLAGS="${INCPPFLAGS} ${PKG_CPPFLAGS}"
 
-
+PKG_LIBS=""
           
 # dnl ditto for a library path
 AC_ARG_WITH([proj-lib],
@@ -244,15 +245,20 @@ AC_ARG_WITH([proj-lib],
                [the location of proj libraries]),
                [proj_lib_path=$withval])
 if test [ -n "$proj_lib_path" ] ; then
+echo "in test"
     AC_SUBST([PKG_LIBS], ["-L${proj_lib_path} ${INPKG_LIBS}"])
-  if test "${proj_config_ok}" = yes; then
+else
+  if test ${proj_config_ok} = "yes"; then
     PROJ_LIB_PATH=`${PROJ_CONFIG} --libs`
+echo "in yes branch"
+echo `${PROJ_CONFIG} --libs`
+echo ${PROJ_LIB_PATH}
     AC_SUBST([PKG_LIBS], ["${PROJ_LIB_PATH} ${INPKG_LIBS}"])
   else
+echo "in no branch"
     AC_SUBST([PKG_LIBS], ["${INPKG_LIBS} -lproj"])
   fi
 fi
-
 
 LIBS="${INLIBS} ${PKG_LIBS}"
 #PKG_LIBS="${PKG_LIBS} -lproj"

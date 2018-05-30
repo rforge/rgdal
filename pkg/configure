@@ -1997,6 +1997,7 @@ if test "${proj_config_ok}" = yes; then
 $as_echo "$as_me: PROJ version: ${PROJ_VERSION}" >&6;}
 fi
 
+PKG_CPPFLAGS=""
 
 
 # Check whether --with-proj-include was given.
@@ -2022,7 +2023,7 @@ fi
 # since we'll set PKG_CPPFLAGS with this, but that shouldn't hurt
 CPPFLAGS="${INCPPFLAGS} ${PKG_CPPFLAGS}"
 
-
+PKG_LIBS=""
 
 # dnl ditto for a library path
 
@@ -2032,18 +2033,23 @@ if test "${with_proj_lib+set}" = set; then :
 fi
 
 if test  -n "$proj_lib_path"  ; then
+echo "in test"
     PKG_LIBS="-L${proj_lib_path} ${INPKG_LIBS}"
 
-  if test "${proj_config_ok}" = yes; then
+else
+  if test ${proj_config_ok} = "yes"; then
     PROJ_LIB_PATH=`${PROJ_CONFIG} --libs`
+echo "in yes branch"
+echo `${PROJ_CONFIG} --libs`
+echo ${PROJ_LIB_PATH}
     PKG_LIBS="${PROJ_LIB_PATH} ${INPKG_LIBS}"
 
   else
+echo "in no branch"
     PKG_LIBS="${INPKG_LIBS} -lproj"
 
   fi
 fi
-
 
 LIBS="${INLIBS} ${PKG_LIBS}"
 #PKG_LIBS="${PKG_LIBS} -lproj"
