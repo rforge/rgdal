@@ -16,6 +16,8 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 Type 'q()' to quit R.
 
 > suppressPackageStartupMessages(library(rgdal))
+> getGDALVersionInfo()
+[1] "GDAL 2.2.4, released 2018/03/19"
 > d <- system.file("vectors", package="rgdal")
 > shps <- ogrListLayers(d)
 > sapply(shps, function(l) OGRSpatialRef(d, l))
@@ -82,4 +84,4 @@ file:  test_envi_class.envi , SRS:  +proj=longlat +datum=WGS84 +no_defs
 > 
 > proc.time()
    user  system elapsed 
-  0.358   0.013   0.365 
+  0.342   0.025   0.361 
