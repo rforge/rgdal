@@ -1,4 +1,5 @@
 suppressPackageStartupMessages(library(rgdal))
+getPROJ4VersionInfo()
 getGDALVersionInfo()
 d <- system.file("vectors", package="rgdal")
 shps <- ogrListLayers(d)
