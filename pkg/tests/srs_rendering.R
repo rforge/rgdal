@@ -1,4 +1,5 @@
 suppressPackageStartupMessages(library(rgdal))
+getGDALVersionInfo()
 d <- system.file("vectors", package="rgdal")
 shps <- ogrListLayers(d)
 sapply(shps, function(l) OGRSpatialRef(d, l))
