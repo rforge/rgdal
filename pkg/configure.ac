@@ -36,6 +36,15 @@ else
 fi
 AC_MSG_NOTICE([svn revision: ${SVN_VERSION}])
 
+#CXX_11
+
+m4_include([m4/ax_cxx_compile_stdcxx.m4])
+AX_CXX_COMPILE_STDCXX([11], [ext], [optional])
+if test [${HAVE_CXX11} = 1] ; then
+  AC_MSG_NOTICE([C++11 support available])
+else
+  AC_MSG_NOTICE([C++11 support not available])
+fi
 
 #GDAL
 
@@ -106,12 +115,22 @@ else
 fi
 
 AC_MSG_NOTICE([GDAL: ${GDAL_VERSION}])
-
-AC_MSG_CHECKING([GDAL version >= 1.11.4])
 #GDAL_VER_DOT=`echo $GDAL_VERSION | tr -d "."`
 GDAL_MAJOR=`echo $GDAL_VERSION | cut -f1 -d"."`
 GDAL_MINOR=`echo $GDAL_VERSION | cut -f2 -d"."`
 GDAL_PATCH=`echo $GDAL_VERSION | cut -f3 -d"."`
+
+if test ${GDAL_MAJOR} = 2 -a ${GDAL_MINOR} -ge 3 ; then
+  AC_MSG_CHECKING([C++11 support for GDAL >= 2.3.0])
+  if test ${HAVE_CXX11} = 1 ; then
+    AC_MSG_RESULT(yes)
+  else
+    AC_MSG_RESULT(no)
+    AC_MSG_ERROR([provide at least CXX11 compiler support for GDAL >= 2.3.0])
+  fi
+fi
+
+AC_MSG_CHECKING([GDAL version >= 1.11.4])
 if test ${GDAL_MAJOR} -gt 1 ; then
   AC_MSG_RESULT(yes)
 else
