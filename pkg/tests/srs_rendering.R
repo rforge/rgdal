@@ -9,9 +9,7 @@ OGRSpatialRef(file.path(d, "Up.tab"), "Up")
 OGRSpatialRef(file.path(d, "test_trk2.gpx"), "tracks")
 OGRSpatialRef(file.path(d, "PacoursIKA2.TAB"), "PacoursIKA2")
 d <- system.file("pictures", package="rgdal")
-d
 f <- sort(list.files(d))
-f
 for (i in f[-c(2,8,11)]) {
  print(i)
  ds <- GDAL.open(file.path(d, i))
