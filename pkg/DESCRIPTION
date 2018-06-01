@@ -1,7 +1,7 @@
 Package: rgdal
 Title: Bindings for the 'Geospatial' Data Abstraction Library
 Version: 1.3-1
-Date: 2018-05-29
+Date: 2018-05-31
 Depends: R (>= 3.3.0), methods, sp (>= 1.1-0)
 Imports: grDevices, graphics, stats, utils
 LinkingTo: sp
@@ -13,7 +13,8 @@ Authors@R: c(
 	person("Edzer", "Pebesma", role = "ctb"),
 	person("Michael", "Sumner", role = "ctb"),
 	person("Robert", "Hijmans", role = "ctb"),
-	person("Even", "Rouault", role = "ctb"),
+	person("Even", "Rouault", role = c("cph", "ctb")),
+	person("Frank", "Warmerdam", role = c("cph", "ctb")),
 	person("Jeroen", "Ooms", role = "ctb"))
 License: GPL (>= 2)
 URL: http://www.gdal.org, https://r-forge.r-project.org/projects/rgdal/
