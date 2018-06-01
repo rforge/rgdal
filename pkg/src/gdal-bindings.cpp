@@ -65,7 +65,7 @@ asString(SEXP sxpString, const int i = 0) {
 static SEXP
 getObjHandle(SEXP sxpObj) {
 
-  SEXP sxpHandle = getAttrib(sxpObj, mkString("handle"));
+  SEXP sxpHandle = getAttrib(sxpObj, install("handle"));
 
   if (isNull(sxpHandle)) error("Null object handle\n");
 
@@ -355,7 +355,7 @@ SEXP
 RGDAL_NullHandle(void) {
 
   return(R_MakeExternalPtr(NULL,
-			   mkString("Null handle"),
+			   install("Null handle"),
 			   R_NilValue));
   
 }
