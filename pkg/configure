@@ -3348,19 +3348,14 @@ if test "${with_proj_lib+set}" = set; then :
 fi
 
 if test  -n "$proj_lib_path"  ; then
-echo "in test"
     PKG_LIBS="-L${proj_lib_path} ${INPKG_LIBS}"
 
 else
   if test ${proj_config_ok} = "yes"; then
     PROJ_LIB_PATH=`${PROJ_CONFIG} --libs`
-echo "in yes branch"
-echo `${PROJ_CONFIG} --libs`
-echo ${PROJ_LIB_PATH}
     PKG_LIBS="${PROJ_LIB_PATH} ${INPKG_LIBS}"
 
   else
-echo "in no branch"
     PKG_LIBS="${INPKG_LIBS} -lproj"
 
   fi

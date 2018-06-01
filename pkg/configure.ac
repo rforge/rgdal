@@ -264,17 +264,12 @@ AC_ARG_WITH([proj-lib],
                [the location of proj libraries]),
                [proj_lib_path=$withval])
 if test [ -n "$proj_lib_path" ] ; then
-echo "in test"
     AC_SUBST([PKG_LIBS], ["-L${proj_lib_path} ${INPKG_LIBS}"])
 else
   if test ${proj_config_ok} = "yes"; then
     PROJ_LIB_PATH=`${PROJ_CONFIG} --libs`
-echo "in yes branch"
-echo `${PROJ_CONFIG} --libs`
-echo ${PROJ_LIB_PATH}
     AC_SUBST([PKG_LIBS], ["${PROJ_LIB_PATH} ${INPKG_LIBS}"])
   else
-echo "in no branch"
     AC_SUBST([PKG_LIBS], ["${INPKG_LIBS} -lproj"])
   fi
 fi
