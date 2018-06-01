@@ -457,7 +457,7 @@ RGDAL_GetDriver(SEXP sxpDriverName) {
     error("No driver registered with name: %s\n", pDriverName);
   
   SEXP sxpHandle = R_MakeExternalPtr((void *) pDriver,
-				     mkChar("GDAL Driver"),
+				     install("GDAL Driver"),
 				     R_NilValue);
 
   return(sxpHandle);
@@ -646,7 +646,7 @@ RGDAL_CreateDataset(SEXP sxpDriver, SEXP sDim, SEXP sType,
   uninstallErrorHandlerAndTriggerError();
 
   SEXP sxpHandle = R_MakeExternalPtr((void *) pDataset,
-				     mkChar("GDAL Dataset"),
+				     install("GDAL Dataset"),
 				     R_NilValue);
 
   return(sxpHandle);
@@ -736,7 +736,7 @@ hope ;-) */
 
 
   SEXP sxpHandle = R_MakeExternalPtr((void *) pDataset,
-				     mkChar("GDAL Dataset"),
+				     install("GDAL Dataset"),
 				     R_NilValue);
 
   return(sxpHandle);
@@ -781,7 +781,7 @@ RGDAL_CopyDataset(SEXP sxpDataset, SEXP sxpDriver,
   uninstallErrorHandlerAndTriggerError();
 
   SEXP sxpHandle = R_MakeExternalPtr((void *) pDatasetCopy,
-				     mkChar("GDAL Dataset"),
+				     install("GDAL Dataset"),
 				     R_NilValue);
 
 
@@ -907,7 +907,7 @@ RGDAL_GetDatasetDriver(SEXP sDataset) {
   uninstallErrorHandlerAndTriggerError();
 
   SEXP sxpDriver = R_MakeExternalPtr((void *) pDriver,
-				     mkChar("GDAL Dataset"),
+				     install("GDAL Dataset"),
 				     R_NilValue);
 
   return(sxpDriver);
@@ -948,7 +948,7 @@ RGDAL_GetRasterBand(SEXP sDataset, SEXP sBand) {
   uninstallErrorHandlerAndTriggerError();
 
   SEXP rpRasterBand = R_MakeExternalPtr((void *) pRasterBand,
-					mkChar("GDAL Raster Band"),
+					install("GDAL Raster Band"),
 					R_NilValue);
   return(rpRasterBand);
 
