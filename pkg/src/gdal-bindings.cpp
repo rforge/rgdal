@@ -65,10 +65,11 @@ asString(SEXP sxpString, const int i = 0) {
 static SEXP
 getObjHandle(SEXP sxpObj) {
 
-  SEXP sxpHandle = getAttrib(sxpObj, install("handle"));
+  SEXP sxpHandle;
+  PROTECT(sxpHandle = getAttrib(sxpObj, install("handle")));
 
   if (isNull(sxpHandle)) error("Null object handle\n");
-
+  UNPROTECT(1);
   return(sxpHandle);
 
 }
@@ -76,12 +77,13 @@ getObjHandle(SEXP sxpObj) {
 static void*
 getGDALObjPtr(SEXP sxpObj) {
 
-  SEXP sxpHandle = getObjHandle(sxpObj);
+  SEXP sxpHandle;
+  PROTECT(sxpHandle = getObjHandle(sxpObj));
 
   void *extPtr = R_ExternalPtrAddr(sxpHandle);
 
   if (extPtr == NULL) error("Null external pointer\n");
-
+  UNPROTECT(1);
   return(extPtr);
 
 }
@@ -582,7 +584,8 @@ SEXP
 RGDAL_CloseDataset(SEXP sxpDataset) {
 
 
-  SEXP sxpHandle = getObjHandle(sxpDataset);
+  SEXP sxpHandle;
+  PROTECT(sxpHandle = getObjHandle(sxpDataset));
 
   if (sxpHandle == NULL) return(R_NilValue);
 
@@ -596,6 +599,7 @@ RGDAL_CloseDataset(SEXP sxpDataset) {
 
     RGDAL_CloseHandle(sxpHandle);
   }
+  UNPROTECT(1);
 
   return(R_NilValue);
 
