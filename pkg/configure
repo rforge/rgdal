@@ -1754,125 +1754,6 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 
-# find R home and set correct compiler + flags
-: ${R_HOME=`R RHOME`}
-if test -z "${R_HOME}"; then
-  as_fn_error $? "cannot determine R_HOME. Make sure you use R CMD INSTALL!" "$LINENO" 5
-fi
-RBIN="${R_HOME}/bin/R"
-
-# pick all flags for testing from R
-: ${CC=`"${RBIN}" CMD config CC`}
-: ${CXX=`"${RBIN}" CMD config CXX`}
-: ${CPP=`"${RBIN}" CMD config CPP`}
-: ${CFLAGS=`"${RBIN}" CMD config CFLAGS`}
-: ${CPPFLAGS=`"${RBIN}" CMD config CPPFLAGS`}
-: ${LDFLAGS=`"${RBIN}" CMD config LDFLAGS`}
-# AC_SUBST([CC],["clang"])
-# AC_SUBST([CXX],["clang++"])
-{ $as_echo "$as_me:${as_lineno-$LINENO}: CC: ${CC}" >&5
-$as_echo "$as_me: CC: ${CC}" >&6;}
-{ $as_echo "$as_me:${as_lineno-$LINENO}: CXX: ${CXX}" >&5
-$as_echo "$as_me: CXX: ${CXX}" >&6;}
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: ${PACKAGE_NAME}: ${PACKAGE_VERSION}" >&5
-$as_echo "$as_me: ${PACKAGE_NAME}: ${PACKAGE_VERSION}" >&6;}
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for /usr/bin/svnversion" >&5
-$as_echo_n "checking for /usr/bin/svnversion... " >&6; }
-if ${ac_cv_file__usr_bin_svnversion+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  test "$cross_compiling" = yes &&
-  as_fn_error $? "cannot check for file existence when cross compiling" "$LINENO" 5
-if test -r "/usr/bin/svnversion"; then
-  ac_cv_file__usr_bin_svnversion=yes
-else
-  ac_cv_file__usr_bin_svnversion=no
-fi
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_file__usr_bin_svnversion" >&5
-$as_echo "$ac_cv_file__usr_bin_svnversion" >&6; }
-if test "x$ac_cv_file__usr_bin_svnversion" = xyes; then :
-  SVN_VERSION=`svnversion -n '.'`
-else
-  SVN_VERSION=""
-fi
-
-
-#SVN_VERSION=`svnversion -n '.'`
-if test "${SVN_VERSION}" != "exported" && test -n "${SVN_VERSION}" && test "${SVN_VERSION}" != "Unversioned directory"; then
-  echo "${SVN_VERSION}" > inst/SVN_VERSION
-else
-  SVN_VERSION=`cat inst/SVN_VERSION | tr -d '\n'`
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: svn revision: ${SVN_VERSION}" >&5
-$as_echo "$as_me: svn revision: ${SVN_VERSION}" >&6;}
-
-#CXX_11
-
-# ===========================================================================
-#   http://www.gnu.org/software/autoconf-archive/ax_cxx_compile_stdcxx.html
-# ===========================================================================
-#
-# SYNOPSIS
-#
-#   AX_CXX_COMPILE_STDCXX(VERSION, [ext|noext], [mandatory|optional])
-#
-# DESCRIPTION
-#
-#   Check for baseline language coverage in the compiler for the specified
-#   version of the C++ standard.  If necessary, add switches to CXX and
-#   CXXCPP to enable support.  VERSION may be '11' (for the C++11 standard)
-#   or '14' (for the C++14 standard).
-#
-#   The second argument, if specified, indicates whether you insist on an
-#   extended mode (e.g. -std=gnu++11) or a strict conformance mode (e.g.
-#   -std=c++11).  If neither is specified, you get whatever works, with
-#   preference for an extended mode.
-#
-#   The third argument, if specified 'mandatory' or if left unspecified,
-#   indicates that baseline support for the specified C++ standard is
-#   required and that the macro should error out if no mode with that
-#   support is found.  If specified 'optional', then configuration proceeds
-#   regardless, after defining HAVE_CXX${VERSION} if and only if a
-#   supporting mode is found.
-#
-# LICENSE
-#
-#   Copyright (c) 2008 Benjamin Kosnik <bkoz@redhat.com>
-#   Copyright (c) 2012 Zack Weinberg <zackw@panix.com>
-#   Copyright (c) 2013 Roy Stogner <roystgnr@ices.utexas.edu>
-#   Copyright (c) 2014, 2015 Google Inc.; contributed by Alexey Sokolov <sokolov@google.com>
-#   Copyright (c) 2015 Paul Norman <penorman@mac.com>
-#   Copyright (c) 2015 Moritz Klammler <moritz@klammler.eu>
-#
-#   Copying and distribution of this file, with or without modification, are
-#   permitted in any medium without royalty provided the copyright notice
-#   and this notice are preserved.  This file is offered as-is, without any
-#   warranty.
-
-#serial 4
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ac_ext=cpp
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
@@ -2374,11 +2255,131 @@ else
     CXXFLAGS=
   fi
 fi
-ac_ext=cpp
-ac_cpp='$CXXCPP $CPPFLAGS'
-ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
+
+# find R home and set correct compiler + flags
+: ${R_HOME=`R RHOME`}
+if test -z "${R_HOME}"; then
+  as_fn_error $? "cannot determine R_HOME. Make sure you use R CMD INSTALL!" "$LINENO" 5
+fi
+RBIN="${R_HOME}/bin/R"
+
+# pick all flags for testing from R
+: ${CC=`"${RBIN}" CMD config CC`}
+: ${CXX=`"${RBIN}" CMD config CXX`}
+: ${CPP=`"${RBIN}" CMD config CPP`}
+: ${CFLAGS=`"${RBIN}" CMD config CFLAGS`}
+: ${CPPFLAGS=`"${RBIN}" CMD config CPPFLAGS`}
+: ${LDFLAGS=`"${RBIN}" CMD config LDFLAGS`}
+# AC_SUBST([CC],["clang"])
+# AC_SUBST([CXX],["clang++"])
+{ $as_echo "$as_me:${as_lineno-$LINENO}: CC: ${CC}" >&5
+$as_echo "$as_me: CC: ${CC}" >&6;}
+{ $as_echo "$as_me:${as_lineno-$LINENO}: CXX: ${CXX}" >&5
+$as_echo "$as_me: CXX: ${CXX}" >&6;}
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: ${PACKAGE_NAME}: ${PACKAGE_VERSION}" >&5
+$as_echo "$as_me: ${PACKAGE_NAME}: ${PACKAGE_VERSION}" >&6;}
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for /usr/bin/svnversion" >&5
+$as_echo_n "checking for /usr/bin/svnversion... " >&6; }
+if ${ac_cv_file__usr_bin_svnversion+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  test "$cross_compiling" = yes &&
+  as_fn_error $? "cannot check for file existence when cross compiling" "$LINENO" 5
+if test -r "/usr/bin/svnversion"; then
+  ac_cv_file__usr_bin_svnversion=yes
+else
+  ac_cv_file__usr_bin_svnversion=no
+fi
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_file__usr_bin_svnversion" >&5
+$as_echo "$ac_cv_file__usr_bin_svnversion" >&6; }
+if test "x$ac_cv_file__usr_bin_svnversion" = xyes; then :
+  SVN_VERSION=`svnversion -n '.'`
+else
+  SVN_VERSION=""
+fi
+
+
+#SVN_VERSION=`svnversion -n '.'`
+if test "${SVN_VERSION}" != "exported" && test -n "${SVN_VERSION}" && test "${SVN_VERSION}" != "Unversioned directory"; then
+  echo "${SVN_VERSION}" > inst/SVN_VERSION
+else
+  SVN_VERSION=`cat inst/SVN_VERSION | tr -d '\n'`
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: svn revision: ${SVN_VERSION}" >&5
+$as_echo "$as_me: svn revision: ${SVN_VERSION}" >&6;}
+
+#CXX_11
+
+# ===========================================================================
+#   http://www.gnu.org/software/autoconf-archive/ax_cxx_compile_stdcxx.html
+# ===========================================================================
+#
+# SYNOPSIS
+#
+#   AX_CXX_COMPILE_STDCXX(VERSION, [ext|noext], [mandatory|optional])
+#
+# DESCRIPTION
+#
+#   Check for baseline language coverage in the compiler for the specified
+#   version of the C++ standard.  If necessary, add switches to CXX and
+#   CXXCPP to enable support.  VERSION may be '11' (for the C++11 standard)
+#   or '14' (for the C++14 standard).
+#
+#   The second argument, if specified, indicates whether you insist on an
+#   extended mode (e.g. -std=gnu++11) or a strict conformance mode (e.g.
+#   -std=c++11).  If neither is specified, you get whatever works, with
+#   preference for an extended mode.
+#
+#   The third argument, if specified 'mandatory' or if left unspecified,
+#   indicates that baseline support for the specified C++ standard is
+#   required and that the macro should error out if no mode with that
+#   support is found.  If specified 'optional', then configuration proceeds
+#   regardless, after defining HAVE_CXX${VERSION} if and only if a
+#   supporting mode is found.
+#
+# LICENSE
+#
+#   Copyright (c) 2008 Benjamin Kosnik <bkoz@redhat.com>
+#   Copyright (c) 2012 Zack Weinberg <zackw@panix.com>
+#   Copyright (c) 2013 Roy Stogner <roystgnr@ices.utexas.edu>
+#   Copyright (c) 2014, 2015 Google Inc.; contributed by Alexey Sokolov <sokolov@google.com>
+#   Copyright (c) 2015 Paul Norman <penorman@mac.com>
+#   Copyright (c) 2015 Moritz Klammler <moritz@klammler.eu>
+#
+#   Copying and distribution of this file, with or without modification, are
+#   permitted in any medium without royalty provided the copyright notice
+#   and this notice are preserved.  This file is offered as-is, without any
+#   warranty.
+
+#serial 4
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
       ax_cxx_compile_cxx11_required=false
