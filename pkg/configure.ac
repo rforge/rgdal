@@ -3,13 +3,14 @@ define([pkgversion], esyscmd([sh -c "grep Version: DESCRIPTION | cut -d' ' -f2 |
 AC_INIT(rgdal, [pkgversion], Roger.Bivand@nhh.no)
 AC_CONFIG_SRCDIR(src/gdal-bindings.cpp)
 
-AC_PROG_CXX()
+# AC_PROG_CXX()
 
 # find R home and set correct compiler + flags
 : ${R_HOME=`R RHOME`}
 if test -z "${R_HOME}"; then
   AC_MSG_ERROR([cannot determine R_HOME. Make sure you use R CMD INSTALL!])
 fi
+AC_MSG_NOTICE([R_HOME: ${R_HOME}])
 RBIN="${R_HOME}/bin/R"
 
 # pick all flags for testing from R
@@ -39,6 +40,8 @@ fi
 AC_MSG_NOTICE([svn revision: ${SVN_VERSION}])
 
 #CXX_11
+
+#HAVE_CXX11=1
 
 m4_include([inst/m4/ax_cxx_compile_stdcxx.m4])
 AX_CXX_COMPILE_STDCXX([11], [ext], [optional])
