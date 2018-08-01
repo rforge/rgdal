@@ -30,7 +30,7 @@ AC_MSG_NOTICE([CXX: ${CXX}])
 R_VERSION=`echo 'cat(unlist(R.Version()$minor))' | ${RBIN} --vanilla --slave`
 R_MINOR=`echo $R_VERSION | cut -f1 -d"."`
 
-if test "${R_MINOR}" -ge 4; then
+if test ${R_MINOR} -ge 4; then
 : ${CXX=`"${RBIN}" CMD config CXX11`}
 else
 : ${CXX=`"${RBIN}" CMD config CXX1X`}
