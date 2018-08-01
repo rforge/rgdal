@@ -25,6 +25,34 @@ RBIN="${R_HOME}/bin/R"
 AC_MSG_NOTICE([CC: ${CC}])
 AC_MSG_NOTICE([CXX: ${CXX}])
 
+#CXX_11
+
+R_VERSION=`echo 'cat(unlist(R.Version()$minor))' | R --vanilla --slave`
+R_MINOR=`echo $R_VERSION | cut -f1 -d"."`
+
+if test "${R_MINOR}" -ge 4; then
+: ${CXX=`"${RBIN}" CMD config CXX11`}
+else
+: ${CXX=`"${RBIN}" CMD config CXX1X`}
+fi
+
+if test -n "${CXX}"; then
+HAVE_CXX11=1
+else
+HAVE_CXX11=0
+fi
+
+#HAVE_CXX11=1
+
+#m4_include([inst/m4/ax_cxx_compile_stdcxx.m4])
+#AX_CXX_COMPILE_STDCXX([11], [ext], [optional])
+if test [${HAVE_CXX11} = 1] ; then
+  AC_MSG_NOTICE([C++11 support available])
+else
+  AC_MSG_NOTICE([C++11 support not available])
+fi
+
+
 AC_MSG_NOTICE([${PACKAGE_NAME}: ${PACKAGE_VERSION}])
 
 AC_CHECK_FILE([/usr/bin/svnversion],
@@ -38,18 +66,6 @@ else
   SVN_VERSION=`cat inst/SVN_VERSION | tr -d '\n'`
 fi
 AC_MSG_NOTICE([svn revision: ${SVN_VERSION}])
-
-#CXX_11
-
-#HAVE_CXX11=1
-
-m4_include([inst/m4/ax_cxx_compile_stdcxx.m4])
-AX_CXX_COMPILE_STDCXX([11], [ext], [optional])
-if test [${HAVE_CXX11} = 1] ; then
-  AC_MSG_NOTICE([C++11 support available])
-else
-  AC_MSG_NOTICE([C++11 support not available])
-fi
 
 #GDAL
 
