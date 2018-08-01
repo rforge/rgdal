@@ -27,7 +27,7 @@ AC_MSG_NOTICE([CXX: ${CXX}])
 
 #CXX_11
 
-R_VERSION=`echo 'cat(unlist(R.Version()$minor))' | R --vanilla --slave`
+R_VERSION=`echo 'cat(unlist(R.Version()$minor))' | ${RBIN} --vanilla --slave`
 R_MINOR=`echo $R_VERSION | cut -f1 -d"."`
 
 if test "${R_MINOR}" -ge 4; then
