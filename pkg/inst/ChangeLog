@@ -1,3 +1,11 @@
+2018-09-28 08:26  rsbivand
+
+	* man/make_EPSG.Rd: update Grids&Datums URL
+
+2018-09-28 08:22  rsbivand
+
+	* ChangeLog, inst/ChangeLog: tidy
+
 2018-09-28 08:21  rsbivand
 
 	* man/GridsDatums.Rd: update Grids&Datums URL
