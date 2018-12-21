@@ -1,3 +1,20 @@
+2018-12-21 13:28  rsbivand
+
+	* man/GridsDatums.Rd: update Grids & Datums
+
+2018-12-21 12:33  rsbivand
+
+	* data/GridsDatums.rda, man/GridsDatums.Rd: update Grids & Datums
+
+2018-12-21 12:01  rsbivand
+
+	* DESCRIPTION, configure, configure.ac: guard against fictional
+	  versions of GDAL
+
+2018-09-28 08:26  rsbivand
+
+	* ChangeLog, inst/ChangeLog: tidy
+
 2018-09-28 08:26  rsbivand
 
 	* man/make_EPSG.Rd: update Grids&Datums URL
