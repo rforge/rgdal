@@ -48,7 +48,7 @@ projNAD <- function() {
 	    as.double(xy[,1]), as.double(xy[,2]), NULL, PACKAGE="rgdal")
         }
 	if (any(!is.finite(res[[1]])) || any(!is.finite(res[[2]]))) {
-	  k <- which(!is.finite(res[[1]]) || !is.finite(res[[2]]))
+	  k <- which(!is.finite(res[[1]]) | !is.finite(res[[2]]))
 	  cat("non finite transformation detected:\n")
 	  print(cbind(xy, res[[1]], res[[2]])[k,])
 	  stop(paste("failure in points", paste(k, collapse=":")))
@@ -63,7 +63,7 @@ projNAD <- function() {
 	    as.double(xy[,1]), as.double(xy[,2]), NULL, PACKAGE="rgdal")
         }
 	if (any(!is.finite(res[[1]])) || any(!is.finite(res[[2]]))) {
-	  k <- which(!is.finite(res[[1]]) || !is.finite(res[[2]]))
+	  k <- which(!is.finite(res[[1]]) | !is.finite(res[[2]]))
 	  cat("non finite transformation detected:\n")
 	  print(cbind(xy, res[[1]], res[[2]])[k,])
 	  stop(paste("failure in points", paste(k, collapse=":")))
@@ -157,7 +157,7 @@ if (!isGeneric("spTransform"))
 	    res <- .Call("transform", proj4string(x), slot(CRSobj, "projargs"), n,
 		as.double(crds[,1]), as.double(crds[,2]), NULL, PACKAGE="rgdal")
 	    if (any(!is.finite(res[[1]])) || any(!is.finite(res[[2]]))) {
-		k <- which(!is.finite(res[[1]]) || !is.finite(res[[2]]))
+		k <- which(!is.finite(res[[1]]) | !is.finite(res[[2]]))
 		cat("non finite transformation detected:\n")
 		print(cbind(crds, res[[1]], res[[2]])[k,])
 		stop(paste("failure in points", paste(k, collapse=":")))
@@ -169,8 +169,8 @@ if (!isGeneric("spTransform"))
                 PACKAGE="rgdal")
 	    if (any(!is.finite(res[[1]])) || any(!is.finite(res[[2]]))
                 || any(!is.finite(res[[3]]))) {
-		k <- which(!is.finite(res[[1]]) || !is.finite(res[[2]])
-                    || !is.finite(res[[3]]))
+		k <- which(!is.finite(res[[1]]) | !is.finite(res[[2]])
+                    | !is.finite(res[[3]]))
 		cat("non finite transformation detected:\n")
 		print(cbind(crds, res[[1]], res[[2]], res[[3]])[k,])
 		stop(paste("failure in points", paste(k, collapse=":")))
@@ -221,7 +221,7 @@ setMethod("spTransform", signature("SpatialGridDataFrame", "CRS"),
 		as.double(crds[,1]), as.double(crds[,2]), NULL,
 		PACKAGE="rgdal")
 	if (any(!is.finite(res[[1]])) || any(!is.finite(res[[2]]))) {
-		k <- which(!is.finite(res[[1]]) || !is.finite(res[[2]]))
+		k <- which(!is.finite(res[[1]]) | !is.finite(res[[2]]))
 		cat("non finite transformation detected:\n")
 		print(cbind(crds, res[[1]], res[[2]])[k,])
 		stop(paste("failure in Lines", ii, "Line", jj, 
@@ -310,7 +310,7 @@ setMethod("spTransform", signature("SpatialLinesDataFrame", "CRS"), spTransform.
 		as.double(crds[,1]), as.double(crds[,2]), NULL,
 		PACKAGE="rgdal")
 	if (any(!is.finite(res[[1]])) || any(!is.finite(res[[2]]))) {
-		k <- which(!is.finite(res[[1]]) || !is.finite(res[[2]]))
+		k <- which(!is.finite(res[[1]]) | !is.finite(res[[2]]))
 		cat("non finite transformation detected:\n")
 		print(cbind(crds, res[[1]], res[[2]])[k,])
 		stop(paste("failure in Polygons", ii, "Polygon", jj, 
