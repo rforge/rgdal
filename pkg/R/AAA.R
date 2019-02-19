@@ -5,6 +5,7 @@ if(!exists("Sys.setenv", envir = baseenv()))
 .RGDAL_CACHE <- new.env(FALSE, parent=globalenv())
 assign(".rgdal_old.PROJ_LIB", "", envir=.RGDAL_CACHE)
 assign(".rgdal_old.GDAL_DATA", "", envir=.RGDAL_CACHE)
+local_RGDAL_Init <- function() .Call('RGDAL_Init', PACKAGE="rgdal")
 
 #.First.lib <- function(lib, pkg) {
 .onLoad <- function(lib, pkg) {
@@ -24,9 +25,9 @@ assign(".rgdal_old.GDAL_DATA", "", envir=.RGDAL_CACHE)
   assign("silent", TRUE, envir=.RGDAL_CACHE)
   assign("has_proj_def.dat", as.logical(NA), envir=.RGDAL_CACHE)
 
-  library.dynam('rgdal', pkg, lib)
+#  library.dynam('rgdal', pkg, lib)
 
-  .Call('RGDAL_Init', PACKAGE="rgdal")
+  local_RGDAL_Init() #.Call('RGDAL_Init', PACKAGE="rgdal")
 }
 
 .onAttach <- function(lib, pkg) {

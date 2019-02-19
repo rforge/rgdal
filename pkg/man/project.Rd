@@ -122,6 +122,6 @@ ll <- structure(c(12.1823368669203, 11.9149630062421, 12.3186076188739,
 try(xy0 <- project(ll, "+proj=moll", legacy=TRUE))
 try(xy1 <- project(ll, "+proj=moll", legacy=FALSE, allowNAs_if_not_legacy=FALSE))
 try(xy2 <- project(ll, "+proj=moll", legacy=FALSE, allowNAs_if_not_legacy=TRUE))
-all.equal(xy0, xy2)
+if (exists("xy0")) all.equal(xy0, xy2)
 }
 \keyword{spatial}
