@@ -33,6 +33,11 @@
 }
 
 checkCRSArgs <- function(uprojargs) {
+# pkgdown work-around
+  if (is.na(get("has_proj_def.dat", envir=.RGDAL_CACHE))) {
+    assign("has_proj_def.dat", .Call("PROJ4_proj_def_dat_Installed",
+      PACKAGE="rgdal"), envir=.RGDAL_CACHE)
+  }
 # RSB Web Mercator bug 180313 (for 5.0.0)
   drop_nadgrids <- FALSE
   if (strsplit(strsplit(getPROJ4VersionInfo(), ",")[[1]][1], " ")[[1]][2]
