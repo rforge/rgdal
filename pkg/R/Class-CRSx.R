@@ -50,7 +50,7 @@ checkCRSArgs <- function(uprojargs) {
       message("NOTE: rgdal::checkCRSArgs: no proj_defs.dat in PROJ.4 shared files")
       uprojargs <- proj_def_bug_fix(uprojargs)
   }
-  res <- .Call("checkCRSArgs", uprojargs, PACKAGE="rgdal")
+  res <- .Call("RGDAL_checkCRSArgs", uprojargs, PACKAGE="rgdal")
   if (drop_nadgrids) {
     uuproj <- strsplit(res[[2]], " ")[[1]]
     hit_nad <- grep("nadgrids", uuproj)

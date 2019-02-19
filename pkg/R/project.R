@@ -89,7 +89,7 @@ projNAD <- function() {
     } else {
      if(!inv) {
 # 160404 RSB convert to .Call()
-      res <- .Call("project",
+      res <- .Call("RGDAL_project",
                 as.integer(nc),
                 as.double(xy[,1]),
                 as.double(xy[,2]),
@@ -410,7 +410,7 @@ projInfo <- function(type="proj") {
     if (!(type %in% opts)) stop("unknown type")
     t <- as.integer(match(type[1], opts) - 1)
     if (is.na(t)) stop("unknown type")
-    res <- .Call("projInfo", t, PACKAGE="rgdal")
+    res <- .Call("RGDAL_projInfo", t, PACKAGE="rgdal")
     if (type == "proj") res$description <- sapply(strsplit(as.character(
         res$description), "\n"), function(x) x[1])
     res <- data.frame(res)
