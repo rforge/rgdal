@@ -1,3 +1,15 @@
+2019-02-20 09:04  rsbivand
+
+	* DESCRIPTION: tidy
+
+2019-02-20 08:42  rsbivand
+
+	* ChangeLog, inst/ChangeLog: tidy
+
+2019-02-20 08:39  rsbivand
+
+	* man/CRS-class.Rd: link to proj update
+
 2019-02-19 18:14  rsbivand
 
 	* man/RGB2PCT.Rd, man/displayDataset.Rd, man/readGDAL.Rd: pkgdown
