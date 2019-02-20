@@ -154,13 +154,13 @@
     <pre class="examples"><div class='input'><span class='no'>driver</span> <span class='kw'>&lt;-</span> <span class='fu'>new</span>(<span class='st'>'GDALDriver'</span>, <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/character'>as.character</a></span>(<span class='fu'><a href='GDALDriver-class.html'>getGDALDriverNames</a></span>()[<span class='fl'>1</span>,<span class='fl'>1</span>]))
 <span class='no'>driver</span></div><div class='output co'>#&gt; An object of class "GDALDriver"
 #&gt; Slot "handle":
-#&gt; &lt;pointer: 0x4261e70&gt;
+#&gt; &lt;pointer: 0x5229de0&gt;
 #&gt; </div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/rm'>rm</a></span>(<span class='no'>driver</span>)
 <span class='no'>logo</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"pictures/logo.jpg"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"rgdal"</span>)[<span class='fl'>1</span>]
 <span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>new</span>(<span class='st'>"GDALReadOnlyDataset"</span>, <span class='no'>logo</span>)
 <span class='no'>x</span></div><div class='output co'>#&gt; An object of class "GDALReadOnlyDataset"
 #&gt; Slot "handle":
-#&gt; &lt;pointer: 0x7c83f00&gt;
+#&gt; &lt;pointer: 0x5ac7ff0&gt;
 #&gt; </div><div class='input'><span class='fu'>getDescription</span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; [1] "/home/rsb/topics/packages/R-Forge/rgdal/pkg/inst/pictures/logo.jpg"</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/dim'>dim</a></span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; [1] 175 200</div><div class='input'><span class='fu'><a href='GDALReadOnlyDataset-class.html'>GDAL.close</a></span>(<span class='no'>x</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

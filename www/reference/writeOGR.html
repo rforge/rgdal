@@ -236,7 +236,7 @@
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/try'>try</a></span>(<span class='fu'>writeOGR</span>(<span class='no'>cities</span>, <span class='no'>td</span>, <span class='st'>"cities"</span>, <span class='kw'>driver</span><span class='kw'>=</span><span class='st'>"ESRI Shapefile"</span>))
 <span class='fu'>writeOGR</span>(<span class='no'>cities</span>, <span class='no'>td</span>, <span class='st'>"cities"</span>, <span class='kw'>driver</span><span class='kw'>=</span><span class='st'>"ESRI Shapefile"</span>, <span class='kw'>overwrite_layer</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
 <span class='no'>cities2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='readOGR.html'>readOGR</a></span>(<span class='no'>td</span>, <span class='st'>"cities"</span>)</div><div class='output co'>#&gt; OGR data source with driver: ESRI Shapefile 
-#&gt; Source: "/tmp/RtmpvVoCZ0/rgdal_examples", layer: "cities"
+#&gt; Source: "/tmp/Rtmp0ZPp6C/rgdal_examples", layer: "cities"
 #&gt; with 606 features
 #&gt; It has 4 fields</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>cities2</span>$<span class='no'>POPULATION</span>)</div><div class='output co'>#&gt;  1270000  1550000  1140000  1190000  1225000  1250000  1300000  1400000 
 #&gt;        5        4        3        3        3        3        3        3 
@@ -295,7 +295,7 @@
 #&gt; It has 0 fields
 #&gt; [1] "0 0"
 #&gt; OGR data source with driver: GeoJSON 
-#&gt; Source: "/tmp/RtmpvVoCZ0/file2e9e6cb7654c", layer: "GeoJSON"
+#&gt; Source: "/tmp/Rtmp0ZPp6C/file30125ff66f2a", layer: "GeoJSON"
 #&gt; with 1 features
 #&gt; It has 1 fields
 #&gt; [1] "0 0"
@@ -400,7 +400,7 @@
  <span class='kw'>dataset_options</span><span class='kw'>=</span><span class='st'>"FORMAT=MIF"</span>)
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list.files'>list.files</a></span>(<span class='no'>td</span>)</div><div class='output co'>#&gt; [1] "cities.dbf"   "cities.prj"   "cities.shp"   "cities.shx"   "meuse.kml"   
 #&gt; [6] "scot_BNG.mid" "scot_BNG.mif"</div><div class='input'><span class='no'>scot_BNG3</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='readOGR.html'>readOGR</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/paste'>paste</a></span>(<span class='no'>td</span>, <span class='st'>"scot_BNG.mif"</span>, <span class='kw'>sep</span><span class='kw'>=</span><span class='st'>"/"</span>), <span class='st'>"scot_BNG"</span>)</div><div class='output co'>#&gt; OGR data source with driver: MapInfo File 
-#&gt; Source: "/tmp/RtmpvVoCZ0/rgdal_examples/scot_BNG.mif", layer: "scot_BNG"
+#&gt; Source: "/tmp/Rtmp0ZPp6C/rgdal_examples/scot_BNG.mif", layer: "scot_BNG"
 #&gt; with 56 features
 #&gt; It has 13 fields</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>scot_BNG3</span>)</div><div class='output co'>#&gt; Object of class SpatialPolygonsDataFrame
 #&gt; Coordinates:
