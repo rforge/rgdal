@@ -1,3 +1,11 @@
+2019-02-20 11:23  rsbivand
+
+	* R/AAA.R: place has_proj_def.dat earlier
+
+2019-02-20 09:13  rsbivand
+
+	* ChangeLog, inst/ChangeLog: tidy
+
 2019-02-20 09:12  rsbivand
 
 	* DESCRIPTION: tidy
