@@ -2342,7 +2342,7 @@ if test "$STOP" = "stop" ; then
     exit 1
 fi
 
-else test for new files if PROJ6
+else # test for new files if PROJ6
 
 cat > proj_conf_test2.c <<_EOCONF
 #include <stdio.h>
