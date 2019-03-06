@@ -68,7 +68,7 @@ than creation." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgdal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.1</span>
       </span>
     </div>
 
@@ -479,11 +479,9 @@ use <code><a href='https://www.rdocumentation.org/packages/sp/topics/flip'>flipV
 #&gt; oblique.x   0 
 #&gt; oblique.y   0 
 #&gt; driver      GTiff 
-#&gt; projection  +proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889
-#&gt; +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel
-#&gt; +towgs84=565.2369,50.0087,465.658,-0.406857,0.350733,-1.87035,4.0812
-#&gt; +units=m +no_defs 
-#&gt; file        /tmp/Rtmp0ZPp6C/file301228106c6 
+#&gt; projection  +proj=sterea +lat_0=52.1561605555556 +lon_0=5.38763888888889
+#&gt; +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +units=m +no_defs 
+#&gt; file        /tmp/RtmpNyj9Cf/file7a7330da694f 
 #&gt; apparent band summary:
 #&gt;    GDType hasNoDataValue NoDataValue blockSize1 blockSize2
 #&gt; 1 Float32          FALSE           0         26         78
@@ -503,11 +501,9 @@ use <code><a href='https://www.rdocumentation.org/packages/sp/topics/flip'>flipV
 #&gt; oblique.x   0 
 #&gt; oblique.y   0 
 #&gt; driver      GTiff 
-#&gt; projection  +proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889
-#&gt; +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel
-#&gt; +towgs84=565.2369,50.0087,465.658,-0.406857,0.350733,-1.87035,4.0812
-#&gt; +units=m +no_defs 
-#&gt; file        /tmp/Rtmp0ZPp6C/file301228106c6 
+#&gt; projection  +proj=sterea +lat_0=52.1561605555556 +lon_0=5.38763888888889
+#&gt; +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +units=m +no_defs 
+#&gt; file        /tmp/RtmpNyj9Cf/file7a7330da694f 
 #&gt; apparent band summary:
 #&gt;    GDType hasNoDataValue NoDataValue blockSize1 blockSize2
 #&gt; 1 Float32          FALSE           0         26         78
@@ -515,8 +511,8 @@ use <code><a href='https://www.rdocumentation.org/packages/sp/topics/flip'>flipV
 #&gt;   Bmin     Bmax     Bmean      Bsd
 #&gt; 1    0 0.992607 0.2971195 0.218151
 #&gt; Metadata:
-#&gt; AREA_OR_POINT=Area </div><div class='input'><span class='no'>mg2</span> <span class='kw'>&lt;-</span> <span class='fu'>readGDAL</span>(<span class='no'>fn</span>)</div><div class='output co'>#&gt; /tmp/Rtmp0ZPp6C/file301228106c6 has GDAL driver GTiff 
-#&gt; and has 104 rows and 78 columns</div><div class='input'><span class='fu'>proj4string</span>(<span class='no'>mg2</span>)</div><div class='output co'>#&gt; [1] "+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +towgs84=565.2369,50.0087,465.658,-0.406857,0.350733,-1.87035,4.0812 +units=m +no_defs"</div><div class='input'><span class='no'>SP27GTIF</span> <span class='kw'>&lt;-</span> <span class='fu'>readGDAL</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"pictures/SP27GTIF.TIF"</span>,
+#&gt; AREA_OR_POINT=Area </div><div class='input'><span class='no'>mg2</span> <span class='kw'>&lt;-</span> <span class='fu'>readGDAL</span>(<span class='no'>fn</span>)</div><div class='output co'>#&gt; /tmp/RtmpNyj9Cf/file7a7330da694f has GDAL driver GTiff 
+#&gt; and has 104 rows and 78 columns</div><div class='input'><span class='fu'>proj4string</span>(<span class='no'>mg2</span>)</div><div class='output co'>#&gt; [1] "+proj=sterea +lat_0=52.1561605555556 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +units=m +no_defs"</div><div class='input'><span class='no'>SP27GTIF</span> <span class='kw'>&lt;-</span> <span class='fu'>readGDAL</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"pictures/SP27GTIF.TIF"</span>,
 <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"rgdal"</span>)[<span class='fl'>1</span>], <span class='kw'>output.dim</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>100</span>,<span class='fl'>100</span>))</div><div class='output co'>#&gt; /home/rsb/topics/packages/R-Forge/rgdal/pkg/inst/pictures/SP27GTIF.TIF has GDAL driver GTiff 
 #&gt; and has 929 rows and 699 columns</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>SP27GTIF</span>)</div><div class='output co'>#&gt; Object of class SpatialGridDataFrame
 #&gt; Coordinates:
@@ -618,11 +614,11 @@ use <code><a href='https://www.rdocumentation.org/packages/sp/topics/flip'>flipV
 #&gt; y           1421348      160       100</div><div class='input'><span class='fu'>gridparameters</span>(<span class='no'>erdas_spnad83a</span>)</div><div class='output co'>#&gt;   cellcentre.offset cellsize cells.dim
 #&gt; x             83019       40       400
 #&gt; y           1421288       40       400</div><div class='input'><span class='no'>tf</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/tempfile'>tempfile</a></span>()
-<span class='fu'>writeGDAL</span>(<span class='no'>erdas_spnad83</span>, <span class='no'>tf</span>, <span class='kw'>drivername</span><span class='kw'>=</span><span class='st'>"GTiff"</span>, <span class='kw'>type</span><span class='kw'>=</span><span class='st'>"Byte"</span>, <span class='kw'>options</span><span class='kw'>=</span><span class='kw'>NULL</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: mvFlag=NA unsuitable for type Byte</span></div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/all.equal'>all.equal</a></span>(<span class='no'>erdas_spnad83</span>, <span class='fu'>readGDAL</span>(<span class='no'>tf</span>))</div><div class='output co'>#&gt; /tmp/Rtmp0ZPp6C/file301273d3f59f has GDAL driver GTiff 
+<span class='fu'>writeGDAL</span>(<span class='no'>erdas_spnad83</span>, <span class='no'>tf</span>, <span class='kw'>drivername</span><span class='kw'>=</span><span class='st'>"GTiff"</span>, <span class='kw'>type</span><span class='kw'>=</span><span class='st'>"Byte"</span>, <span class='kw'>options</span><span class='kw'>=</span><span class='kw'>NULL</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: mvFlag=NA unsuitable for type Byte</span></div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/all.equal'>all.equal</a></span>(<span class='no'>erdas_spnad83</span>, <span class='fu'>readGDAL</span>(<span class='no'>tf</span>))</div><div class='output co'>#&gt; /tmp/RtmpNyj9Cf/file7a7354bf6ceb has GDAL driver GTiff 
 #&gt; and has 100 rows and 100 columns</div><div class='output co'>#&gt; [1] "Attributes: &lt; Component “proj4string”: Attributes: &lt; Component “projargs”: 1 string mismatch &gt; &gt;"</div><div class='input'><span class='fu'>writeGDAL</span>(<span class='no'>erdas_spnad83</span>, <span class='no'>tf</span>, <span class='kw'>drivername</span><span class='kw'>=</span><span class='st'>"GTiff"</span>, <span class='kw'>type</span><span class='kw'>=</span><span class='st'>"Byte"</span>,
-<span class='kw'>options</span><span class='kw'>=</span><span class='st'>"INTERLEAVE=PIXEL"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: mvFlag=NA unsuitable for type Byte</span></div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/all.equal'>all.equal</a></span>(<span class='no'>erdas_spnad83</span>, <span class='fu'>readGDAL</span>(<span class='no'>tf</span>))</div><div class='output co'>#&gt; /tmp/Rtmp0ZPp6C/file301273d3f59f has GDAL driver GTiff 
+<span class='kw'>options</span><span class='kw'>=</span><span class='st'>"INTERLEAVE=PIXEL"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: mvFlag=NA unsuitable for type Byte</span></div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/all.equal'>all.equal</a></span>(<span class='no'>erdas_spnad83</span>, <span class='fu'>readGDAL</span>(<span class='no'>tf</span>))</div><div class='output co'>#&gt; /tmp/RtmpNyj9Cf/file7a7354bf6ceb has GDAL driver GTiff 
 #&gt; and has 100 rows and 100 columns</div><div class='output co'>#&gt; [1] "Attributes: &lt; Component “proj4string”: Attributes: &lt; Component “projargs”: 1 string mismatch &gt; &gt;"</div><div class='input'><span class='fu'>writeGDAL</span>(<span class='no'>erdas_spnad83</span>, <span class='no'>tf</span>, <span class='kw'>drivername</span><span class='kw'>=</span><span class='st'>"GTiff"</span>, <span class='kw'>type</span><span class='kw'>=</span><span class='st'>"Byte"</span>,
-<span class='kw'>options</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"INTERLEAVE=PIXEL"</span>, <span class='st'>"COMPRESS=DEFLATE"</span>))</div><div class='output co'>#&gt; <span class='warning'>Warning: mvFlag=NA unsuitable for type Byte</span></div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/all.equal'>all.equal</a></span>(<span class='no'>erdas_spnad83</span>, <span class='fu'>readGDAL</span>(<span class='no'>tf</span>))</div><div class='output co'>#&gt; /tmp/Rtmp0ZPp6C/file301273d3f59f has GDAL driver GTiff 
+<span class='kw'>options</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"INTERLEAVE=PIXEL"</span>, <span class='st'>"COMPRESS=DEFLATE"</span>))</div><div class='output co'>#&gt; <span class='warning'>Warning: mvFlag=NA unsuitable for type Byte</span></div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/all.equal'>all.equal</a></span>(<span class='no'>erdas_spnad83</span>, <span class='fu'>readGDAL</span>(<span class='no'>tf</span>))</div><div class='output co'>#&gt; /tmp/RtmpNyj9Cf/file7a7354bf6ceb has GDAL driver GTiff 
 #&gt; and has 100 rows and 100 columns</div><div class='output co'>#&gt; [1] "Attributes: &lt; Component “proj4string”: Attributes: &lt; Component “projargs”: 1 string mismatch &gt; &gt;"</div><div class='input'>
 <span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='GDALReadOnlyDataset-class.html'>GDAL.open</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"pictures/erdas_spnad83.tif"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"rgdal"</span>)[<span class='fl'>1</span>])
 <span class='no'>erdas_spnad83</span> <span class='kw'>&lt;-</span> <span class='fu'>asSGDF_GROD</span>(<span class='no'>x</span>, <span class='kw'>output.dim</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>100</span>,<span class='fl'>100</span>))
@@ -666,7 +662,7 @@ use <code><a href='https://www.rdocumentation.org/packages/sp/topics/flip'>flipV
 #&gt; driver      PNG 
 #&gt; projection  +proj=tmerc +lat_0=30 +lon_0=-82.16666666666667 +k=0.9999 +x_0=200000
 #&gt; +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=us-ft +no_defs 
-#&gt; file        /tmp/Rtmp0ZPp6C/file30127ab3203f 
+#&gt; file        /tmp/RtmpNyj9Cf/file7a735b44a538 
 #&gt; apparent band summary:
 #&gt;   GDType hasNoDataValue NoDataValue blockSize1 blockSize2
 #&gt; 1   Byte          FALSE           0          1        100
@@ -687,7 +683,7 @@ use <code><a href='https://www.rdocumentation.org/packages/sp/topics/flip'>flipV
 #&gt; driver      PNG 
 #&gt; projection  +proj=tmerc +lat_0=30 +lon_0=-82.16666666666667 +k=0.9999 +x_0=200000
 #&gt; +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=us-ft +no_defs 
-#&gt; file        /tmp/Rtmp0ZPp6C/file301252b24653 
+#&gt; file        /tmp/RtmpNyj9Cf/file7a737df8ada1 
 #&gt; apparent band summary:
 #&gt;   GDType hasNoDataValue NoDataValue blockSize1 blockSize2
 #&gt; 1   Byte          FALSE           0          1        100
@@ -708,7 +704,7 @@ use <code><a href='https://www.rdocumentation.org/packages/sp/topics/flip'>flipV
 <span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/image'>image</a></span>(<span class='no'>SGDF</span>, <span class='kw'>red</span><span class='kw'>=</span><span class='st'>"red"</span>, <span class='kw'>green</span><span class='kw'>=</span><span class='st'>"green"</span>, <span class='kw'>blue</span><span class='kw'>=</span><span class='st'>"blue"</span>)
 <span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/title'>title</a></span>(<span class='kw'>main</span><span class='kw'>=</span><span class='st'>"input RGB"</span>)
 <span class='no'>tf</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/tempfile'>tempfile</a></span>()
-<span class='fu'>writeGDAL</span>(<span class='no'>SGDF</span>[<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"red"</span>, <span class='st'>"green"</span>, <span class='st'>"blue"</span>)], <span class='no'>tf</span>, <span class='kw'>type</span><span class='kw'>=</span><span class='st'>"Byte"</span>, <span class='kw'>drivername</span><span class='kw'>=</span><span class='st'>"PNG"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: mvFlag=NA unsuitable for type Byte</span></div><div class='input'><span class='no'>t1</span> <span class='kw'>&lt;-</span> <span class='fu'>readGDAL</span>(<span class='no'>tf</span>)</div><div class='output co'>#&gt; /tmp/Rtmp0ZPp6C/file30127c7a2e10 has GDAL driver PNG 
+<span class='fu'>writeGDAL</span>(<span class='no'>SGDF</span>[<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"red"</span>, <span class='st'>"green"</span>, <span class='st'>"blue"</span>)], <span class='no'>tf</span>, <span class='kw'>type</span><span class='kw'>=</span><span class='st'>"Byte"</span>, <span class='kw'>drivername</span><span class='kw'>=</span><span class='st'>"PNG"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: mvFlag=NA unsuitable for type Byte</span></div><div class='input'><span class='no'>t1</span> <span class='kw'>&lt;-</span> <span class='fu'>readGDAL</span>(<span class='no'>tf</span>)</div><div class='output co'>#&gt; /tmp/RtmpNyj9Cf/file7a736ac3581a has GDAL driver PNG 
 #&gt; and has 10 rows and 10 columns</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/image'>image</a></span>(<span class='no'>t1</span>, <span class='kw'>red</span><span class='kw'>=</span><span class='fl'>1</span>, <span class='kw'>green</span><span class='kw'>=</span><span class='fl'>2</span>, <span class='kw'>blue</span><span class='kw'>=</span><span class='fl'>3</span>)
 <span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/title'>title</a></span>(<span class='kw'>main</span><span class='kw'>=</span><span class='st'>"output PNG RGB"</span>)
 <span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/par'>par</a></span>(<span class='no'>opar</span>)</div><div class='img'><img src='readGDAL-8.png' alt='' width='700' height='433' /></div><div class='input'>
@@ -764,7 +760,7 @@ use <code><a href='https://www.rdocumentation.org/packages/sp/topics/flip'>flipV
 <span class='fu'>writeGDAL</span>(<span class='no'>with</span>, <span class='no'>tf</span>, <span class='kw'>drivername</span><span class='kw'>=</span><span class='st'>"ENVI"</span>, <span class='kw'>type</span><span class='kw'>=</span><span class='st'>"Int16"</span>, <span class='kw'>colorTable</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='no'>CT</span>),
  <span class='kw'>catNames</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='no'>cN</span>), <span class='kw'>mvFlag</span><span class='kw'>=</span><span class='fl'>11L</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: colorTables valid for Byte type only in some drivers</span></div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/cat'>cat</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/paste'>paste</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/readLines'>readLines</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/paste'>paste</a></span>(<span class='no'>tf</span>, <span class='st'>"hdr"</span>, <span class='kw'>sep</span><span class='kw'>=</span><span class='st'>"."</span>)), <span class='st'>"\n"</span>, <span class='kw'>sep</span><span class='kw'>=</span><span class='st'>""</span>), <span class='st'>"\n"</span>)</div><div class='output co'>#&gt; ENVI
 #&gt;  description = {
-#&gt;  /tmp/Rtmp0ZPp6C/file30122571916}
+#&gt;  /tmp/RtmpNyj9Cf/file7a733a13f499}
 #&gt;  samples = 30
 #&gt;  lines   = 30
 #&gt;  bands   = 1
@@ -791,7 +787,7 @@ use <code><a href='https://www.rdocumentation.org/packages/sp/topics/flip'>flipV
 #&gt;  [8] "#0066FF" "#3300FF" "#CC00FF" "#FF0099"</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/attr'>attr</a></span>(<span class='no'>wGi</span>, <span class='st'>"CATlist"</span>)<span class='kw'>[[</span><span class='fl'>1</span>]]</div><div class='output co'>#&gt;  [1] "Unclassified"       "temperature_min"    "temperature_max"   
 #&gt;  [4] "temperature_var"    "precipitation_mean" "precipitation_var" 
 #&gt;  [7] "wnd_mean"           "rad_mean"           "eto_mean"          
-#&gt; [10] "aet_mean"           "def_mean"          </div><div class='input'><span class='no'>withN</span> <span class='kw'>&lt;-</span> <span class='fu'>readGDAL</span>(<span class='no'>tf</span>)</div><div class='output co'>#&gt; /tmp/Rtmp0ZPp6C/file30122571916 has GDAL driver ENVI 
+#&gt; [10] "aet_mean"           "def_mean"          </div><div class='input'><span class='no'>withN</span> <span class='kw'>&lt;-</span> <span class='fu'>readGDAL</span>(<span class='no'>tf</span>)</div><div class='output co'>#&gt; /tmp/RtmpNyj9Cf/file7a733a13f499 has GDAL driver ENVI 
 #&gt; and has 30 rows and 30 columns
 #&gt; Input level values and names
 #&gt; 0 Unclassified
@@ -810,7 +806,7 @@ use <code><a href='https://www.rdocumentation.org/packages/sp/topics/flip'>flipV
 #&gt; precipitation_mean  precipitation_var           wnd_mean           rad_mean 
 #&gt;                  0                  0                  0                 50 
 #&gt;           eto_mean           aet_mean           def_mean 
-#&gt;                 49                 47                  0 </div><div class='input'><span class='no'>withN1</span> <span class='kw'>&lt;-</span> <span class='fu'>readGDAL</span>(<span class='no'>tf</span>, <span class='kw'>as.is</span><span class='kw'>=</span><span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; /tmp/Rtmp0ZPp6C/file30122571916 has GDAL driver ENVI 
+#&gt;                 49                 47                  0 </div><div class='input'><span class='no'>withN1</span> <span class='kw'>&lt;-</span> <span class='fu'>readGDAL</span>(<span class='no'>tf</span>, <span class='kw'>as.is</span><span class='kw'>=</span><span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; /tmp/RtmpNyj9Cf/file7a733a13f499 has GDAL driver ENVI 
 #&gt; and has 30 rows and 30 columns</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/table'>table</a></span>(<span class='no'>withN1</span>$<span class='no'>band1</span>)</div><div class='output co'>#&gt; 
 #&gt;   0   1   3   7   8   9 
 #&gt; 289 241 224  50  49  47 </div><div class='input'><span class='fu'>spplot</span>(<span class='no'>withN</span>, <span class='kw'>col.regions</span><span class='kw'>=</span><span class='no'>CTN</span>)</div><div class='img'><img src='readGDAL-10.png' alt='' width='700' height='433' /></div><div class='input'>

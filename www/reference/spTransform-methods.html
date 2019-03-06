@@ -64,7 +64,7 @@ In addition, the +towgs84 tag should be used where needed to make sure that datu
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgdal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.1</span>
       </span>
     </div>
 
@@ -304,10 +304,9 @@ Note that warnings about different projections may be issued when the PROJ.4 lib
 #&gt; y  -429308.4 1784235
 #&gt; Is projected: TRUE 
 #&gt; proj4string :
-#&gt; [+init=epsg:26978 +proj=lcc +lat_1=38.56666666666667
-#&gt; +lat_2=37.26666666666667 +lat_0=36.66666666666666 +lon_0=-98.5
-#&gt; +x_0=400000 +y_0=400000 +datum=NAD83 +units=m +no_defs +ellps=GRS80
-#&gt; +towgs84=0,0,0]
+#&gt; [+init=epsg:26978 +proj=lcc +lat_0=36.6666666666667 +lon_0=-98.5
+#&gt; +lat_1=38.5666666666667 +lat_2=37.2666666666667 +x_0=400000 +y_0=400000
+#&gt; +datum=NAD83 +units=m +no_defs +ellps=GRS80 +towgs84=0,0,0]
 #&gt; Number of points: 48
 #&gt; Data attributes:
 #&gt;    Population        Income       Illiteracy       Life.Exp    
@@ -342,7 +341,7 @@ Note that warnings about different projections may be issued when the PROJ.4 lib
 #&gt; proj4string :
 #&gt; [+init=epsg:28992
 #&gt; +towgs84=565.237,50.0087,465.658,-0.406857,0.350733,-1.87035,4.0812
-#&gt; +proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889
+#&gt; +proj=sterea +lat_0=52.1561605555556 +lon_0=5.38763888888889
 #&gt; +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +units=m +no_defs]
 #&gt; Number of points: 155
 #&gt; Data attributes:
@@ -673,13 +672,12 @@ Note that warnings about different projections may be issued when the PROJ.4 lib
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>nor2kNGO</span>)</div><div class='output co'>#&gt; Object of class SpatialPointsDataFrame
 #&gt; Coordinates:
 #&gt;                min         max
-#&gt; East      7.199049    9.905515
-#&gt; North    61.370713   62.321303
-#&gt; Height 1999.801816 2468.429914
+#&gt; East      7.194275    9.900485
+#&gt; North    61.371289   62.321804
+#&gt; Height 2001.000000 2469.000000
 #&gt; Is projected: FALSE 
 #&gt; proj4string :
-#&gt; [+init=epsg:4273 +proj=longlat +a=6377492.018 +b=6356173.508712696
-#&gt; +towgs84=278.3,93,474.5,7.889,0.05,-6.61,6.21 +no_defs]
+#&gt; [+init=epsg:4273 +proj=longlat +a=6377492.018 +rf=299.1528128 +no_defs]
 #&gt; Number of points: 300
 #&gt; Data attributes:
 #&gt;       Nr.             Navn             Kommune         
@@ -688,7 +686,7 @@ Note that warnings about different projections may be issued when the PROJ.4 lib
 #&gt;  Median :150.50   Mode  :character   Mode  :character  
 #&gt;  Mean   :150.50                                        
 #&gt;  3rd Qu.:225.25                                        
-#&gt;  Max.   :300.00                                        </div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/all.equal'>all.equal</a></span>(<span class='fu'>coordinates</span>(<span class='no'>nor2k</span>)[,<span class='fl'>3</span>], <span class='fu'>coordinates</span>(<span class='no'>nor2kNGO</span>)[,<span class='fl'>3</span>])</div><div class='output co'>#&gt; [1] "Mean relative difference: 0.0002685782"</div><div class='input'><span class='co'>#added after posting by Don MacQueen </span>
+#&gt;  Max.   :300.00                                        </div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/all.equal'>all.equal</a></span>(<span class='fu'>coordinates</span>(<span class='no'>nor2k</span>)[,<span class='fl'>3</span>], <span class='fu'>coordinates</span>(<span class='no'>nor2kNGO</span>)[,<span class='fl'>3</span>])</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='co'>#added after posting by Don MacQueen </span>
 <span class='no'>crds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/cbind'>cbind</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(-<span class='fl'>121.524764291826</span>, -<span class='fl'>121.523480804667</span>), <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>37.6600366036405</span>, <span class='fl'>37.6543604613483</span>))
 <span class='no'>ref</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/cbind'>cbind</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1703671.30566227</span>, <span class='fl'>1704020.20113366</span>), <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>424014.398045834</span>, <span class='fl'>421943.708664294</span>))
 <span class='no'>crs.step1.cf</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/paste'>paste</a></span>(<span class='st'>"+proj=lcc +lat_1=38.43333333333333"</span>,
@@ -703,8 +701,8 @@ Note that warnings about different projections may be issued when the PROJ.4 lib
 <span class='st'>"+no_defs +nadgrids=@null"</span>)))
 <span class='no'>locs.step2.cfb</span> <span class='kw'>&lt;-</span> <span class='fu'>spTransform</span>(<span class='no'>locs.step1.cf</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='st'>"+init=epsg:26743"</span>))
 <span class='fu'>coordinates</span>(<span class='no'>locs.step2.cfb</span>) - <span class='no'>ref</span></div><div class='output co'>#&gt;         coords.x1    coords.x2
-#&gt; [1,] 1.027342e-05 5.122856e-07
-#&gt; [2,] 1.081242e-05 5.453476e-07</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/all.equal'>all.equal</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/unname'>unname</a></span>(<span class='fu'>coordinates</span>(<span class='no'>locs.step2.cfb</span>)), <span class='no'>ref</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='co'># Test for UTM == TMERC (&lt;= 4.9.2) or UTM == ETMERC (&gt; 4.9.2)</span>
+#&gt; [1,] 1.027249e-05 5.122856e-07
+#&gt; [2,] 1.081126e-05 5.406910e-07</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/all.equal'>all.equal</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/unname'>unname</a></span>(<span class='fu'>coordinates</span>(<span class='no'>locs.step2.cfb</span>)), <span class='no'>ref</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='co'># Test for UTM == TMERC (&lt;= 4.9.2) or UTM == ETMERC (&gt; 4.9.2)</span>
 <span class='no'>nhh</span> <span class='kw'>&lt;-</span> <span class='fu'>SpatialPointsDataFrame</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/matrix'>matrix</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>5.304234</span>, <span class='fl'>60.422311</span>), <span class='kw'>ncol</span><span class='kw'>=</span><span class='fl'>2</span>),
  <span class='kw'>proj4string</span><span class='kw'>=</span><span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='st'>"+init=epsg:4326"</span>), <span class='kw'>data</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>office</span><span class='kw'>=</span><span class='st'>"RSB"</span>))
 <span class='no'>nhh_utm_32N_P4</span> <span class='kw'>&lt;-</span> <span class='fu'>spTransform</span>(<span class='no'>nhh</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='st'>"+init=epsg:3044"</span>))
@@ -713,7 +711,7 @@ Note that warnings about different projections may be issued when the PROJ.4 lib
 <span class='no'>nhh_etmerc_P4</span> <span class='kw'>&lt;-</span> <span class='fu'>spTransform</span>(<span class='no'>nhh</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/paste'>paste</a></span>(<span class='st'>"+proj=etmerc +k=0.9996"</span>,
  <span class='st'>"+lon_0=9 +x_0=500000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"</span>)))
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/all.equal'>all.equal</a></span>(<span class='fu'>coordinates</span>(<span class='no'>nhh_utm_32N_P4</span>), <span class='fu'>coordinates</span>(<span class='no'>nhh_tmerc_P4</span>),
- <span class='kw'>tolerance</span><span class='kw'>=</span><span class='fl'>1e-9</span>, <span class='kw'>scale</span><span class='kw'>=</span><span class='fl'>1</span>)</div><div class='output co'>#&gt; [1] "Mean absolute difference: 1.896347e-06"</div><div class='input'><span class='co'># UTM == TMERC: PROJ4 &lt;=4.9.2</span>
+ <span class='kw'>tolerance</span><span class='kw'>=</span><span class='fl'>1e-9</span>, <span class='kw'>scale</span><span class='kw'>=</span><span class='fl'>1</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='co'># UTM == TMERC: PROJ4 &lt;=4.9.2</span>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/all.equal'>all.equal</a></span>(<span class='fu'>coordinates</span>(<span class='no'>nhh_utm_32N_P4</span>), <span class='fu'>coordinates</span>(<span class='no'>nhh_etmerc_P4</span>),
  <span class='kw'>tolerance</span><span class='kw'>=</span><span class='fl'>1e-9</span>, <span class='kw'>scale</span><span class='kw'>=</span><span class='fl'>1</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='co'># UTM == ETMERC: PROJ4 &gt; 4.9.2</span>
 <span class='no'>unis</span> <span class='kw'>&lt;-</span> <span class='fu'>SpatialPointsDataFrame</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/matrix'>matrix</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>15.653453</span>, <span class='fl'>78.222504</span>), <span class='kw'>ncol</span><span class='kw'>=</span><span class='fl'>2</span>),
@@ -724,7 +722,7 @@ Note that warnings about different projections may be issued when the PROJ.4 lib
 <span class='no'>unis_etmerc_P4</span> <span class='kw'>&lt;-</span> <span class='fu'>spTransform</span>(<span class='no'>unis</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/paste'>paste</a></span>(<span class='st'>"+proj=etmerc +k=0.9996"</span>,
  <span class='st'>"+lon_0=15 +x_0=500000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"</span>)))
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/all.equal'>all.equal</a></span>(<span class='fu'>coordinates</span>(<span class='no'>unis_utm_33N_P4</span>), <span class='fu'>coordinates</span>(<span class='no'>unis_tmerc_P4</span>),
- <span class='kw'>tolerance</span><span class='kw'>=</span><span class='fl'>1e-9</span>, <span class='kw'>scale</span><span class='kw'>=</span><span class='fl'>1</span>)</div><div class='output co'>#&gt; [1] "Mean absolute difference: 2.21486e-06"</div><div class='input'><span class='co'># UTM == TMERC: PROJ4 &lt;=4.9.2</span>
+ <span class='kw'>tolerance</span><span class='kw'>=</span><span class='fl'>1e-9</span>, <span class='kw'>scale</span><span class='kw'>=</span><span class='fl'>1</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='co'># UTM == TMERC: PROJ4 &lt;=4.9.2</span>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/all.equal'>all.equal</a></span>(<span class='fu'>coordinates</span>(<span class='no'>unis_utm_33N_P4</span>), <span class='fu'>coordinates</span>(<span class='no'>unis_etmerc_P4</span>),
  <span class='kw'>tolerance</span><span class='kw'>=</span><span class='fl'>1e-9</span>, <span class='kw'>scale</span><span class='kw'>=</span><span class='fl'>1</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'># UTM == ETMERC: PROJ4 > 4.9.2
 
