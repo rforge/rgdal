@@ -119,7 +119,7 @@ SEXP RGDAL_projInfo(SEXP type) {
         SET_VECTOR_ELT(ans, 1, NEW_CHARACTER(n));
         SET_VECTOR_ELT(ans, 2, NEW_CHARACTER(n));
         n=0;
-        for (lu = proj_list_units(); lu->id ; ++lu)
+        for (lu = proj_list_units(); lu->id ; ++lu) {
             SET_STRING_ELT(VECTOR_ELT(ans, 0), n, 
 		COPY_TO_USER_STRING(lu->id));
             SET_STRING_ELT(VECTOR_ELT(ans, 1), n, 
@@ -127,6 +127,7 @@ SEXP RGDAL_projInfo(SEXP type) {
             SET_STRING_ELT(VECTOR_ELT(ans, 2), n, 
 		COPY_TO_USER_STRING(lu->name));
             n++;
+        }
     } else error("no such type");
     
     UNPROTECT(pc);
