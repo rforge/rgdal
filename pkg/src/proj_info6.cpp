@@ -133,10 +133,11 @@ SEXP RGDAL_projInfo(SEXP type) {
     UNPROTECT(pc);
     return(ans);
 }
-#endif
 
 
 #ifdef __cplusplus
 }
 #endif
+#endif
+
 
