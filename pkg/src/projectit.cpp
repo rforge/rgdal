@@ -34,6 +34,10 @@ FILE *pj_open_lib(const char *, const char *);
 int inversetest(void *);
 #endif
 
+#if PJ_VERSION >= 600
+# define PROJ6 1
+#endif
+
 SEXP
 PROJ4VersionInfo(void) {
     SEXP ans;
@@ -127,6 +131,8 @@ PROJ4_proj_def_dat_Installed(void) {
 
 SEXP
 PROJcopyEPSG(SEXP tf) {
+#ifndef PROJ6
+
     SEXP ans;
 
 #if PJ_VERSION <= 480
@@ -204,7 +210,11 @@ PROJcopyEPSG(SEXP tf) {
     UNPROTECT(1);
 
     return(ans);
+#else
+    return(R_NilValue);
+#endif
 }
+
 
 SEXP RGDAL_project(SEXP n, SEXP xlon, SEXP ylat, SEXP projarg, SEXP ob_tran) {
 //void project(int *n, double *xlon, double *ylat, double *x, double *y, char **projarg, int *ob_tran){
@@ -498,6 +508,8 @@ SEXP RGDAL_checkCRSArgs(SEXP args) {
 	return(res);
 }
 
+#ifndef PROJ6
+
 /* #include <projects.h> */
 struct PJconsts;
     
@@ -530,6 +542,7 @@ struct PJ_UNITS {
 #endif
 };
 struct PJ_UNITS *pj_get_units_ref( void );
+
 
 SEXP RGDAL_projInfo(SEXP type) {
     SEXP ans=NULL;
@@ -613,7 +626,7 @@ SEXP RGDAL_projInfo(SEXP type) {
         }
 
     } else if (INTEGER_POINTER(type)[0] == 3) {
-#if PJ_VERSION < 500
+#if PJ_VERSION < 500 
         PROTECT(ans = NEW_LIST(3)); pc++;
         PROTECT(ansnames = NEW_CHARACTER(3)); pc++;
         SET_STRING_ELT(ansnames, 0, COPY_TO_USER_STRING("id"));
@@ -621,19 +634,19 @@ SEXP RGDAL_projInfo(SEXP type) {
         SET_STRING_ELT(ansnames, 2, COPY_TO_USER_STRING("name"));
         setAttrib(ans, R_NamesSymbol, ansnames);
 
-        struct PJ_UNITS *ld;
-        for (ld = pj_get_units_ref(); ld->id ; ++ld) n++;
+        struct PJ_UNITS *lu;
+        for (lu = pj_get_units_ref(); lu->id ; ++lu) n++;
         SET_VECTOR_ELT(ans, 0, NEW_CHARACTER(n));
         SET_VECTOR_ELT(ans, 1, NEW_CHARACTER(n));
         SET_VECTOR_ELT(ans, 2, NEW_CHARACTER(n));
         n=0;
-        for (ld = pj_get_units_ref(); ld->id ; ++ld) {
+        for (lu = pj_get_units_ref(); lu->id ; ++lu) {
             SET_STRING_ELT(VECTOR_ELT(ans, 0), n, 
-		COPY_TO_USER_STRING(ld->id));
+		COPY_TO_USER_STRING(lu->id));
             SET_STRING_ELT(VECTOR_ELT(ans, 1), n, 
-		COPY_TO_USER_STRING(ld->to_meter));
+		COPY_TO_USER_STRING(lu->to_meter));
             SET_STRING_ELT(VECTOR_ELT(ans, 2), n, 
-		COPY_TO_USER_STRING(ld->name));
+		COPY_TO_USER_STRING(lu->name));
             n++;
         }
 #else
@@ -645,21 +658,21 @@ SEXP RGDAL_projInfo(SEXP type) {
         SET_STRING_ELT(ansnames, 3, COPY_TO_USER_STRING("factor"));
         setAttrib(ans, R_NamesSymbol, ansnames);
 
-        struct PJ_UNITS *ld;
-        for (ld = pj_get_units_ref(); ld->id ; ++ld) n++;
+        struct PJ_UNITS *lu;
+        for (lu = pj_get_units_ref(); lu->id ; ++lu) n++;
         SET_VECTOR_ELT(ans, 0, NEW_CHARACTER(n));
         SET_VECTOR_ELT(ans, 1, NEW_CHARACTER(n));
         SET_VECTOR_ELT(ans, 2, NEW_CHARACTER(n));
         SET_VECTOR_ELT(ans, 3, NEW_NUMERIC(n));
         n=0;
-        for (ld = pj_get_units_ref(); ld->id ; ++ld) {
+        for (lu = pj_get_units_ref(); lu->id ; ++lu) {
             SET_STRING_ELT(VECTOR_ELT(ans, 0), n, 
-		COPY_TO_USER_STRING(ld->id));
+		COPY_TO_USER_STRING(lu->id));
             SET_STRING_ELT(VECTOR_ELT(ans, 1), n, 
-		COPY_TO_USER_STRING(ld->to_meter));
+		COPY_TO_USER_STRING(lu->to_meter));
             SET_STRING_ELT(VECTOR_ELT(ans, 2), n, 
-		COPY_TO_USER_STRING(ld->name));
-            NUMERIC_POINTER(VECTOR_ELT(ans, 3))[n] = ld->factor;
+		COPY_TO_USER_STRING(lu->name));
+            NUMERIC_POINTER(VECTOR_ELT(ans, 3))[n] = lu->factor;
             n++;
         }
 #endif
@@ -668,6 +681,7 @@ SEXP RGDAL_projInfo(SEXP type) {
     UNPROTECT(pc);
     return(ans);
 }
+#endif
 
 
 #ifdef __cplusplus

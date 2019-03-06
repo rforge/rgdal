@@ -19,6 +19,6 @@ Authors@R: c(
 	person("Jeroen", "Ooms", role = "ctb"),
 	person("Colin", "Rundel", role = "ctb"))
 License: GPL (>= 2)
-URL: http://rgdal.r-forge.r-project.org, https://www.gdal.org, https://proj.org, https://r-forge.r-project.org/projects/rgdal/
+URL: http://rgdal.r-forge.r-project.org, https://www.gdal.org, https://proj4.org, https://r-forge.r-project.org/projects/rgdal/
 SystemRequirements: for building from source: GDAL >= 1.11.4 and <= 2.5.0, library from https://trac.osgeo.org/gdal/wiki/DownloadSource and PROJ.4 (proj >= 4.8.0) from https://download.osgeo.org/proj/; GDAL OSX frameworks built by William Kyngesburye at http://www.kyngchaos.com/ may be used for source installs on OSX. For installation with older external dependencies, override configure checks with --configure-args="enable-deprecated=yes". Consider source installations using archived versions of rgdal contemporary with installed external dependencies, for example rgdal_0.8-7 for PROJ4 4.8.0 (March 2012).
 RoxygenNote: 6.1.1

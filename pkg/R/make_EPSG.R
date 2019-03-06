@@ -1,4 +1,6 @@
 make_EPSG <- function(file) {
+        if (.Call("PROJ4VersionInfo", PACKAGE = "rgdal")[[2]] >= 600L)
+            stop("Listing of EPSG codes not available from new proj interface")
         if (missing(file)) {
             tf <- tempfile()
             n <- .Call("PROJcopyEPSG", tf, PACKAGE="rgdal")
