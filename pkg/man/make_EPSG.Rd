@@ -19,6 +19,7 @@ make_EPSG(file)
   \item{code}{integer column of EPSG code numbers}
   \item{note}{character column of notes as included in the file}
   \item{prj4}{character column of PROJ.4 arguments for the equivalent projection definitions}
+  \item{prj_method}{extra character column from PROJ 6 showing the projection method}
   ...
 }
 \references{\url{http://www.epsg.org/}}

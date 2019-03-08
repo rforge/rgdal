@@ -134,6 +134,10 @@ SEXP RGDAL_projInfo(SEXP type) {
     return(ans);
 }
 
+// blocks error messages in this context
+// https://lists.osgeo.org/pipermail/proj/2019-March/008310.html
+static void proj_logger(void * user_data, int level, const char * message) {}
+
 // code borrowed from GRASS g.proj main.c adapted for PROJ6 by Markus Metz
 
 SEXP
@@ -151,7 +155,6 @@ PROJcopyEPSG(SEXP tf) {
     crs_cnt = 0;
     proj_crs_info = proj_get_crs_info_list_from_database(ctx, "EPSG", NULL,
         &crs_cnt);
-//Rprintf("proj_get_crs_info_list_from_database errno: %d\n", proj_context_errno(ctx));
     if (crs_cnt < 1) {
         UNPROTECT(1);
         return(ans);
@@ -161,31 +164,31 @@ PROJcopyEPSG(SEXP tf) {
         UNPROTECT(1);
         return(ans);
     }
-    fprintf(fptf, "\"code\",\"note\",\"prj4\"\n");
+    fprintf(fptf, "\"code\",\"note\",\"prj4\",\"prj_method\"\n");
 
     PJ *pj;
+// blocks error messages in this context
+    proj_log_func(ctx, NULL, proj_logger);
     for (i = 0; i < crs_cnt; i++) {
         const char *proj_definition;
 
         pj = proj_create_from_database(ctx, proj_crs_info[i]->auth_name,
             proj_crs_info[i]->code, PJ_CATEGORY_CRS, 0, NULL);
-//Rprintf("proj_create_from_database %s: %d\n", proj_crs_info[i]->code, proj_context_errno(ctx));
         proj_definition = proj_as_proj_string(ctx, pj, PJ_PROJ_5, NULL);
-//Rprintf("proj_as_proj_string %s: %d\n", proj_crs_info[i]->code, proj_context_errno(ctx));
 
-        fprintf(fptf, "%s,\"%s\",\"%s\"\n", proj_crs_info[i]->code,
-  	    proj_crs_info[i]->name, proj_definition);
+        fprintf(fptf, "%s,\"%s\",\"%s\",\"%s\"\n", proj_crs_info[i]->code,
+  	    proj_crs_info[i]->name, proj_definition, 
+            proj_crs_info[i]->projection_method_name);
     }
 
     fclose(fptf);
+    proj_destroy(pj);
     proj_crs_info_list_destroy(proj_crs_info);
     proj_context_destroy(ctx);
-    proj_destroy(pj);
     INTEGER_POINTER(ans)[0] = crs_cnt;
     UNPROTECT(1);
 
     return(ans);
-//    return(R_NilValue);
 
 }
 
