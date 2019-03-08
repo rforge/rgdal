@@ -144,12 +144,14 @@ PROJcopyEPSG(SEXP tf) {
     INTEGER_POINTER(ans)[0] = 0;
     int i, crs_cnt;
     PROJ_CRS_INFO **proj_crs_info;
+    PJ_CONTEXT *ctx = proj_context_create();
     FILE *fptf;
 
 	
     crs_cnt = 0;
-    proj_crs_info = proj_get_crs_info_list_from_database(NULL, "EPSG", NULL,
+    proj_crs_info = proj_get_crs_info_list_from_database(ctx, "EPSG", NULL,
         &crs_cnt);
+//Rprintf("proj_get_crs_info_list_from_database errno: %d\n", proj_context_errno(ctx));
     if (crs_cnt < 1) {
         UNPROTECT(1);
         return(ans);
@@ -160,19 +162,25 @@ PROJcopyEPSG(SEXP tf) {
         return(ans);
     }
     fprintf(fptf, "\"code\",\"note\",\"prj4\"\n");
+
+    PJ *pj;
     for (i = 0; i < crs_cnt; i++) {
         const char *proj_definition;
-	PJ *pj;
 
-        pj = proj_create_from_database(NULL, proj_crs_info[i]->auth_name,
+        pj = proj_create_from_database(ctx, proj_crs_info[i]->auth_name,
             proj_crs_info[i]->code, PJ_CATEGORY_CRS, 0, NULL);
-        proj_definition = proj_as_proj_string(NULL, pj, PJ_PROJ_5, NULL);
+//Rprintf("proj_create_from_database %s: %d\n", proj_crs_info[i]->code, proj_context_errno(ctx));
+        proj_definition = proj_as_proj_string(ctx, pj, PJ_PROJ_5, NULL);
+//Rprintf("proj_as_proj_string %s: %d\n", proj_crs_info[i]->code, proj_context_errno(ctx));
 
         fprintf(fptf, "%s,\"%s\",\"%s\"\n", proj_crs_info[i]->code,
   	    proj_crs_info[i]->name, proj_definition);
     }
 
     fclose(fptf);
+    proj_crs_info_list_destroy(proj_crs_info);
+    proj_context_destroy(ctx);
+    proj_destroy(pj);
     INTEGER_POINTER(ans)[0] = crs_cnt;
     UNPROTECT(1);
 
