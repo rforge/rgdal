@@ -3,14 +3,14 @@
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Make a data frame of EPSG projection codes}
 \description{
-  Make a data frame of the now-defunct European Petroleum Survey Group (EPSG) geodetic parameter dataset as distributed with PROJ.4 software and included in this package (prior to PROJ 6.0.0, March 2019). Because finding the correct projection specification is not easy, lists still known as EPSG lists were maintained, and more generally retrieved from databases. The data collated here were as distributed with PROJ.4. Access to the new representation will be provided later.
+  Make a data frame of the European Petroleum Survey Group (EPSG) geodetic parameter dataset as distributed with PROJ.4 software (prior to PROJ 6.0.0, March 2019, only the CSV file, from March 2019 with PROJ >= 6 from the SQLite database). Because finding the correct projection specification is not easy, lists still known as EPSG lists are maintained, and more generally retrieved from databases. The data collated here are as distributed with PROJ.4.
 }
 \usage{
 make_EPSG(file)
 }
 
 \arguments{
-  \item{file}{file name of the file matching EPSG codes and PROJ.4 arguments, should usually be autodetected}
+  \item{file}{file name of the file matching EPSG codes and PROJ.4 arguments, should usually be autodetected; not used for PROJ >= 6}
 }
 %- maybe also 'usage' for other objects documented here.
 

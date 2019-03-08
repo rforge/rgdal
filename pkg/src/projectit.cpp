@@ -129,9 +129,10 @@ PROJ4_proj_def_dat_Installed(void) {
 
 #define MAX_LINE_LEN 512	/* maximal line length supported.     */
 
+#ifndef PROJ6
+
 SEXP
 PROJcopyEPSG(SEXP tf) {
-#ifndef PROJ6
 
     SEXP ans;
 
@@ -210,10 +211,8 @@ PROJcopyEPSG(SEXP tf) {
     UNPROTECT(1);
 
     return(ans);
-#else
-    return(R_NilValue);
-#endif
 }
+#endif
 
 
 SEXP RGDAL_project(SEXP n, SEXP xlon, SEXP ylat, SEXP projarg, SEXP ob_tran) {

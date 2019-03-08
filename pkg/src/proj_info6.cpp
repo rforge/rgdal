@@ -134,6 +134,52 @@ SEXP RGDAL_projInfo(SEXP type) {
     return(ans);
 }
 
+// code borrowed from GRASS g.proj main.c adapted for PROJ6 by Markus Metz
+
+SEXP
+PROJcopyEPSG(SEXP tf) {
+
+    SEXP ans;
+    PROTECT(ans=NEW_INTEGER(1));
+    INTEGER_POINTER(ans)[0] = 0;
+    int i, crs_cnt;
+    PROJ_CRS_INFO **proj_crs_info;
+    FILE *fptf;
+
+	
+    crs_cnt = 0;
+    proj_crs_info = proj_get_crs_info_list_from_database(NULL, "EPSG", NULL,
+        &crs_cnt);
+    if (crs_cnt < 1) {
+        UNPROTECT(1);
+        return(ans);
+    }
+    fptf = fopen(CHAR(STRING_ELT(tf, 0)), "wb");
+    if (fptf == NULL) {
+        UNPROTECT(1);
+        return(ans);
+    }
+    fprintf(fptf, "\"code\",\"note\",\"prj4\"\n");
+    for (i = 0; i < crs_cnt; i++) {
+        const char *proj_definition;
+	PJ *pj;
+
+        pj = proj_create_from_database(NULL, proj_crs_info[i]->auth_name,
+            proj_crs_info[i]->code, PJ_CATEGORY_CRS, 0, NULL);
+        proj_definition = proj_as_proj_string(NULL, pj, PJ_PROJ_5, NULL);
+
+        fprintf(fptf, "%s,\"%s\",\"%s\"\n", proj_crs_info[i]->code,
+  	    proj_crs_info[i]->name, proj_definition);
+    }
+
+    fclose(fptf);
+    INTEGER_POINTER(ans)[0] = crs_cnt;
+    UNPROTECT(1);
+
+    return(ans);
+//    return(R_NilValue);
+
+}
 
 #ifdef __cplusplus
 }
