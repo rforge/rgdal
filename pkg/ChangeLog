@@ -1,3 +1,16 @@
+2019-03-08 19:09  rsbivand
+
+	* man/make_EPSG.Rd, src/proj_info6.cpp: fix EPSG messages where no
+	  proj_string
+
+2019-03-08 12:42  rsbivand
+
+	* src/proj_info6.cpp: add contexts to EPSG listing
+
+2019-03-08 12:33  rsbivand
+
+	* ChangeLog, inst/ChangeLog: tidy
+
 2019-03-08 12:32  rsbivand
 
 	* src/proj_info6.cpp: add contexts to EPSG listing
