@@ -1,3 +1,11 @@
+2019-03-08 12:32  rsbivand
+
+	* src/proj_info6.cpp: add contexts to EPSG listing
+
+2019-03-08 11:39  rsbivand
+
+	* ChangeLog, inst/ChangeLog: tidy
+
 2019-03-08 11:38  rsbivand
 
 	* DESCRIPTION: tidy
