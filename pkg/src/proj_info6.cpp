@@ -194,13 +194,4 @@ PROJcopyEPSG(SEXP tf) {
 #endif
 #endif
 
-/*Since rgdal::make_EPSG() is facing the same problems of listing tabulated EPSG fields as g.proj -l, I was very happy to see Markus' code in g.proj/main.c mentioned in this thread, and have used this approach in https://r-forge.r-project.org/scm/viewvc.php/pkg/src/proj_info6.cpp?view=markup&root=rgdal 
-
-However, there are plenty of messages such as: "proj_as_proj_string: Unsupported conversion method: Lambert Conic Conformal (West Orientated)". I haven't installed GRASS trunk with PROJ6, so I can't see whether g.proj -l also sees the same messages. If it does, maybe we could ask on the proj list how they might be captured for summary reporting. I think they are coming from line 5758 in src/iso19111/coordinateoperation.cpp or maybe line 906 in same file. Maybe PROJ now has an error handler that
-
-Another question concerns the issue of whether one needs to free objects created, in particular proj_crs_info and pj. Not so important for g.proj, which exists when done, but important for rgdal whose functions don't exit.
-
-Anyway, very helpful to see that Markus is looking at the same issues as we are!
-
-Roger */
 
