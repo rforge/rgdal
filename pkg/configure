@@ -2086,29 +2086,39 @@ if `$PROJ_CONFIG --exists` ; then
 $as_echo "$as_me: pkg-config proj exists, will use it" >&6;}
   proj_config_ok=yes
 else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: pkg-config proj not available" >&5
+$as_echo "$as_me: pkg-config proj not available" >&6;}
+  echo "  set PKG_CONFIG_PATH to the directory containing proj.pc"
   proj_config_ok=no
 fi
 
 PROJ_VERSION=""
+PROJ6=""
 
 if test "${proj_config_ok}" = yes; then
   PROJ_VERSION=`${PROJ_CONFIG} --modversion`
   { $as_echo "$as_me:${as_lineno-$LINENO}: PROJ version: ${PROJ_VERSION}" >&5
 $as_echo "$as_me: PROJ version: ${PROJ_VERSION}" >&6;}
-fi
 
-PROJV1=`echo "${PROJ_VERSION}" | cut -c 1`
+  PROJV1=`echo "${PROJ_VERSION}" | cut -c 1`
 
-if test "${PROJV1}" = "6"; then
-  { $as_echo "$as_me:${as_lineno-$LINENO}: Support for PROJ >= 6.0.0 not yet available, deprecated API defined" >&5
+  if test "${PROJV1}" = "6"; then
+    { $as_echo "$as_me:${as_lineno-$LINENO}: Support for PROJ >= 6.0.0 not yet available, deprecated API defined" >&5
 $as_echo "$as_me: Support for PROJ >= 6.0.0 not yet available, deprecated API defined" >&6;}
-  PKG_CPPFLAGS="-DACCEPT_USE_OF_DEPRECATED_PROJ_API_H"
-  PROJ6="yes"
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: PROJ version < 6.0.0" >&5
+    PKG_CPPFLAGS="-DACCEPT_USE_OF_DEPRECATED_PROJ_API_H"
+    PROJ6="yes"
+  else
+    { $as_echo "$as_me:${as_lineno-$LINENO}: PROJ version < 6.0.0" >&5
 $as_echo "$as_me: PROJ version < 6.0.0" >&6;}
-  PKG_CPPFLAGS=""
-  PROJ6="no"
+    PKG_CPPFLAGS=""
+    PROJ6="no"
+  fi
+
+else
+
+  { $as_echo "$as_me:${as_lineno-$LINENO}: PROJ version not determined using pkg-config proj" >&5
+$as_echo "$as_me: PROJ version not determined using pkg-config proj" >&6;}
+
 fi
 #AC_MSG_NOTICE([Package CPP flags: ${PKG_CPPFLAGS}])
 
@@ -2181,26 +2191,33 @@ int main() {
 _EOCONF
 
 if test `${CC} ${CFLAGS} ${PKG_CPPFLAGS} -o proj_conf_test1 proj_conf_test1.c ${PKG_LIBS} 2> /dev/null; echo $?` = 0; then
+  PROJ_VERSION_H=`./proj_conf_test1`
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+  if test `${CC} ${CFLAGS} ${PKG_CPPFLAGS} -DACCEPT_USE_OF_DEPRECATED_PROJ_API_H -o proj_conf_test1 proj_conf_test1.c ${PKG_LIBS} 2> /dev/null; echo $?` = 0; then
+    PROJ6="yes"
+    PKG_CPPFLAGS="${PKG_CPPFLAGS} -DACCEPT_USE_OF_DEPRECATED_PROJ_API_H"
+    PROJ_VERSION_H=`./proj_conf_test1`
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+  else
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-  as_fn_error $? "proj_api.h not found in standard or given locations." "$LINENO" 5
+    as_fn_error $? "proj_api.h not found in standard or given locations." "$LINENO" 5
+  fi
 fi
-
-PROJ_VERSION_H=`./proj_conf_test1`
 
 rm -f proj_conf_test1.c proj_conf_test1
 
-#AC_MSG_NOTICE(["${PROJ_VERSION} ${PROJ_VERSION_H}"])
+#AC_MSG_NOTICE(["|${PROJ_VERSION}| |${PROJ_VERSION_H}|"])
 
-if test ${PROJ_VERSION} = "" ; then
+if test -n "${PROJ_VERSION}" ; then
   { $as_echo "$as_me:${as_lineno-$LINENO}: checking PROJ version agreement" >&5
 $as_echo_n "checking PROJ version agreement... " >&6; }
   PROJ_VERSION_DOT=`echo ${PROJ_VERSION} | tr -d "."`
 #echo "|${PROJ_VERSION}| |${PROJ_VERSION_DOT}| |${PROJ_VERSION_H}|"
-  if test ${PROJ_VERSION_DOT}$ = ${PROJ_VERSION_H}$; then
+  if test "${PROJ_VERSION_DOT}$" = "${PROJ_VERSION_H}$"; then
     { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
   else
@@ -2265,6 +2282,8 @@ if test "$STOP" = "stop" ; then
 fi
 
 fi # < 493 test for projects.h
+
+
 
 PKG_CPPFLAGS="-DP4CTX=1 ${PKG_CPPFLAGS}"
 
