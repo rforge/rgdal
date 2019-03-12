@@ -1,3 +1,11 @@
+2019-03-12 12:26  rsbivand
+
+	* R/project.R, man/project.Rd: fix NA handling for i386 project()
+
+2019-03-12 11:08  rsbivand
+
+	* ChangeLog, inst/ChangeLog: tidy
+
 2019-03-12 11:04  rsbivand
 
 	* src/inverser.c: re-order inversetest header order
