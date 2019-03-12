@@ -1,3 +1,27 @@
+2019-03-12 11:04  rsbivand
+
+	* src/inverser.c: re-order inversetest header order
+
+2019-03-12 10:21  rsbivand
+
+	* configure: tidy
+
+2019-03-12 10:20  rsbivand
+
+	* DESCRIPTION: tidy
+
+2019-03-12 10:16  rsbivand
+
+	* configure, configure.ac: fix configure.ac tests
+
+2019-03-11 13:49  rsbivand
+
+	* configure: tidy
+
+2019-03-11 09:20  rsbivand
+
+	* ChangeLog, inst/ChangeLog: tidy
+
 2019-03-11 09:19  rsbivand
 
 	* DESCRIPTION: tidy
