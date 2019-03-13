@@ -360,6 +360,19 @@ else
   fi
 fi
 
+AC_ARG_WITH([proj_api],
+    [  --with-proj_api[=ARG]        legacy proj_api.h while still available, or current proj.h (ARG="proj_api.h"(default), "proj.h")],,)
+
+AC_MSG_CHECKING([PROJ header API:])
+
+if test "$with_proj_api" = "" ; then
+  PROJ_API="proj_api.h"
+else
+  PROJ_API="$with_proj_api"
+fi
+
+AC_MSG_RESULT(${PROJ_API})
+
 LIBS="${INLIBS} ${PKG_LIBS}"
 #PKG_LIBS="${PKG_LIBS} -lproj"
 #AC_MSG_NOTICE([${CFLAGS} ${PKG_CPPFLAGS}])

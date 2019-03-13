@@ -635,6 +635,7 @@ enable_option_checking
 with_gdal_config
 with_proj_include
 with_proj_lib
+with_proj_api
 with_proj_share
 with_data_copy
 with_proj_data
@@ -1255,6 +1256,7 @@ Optional Packages:
   --with-proj-include=DIR location of proj header files
   --with-proj-lib=LIB_PATH
                           the location of proj libraries
+  --with-proj_api=ARG        legacy proj_api.h while still available, or current proj.h (ARG="proj_api.h"(default), "proj.h")
   --with-proj-share=SHARE_PATH
                           the location of proj metadata files
   --with-data-copy=yes/no local copy of data directories in package, default
@@ -2173,6 +2175,25 @@ else
 
   fi
 fi
+
+
+# Check whether --with-proj_api was given.
+if test "${with_proj_api+set}" = set; then :
+  withval=$with_proj_api;
+fi
+
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking PROJ header API:" >&5
+$as_echo_n "checking PROJ header API:... " >&6; }
+
+if test "$with_proj_api" = "" ; then
+  PROJ_API="proj_api.h"
+else
+  PROJ_API="$with_proj_api"
+fi
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${PROJ_API}" >&5
+$as_echo "${PROJ_API}" >&6; }
 
 LIBS="${INLIBS} ${PKG_LIBS}"
 #PKG_LIBS="${PKG_LIBS} -lproj"
