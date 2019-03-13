@@ -1,3 +1,12 @@
+2019-03-13 08:57  rsbivand
+
+	* R/gdal.R, man/GDALReadOnlyDataset-class.Rd: test for file exists
+	  before normalizePath when reading rasters
+
+2019-03-12 12:27  rsbivand
+
+	* ChangeLog, inst/ChangeLog: tidy
+
 2019-03-12 12:26  rsbivand
 
 	* R/project.R, man/project.Rd: fix NA handling for i386 project()
