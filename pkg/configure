@@ -610,6 +610,7 @@ infodir
 docdir
 oldincludedir
 includedir
+runstatedir
 localstatedir
 sharedstatedir
 sysconfdir
@@ -681,6 +682,7 @@ datadir='${datarootdir}'
 sysconfdir='${prefix}/etc'
 sharedstatedir='${prefix}/com'
 localstatedir='${prefix}/var'
+runstatedir='${localstatedir}/run'
 includedir='${prefix}/include'
 oldincludedir='/usr/include'
 docdir='${datarootdir}/doc/${PACKAGE_TARNAME}'
@@ -933,6 +935,15 @@ do
   | -silent | --silent | --silen | --sile | --sil)
     silent=yes ;;
 
+  -runstatedir | --runstatedir | --runstatedi | --runstated \
+  | --runstate | --runstat | --runsta | --runst | --runs \
+  | --run | --ru | --r)
+    ac_prev=runstatedir ;;
+  -runstatedir=* | --runstatedir=* | --runstatedi=* | --runstated=* \
+  | --runstate=* | --runstat=* | --runsta=* | --runst=* | --runs=* \
+  | --run=* | --ru=* | --r=*)
+    runstatedir=$ac_optarg ;;
+
   -sbindir | --sbindir | --sbindi | --sbind | --sbin | --sbi | --sb)
     ac_prev=sbindir ;;
   -sbindir=* | --sbindir=* | --sbindi=* | --sbind=* | --sbin=* \
@@ -1070,7 +1081,7 @@ fi
 for ac_var in	exec_prefix prefix bindir sbindir libexecdir datarootdir \
 		datadir sysconfdir sharedstatedir localstatedir includedir \
 		oldincludedir docdir infodir htmldir dvidir pdfdir psdir \
-		libdir localedir mandir
+		libdir localedir mandir runstatedir
 do
   eval ac_val=\$$ac_var
   # Remove trailing slashes.
@@ -1223,6 +1234,7 @@ Fine tuning of the installation directories:
   --sysconfdir=DIR        read-only single-machine data [PREFIX/etc]
   --sharedstatedir=DIR    modifiable architecture-independent data [PREFIX/com]
   --localstatedir=DIR     modifiable single-machine data [PREFIX/var]
+  --runstatedir=DIR       modifiable per-process data [LOCALSTATEDIR/run]
   --libdir=DIR            object code libraries [EPREFIX/lib]
   --includedir=DIR        C header files [PREFIX/include]
   --oldincludedir=DIR     C header files for non-gcc [/usr/include]
@@ -1887,17 +1899,16 @@ fi
 $as_echo_n "checking gdal-config usability... " >&6; }
 if test `${GDAL_CONFIG} --version`;
 then
-
-	GDAL_CPPFLAGS=`${GDAL_CONFIG} --cflags`
-	GDAL_LIBS=`${GDAL_CONFIG} --libs`
-        GDAL_VERSION=`${GDAL_CONFIG} --version`
-        GDAL_DEP_LIBS=`${GDAL_CONFIG} --dep-libs`
-        GDAL_DATADIR=`${GDAL_CONFIG} --datadir`
-        gdalok=yes
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+  GDAL_CPPFLAGS=`${GDAL_CONFIG} --cflags`
+  GDAL_LIBS=`${GDAL_CONFIG} --libs`
+  GDAL_VERSION=`${GDAL_CONFIG} --version`
+  GDAL_DEP_LIBS=`${GDAL_CONFIG} --dep-libs`
+  GDAL_DATADIR=`${GDAL_CONFIG} --datadir`
+  gdalok=yes
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 else
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+      { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 	echo "Error: gdal-config not found"
 	echo "The gdal-config script distributed with GDAL could not be found."
@@ -1911,7 +1922,6 @@ $as_echo "no" >&6; }
 	echo ""
 
 	exit 1
-
 fi
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: GDAL: ${GDAL_VERSION}" >&5
@@ -2065,6 +2075,19 @@ $as_echo "no" >&6; }
   fi
 fi
 
+GDAL_GE_250="no"
+GDAL_MAJ_VER=`echo $GDAL_VERSION | cut -d "." -f1`
+GDAL_MOD_VER=`echo $GDAL_VERSION | cut -d "." -f2`
+if test "${GDAL_MAJ_VER}" = 2 ; then
+  if test "${GDAL_MOD_VER}" -ge 5 ; then
+    GDAL_GE_250="yes"
+  fi
+else
+  if test "${GDAL_MAJ_VER}" -ge 3 ; then
+    GDAL_GE_250="yes"
+  fi
+fi
+
 GDAL_DATA_TEST_FILE="${GDAL_DATADIR}/pcs.csv"
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking GDAL: ${GDAL_DATADIR}/pcs.csv readable" >&5
 $as_echo_n "checking GDAL: ${GDAL_DATADIR}/pcs.csv readable... " >&6; }
@@ -2074,7 +2097,9 @@ $as_echo "yes" >&6; }
 else
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-  as_fn_error $? "pcs.csv not found in GDAL data directory." "$LINENO" 5
+  if test "${GDAL_GE_250}" = no; then
+    as_fn_error $? "pcs.csv not found in GDAL data directory." "$LINENO" 5
+  fi
 fi
 
 # PROJ.4
