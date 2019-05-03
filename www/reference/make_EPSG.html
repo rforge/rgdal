@@ -32,7 +32,7 @@
 
 <meta property="og:title" content="Make a data frame of EPSG projection codes — make_EPSG" />
 
-<meta property="og:description" content="Make a data frame of the now-defunct European Petroleum Survey Group (EPSG) geodetic parameter dataset as distributed with PROJ.4 software and included in this package (prior to PROJ 6.0.0, March 2019). Because finding the correct projection specification is not easy, lists still known as EPSG lists were maintained, and more generally retrieved from databases. The data collated here were as distributed with PROJ.4. Access to the new representation will be provided later." />
+<meta property="og:description" content="Make a data frame of the European Petroleum Survey Group (EPSG) geodetic parameter dataset as distributed with PROJ.4 software (prior to PROJ 6.0.0, March 2019, only the CSV file, from March 2019 with PROJ &amp;gt;= 6 from the SQLite database). Because finding the correct projection specification is not easy, lists still known as EPSG lists are maintained, and more generally retrieved from databases. The data collated here are as distributed with PROJ.4." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -63,7 +63,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgdal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.3</span>
       </span>
     </div>
 
@@ -101,7 +101,7 @@
 
     <div class="ref-description">
     
-    <p>Make a data frame of the now-defunct European Petroleum Survey Group (EPSG) geodetic parameter dataset as distributed with PROJ.4 software and included in this package (prior to PROJ 6.0.0, March 2019). Because finding the correct projection specification is not easy, lists still known as EPSG lists were maintained, and more generally retrieved from databases. The data collated here were as distributed with PROJ.4. Access to the new representation will be provided later.</p>
+    <p>Make a data frame of the European Petroleum Survey Group (EPSG) geodetic parameter dataset as distributed with PROJ.4 software (prior to PROJ 6.0.0, March 2019, only the CSV file, from March 2019 with PROJ &gt;= 6 from the SQLite database). Because finding the correct projection specification is not easy, lists still known as EPSG lists are maintained, and more generally retrieved from databases. The data collated here are as distributed with PROJ.4.</p>
     
     </div>
 
@@ -112,7 +112,7 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>file</th>
-      <td><p>file name of the file matching EPSG codes and PROJ.4 arguments, should usually be autodetected</p></td>
+      <td><p>file name of the file matching EPSG codes and PROJ.4 arguments, should usually be autodetected; not used for PROJ &gt;= 6</p></td>
     </tr>
     </table>
     
@@ -122,6 +122,7 @@
 <dt>code</dt><dd><p>integer column of EPSG code numbers</p></dd>
   <dt>note</dt><dd><p>character column of notes as included in the file</p></dd>
   <dt>prj4</dt><dd><p>character column of PROJ.4 arguments for the equivalent projection definitions</p></dd>
+  <dt>prj_method</dt><dd><p>extra character column from PROJ 6 showing the projection method</p></dd>
   ...
 
     
@@ -137,13 +138,44 @@
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>EPSG</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/try'>try</a></span>(<span class='fu'>make_EPSG</span>())
 <span class='co'># from PROJ 6.0.0, EPSG data is no longer stored in a flat file</span>
-<span class='kw'>if</span> (<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/class'>class</a></span>(<span class='no'>EPSG</span>) <span class='kw'>!=</span> <span class='st'>"try-error"</span>) <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/attr'>attr</a></span>(<span class='no'>EPSG</span>, <span class='st'>"metadata"</span>) <span class='co'># PROJ.4 5.0.0 and later include EPSG version</span>
-<span class='kw'>if</span> (<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/class'>class</a></span>(<span class='no'>EPSG</span>) <span class='kw'>!=</span> <span class='st'>"try-error"</span>) <span class='no'>EPSG</span>[<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/grep'>grep</a></span>(<span class='st'>"Oslo"</span>, <span class='no'>EPSG</span>$<span class='no'>note</span>), <span class='fl'>1</span>:<span class='fl'>2</span>]
-<span class='kw'>if</span> (<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/class'>class</a></span>(<span class='no'>EPSG</span>) <span class='kw'>!=</span> <span class='st'>"try-error"</span>) <span class='no'>EPSG</span>[<span class='fl'>1925</span>:<span class='fl'>1927</span>, <span class='fl'>3</span>]
-<span class='kw'>if</span> (<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/class'>class</a></span>(<span class='no'>EPSG</span>) <span class='kw'>!=</span> <span class='st'>"try-error"</span>) <span class='no'>EPSG</span>[<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/grep'>grep</a></span>(<span class='st'>"Poland"</span>, <span class='no'>EPSG</span>$<span class='no'>note</span>), <span class='fl'>1</span>:<span class='fl'>2</span>]
-<span class='kw'>if</span> (<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/class'>class</a></span>(<span class='no'>EPSG</span>) <span class='kw'>!=</span> <span class='st'>"try-error"</span>) <span class='no'>EPSG</span>[<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/grep'>grep</a></span>(<span class='st'>"Amersfoort"</span>, <span class='no'>EPSG</span>$<span class='no'>note</span>), <span class='fl'>1</span>:<span class='fl'>2</span>]
-<span class='kw'>if</span> (<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/class'>class</a></span>(<span class='no'>EPSG</span>) <span class='kw'>!=</span> <span class='st'>"try-error"</span>) <span class='no'>EPSG</span>[<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/grep'>grep</a></span>(<span class='st'>"North Carolina"</span>, <span class='no'>EPSG</span>$<span class='no'>note</span>), <span class='fl'>1</span>:<span class='fl'>2</span>]
-<span class='kw'>if</span> (<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/class'>class</a></span>(<span class='no'>EPSG</span>) <span class='kw'>!=</span> <span class='st'>"try-error"</span>) <span class='no'>EPSG</span>[<span class='fl'>2202</span>, <span class='fl'>3</span>]</div></pre>
+<span class='kw'>if</span> (<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/class'>class</a></span>(<span class='no'>EPSG</span>) <span class='kw'>!=</span> <span class='st'>"try-error"</span>) <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/attr'>attr</a></span>(<span class='no'>EPSG</span>, <span class='st'>"metadata"</span>) <span class='co'># PROJ.4 5.0.0 and later include EPSG version</span></div><div class='output co'>#&gt; NULL</div><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/class'>class</a></span>(<span class='no'>EPSG</span>) <span class='kw'>!=</span> <span class='st'>"try-error"</span>) <span class='no'>EPSG</span>[<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/grep'>grep</a></span>(<span class='st'>"Oslo"</span>, <span class='no'>EPSG</span>$<span class='no'>note</span>), <span class='fl'>1</span>:<span class='fl'>2</span>]</div><div class='output co'>#&gt;       code                            note
+#&gt; 515   4817                 NGO 1948 (Oslo)
+#&gt; 2278 27391    NGO 1948 (Oslo) / NGO zone I
+#&gt; 2279 27392   NGO 1948 (Oslo) / NGO zone II
+#&gt; 2280 27393  NGO 1948 (Oslo) / NGO zone III
+#&gt; 2281 27394   NGO 1948 (Oslo) / NGO zone IV
+#&gt; 2282 27395    NGO 1948 (Oslo) / NGO zone V
+#&gt; 2283 27396   NGO 1948 (Oslo) / NGO zone VI
+#&gt; 2284 27397  NGO 1948 (Oslo) / NGO zone VII
+#&gt; 2285 27398 NGO 1948 (Oslo) / NGO zone VIII</div><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/class'>class</a></span>(<span class='no'>EPSG</span>) <span class='kw'>!=</span> <span class='st'>"try-error"</span>) <span class='no'>EPSG</span>[<span class='fl'>1925</span>:<span class='fl'>1927</span>, <span class='fl'>3</span>]</div><div class='output co'>#&gt; [1] "+proj=tmerc +lat_0=0 +lon_0=99 +k=1 +x_0=33500000 +y_0=0 +ellps=krass +units=m +no_defs +type=crs" 
+#&gt; [2] "+proj=tmerc +lat_0=0 +lon_0=102 +k=1 +x_0=34500000 +y_0=0 +ellps=krass +units=m +no_defs +type=crs"
+#&gt; [3] "+proj=tmerc +lat_0=0 +lon_0=105 +k=1 +x_0=35500000 +y_0=0 +ellps=krass +units=m +no_defs +type=crs"</div><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/class'>class</a></span>(<span class='no'>EPSG</span>) <span class='kw'>!=</span> <span class='st'>"try-error"</span>) <span class='no'>EPSG</span>[<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/grep'>grep</a></span>(<span class='st'>"Poland"</span>, <span class='no'>EPSG</span>$<span class='no'>note</span>), <span class='fl'>1</span>:<span class='fl'>2</span>]</div><div class='output co'>#&gt;      code                               note
+#&gt; 1214 2171   Pulkovo 1942(58) / Poland zone I
+#&gt; 1215 2172  Pulkovo 1942(58) / Poland zone II
+#&gt; 1216 2173 Pulkovo 1942(58) / Poland zone III
+#&gt; 1217 2174  Pulkovo 1942(58) / Poland zone IV
+#&gt; 1218 2175   Pulkovo 1942(58) / Poland zone V
+#&gt; 1219 2176      ETRS89 / Poland CS2000 zone 5
+#&gt; 1220 2177      ETRS89 / Poland CS2000 zone 6
+#&gt; 1221 2178      ETRS89 / Poland CS2000 zone 7
+#&gt; 1225 2179      ETRS89 / Poland CS2000 zone 8
+#&gt; 1226 2180               ETRS89 / Poland CS92
+#&gt; 2861 3120   Pulkovo 1942(58) / Poland zone I</div><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/class'>class</a></span>(<span class='no'>EPSG</span>) <span class='kw'>!=</span> <span class='st'>"try-error"</span>) <span class='no'>EPSG</span>[<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/grep'>grep</a></span>(<span class='st'>"Amersfoort"</span>, <span class='no'>EPSG</span>$<span class='no'>note</span>), <span class='fl'>1</span>:<span class='fl'>2</span>]</div><div class='output co'>#&gt;       code                             note
+#&gt; 230   4289                       Amersfoort
+#&gt; 2545 28991              Amersfoort / RD Old
+#&gt; 2546 28992              Amersfoort / RD New
+#&gt; 6287  7415 Amersfoort / RD New + NAP height</div><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/class'>class</a></span>(<span class='no'>EPSG</span>) <span class='kw'>!=</span> <span class='st'>"try-error"</span>) <span class='no'>EPSG</span>[<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/grep'>grep</a></span>(<span class='st'>"North Carolina"</span>, <span class='no'>EPSG</span>$<span class='no'>note</span>), <span class='fl'>1</span>:<span class='fl'>2</span>]</div><div class='output co'>#&gt;       code                                                 note
+#&gt; 1360  2264                        NAD83 / North Carolina (ftUS)
+#&gt; 3050 32019                               NAD27 / North Carolina
+#&gt; 3131 32119                               NAD83 / North Carolina
+#&gt; 3711  3358                         NAD83(HARN) / North Carolina
+#&gt; 3712  3359                  NAD83(HARN) / North Carolina (ftUS)
+#&gt; 3757  3404                  NAD83(HARN) / North Carolina (ftUS)
+#&gt; 3984  3631                     NAD83(NSRS2007) / North Carolina
+#&gt; 3985  3632              NAD83(NSRS2007) / North Carolina (ftUS)
+#&gt; 5079  6542                         NAD83(2011) / North Carolina
+#&gt; 5080  6543                  NAD83(2011) / North Carolina (ftUS)
+#&gt; 6371  8768 NAD83 / North Carolina (ftUS) + NAVD88 height (ftUS)</div><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/class'>class</a></span>(<span class='no'>EPSG</span>) <span class='kw'>!=</span> <span class='st'>"try-error"</span>) <span class='no'>EPSG</span>[<span class='fl'>2202</span>, <span class='fl'>3</span>]</div><div class='output co'>#&gt; [1] "+proj=tmerc +lat_0=0 +lon_0=33 +k=1 +x_0=500000 +y_0=0 +ellps=krass +units=m +no_defs +type=crs"</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
