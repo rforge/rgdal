@@ -172,15 +172,17 @@ else
 fi
 
 
-AC_MSG_CHECKING([GDAL version <= 2.5.0])
-if test ${GDAL_MAJOR} -lt 2 ; then
+AC_MSG_CHECKING([GDAL version <= 2.5 or >= 3.0])
+if test ${GDAL_MAJOR} -lt 2 -o ${GDAL_MAJOR} -gt 2; then
   AC_MSG_RESULT(yes)
 else
-  if test ${GDAL_MAJOR} = 2 -a ${GDAL_MINOR} -le 5 ; then
-    AC_MSG_RESULT(yes)
-  else
-    AC_MSG_RESULT(no)
-    AC_MSG_ERROR([GDAL version out of bounds])
+  if test ${GDAL_MAJOR} = 2; then
+    if test ${GDAL_MINOR} -le 5 ; then
+      AC_MSG_RESULT(yes)
+    else
+      AC_MSG_RESULT(no)
+      AC_MSG_ERROR([GDAL version out of bounds])
+    fi
   fi
 fi
 
