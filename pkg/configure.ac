@@ -496,8 +496,10 @@ if test [ -n "$proj_share_path" ] ; then
 fi
 
 
-
 if test ${PROJ6} = "no"; then
+
+AC_MSG_CHECKING(PROJ.6: )
+AC_MSG_RESULT(no)
 
 [cat > proj_conf_test2.c <<_EOCONF
 #include <stdio.h>
@@ -556,7 +558,7 @@ fi
 
 else # test for new files if PROJ6
 
-[cat > proj_conf_test2.c <<_EOCONF
+[cat > proj_conf_test2.cpp <<_EOCONF
 #include <stdio.h>
 #include <proj_api.h>
 
@@ -571,7 +573,7 @@ int main() {
 }
 _EOCONF]
 
-${CC} ${CFLAGS} ${PKG_CPPFLAGS} -o proj_conf_test2 proj_conf_test2.c ${PKG_LIBS}
+${CXX} ${CPPFLAGS} ${PKG_CPPFLAGS} -o proj_conf_test2 proj_conf_test2.cpp ${PKG_LIBS} -lproj -lsqlite3
 if test [ -n "$proj_share_path" ] ; then
   PROJ_LIB="${proj_share_path}" ./proj_conf_test2
   proj_share=`echo $?`
@@ -580,7 +582,7 @@ else
   proj_share=`echo $?`
 fi
 
-AC_MSG_CHECKING(PROJ.4: proj.db found and readable)
+AC_MSG_CHECKING(PROJ: proj.db found and readable)
 if test ${proj_share} -eq 1 ; then
     AC_MSG_RESULT(no)
     STOP="stop"
@@ -588,7 +590,7 @@ else
     AC_MSG_RESULT(yes)
 fi
 
-rm -f proj_conf_test2.c proj_conf_test2
+rm -f proj_conf_test2.cpp proj_conf_test2
 
 if test "$STOP" = "stop" ; then
     echo "Error: proj/proj.db not found"
@@ -597,7 +599,6 @@ if test "$STOP" = "stop" ; then
     echo "configure argument."
     exit 1
 fi
-
 
 fi # don't test for old files if PROJ6
 
@@ -628,32 +629,33 @@ int main() {
 }
 _EOCONF]
 
-${CC} ${CFLAGS} ${PKG_CPPFLAGS} -o proj_conf_test3 proj_conf_test3.c ${PKG_LIBS}
-if test [ -n "$proj_share_path" ] ; then
-  PROJ_LIB="${proj_share_path}" ./proj_conf_test3
-  proj_share=`echo $?`
-else
-  ./proj_conf_test3
-  proj_share=`echo $?`
-fi
-
-AC_MSG_CHECKING(PROJ.4: conus found and readable)
-if test ${proj_share} -eq 1 ; then
-    WARN="warn"
-    AC_MSG_RESULT(no)
-else
-    AC_MSG_RESULT(yes)
+if test ${PROJ6} = "no"; then
+ ${CC} ${CFLAGS} ${PKG_CPPFLAGS} -o proj_conf_test3 proj_conf_test3.c ${PKG_LIBS}
+ if test [ -n "$proj_share_path" ] ; then
+   PROJ_LIB="${proj_share_path}" ./proj_conf_test3
+   proj_share=`echo $?`
+ else
+   ./proj_conf_test3
+   proj_share=`echo $?`
+ fi
+ 
+ AC_MSG_CHECKING(PROJ.4: conus found and readable)
+ if test ${proj_share} -eq 1 ; then
+     WARN="warn"
+     AC_MSG_RESULT(no)
+ else
+     AC_MSG_RESULT(yes)
+ fi
+ 
+ if test "$WARN" = "warn" ; then
+     echo "Note: proj/conus not found"
+     echo "No support available in PROJ4 for NAD grid datum transformations"
+     echo "If required, consider re-installing from source with the contents"
+     echo "of proj-datumgrid-1.<latest>.zip from http://download.osgeo.org/proj/ in nad/."
+ fi
 fi
 
 rm -f proj_conf_test3.c proj_conf_test3
-
-if test "$WARN" = "warn" ; then
-    echo "Note: proj/conus not found"
-    echo "No support available in PROJ4 for NAD grid datum transformations"
-    echo "If required, consider re-installing from source with the contents"
-    echo "of proj-datumgrid-1.<latest>.zip from http://download.osgeo.org/proj/ in nad/."
-fi
-
 
 # Optional local copy of GDAL datadir and PROJ_LIB
 
