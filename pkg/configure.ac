@@ -27,8 +27,9 @@ AC_MSG_NOTICE([CXX: ${CXX}])
 
 #CXX_11
 
-R_VERSION=`echo 'cat(unlist(R.Version()$minor))' | ${RBIN} --vanilla --slave`
-R_MINOR=`echo $R_VERSION | cut -f1 -d"."`
+R_VERSION=`echo 'o <- R.version; cat(paste0(o$major, ".", o$minor))' | ${RBIN} --vanilla --slave`
+R_MINOR=`echo $R_VERSION | cut -f2 -d"."`
+R_MAJOR=`echo $R_VERSION | cut -f1 -d"."`
 
 #if test ${R_MINOR} -ge 4; then
 #: ${CXX=`"${RBIN}" CMD config CXX11`}
@@ -36,12 +37,17 @@ R_MINOR=`echo $R_VERSION | cut -f1 -d"."`
 #: ${CXX=`"${RBIN}" CMD config CXX1X`}
 #fi
 
-if test ${R_MINOR} -ge 4; then
+if test ${R_MAJOR} -ge 4; then
  CXX11=`"${RBIN}" CMD config CXX11`
  CXX11STD=`"${RBIN}" CMD config CXX11STD`
 else
- CXX11=`"${RBIN}" CMD config CXX1X`
- CXX11STD=`"${RBIN}" CMD config CXX1XSTD`
+ if test ${R_MAJOR} -eq 3 -a ${R_MINOR} -ge 4; then
+  CXX11=`"${RBIN}" CMD config CXX11`
+  CXX11STD=`"${RBIN}" CMD config CXX11STD`
+ else
+  CXX11=`"${RBIN}" CMD config CXX1X`
+  CXX11STD=`"${RBIN}" CMD config CXX1XSTD`
+ fi
 fi
 
 CXX="${CXX11} ${CXX11STD}"
