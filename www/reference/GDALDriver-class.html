@@ -8,21 +8,25 @@
 
 <title>Class "GDALDriver": GDAL Driver Object — GDALDriver-class • rgdal</title>
 
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -30,11 +34,12 @@
 
 
 
-<meta property="og:title" content="Class "GDALDriver": GDAL Driver Object — GDALDriver-class" />
 
+<meta property="og:title" content="Class "GDALDriver": GDAL Driver Object — GDALDriver-class" />
 <meta property="og:description" content="GDALDriver objects encapsulate GDAL file format
   drivers. GDALDriver inherits from GDALMajorObject-class." />
 <meta name="twitter:card" content="summary" />
+
 
 
 
@@ -46,6 +51,7 @@
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
 
 
   </head>
@@ -64,7 +70,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgdal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.6</span>
       </span>
     </div>
 
@@ -72,7 +78,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -80,7 +86,6 @@
   <a href="../reference/index.html">Reference</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         
       </ul>
@@ -90,6 +95,7 @@
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -101,10 +107,8 @@
     </div>
 
     <div class="ref-description">
-    
     <p><code>GDALDriver</code> objects encapsulate GDAL file format
   drivers. <code>GDALDriver</code> inherits from <code><a href='GDALMajorObject-class.html'>GDALMajorObject-class</a></code>.</p>
-    
     </div>
 
     <pre class="usage"><span class='fu'>getGDALDriverNames</span>()
@@ -117,7 +121,7 @@
 <span class='fu'>rgdal_extSoftVersion</span>()
 <span class='fu'>getCPLConfigOption</span>(<span class='no'>ConfigOption</span>)
 <span class='fu'>setCPLConfigOption</span>(<span class='no'>ConfigOption</span>, <span class='no'>value</span>)</pre>
-    
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -138,47 +142,48 @@
       <td><p>a string value to set a CPL option; NULL is used to unset the CPL option</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="objects-from-the-class"><a class="anchor" href="#objects-from-the-class"></a>Objects from the Class</h2>
 
     <p>Objects can be created by calls of the form <code>new("GDALDriver", name, handle)</code>, where name: a string giving the name of a GDAL driver, handle: used internally; not for public consumption (default = NULL).</p>
-    
     <h2 class="hasAnchor" id="slots"><a class="anchor" href="#slots"></a>Slots</h2>
 
     <p></p><dl class='dl-horizontal'>
     <dt><code>handle</code>:</dt><dd><p>Object of class <code>"externalptr", from class "GDALMajorObject"</code>, used internally; not for public consumption</p></dd>
-  </dl>
-    
+  
+</dl>
+
     <h2 class="hasAnchor" id="extends"><a class="anchor" href="#extends"></a>Extends</h2>
 
     <p>Class <code>"GDALMajorObject"</code>, directly.</p>
-    
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
 
     <p></p><dl class='dl-horizontal'>
     <dt>initialize</dt><dd><p><code>signature(.Object = "GDALDriver")</code>: drivername: a string giving the name of a GDAL driver, handle: used internally; not for public consumption (default = NULL)</p></dd>
-  </dl>
-    
+  
+</dl>
+
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p></p><dl class='dl-horizontal'>
     <dt><code>getGDALDriverNames, gdalDrivers</code>:</dt><dd><p>returns all driver names currently installed in GDAL, with their declared create and copy status (some drivers can create datasets, others can only copy from a prototype with a different driver.</p></dd>
+  
     <dt><code>getDriverName</code>:</dt><dd><p>returns the GDAL driver name associated
       with the driver object.</p></dd>
+
     <dt><code>getDriverLongName</code>:</dt><dd><p>returns a longer driver name.</p></dd>
     <dt><code>getGDALVersionInfo</code>:</dt><dd><p>returns the version of the GDAL runtime shared object.</p></dd>
     <dt><code>getGDALCheckVersion</code>:</dt><dd><p>checks the version of the GDAL headers used when building the package (GDAL_VERSION_MAJOR, GDAL_VERSION_MINOR) - if the two versions differ, problems may arise (the C++ API/ABI may have changed), and rgdal should be re-installed</p></dd>
     <dt><code>getGDALwithGEOS</code>:</dt><dd><p>because drivers may behave differently if GDAL itself was built with GEOS support, the function uses a heuristic to check whether GDAL has access to the GEOS Union function or not</p></dd>
+
 </dl>
-    
+
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
     <p>Loading the rgdal package changes the <code>GDAL\_DATA</code> environmental variable to the GDAL support files bundled with the package.</p>
-    
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='GDALMajorObject-class.html'>GDALMajorObject-class</a></code></p></div>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'>gdalDrivers</span>()</div><div class='output co'>#&gt;                    name
@@ -203,123 +208,125 @@
 #&gt; 19                  CPG
 #&gt; 20              CTable2
 #&gt; 21                  CTG
-#&gt; 22              DERIVED
-#&gt; 23                DIMAP
-#&gt; 24                DIPEx
-#&gt; 25                 DOQ1
-#&gt; 26                 DOQ2
-#&gt; 27                 DTED
-#&gt; 28              E00GRID
-#&gt; 29              ECRGTOC
-#&gt; 30                EEDAI
-#&gt; 31                 EHdr
-#&gt; 32                  EIR
-#&gt; 33                 ELAS
-#&gt; 34                 ENVI
-#&gt; 35                  ERS
-#&gt; 36                 ESAT
-#&gt; 37                 FAST
-#&gt; 38                  FIT
-#&gt; 39              FujiBAS
-#&gt; 40               GenBin
-#&gt; 41                  GFF
-#&gt; 42                  GIF
-#&gt; 43                  GMT
-#&gt; 44                 GPKG
-#&gt; 45       GRASSASCIIGrid
-#&gt; 46                 GRIB
-#&gt; 47                GS7BG
-#&gt; 48                 GSAG
-#&gt; 49                 GSBG
-#&gt; 50                  GSC
-#&gt; 51                GTiff
-#&gt; 52                  GTX
-#&gt; 53                  GXF
-#&gt; 54                 HDF5
-#&gt; 55            HDF5Image
-#&gt; 56                  HF2
-#&gt; 57                  HFA
-#&gt; 58                 HTTP
-#&gt; 59                  IDA
-#&gt; 60  IGNFHeightASCIIGrid
-#&gt; 61                ILWIS
-#&gt; 62                 INGR
-#&gt; 63                 IRIS
-#&gt; 64                 ISCE
-#&gt; 65                ISIS2
-#&gt; 66                ISIS3
-#&gt; 67           JAXAPALSAR
-#&gt; 68                 JDEM
-#&gt; 69          JP2OpenJPEG
-#&gt; 70                 JPEG
-#&gt; 71      KMLSUPEROVERLAY
-#&gt; 72                  KRO
-#&gt; 73                  L1B
-#&gt; 74                  LAN
-#&gt; 75                  LCP
-#&gt; 76             Leveller
-#&gt; 77               LOSLAS
-#&gt; 78                  MAP
-#&gt; 79              MBTiles
-#&gt; 80                  MEM
-#&gt; 81                  MFF
-#&gt; 82                 MFF2
-#&gt; 83                  MRF
-#&gt; 84                 MSGN
-#&gt; 85                  NDF
-#&gt; 86               netCDF
-#&gt; 87             NGSGEOID
-#&gt; 88                  NGW
-#&gt; 89                 NITF
-#&gt; 90                 NTv1
-#&gt; 91                 NTv2
-#&gt; 92              NWT_GRC
-#&gt; 93              NWT_GRD
-#&gt; 94                  OZI
-#&gt; 95                 PAux
-#&gt; 96               PCIDSK
-#&gt; 97             PCRaster
-#&gt; 98                  PDF
-#&gt; 99                  PDS
-#&gt; 100                PDS4
-#&gt; 101            PLMOSAIC
-#&gt; 102            PLSCENES
-#&gt; 103                 PNG
-#&gt; 104                 PNM
-#&gt; 105       PostGISRaster
-#&gt; 106                 PRF
-#&gt; 107                   R
-#&gt; 108          Rasterlite
-#&gt; 109                 RDA
-#&gt; 110                 RIK
-#&gt; 111                 RMF
-#&gt; 112             ROI_PAC
-#&gt; 113              RPFTOC
-#&gt; 114             RRASTER
-#&gt; 115                 RS2
-#&gt; 116                 RST
-#&gt; 117                SAFE
-#&gt; 118                SAGA
-#&gt; 119            SAR_CEOS
-#&gt; 120                SDTS
-#&gt; 121           SENTINEL2
-#&gt; 122                 SGI
-#&gt; 123              SIGDEM
-#&gt; 124              SNODAS
-#&gt; 125                 SRP
-#&gt; 126             SRTMHGT
-#&gt; 127            Terragen
-#&gt; 128                 TIL
-#&gt; 129                 TSX
-#&gt; 130             USGSDEM
-#&gt; 131               VICAR
-#&gt; 132                 VRT
-#&gt; 133                 WCS
-#&gt; 134                 WMS
-#&gt; 135                WMTS
-#&gt; 136                 XPM
-#&gt; 137                 XYZ
-#&gt; 138                ZMap
+#&gt; 22                 DAAS
+#&gt; 23              DERIVED
+#&gt; 24                DIMAP
+#&gt; 25                DIPEx
+#&gt; 26                 DOQ1
+#&gt; 27                 DOQ2
+#&gt; 28                 DTED
+#&gt; 29              E00GRID
+#&gt; 30              ECRGTOC
+#&gt; 31                EEDAI
+#&gt; 32                 EHdr
+#&gt; 33                  EIR
+#&gt; 34                 ELAS
+#&gt; 35                 ENVI
+#&gt; 36                  ERS
+#&gt; 37                 ESAT
+#&gt; 38                 FAST
+#&gt; 39                  FIT
+#&gt; 40              FujiBAS
+#&gt; 41               GenBin
+#&gt; 42                  GFF
+#&gt; 43                  GIF
+#&gt; 44                  GMT
+#&gt; 45                 GPKG
+#&gt; 46       GRASSASCIIGrid
+#&gt; 47                 GRIB
+#&gt; 48                GS7BG
+#&gt; 49                 GSAG
+#&gt; 50                 GSBG
+#&gt; 51                  GSC
+#&gt; 52                GTiff
+#&gt; 53                  GTX
+#&gt; 54                  GXF
+#&gt; 55                 HDF5
+#&gt; 56            HDF5Image
+#&gt; 57                  HF2
+#&gt; 58                  HFA
+#&gt; 59                 HTTP
+#&gt; 60                  IDA
+#&gt; 61  IGNFHeightASCIIGrid
+#&gt; 62                ILWIS
+#&gt; 63                 INGR
+#&gt; 64                 IRIS
+#&gt; 65                 ISCE
+#&gt; 66                ISIS2
+#&gt; 67                ISIS3
+#&gt; 68           JAXAPALSAR
+#&gt; 69                 JDEM
+#&gt; 70          JP2OpenJPEG
+#&gt; 71                 JPEG
+#&gt; 72      KMLSUPEROVERLAY
+#&gt; 73                  KRO
+#&gt; 74                  L1B
+#&gt; 75                  LAN
+#&gt; 76                  LCP
+#&gt; 77             Leveller
+#&gt; 78               LOSLAS
+#&gt; 79                  MAP
+#&gt; 80              MBTiles
+#&gt; 81                  MEM
+#&gt; 82                  MFF
+#&gt; 83                 MFF2
+#&gt; 84                  MRF
+#&gt; 85                 MSGN
+#&gt; 86                  NDF
+#&gt; 87               netCDF
+#&gt; 88             NGSGEOID
+#&gt; 89                  NGW
+#&gt; 90                 NITF
+#&gt; 91                 NTv1
+#&gt; 92                 NTv2
+#&gt; 93              NWT_GRC
+#&gt; 94              NWT_GRD
+#&gt; 95                  OZI
+#&gt; 96                 PAux
+#&gt; 97               PCIDSK
+#&gt; 98             PCRaster
+#&gt; 99                  PDF
+#&gt; 100                 PDS
+#&gt; 101                PDS4
+#&gt; 102            PLMOSAIC
+#&gt; 103            PLSCENES
+#&gt; 104                 PNG
+#&gt; 105                 PNM
+#&gt; 106       PostGISRaster
+#&gt; 107                 PRF
+#&gt; 108                   R
+#&gt; 109          Rasterlite
+#&gt; 110                 RDA
+#&gt; 111                 RIK
+#&gt; 112                 RMF
+#&gt; 113             ROI_PAC
+#&gt; 114              RPFTOC
+#&gt; 115             RRASTER
+#&gt; 116                 RS2
+#&gt; 117                 RST
+#&gt; 118                SAFE
+#&gt; 119                SAGA
+#&gt; 120            SAR_CEOS
+#&gt; 121                SDTS
+#&gt; 122           SENTINEL2
+#&gt; 123                 SGI
+#&gt; 124              SIGDEM
+#&gt; 125              SNODAS
+#&gt; 126                 SRP
+#&gt; 127             SRTMHGT
+#&gt; 128            Terragen
+#&gt; 129                 TIL
+#&gt; 130                 TSX
+#&gt; 131             USGSDEM
+#&gt; 132               VICAR
+#&gt; 133                 VRT
+#&gt; 134                 WCS
+#&gt; 135                WEBP
+#&gt; 136                 WMS
+#&gt; 137                WMTS
+#&gt; 138                 XPM
+#&gt; 139                 XYZ
+#&gt; 140                ZMap
 #&gt;                                                    long_name create  copy
 #&gt; 1                                        Arc/Info ASCII Grid  FALSE  TRUE
 #&gt; 2                                                       ACE2  FALSE FALSE
@@ -342,123 +349,125 @@
 #&gt; 19                                           Convair PolGASP  FALSE FALSE
 #&gt; 20                                  CTable2 Datum Grid Shift   TRUE FALSE
 #&gt; 21                            USGS LULC Composite Theme Grid  FALSE FALSE
-#&gt; 22                Derived datasets using VRT pixel functions  FALSE FALSE
-#&gt; 23                                                SPOT DIMAP  FALSE FALSE
-#&gt; 24                                                     DIPEx  FALSE FALSE
-#&gt; 25                                      USGS DOQ (Old Style)  FALSE FALSE
-#&gt; 26                                      USGS DOQ (New Style)  FALSE FALSE
-#&gt; 27                                     DTED Elevation Raster  FALSE  TRUE
-#&gt; 28                                  Arc/Info Export E00 GRID  FALSE FALSE
-#&gt; 29                                           ECRG TOC format  FALSE FALSE
-#&gt; 30                               Earth Engine Data API Image  FALSE FALSE
-#&gt; 31                                        ESRI .hdr Labelled   TRUE  TRUE
-#&gt; 32                                         Erdas Imagine Raw  FALSE FALSE
-#&gt; 33                                                      ELAS   TRUE FALSE
-#&gt; 34                                        ENVI .hdr Labelled   TRUE FALSE
-#&gt; 35                                    ERMapper .ers Labelled   TRUE FALSE
-#&gt; 36                                      Envisat Image Format  FALSE FALSE
-#&gt; 37                                         EOSAT FAST Format  FALSE FALSE
-#&gt; 38                                                 FIT Image  FALSE  TRUE
-#&gt; 39                                    Fuji BAS Scanner Image  FALSE FALSE
-#&gt; 40                            Generic Binary (.hdr Labelled)  FALSE FALSE
-#&gt; 41  Ground-based SAR Applications Testbed File Format (.gff)  FALSE FALSE
-#&gt; 42                        Graphics Interchange Format (.gif)  FALSE  TRUE
-#&gt; 43                                    GMT NetCDF Grid Format  FALSE  TRUE
-#&gt; 44                                                GeoPackage   TRUE  TRUE
-#&gt; 45                                          GRASS ASCII Grid  FALSE FALSE
-#&gt; 46                              GRIdded Binary (.grb, .grb2)  FALSE  TRUE
-#&gt; 47                      Golden Software 7 Binary Grid (.grd)   TRUE  TRUE
-#&gt; 48                         Golden Software ASCII Grid (.grd)  FALSE  TRUE
-#&gt; 49                        Golden Software Binary Grid (.grd)   TRUE  TRUE
-#&gt; 50                                               GSC Geogrid  FALSE FALSE
-#&gt; 51                                                   GeoTIFF   TRUE  TRUE
-#&gt; 52                                  NOAA Vertical Datum .GTX   TRUE FALSE
-#&gt; 53                              GeoSoft Grid Exchange Format  FALSE FALSE
-#&gt; 54                        Hierarchical Data Format Release 5  FALSE FALSE
-#&gt; 55                                              HDF5 Dataset  FALSE FALSE
-#&gt; 56                                HF2/HFZ heightfield raster  FALSE  TRUE
-#&gt; 57                               Erdas Imagine Images (.img)   TRUE  TRUE
-#&gt; 58                                     HTTP Fetching Wrapper  FALSE FALSE
-#&gt; 59                                   Image Data and Analysis   TRUE FALSE
-#&gt; 60                   IGN France height correction ASCII Grid  FALSE FALSE
-#&gt; 61                                          ILWIS Raster Map   TRUE  TRUE
-#&gt; 62                                         Intergraph Raster   TRUE  TRUE
-#&gt; 63                              IRIS data (.PPI, .CAPPi etc)  FALSE FALSE
-#&gt; 64                                               ISCE raster   TRUE FALSE
-#&gt; 65                   USGS Astrogeology ISIS cube (Version 2)   TRUE FALSE
-#&gt; 66                   USGS Astrogeology ISIS cube (Version 3)   TRUE  TRUE
-#&gt; 67                JAXA PALSAR Product Reader (Level 1.1/1.5)  FALSE FALSE
-#&gt; 68                                       Japanese DEM (.mem)  FALSE FALSE
-#&gt; 69                JPEG-2000 driver based on OpenJPEG library  FALSE  TRUE
-#&gt; 70                                                 JPEG JFIF  FALSE  TRUE
-#&gt; 71                                         Kml Super Overlay  FALSE  TRUE
-#&gt; 72                                                 KOLOR Raw   TRUE FALSE
-#&gt; 73                      NOAA Polar Orbiter Level 1b Data Set  FALSE FALSE
-#&gt; 74                                           Erdas .LAN/.GIS   TRUE FALSE
-#&gt; 75                         FARSITE v.4 Landscape File (.lcp)  FALSE  TRUE
-#&gt; 76                                      Leveller heightfield   TRUE FALSE
-#&gt; 77                         NADCON .los/.las Datum Grid Shift  FALSE FALSE
-#&gt; 78                                          OziExplorer .MAP  FALSE FALSE
-#&gt; 79                                                   MBTiles   TRUE  TRUE
-#&gt; 80                                          In Memory Raster   TRUE FALSE
-#&gt; 81                                         Vexcel MFF Raster   TRUE  TRUE
-#&gt; 82                                  Vexcel MFF2 (HKV) Raster   TRUE  TRUE
-#&gt; 83                                        Meta Raster Format   TRUE  TRUE
-#&gt; 84                            EUMETSAT Archive native (.nat)  FALSE FALSE
-#&gt; 85                                         NLAPS Data Format  FALSE FALSE
-#&gt; 86                                Network Common Data Format   TRUE  TRUE
-#&gt; 87                               NOAA NGS Geoid Height Grids  FALSE FALSE
-#&gt; 88                                               NextGIS Web   TRUE FALSE
-#&gt; 89                      National Imagery Transmission Format   TRUE  TRUE
-#&gt; 90                                     NTv1 Datum Grid Shift  FALSE FALSE
-#&gt; 91                                     NTv2 Datum Grid Shift   TRUE FALSE
-#&gt; 92                Northwood Classified Grid Format .grc/.tab  FALSE FALSE
-#&gt; 93                   Northwood Numeric Grid Format .grd/.tab   TRUE  TRUE
-#&gt; 94                                    OziExplorer Image File  FALSE FALSE
-#&gt; 95                                         PCI .aux Labelled   TRUE FALSE
-#&gt; 96                                      PCIDSK Database File   TRUE FALSE
-#&gt; 97                                      PCRaster Raster File   TRUE  TRUE
-#&gt; 98                                            Geospatial PDF   TRUE  TRUE
-#&gt; 99                                NASA Planetary Data System  FALSE FALSE
-#&gt; 100                             NASA Planetary Data System 4   TRUE  TRUE
-#&gt; 101                                  Planet Labs Mosaics API  FALSE FALSE
-#&gt; 102                                   Planet Labs Scenes API  FALSE FALSE
-#&gt; 103                                Portable Network Graphics  FALSE  TRUE
-#&gt; 104                          Portable Pixmap Format (netpbm)   TRUE FALSE
-#&gt; 105                                    PostGIS Raster driver  FALSE  TRUE
-#&gt; 106                                      Racurs PHOTOMOD PRF  FALSE FALSE
-#&gt; 107                                      R Object Data Store  FALSE  TRUE
-#&gt; 108                                               Rasterlite  FALSE  TRUE
-#&gt; 109                   DigitalGlobe Raster Data Access driver  FALSE FALSE
-#&gt; 110                                  Swedish Grid RIK (.rik)  FALSE FALSE
-#&gt; 111                                     Raster Matrix Format   TRUE FALSE
-#&gt; 112                                           ROI_PAC raster   TRUE FALSE
-#&gt; 113                         Raster Product Format TOC format  FALSE FALSE
-#&gt; 114                                                 R Raster   TRUE  TRUE
-#&gt; 115                                   RadarSat 2 XML Product  FALSE FALSE
-#&gt; 116                                        Idrisi Raster A.1   TRUE  TRUE
-#&gt; 117                              Sentinel-1 SAR SAFE Product  FALSE FALSE
-#&gt; 118                  SAGA GIS Binary Grid (.sdat, .sg-grd-z)   TRUE  TRUE
-#&gt; 119                                           CEOS SAR Image  FALSE FALSE
-#&gt; 120                                              SDTS Raster  FALSE FALSE
-#&gt; 121                                               Sentinel 2  FALSE FALSE
-#&gt; 122                                SGI Image File Format 1.0   TRUE FALSE
-#&gt; 123                       Scaled Integer Gridded DEM .sigdem  FALSE  TRUE
-#&gt; 124                            Snow Data Assimilation System  FALSE FALSE
-#&gt; 125                      Standard Raster Product (ASRP/USRP)  FALSE FALSE
-#&gt; 126                                      SRTMHGT File Format  FALSE  TRUE
-#&gt; 127                                     Terragen heightfield   TRUE FALSE
-#&gt; 128                                          EarthWatch .TIL  FALSE FALSE
-#&gt; 129                                       TerraSAR-X Product  FALSE FALSE
-#&gt; 130                       USGS Optional ASCII DEM (and CDED)  FALSE  TRUE
-#&gt; 131                                          MIPL VICAR file  FALSE FALSE
-#&gt; 132                                           Virtual Raster   TRUE  TRUE
-#&gt; 133                                 OGC Web Coverage Service  FALSE FALSE
-#&gt; 134                                      OGC Web Map Service  FALSE  TRUE
-#&gt; 135                                 OGC Web Map Tile Service  FALSE  TRUE
-#&gt; 136                                        X11 PixMap Format  FALSE  TRUE
-#&gt; 137                                        ASCII Gridded XYZ  FALSE  TRUE
-#&gt; 138                                           ZMap Plus Grid  FALSE  TRUE
+#&gt; 22           Airbus DS Intelligence Data As A Service driver  FALSE FALSE
+#&gt; 23                Derived datasets using VRT pixel functions  FALSE FALSE
+#&gt; 24                                                SPOT DIMAP  FALSE FALSE
+#&gt; 25                                                     DIPEx  FALSE FALSE
+#&gt; 26                                      USGS DOQ (Old Style)  FALSE FALSE
+#&gt; 27                                      USGS DOQ (New Style)  FALSE FALSE
+#&gt; 28                                     DTED Elevation Raster  FALSE  TRUE
+#&gt; 29                                  Arc/Info Export E00 GRID  FALSE FALSE
+#&gt; 30                                           ECRG TOC format  FALSE FALSE
+#&gt; 31                               Earth Engine Data API Image  FALSE FALSE
+#&gt; 32                                        ESRI .hdr Labelled   TRUE  TRUE
+#&gt; 33                                         Erdas Imagine Raw  FALSE FALSE
+#&gt; 34                                                      ELAS   TRUE FALSE
+#&gt; 35                                        ENVI .hdr Labelled   TRUE FALSE
+#&gt; 36                                    ERMapper .ers Labelled   TRUE FALSE
+#&gt; 37                                      Envisat Image Format  FALSE FALSE
+#&gt; 38                                         EOSAT FAST Format  FALSE FALSE
+#&gt; 39                                                 FIT Image  FALSE  TRUE
+#&gt; 40                                    Fuji BAS Scanner Image  FALSE FALSE
+#&gt; 41                            Generic Binary (.hdr Labelled)  FALSE FALSE
+#&gt; 42  Ground-based SAR Applications Testbed File Format (.gff)  FALSE FALSE
+#&gt; 43                        Graphics Interchange Format (.gif)  FALSE  TRUE
+#&gt; 44                                    GMT NetCDF Grid Format  FALSE  TRUE
+#&gt; 45                                                GeoPackage   TRUE  TRUE
+#&gt; 46                                          GRASS ASCII Grid  FALSE FALSE
+#&gt; 47                              GRIdded Binary (.grb, .grb2)  FALSE  TRUE
+#&gt; 48                      Golden Software 7 Binary Grid (.grd)   TRUE  TRUE
+#&gt; 49                         Golden Software ASCII Grid (.grd)  FALSE  TRUE
+#&gt; 50                        Golden Software Binary Grid (.grd)   TRUE  TRUE
+#&gt; 51                                               GSC Geogrid  FALSE FALSE
+#&gt; 52                                                   GeoTIFF   TRUE  TRUE
+#&gt; 53                                  NOAA Vertical Datum .GTX   TRUE FALSE
+#&gt; 54                              GeoSoft Grid Exchange Format  FALSE FALSE
+#&gt; 55                        Hierarchical Data Format Release 5  FALSE FALSE
+#&gt; 56                                              HDF5 Dataset  FALSE FALSE
+#&gt; 57                                HF2/HFZ heightfield raster  FALSE  TRUE
+#&gt; 58                               Erdas Imagine Images (.img)   TRUE  TRUE
+#&gt; 59                                     HTTP Fetching Wrapper  FALSE FALSE
+#&gt; 60                                   Image Data and Analysis   TRUE FALSE
+#&gt; 61                   IGN France height correction ASCII Grid  FALSE FALSE
+#&gt; 62                                          ILWIS Raster Map   TRUE  TRUE
+#&gt; 63                                         Intergraph Raster   TRUE  TRUE
+#&gt; 64                              IRIS data (.PPI, .CAPPi etc)  FALSE FALSE
+#&gt; 65                                               ISCE raster   TRUE FALSE
+#&gt; 66                   USGS Astrogeology ISIS cube (Version 2)   TRUE FALSE
+#&gt; 67                   USGS Astrogeology ISIS cube (Version 3)   TRUE  TRUE
+#&gt; 68                JAXA PALSAR Product Reader (Level 1.1/1.5)  FALSE FALSE
+#&gt; 69                                       Japanese DEM (.mem)  FALSE FALSE
+#&gt; 70                JPEG-2000 driver based on OpenJPEG library  FALSE  TRUE
+#&gt; 71                                                 JPEG JFIF  FALSE  TRUE
+#&gt; 72                                         Kml Super Overlay  FALSE  TRUE
+#&gt; 73                                                 KOLOR Raw   TRUE FALSE
+#&gt; 74                      NOAA Polar Orbiter Level 1b Data Set  FALSE FALSE
+#&gt; 75                                           Erdas .LAN/.GIS   TRUE FALSE
+#&gt; 76                         FARSITE v.4 Landscape File (.lcp)  FALSE  TRUE
+#&gt; 77                                      Leveller heightfield   TRUE FALSE
+#&gt; 78                         NADCON .los/.las Datum Grid Shift  FALSE FALSE
+#&gt; 79                                          OziExplorer .MAP  FALSE FALSE
+#&gt; 80                                                   MBTiles   TRUE  TRUE
+#&gt; 81                                          In Memory Raster   TRUE FALSE
+#&gt; 82                                         Vexcel MFF Raster   TRUE  TRUE
+#&gt; 83                                  Vexcel MFF2 (HKV) Raster   TRUE  TRUE
+#&gt; 84                                        Meta Raster Format   TRUE  TRUE
+#&gt; 85                            EUMETSAT Archive native (.nat)  FALSE FALSE
+#&gt; 86                                         NLAPS Data Format  FALSE FALSE
+#&gt; 87                                Network Common Data Format   TRUE  TRUE
+#&gt; 88                               NOAA NGS Geoid Height Grids  FALSE FALSE
+#&gt; 89                                               NextGIS Web   TRUE  TRUE
+#&gt; 90                      National Imagery Transmission Format   TRUE  TRUE
+#&gt; 91                                     NTv1 Datum Grid Shift  FALSE FALSE
+#&gt; 92                                     NTv2 Datum Grid Shift   TRUE FALSE
+#&gt; 93                Northwood Classified Grid Format .grc/.tab  FALSE FALSE
+#&gt; 94                   Northwood Numeric Grid Format .grd/.tab   TRUE  TRUE
+#&gt; 95                                    OziExplorer Image File  FALSE FALSE
+#&gt; 96                                         PCI .aux Labelled   TRUE FALSE
+#&gt; 97                                      PCIDSK Database File   TRUE FALSE
+#&gt; 98                                      PCRaster Raster File   TRUE  TRUE
+#&gt; 99                                            Geospatial PDF   TRUE  TRUE
+#&gt; 100                               NASA Planetary Data System  FALSE FALSE
+#&gt; 101                             NASA Planetary Data System 4   TRUE  TRUE
+#&gt; 102                                  Planet Labs Mosaics API  FALSE FALSE
+#&gt; 103                                   Planet Labs Scenes API  FALSE FALSE
+#&gt; 104                                Portable Network Graphics  FALSE  TRUE
+#&gt; 105                          Portable Pixmap Format (netpbm)   TRUE FALSE
+#&gt; 106                                    PostGIS Raster driver  FALSE  TRUE
+#&gt; 107                                      Racurs PHOTOMOD PRF  FALSE FALSE
+#&gt; 108                                      R Object Data Store  FALSE  TRUE
+#&gt; 109                                               Rasterlite  FALSE  TRUE
+#&gt; 110                   DigitalGlobe Raster Data Access driver  FALSE FALSE
+#&gt; 111                                  Swedish Grid RIK (.rik)  FALSE FALSE
+#&gt; 112                                     Raster Matrix Format   TRUE FALSE
+#&gt; 113                                           ROI_PAC raster   TRUE FALSE
+#&gt; 114                         Raster Product Format TOC format  FALSE FALSE
+#&gt; 115                                                 R Raster   TRUE  TRUE
+#&gt; 116                                   RadarSat 2 XML Product  FALSE FALSE
+#&gt; 117                                        Idrisi Raster A.1   TRUE  TRUE
+#&gt; 118                              Sentinel-1 SAR SAFE Product  FALSE FALSE
+#&gt; 119                  SAGA GIS Binary Grid (.sdat, .sg-grd-z)   TRUE  TRUE
+#&gt; 120                                           CEOS SAR Image  FALSE FALSE
+#&gt; 121                                              SDTS Raster  FALSE FALSE
+#&gt; 122                                               Sentinel 2  FALSE FALSE
+#&gt; 123                                SGI Image File Format 1.0   TRUE FALSE
+#&gt; 124                       Scaled Integer Gridded DEM .sigdem  FALSE  TRUE
+#&gt; 125                            Snow Data Assimilation System  FALSE FALSE
+#&gt; 126                      Standard Raster Product (ASRP/USRP)  FALSE FALSE
+#&gt; 127                                      SRTMHGT File Format  FALSE  TRUE
+#&gt; 128                                     Terragen heightfield   TRUE FALSE
+#&gt; 129                                          EarthWatch .TIL  FALSE FALSE
+#&gt; 130                                       TerraSAR-X Product  FALSE FALSE
+#&gt; 131                       USGS Optional ASCII DEM (and CDED)  FALSE  TRUE
+#&gt; 132                                          MIPL VICAR file  FALSE FALSE
+#&gt; 133                                           Virtual Raster   TRUE  TRUE
+#&gt; 134                                 OGC Web Coverage Service  FALSE FALSE
+#&gt; 135                                                     WEBP  FALSE  TRUE
+#&gt; 136                                      OGC Web Map Service  FALSE  TRUE
+#&gt; 137                                 OGC Web Map Tile Service  FALSE  TRUE
+#&gt; 138                                        X11 PixMap Format  FALSE  TRUE
+#&gt; 139                                        ASCII Gridded XYZ  FALSE  TRUE
+#&gt; 140                                           ZMap Plus Grid  FALSE  TRUE
 #&gt;     isRaster
 #&gt; 1       TRUE
 #&gt; 2       TRUE
@@ -597,32 +606,26 @@
 #&gt; 135     TRUE
 #&gt; 136     TRUE
 #&gt; 137     TRUE
-#&gt; 138     TRUE</div><div class='input'><span class='no'>logo</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"pictures/logo.jpg"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"rgdal"</span>)[<span class='fl'>1</span>]
+#&gt; 138     TRUE
+#&gt; 139     TRUE
+#&gt; 140     TRUE</div><div class='input'><span class='no'>logo</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"pictures/logo.jpg"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"rgdal"</span>)[<span class='fl'>1</span>]
 <span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>new</span>(<span class='st'>"GDALReadOnlyDataset"</span>, <span class='no'>logo</span>)
 <span class='fu'><a href='GDALReadOnlyDataset-class.html'>getDriver</a></span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; An object of class "GDALDriver"
 #&gt; Slot "handle":
-#&gt; &lt;pointer: 0x2019af0&gt;
+#&gt; &lt;pointer: 0x5951390&gt;
 #&gt; </div><div class='input'><span class='fu'>getDriverLongName</span>(<span class='fu'><a href='GDALReadOnlyDataset-class.html'>getDriver</a></span>(<span class='no'>x</span>))</div><div class='output co'>#&gt; [1] "JPEG JFIF"</div><div class='input'><span class='fu'><a href='GDALReadOnlyDataset-class.html'>GDAL.close</a></span>(<span class='no'>x</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
       <li><a href="#objects-from-the-class">Objects from the Class</a></li>
-
       <li><a href="#slots">Slots</a></li>
-
       <li><a href="#extends">Extends</a></li>
-
       <li><a href="#methods">Methods</a></li>
-
       <li><a href="#details">Details</a></li>
-
       <li><a href="#note">Note</a></li>
-
       <li><a href="#see-also">See also</a></li>
-      
       <li><a href="#examples">Examples</a></li>
     </ul>
 
@@ -631,19 +634,23 @@
   </div>
 </div>
 
+
       <footer>
       <div class="copyright">
   <p>Developed by Roger Bivand, Tim Keitt, Barry Rowlingson.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 

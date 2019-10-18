@@ -8,21 +8,25 @@
 
 <title>Write spatial vector data using OGR — writeOGR • rgdal</title>
 
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -30,10 +34,11 @@
 
 
 
-<meta property="og:title" content="Write spatial vector data using OGR — writeOGR" />
 
+<meta property="og:title" content="Write spatial vector data using OGR — writeOGR" />
 <meta property="og:description" content="The function is an interface with the OGR abstraction library for spatial vector data, allowing data to be written out using supported drivers. The drivers supported will depend on the local installation, and the capabilities of those drivers (many are read-only). The objects exported are SpatialPointsDataFrame, SpatialLinesDataFrame, or SpatialPolygonsDataFrame objects as defined in the sp package." />
 <meta name="twitter:card" content="summary" />
+
 
 
 
@@ -45,6 +50,7 @@
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
 
 
   </head>
@@ -63,7 +69,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgdal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.6</span>
       </span>
     </div>
 
@@ -71,7 +77,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -79,7 +85,6 @@
   <a href="../reference/index.html">Reference</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         
       </ul>
@@ -89,6 +94,7 @@
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -100,16 +106,14 @@
     </div>
 
     <div class="ref-description">
-    
     <p>The function is an interface with the OGR abstraction library for spatial vector data, allowing data to be written out using supported drivers. The drivers supported will depend on the local installation, and the capabilities of those drivers (many are read-only). The objects exported are SpatialPointsDataFrame, SpatialLinesDataFrame, or SpatialPolygonsDataFrame objects as defined in the sp package.</p>
-    
     </div>
 
     <pre class="usage"><span class='fu'>writeOGR</span>(<span class='no'>obj</span>, <span class='no'>dsn</span>, <span class='no'>layer</span>, <span class='no'>driver</span>, <span class='kw'>dataset_options</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
  <span class='kw'>layer_options</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>check_exists</span><span class='kw'>=</span><span class='kw'>NULL</span>,
  <span class='kw'>overwrite_layer</span><span class='kw'>=</span><span class='fl'>FALSE</span>, <span class='kw'>delete_dsn</span><span class='kw'>=</span><span class='fl'>FALSE</span>, <span class='kw'>morphToESRI</span><span class='kw'>=</span><span class='kw'>NULL</span>,
- <span class='kw'>encoding</span><span class='kw'>=</span><span class='kw'>NULL</span>)</pre>
-    
+ <span class='kw'>encoding</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>shp_edge_case_fix</span><span class='kw'>=</span><span class='fl'>FALSE</span>)</pre>
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -161,46 +165,43 @@
       <th>encoding</th>
       <td><p>default NULL, if set to a character string, it will be used to convert output strings from the given value to UTF-8 encoding.</p></td>
     </tr>
+    <tr>
+      <th>shp_edge_case_fix</th>
+      <td><p>default FALSE, if TRUE, attempt to work around MULTIPOLYGON to POLYGON degradation in ESRI Shapefile output with two toiching exterior rings in a single feature (not yet implemented).</p></td>
+    </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>Working out which combination of dsn, layer, and driver (and option) values give the desired output takes time and care, and is constrained by the ability of drivers to write output; many are read-only. Use of the references given is highly advisable, with searches in the archives of other software using GDAL/OGR. Note that for the &#8220;ESRI Shapefile&#8221; driver and GDAL &gt;= 1.9, the <code>layer_options</code> value of &#8216;ENCODING=&#8220;LDID/CP1252&#8221;&#8217; or other values found on <a href='http://www.autopark.ru/ASBProgrammerGuide/DBFSTRUC.HTM'>http://www.autopark.ru/ASBProgrammerGuide/DBFSTRUC.HTM</a> to set the encoding byte of the output DBF file (link refered to in ogr/ogrsf_frmts/shape/ogrshapelayer.cpp. The effect of setting the LDID may vary depending on whether GDAL is built with iconv or not, and on the setting of the CPL Option &#8220;SHAPE_ENCODING&#8221;.</p>
-<p>While there is no certainty, newer drivers such as KML, GML, SQLite and Geopackage (GPKG) may encode string fields as UTF-8. Users are advised to explore this on a case to case basis using <code><a href='https://www.rdocumentation.org/packages/base/topics/Encoding'>Encoding</a></code> on string fields of objects to be output, converting where necessary with <code><a href='https://www.rdocumentation.org/packages/base/topics/iconv'>iconv</a></code> or assigning the appropriate value with <code><a href='https://www.rdocumentation.org/packages/base/topics/Encoding'>Encoding</a></code>.</p>
-    
+<p>While there is no certainty, newer drivers such as KML, GML, SQLite and Geopackage (GPKG) may encode string fields as UTF-8. Users are advised to explore this on a case to case basis using <code><a href='https://rdrr.io/r/base/Encoding.html'>Encoding</a></code> on string fields of objects to be output, converting where necessary with <code><a href='https://rdrr.io/r/base/iconv.html'>iconv</a></code> or assigning the appropriate value with <code><a href='https://rdrr.io/r/base/Encoding.html'>Encoding</a></code>.</p>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>if verbose=TRUE, a list of information about the attempted write operation</p>
-    
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
-    <p>Only a subset of possible data slot column classes may be written out; if the function returns an error that the data type of stated columns is unknown, examine the classes and check that they are one of <code><a href='https://www.rdocumentation.org/packages/base/topics/c'>c("numeric", "character", "factor", "POSIXt", "integer", "logical")</a></code>, and if not convert to such classes. Classes <code><a href='https://www.rdocumentation.org/packages/base/topics/c'>c("factor", "POSIXt")</a></code> are converted to character strings, and <code><a href='https://www.rdocumentation.org/packages/base/topics/c'>c("logical")</a></code> to integer internally.</p>
+    <p>Only a subset of possible data slot column classes may be written out; if the function returns an error that the data type of stated columns is unknown, examine the classes and check that they are one of <code><a href='https://rdrr.io/r/base/c.html'>c("numeric", "character", "factor", "POSIXt", "integer", "logical")</a></code>, and if not convert to such classes. Classes <code><a href='https://rdrr.io/r/base/c.html'>c("factor", "POSIXt")</a></code> are converted to character strings, and <code><a href='https://rdrr.io/r/base/c.html'>c("logical")</a></code> to integer internally.</p>
 <p>For writing with the KML and GPX drivers, note that the geometries should be in geographical coordinates with datum WGS84.</p>
-    
     <h2 class="hasAnchor" id="warning"><a class="anchor" href="#warning"></a>Warning</h2>
 
     <p>The <code>overwrite_layer</code> and <code>delete_dsn</code> arguments are provided only for experienced script writers who need to be able to destroy data, for example during repetetive simulation runs. They should never be used by anyone who is not confident about deleting files.</p>
-    
     <h2 class="hasAnchor" id="writeogr-polygon-bug-in-"><a class="anchor" href="#writeogr-polygon-bug-in-"></a><code>writeOGR</code> Polygon bug in 1.1-1</h2>
 
     <p>In fixing a bug in the correct handling of SFS polygon geometries in version 1.1-1, a further bug was introduced affecting cases of wkbPolygon (not wkbMultiPolygon) output where SFS hole status in the output object was (correctly) defined in the comment to Polygons objects. The error only occurred when all the Polygons objects had one exterior ring, and zero or more interior rings. The error led to the coordinates of the rings cumulating, because the rings were not emptied before assigning the next ring. Version 1.1-2 corrects the error; thanks to  JamesWorrall for a complete bug report <a href='https://stat.ethz.ch/pipermail/r-sig-geo/2015-December/023796.html'>https://stat.ethz.ch/pipermail/r-sig-geo/2015-December/023796.html</a>.</p>
-    
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p><a href='http://www.gdal.org/ogr_formats.html'>http://www.gdal.org/ogr_formats.html</a>, <a href='http://examples.oreilly.com/webmapping/'>http://examples.oreilly.com/webmapping/</a></p>
-    
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='readOGR.html'>readOGR</a></code></p></div>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>cities</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='readOGR.html'>readOGR</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"vectors"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"rgdal"</span>)[<span class='fl'>1</span>], <span class='st'>"cities"</span>)</div><div class='output co'>#&gt; OGR data source with driver: ESRI Shapefile 
-#&gt; Source: "/home/rsb/topics/packages/R-Forge/rgdal/pkg/inst/vectors", layer: "cities"
+    <pre class="examples"><div class='input'><span class='no'>cities</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='readOGR.html'>readOGR</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"vectors"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"rgdal"</span>)[<span class='fl'>1</span>], <span class='st'>"cities"</span>)</div><div class='output co'>#&gt; OGR data source with driver: ESRI Shapefile 
+#&gt; Source: "/tmp/RtmpfyIEDl/temp_libpath40c54230fdb9/rgdal/vectors", layer: "cities"
 #&gt; with 606 features
 #&gt; It has 4 fields
-#&gt; Integer64 fields read as strings:  POPULATION </div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/NA'>is.na</a></span>(<span class='no'>cities</span>$<span class='no'>POPULATION</span>) <span class='kw'>&lt;-</span> <span class='no'>cities</span>$<span class='no'>POPULATION</span> <span class='kw'>==</span> -<span class='fl'>99</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>cities</span>$<span class='no'>POPULATION</span>)</div><div class='output co'>#&gt;  1270000  1550000  1140000  1190000  1225000  1250000  1300000  1400000 
+#&gt; Integer64 fields read as strings:  POPULATION </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span>(<span class='no'>cities</span>$<span class='no'>POPULATION</span>) <span class='kw'>&lt;-</span> <span class='no'>cities</span>$<span class='no'>POPULATION</span> <span class='kw'>==</span> -<span class='fl'>99</span>
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>cities</span>$<span class='no'>POPULATION</span>)</div><div class='output co'>#&gt;  1270000  1550000  1140000  1190000  1225000  1250000  1300000  1400000 
 #&gt;        5        4        3        3        3        3        3        3 
 #&gt;  1600000  2050000   320000   600000   700000   800000  1025000  1060000 
 #&gt;        3        3        3        3        3        3        2        2 
@@ -225,20 +226,20 @@
 #&gt;  1205000   121265  1216000  1227200    12426   124400   125263  1255000 
 #&gt;        1        1        1        1        1        1        1        1 
 #&gt;  1272400  1275000  (Other)     NA's 
-#&gt;        1        1      415       30 </div><div class='input'><span class='no'>td</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/file.path'>file.path</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/tempfile'>tempdir</a></span>(), <span class='st'>"rgdal_examples"</span>); <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/files2'>dir.create</a></span>(<span class='no'>td</span>)
+#&gt;        1        1      415       30 </div><div class='input'><span class='no'>td</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>(), <span class='st'>"rgdal_examples"</span>); <span class='fu'><a href='https://rdrr.io/r/base/files2.html'>dir.create</a></span>(<span class='no'>td</span>)
 <span class='co'># BDR 2016-12-15 (MapInfo driver fails writing to directory with ".")</span>
-<span class='kw'>if</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/nchar'>nchar</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Sys.getenv'>Sys.getenv</a></span>(<span class='st'>"OSGEO4W_ROOT"</span>)) <span class='kw'>&gt;</span> <span class='fl'>0</span>) {
-    <span class='no'>OLDPWD</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/getwd'>getwd</a></span>()
-    <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/getwd'>setwd</a></span>(<span class='no'>td</span>)
+<span class='kw'>if</span>(<span class='fu'><a href='https://rdrr.io/r/base/nchar.html'>nchar</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/Sys.getenv.html'>Sys.getenv</a></span>(<span class='st'>"OSGEO4W_ROOT"</span>)) <span class='kw'>&gt;</span> <span class='fl'>0</span>) {
+    <span class='no'>OLDPWD</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/getwd.html'>getwd</a></span>()
+    <span class='fu'><a href='https://rdrr.io/r/base/getwd.html'>setwd</a></span>(<span class='no'>td</span>)
     <span class='no'>td</span> <span class='kw'>&lt;-</span> <span class='st'>"."</span>
 }
 <span class='fu'>writeOGR</span>(<span class='no'>cities</span>, <span class='no'>td</span>, <span class='st'>"cities"</span>, <span class='kw'>driver</span><span class='kw'>=</span><span class='st'>"ESRI Shapefile"</span>)
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/try'>try</a></span>(<span class='fu'>writeOGR</span>(<span class='no'>cities</span>, <span class='no'>td</span>, <span class='st'>"cities"</span>, <span class='kw'>driver</span><span class='kw'>=</span><span class='st'>"ESRI Shapefile"</span>))
-<span class='fu'>writeOGR</span>(<span class='no'>cities</span>, <span class='no'>td</span>, <span class='st'>"cities"</span>, <span class='kw'>driver</span><span class='kw'>=</span><span class='st'>"ESRI Shapefile"</span>, <span class='kw'>overwrite_layer</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='fu'>writeOGR</span>(<span class='no'>cities</span>, <span class='no'>td</span>, <span class='st'>"cities"</span>, <span class='kw'>driver</span><span class='kw'>=</span><span class='st'>"ESRI Shapefile"</span>))</div><div class='output co'>#&gt; Error in writeOGR(cities, td, "cities", driver = "ESRI Shapefile") : 
+#&gt;   layer exists, use a new layer name</div><div class='input'><span class='fu'>writeOGR</span>(<span class='no'>cities</span>, <span class='no'>td</span>, <span class='st'>"cities"</span>, <span class='kw'>driver</span><span class='kw'>=</span><span class='st'>"ESRI Shapefile"</span>, <span class='kw'>overwrite_layer</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
 <span class='no'>cities2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='readOGR.html'>readOGR</a></span>(<span class='no'>td</span>, <span class='st'>"cities"</span>)</div><div class='output co'>#&gt; OGR data source with driver: ESRI Shapefile 
-#&gt; Source: "/tmp/RtmpNyj9Cf/rgdal_examples", layer: "cities"
+#&gt; Source: "/tmp/Rtmp5qIC6B/rgdal_examples", layer: "cities"
 #&gt; with 606 features
-#&gt; It has 4 fields</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>cities2</span>$<span class='no'>POPULATION</span>)</div><div class='output co'>#&gt;  1270000  1550000  1140000  1190000  1225000  1250000  1300000  1400000 
+#&gt; It has 4 fields</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>cities2</span>$<span class='no'>POPULATION</span>)</div><div class='output co'>#&gt;  1270000  1550000  1140000  1190000  1225000  1250000  1300000  1400000 
 #&gt;        5        4        3        3        3        3        3        3 
 #&gt;  1600000  2050000   320000   600000   700000   800000  1025000  1060000 
 #&gt;        3        3        3        3        3        3        2        2 
@@ -264,8 +265,8 @@
 #&gt;        1        1        1        1        1        1        1        1 
 #&gt;  1272400  1275000  (Other)     NA's 
 #&gt;        1        1      415       30 </div><div class='input'><span class='kw'>if</span> (<span class='st'>"SQLite"</span> <span class='kw'>%in%</span> <span class='fu'><a href='readOGR.html'>ogrDrivers</a></span>()$<span class='no'>name</span>) {
-  <span class='no'>tf</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/tempfile'>tempfile</a></span>()
-  <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/try'>try</a></span>(<span class='fu'>writeOGR</span>(<span class='no'>cities</span>, <span class='no'>tf</span>, <span class='st'>"cities"</span>, <span class='kw'>driver</span><span class='kw'>=</span><span class='st'>"SQLite"</span>, <span class='kw'>layer_options</span><span class='kw'>=</span><span class='st'>"LAUNDER=NO"</span>))
+  <span class='no'>tf</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempfile</a></span>()
+  <span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='fu'>writeOGR</span>(<span class='no'>cities</span>, <span class='no'>tf</span>, <span class='st'>"cities"</span>, <span class='kw'>driver</span><span class='kw'>=</span><span class='st'>"SQLite"</span>, <span class='kw'>layer_options</span><span class='kw'>=</span><span class='st'>"LAUNDER=NO"</span>))
 }
 <span class='kw'>if</span> (<span class='st'>"GeoJSON"</span> <span class='kw'>%in%</span> <span class='fu'><a href='readOGR.html'>ogrDrivers</a></span>()$<span class='no'>name</span>) {
   <span class='no'>js</span> <span class='kw'>&lt;-</span> <span class='st'>'{
@@ -275,15 +276,15 @@
     [100.0, 0.0]]]]
   }'</span>
   <span class='no'>spdf</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='readOGR.html'>readOGR</a></span>(<span class='no'>js</span>, <span class='kw'>layer</span><span class='kw'>=</span><span class='st'>'OGRGeoJSON'</span>)
-  <span class='no'>in1_comms</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/lapply'>sapply</a></span>(<span class='fu'>slot</span>(<span class='no'>spdf</span>, <span class='st'>"polygons"</span>), <span class='no'>comment</span>)
-  <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/print'>print</a></span>(<span class='no'>in1_comms</span>)
-  <span class='no'>tf</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/tempfile'>tempfile</a></span>()
+  <span class='no'>in1_comms</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>sapply</a></span>(<span class='fu'>slot</span>(<span class='no'>spdf</span>, <span class='st'>"polygons"</span>), <span class='no'>comment</span>)
+  <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>in1_comms</span>)
+  <span class='no'>tf</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempfile</a></span>()
   <span class='fu'>writeOGR</span>(<span class='no'>spdf</span>, <span class='no'>tf</span>, <span class='st'>"GeoJSON"</span>, <span class='kw'>driver</span><span class='kw'>=</span><span class='st'>"GeoJSON"</span>)
   <span class='co'>#spdf1 &lt;- readOGR(tf, "GeoJSON")</span>
   <span class='no'>spdf1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='readOGR.html'>readOGR</a></span>(<span class='no'>tf</span>)
-  <span class='no'>in2_comms</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/lapply'>sapply</a></span>(<span class='fu'>slot</span>(<span class='no'>spdf1</span>, <span class='st'>"polygons"</span>), <span class='no'>comment</span>)
-  <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/print'>print</a></span>(<span class='no'>in2_comms</span>)
-  <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/print'>print</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Logic'>isTRUE</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/all.equal'>all.equal</a></span>(<span class='no'>in1_comms</span>, <span class='no'>in2_comms</span>)))
+  <span class='no'>in2_comms</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>sapply</a></span>(<span class='fu'>slot</span>(<span class='no'>spdf1</span>, <span class='st'>"polygons"</span>), <span class='no'>comment</span>)
+  <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>in2_comms</span>)
+  <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/Logic.html'>isTRUE</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/all.equal.html'>all.equal</a></span>(<span class='no'>in1_comms</span>, <span class='no'>in2_comms</span>)))
 }</div><div class='output co'>#&gt; OGR data source with driver: GeoJSON 
 #&gt; Source: "{
 #&gt;     "type": "MultiPolygon",
@@ -295,32 +296,31 @@
 #&gt; It has 0 fields
 #&gt; [1] "0 0"
 #&gt; OGR data source with driver: GeoJSON 
-#&gt; Source: "/tmp/RtmpNyj9Cf/file7a737dcc3dda", layer: "GeoJSON"
+#&gt; Source: "/tmp/Rtmp5qIC6B/file496133f0e97e", layer: "GeoJSON"
 #&gt; with 1 features
 #&gt; It has 1 fields
 #&gt; [1] "0 0"
-#&gt; [1] TRUE</div><span class='co'># NOT RUN {</span>
-<span class='kw'>if</span> (<span class='st'>"GML"</span> <span class='kw'>%in%</span> <span class='fu'><a href='readOGR.html'>ogrDrivers</a></span>()$<span class='no'>name</span>) {
-  <span class='no'>airports</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/try'>try</a></span>(<span class='fu'><a href='readOGR.html'>readOGR</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"vectors/airports.gml"</span>,
+#&gt; [1] TRUE</div><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) <span class='kw'>if</span> (<span class='st'>"GML"</span> <span class='kw'>%in%</span> <span class='fu'><a href='readOGR.html'>ogrDrivers</a></span>()$<span class='no'>name</span>) {
+  <span class='no'>airports</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='fu'><a href='readOGR.html'>readOGR</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"vectors/airports.gml"</span>,
     <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"rgdal"</span>)[<span class='fl'>1</span>], <span class='st'>"airports"</span>))
-  <span class='kw'>if</span> (<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/class'>class</a></span>(<span class='no'>airports</span>) <span class='kw'>!=</span> <span class='st'>"try-error"</span>) {
-    <span class='fu'>writeOGR</span>(<span class='no'>cities</span>, <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/paste'>paste</a></span>(<span class='no'>td</span>, <span class='st'>"cities.gml"</span>, <span class='kw'>sep</span><span class='kw'>=</span><span class='st'>"/"</span>), <span class='st'>"cities"</span>, <span class='kw'>driver</span><span class='kw'>=</span><span class='st'>"GML"</span>)
-    <span class='no'>cities3</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='readOGR.html'>readOGR</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/paste'>paste</a></span>(<span class='no'>td</span>, <span class='st'>"cities.gml"</span>, <span class='kw'>sep</span><span class='kw'>=</span><span class='st'>"/"</span>), <span class='st'>"cities"</span>)
+  <span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span>(<span class='no'>airports</span>) <span class='kw'>!=</span> <span class='st'>"try-error"</span>) {
+    <span class='fu'>writeOGR</span>(<span class='no'>cities</span>, <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='no'>td</span>, <span class='st'>"cities.gml"</span>, <span class='kw'>sep</span><span class='kw'>=</span><span class='st'>"/"</span>), <span class='st'>"cities"</span>, <span class='kw'>driver</span><span class='kw'>=</span><span class='st'>"GML"</span>)
+    <span class='no'>cities3</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='readOGR.html'>readOGR</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='no'>td</span>, <span class='st'>"cities.gml"</span>, <span class='kw'>sep</span><span class='kw'>=</span><span class='st'>"/"</span>), <span class='st'>"cities"</span>)
   }
 }
-<span class='co'># }</span><div class='input'><span class='co'># The GML driver does not support coordinate reference systems</span>
+<span class='co'># The GML driver does not support coordinate reference systems</span>
 <span class='kw'>if</span> (<span class='st'>"KML"</span> <span class='kw'>%in%</span> <span class='fu'><a href='readOGR.html'>ogrDrivers</a></span>()$<span class='no'>name</span>) {
-  <span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/data'>data</a></span>(<span class='no'>meuse</span>)
-  <span class='fu'>coordinates</span>(<span class='no'>meuse</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"x"</span>, <span class='st'>"y"</span>)
+  <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>meuse</span>)
+  <span class='fu'>coordinates</span>(<span class='no'>meuse</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"x"</span>, <span class='st'>"y"</span>)
   <span class='fu'>proj4string</span>(<span class='no'>meuse</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='st'>"+init=epsg:28992"</span>)
   <span class='no'>meuse_ll</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='spTransform-methods.html'>spTransform</a></span>(<span class='no'>meuse</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='st'>"+proj=longlat +datum=WGS84"</span>))
-  <span class='fu'>writeOGR</span>(<span class='no'>meuse_ll</span>[<span class='st'>"zinc"</span>], <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/paste'>paste</a></span>(<span class='no'>td</span>, <span class='st'>"meuse.kml"</span>, <span class='kw'>sep</span><span class='kw'>=</span><span class='st'>"/"</span>), <span class='st'>"zinc"</span>, <span class='st'>"KML"</span>)
+  <span class='fu'>writeOGR</span>(<span class='no'>meuse_ll</span>[<span class='st'>"zinc"</span>], <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='no'>td</span>, <span class='st'>"meuse.kml"</span>, <span class='kw'>sep</span><span class='kw'>=</span><span class='st'>"/"</span>), <span class='st'>"zinc"</span>, <span class='st'>"KML"</span>)
 }
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list.files'>list.files</a></span>(<span class='no'>td</span>)</div><div class='output co'>#&gt; [1] "cities.dbf" "cities.prj" "cities.shp" "cities.shx" "meuse.kml" </div><div class='input'><span class='no'>roads</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='readOGR.html'>readOGR</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"vectors"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"rgdal"</span>)[<span class='fl'>1</span>],
+<span class='fu'><a href='https://rdrr.io/r/base/list.files.html'>list.files</a></span>(<span class='no'>td</span>)</div><div class='output co'>#&gt; [1] "cities.dbf" "cities.prj" "cities.shp" "cities.shx" "meuse.kml" </div><div class='input'><span class='no'>roads</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='readOGR.html'>readOGR</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"vectors"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"rgdal"</span>)[<span class='fl'>1</span>],
  <span class='st'>"kiritimati_primary_roads"</span>)</div><div class='output co'>#&gt; OGR data source with driver: ESRI Shapefile 
-#&gt; Source: "/home/rsb/topics/packages/R-Forge/rgdal/pkg/inst/vectors", layer: "kiritimati_primary_roads"
+#&gt; Source: "/tmp/RtmpfyIEDl/temp_libpath40c54230fdb9/rgdal/vectors", layer: "kiritimati_primary_roads"
 #&gt; with 35 features
-#&gt; It has 1 fields</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>roads</span>)</div><div class='output co'>#&gt; Object of class SpatialLinesDataFrame
+#&gt; It has 1 fields</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>roads</span>)</div><div class='output co'>#&gt; Object of class SpatialLinesDataFrame
 #&gt; Coordinates:
 #&gt;        min      max
 #&gt; x 667587.7 704048.0
@@ -336,16 +336,16 @@
 #&gt;  Median :0  
 #&gt;  Mean   :0  
 #&gt;  3rd Qu.:0  
-#&gt;  Max.   :0  </div><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/strsplit'>strsplit</a></span>(<span class='fu'><a href='GDALDriver-class.html'>getGDALVersionInfo</a></span>(), <span class='st'>" "</span>)<span class='kw'>[[</span><span class='fl'>1</span>]][<span class='fl'>2</span>] <span class='kw'>&lt;</span> <span class='st'>"2"</span>) {
+#&gt;  Max.   :0  </div><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/strsplit.html'>strsplit</a></span>(<span class='fu'><a href='GDALDriver-class.html'>getGDALVersionInfo</a></span>(), <span class='st'>" "</span>)<span class='kw'>[[</span><span class='fl'>1</span>]][<span class='fl'>2</span>] <span class='kw'>&lt;</span> <span class='st'>"2"</span>) {
 <span class='co'># For GDAL &gt;= 2, the TAB driver may need a BOUNDS layer option</span>
   <span class='fu'>writeOGR</span>(<span class='no'>roads</span>, <span class='no'>td</span>, <span class='st'>"roads"</span>, <span class='kw'>driver</span><span class='kw'>=</span><span class='st'>"MapInfo File"</span>)
-  <span class='no'>roads2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='readOGR.html'>readOGR</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/paste'>paste</a></span>(<span class='no'>td</span>, <span class='st'>"roads.tab"</span>, <span class='kw'>sep</span><span class='kw'>=</span><span class='st'>"/"</span>), <span class='st'>"roads"</span>)
-  <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>roads2</span>)
+  <span class='no'>roads2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='readOGR.html'>readOGR</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='no'>td</span>, <span class='st'>"roads.tab"</span>, <span class='kw'>sep</span><span class='kw'>=</span><span class='st'>"/"</span>), <span class='st'>"roads"</span>)
+  <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>roads2</span>)
 }
-<span class='no'>scot_BNG</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='readOGR.html'>readOGR</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"vectors"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"rgdal"</span>)[<span class='fl'>1</span>], <span class='st'>"scot_BNG"</span>)</div><div class='output co'>#&gt; OGR data source with driver: ESRI Shapefile 
-#&gt; Source: "/home/rsb/topics/packages/R-Forge/rgdal/pkg/inst/vectors", layer: "scot_BNG"
+<span class='no'>scot_BNG</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='readOGR.html'>readOGR</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"vectors"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"rgdal"</span>)[<span class='fl'>1</span>], <span class='st'>"scot_BNG"</span>)</div><div class='output co'>#&gt; OGR data source with driver: ESRI Shapefile 
+#&gt; Source: "/tmp/RtmpfyIEDl/temp_libpath40c54230fdb9/rgdal/vectors", layer: "scot_BNG"
 #&gt; with 56 features
-#&gt; It has 13 fields</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>scot_BNG</span>)</div><div class='output co'>#&gt; Object of class SpatialPolygonsDataFrame
+#&gt; It has 13 fields</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>scot_BNG</span>)</div><div class='output co'>#&gt; Object of class SpatialPolygonsDataFrame
 #&gt; Coordinates:
 #&gt;          min       max
 #&gt; x   7094.552  468285.5
@@ -353,9 +353,7 @@
 #&gt; Is projected: TRUE 
 #&gt; proj4string :
 #&gt; [+proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000
-#&gt; +y_0=-100000 +ellps=airy
-#&gt; +towgs84=446.448,-125.157,542.06,0.15,0.247,0.842,-20.489 +units=m
-#&gt; +no_defs]
+#&gt; +y_0=-100000 +ellps=airy +units=m +no_defs]
 #&gt; Data attributes:
 #&gt;      SP_ID              NAME         ID_x           COUNT       
 #&gt;  0      : 1   Aberdeen    : 1   Min.   : 1.00   Min.   : 0.000  
@@ -388,21 +386,21 @@
 #&gt;  Mean   :28.50  
 #&gt;  3rd Qu.:42.25  
 #&gt;  Max.   :56.00  
-#&gt;                 </div><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/strsplit'>strsplit</a></span>(<span class='fu'><a href='GDALDriver-class.html'>getGDALVersionInfo</a></span>(), <span class='st'>" "</span>)<span class='kw'>[[</span><span class='fl'>1</span>]][<span class='fl'>2</span>] <span class='kw'>&lt;</span> <span class='st'>"2"</span>) {
+#&gt;                 </div><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/strsplit.html'>strsplit</a></span>(<span class='fu'><a href='GDALDriver-class.html'>getGDALVersionInfo</a></span>(), <span class='st'>" "</span>)<span class='kw'>[[</span><span class='fl'>1</span>]][<span class='fl'>2</span>] <span class='kw'>&lt;</span> <span class='st'>"2"</span>) {
 <span class='co'># For GDAL &gt;= 2, the TAB driver may need a BOUNDS layer option</span>
   <span class='fu'>writeOGR</span>(<span class='no'>scot_BNG</span>, <span class='no'>td</span>, <span class='st'>"scot_BNG"</span>, <span class='kw'>driver</span><span class='kw'>=</span><span class='st'>"MapInfo File"</span>)
-  <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list.files'>list.files</a></span>(<span class='no'>td</span>)
-  <span class='no'>scot_BNG2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='readOGR.html'>readOGR</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/paste'>paste</a></span>(<span class='no'>td</span>, <span class='st'>"scot_BNG.tab"</span>, <span class='kw'>sep</span><span class='kw'>=</span><span class='st'>"/"</span>), <span class='st'>"scot_BNG"</span>,
+  <span class='fu'><a href='https://rdrr.io/r/base/list.files.html'>list.files</a></span>(<span class='no'>td</span>)
+  <span class='no'>scot_BNG2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='readOGR.html'>readOGR</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='no'>td</span>, <span class='st'>"scot_BNG.tab"</span>, <span class='kw'>sep</span><span class='kw'>=</span><span class='st'>"/"</span>), <span class='st'>"scot_BNG"</span>,
     <span class='kw'>addCommentsToPolygons</span><span class='kw'>=</span><span class='fl'>FALSE</span>)
-  <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>scot_BNG2</span>)
+  <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>scot_BNG2</span>)
 }
 <span class='fu'>writeOGR</span>(<span class='no'>scot_BNG</span>, <span class='no'>td</span>, <span class='st'>"scot_BNG"</span>, <span class='kw'>driver</span><span class='kw'>=</span><span class='st'>"MapInfo File"</span>,
  <span class='kw'>dataset_options</span><span class='kw'>=</span><span class='st'>"FORMAT=MIF"</span>)
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list.files'>list.files</a></span>(<span class='no'>td</span>)</div><div class='output co'>#&gt; [1] "cities.dbf"   "cities.prj"   "cities.shp"   "cities.shx"   "meuse.kml"   
-#&gt; [6] "scot_BNG.mid" "scot_BNG.mif"</div><div class='input'><span class='no'>scot_BNG3</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='readOGR.html'>readOGR</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/paste'>paste</a></span>(<span class='no'>td</span>, <span class='st'>"scot_BNG.mif"</span>, <span class='kw'>sep</span><span class='kw'>=</span><span class='st'>"/"</span>), <span class='st'>"scot_BNG"</span>)</div><div class='output co'>#&gt; OGR data source with driver: MapInfo File 
-#&gt; Source: "/tmp/RtmpNyj9Cf/rgdal_examples/scot_BNG.mif", layer: "scot_BNG"
+<span class='fu'><a href='https://rdrr.io/r/base/list.files.html'>list.files</a></span>(<span class='no'>td</span>)</div><div class='output co'>#&gt; [1] "cities.dbf"   "cities.prj"   "cities.shp"   "cities.shx"   "meuse.kml"   
+#&gt; [6] "scot_BNG.mid" "scot_BNG.mif"</div><div class='input'><span class='no'>scot_BNG3</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='readOGR.html'>readOGR</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='no'>td</span>, <span class='st'>"scot_BNG.mif"</span>, <span class='kw'>sep</span><span class='kw'>=</span><span class='st'>"/"</span>), <span class='st'>"scot_BNG"</span>)</div><div class='output co'>#&gt; OGR data source with driver: MapInfo File 
+#&gt; Source: "/tmp/Rtmp5qIC6B/rgdal_examples/scot_BNG.mif", layer: "scot_BNG"
 #&gt; with 56 features
-#&gt; It has 13 fields</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>scot_BNG3</span>)</div><div class='output co'>#&gt; Object of class SpatialPolygonsDataFrame
+#&gt; It has 13 fields</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>scot_BNG3</span>)</div><div class='output co'>#&gt; Object of class SpatialPolygonsDataFrame
 #&gt; Coordinates:
 #&gt;          min       max
 #&gt; x   7094.552  468285.5
@@ -443,29 +441,21 @@
 #&gt;  Mean   :28.50  
 #&gt;  3rd Qu.:42.25  
 #&gt;  Max.   :56.00  
-#&gt;                 </div><div class='input'><span class='kw'>if</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/nchar'>nchar</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Sys.getenv'>Sys.getenv</a></span>(<span class='st'>"OSGEO4W_ROOT"</span>)) <span class='kw'>&gt;</span> <span class='fl'>0</span>) {
-    <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/getwd'>setwd</a></span>(<span class='no'>OLDPWD</span>)
+#&gt;                 </div><div class='input'><span class='kw'>if</span>(<span class='fu'><a href='https://rdrr.io/r/base/nchar.html'>nchar</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/Sys.getenv.html'>Sys.getenv</a></span>(<span class='st'>"OSGEO4W_ROOT"</span>)) <span class='kw'>&gt;</span> <span class='fl'>0</span>) {
+    <span class='fu'><a href='https://rdrr.io/r/base/getwd.html'>setwd</a></span>(<span class='no'>OLDPWD</span>)
 }</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
       <li><a href="#details">Details</a></li>
-
       <li><a href="#value">Value</a></li>
-
       <li><a href="#note">Note</a></li>
-
       <li><a href="#warning">Warning</a></li>
-
       <li><a href="#writeogr-polygon-bug-in-"><code>writeOGR</code> Polygon bug in 1.1-1</a></li>
-
       <li><a href="#references">References</a></li>
-
       <li><a href="#see-also">See also</a></li>
-      
       <li><a href="#examples">Examples</a></li>
     </ul>
 
@@ -474,19 +464,23 @@
   </div>
 </div>
 
+
       <footer>
       <div class="copyright">
   <p>Developed by Roger Bivand, Tim Keitt, Barry Rowlingson.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 
