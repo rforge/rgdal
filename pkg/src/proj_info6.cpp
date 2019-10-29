@@ -78,33 +78,6 @@ SEXP RGDAL_projInfo(SEXP type) {
         }
     } else if (INTEGER_POINTER(type)[0] == 2) {
         return(R_NilValue);
-/*        PROTECT(ans = NEW_LIST(4)); pc++;
-        PROTECT(ansnames = NEW_CHARACTER(4)); pc++;
-        SET_STRING_ELT(ansnames, 0, COPY_TO_USER_STRING("name"));
-        SET_STRING_ELT(ansnames, 1, COPY_TO_USER_STRING("ellipse"));
-        SET_STRING_ELT(ansnames, 2, COPY_TO_USER_STRING("definition"));
-        SET_STRING_ELT(ansnames, 3, COPY_TO_USER_STRING("description"));
-        setAttrib(ans, R_NamesSymbol, ansnames);
-
-        const struct PJ_DATUMS *ld;
-        for (ld = pj_get_datums_ref(); ld->id ; ++ld) n++;
-        SET_VECTOR_ELT(ans, 0, NEW_CHARACTER(n));
-        SET_VECTOR_ELT(ans, 1, NEW_CHARACTER(n));
-        SET_VECTOR_ELT(ans, 2, NEW_CHARACTER(n));
-        SET_VECTOR_ELT(ans, 3, NEW_CHARACTER(n));
-        n=0;
-        for (ld = pj_get_datums_ref(); ld->id ; ++ld) {
-            SET_STRING_ELT(VECTOR_ELT(ans, 0), n, 
-		COPY_TO_USER_STRING(ld->id));
-            SET_STRING_ELT(VECTOR_ELT(ans, 1), n, 
-		COPY_TO_USER_STRING(ld->ellipse_id));
-            SET_STRING_ELT(VECTOR_ELT(ans, 2), n, 
-		COPY_TO_USER_STRING(ld->defn));
-            SET_STRING_ELT(VECTOR_ELT(ans, 3), n, 
-		COPY_TO_USER_STRING(ld->comments));
-            n++;
-        }*/
-
     } else if (INTEGER_POINTER(type)[0] == 3) {
         PROTECT(ans = NEW_LIST(3)); pc++;
         PROTECT(ansnames = NEW_CHARACTER(3)); pc++;
@@ -133,6 +106,190 @@ SEXP RGDAL_projInfo(SEXP type) {
     UNPROTECT(pc);
     return(ans);
 }
+
+// unname(sapply(o[[2]], function(x) gsub(" ", " +", paste0("+", x))))
+
+SEXP list_coordinate_ops(SEXP source, SEXP target, SEXP area_of_interest, SEXP strict_containment, SEXP vis_order) {
+
+    PJ_CONTEXT *ctx = proj_context_create();
+    PJ_OPERATION_FACTORY_CONTEXT* operation_factory_context = NULL;
+    PJ_OBJ_LIST *pj_operations = NULL;
+    PJ *source_crs, *target_crs;
+    PJ* pj_transform = NULL;
+    SEXP ans, input;
+    int num_operations, i, j, is_instantiable, is_ballpark, grid_count;
+    int pc=0;
+    double accuracy;
+    int grid_OK, out_direct_download, out_open_license, out_available;
+    const char *out_short_name, *out_full_name, *out_package_name, *out_url;
+    PJ_PROJ_INFO pjinfo;
+
+    source_crs = proj_create(ctx, CHAR(STRING_ELT(source, 0)));
+
+    if (source_crs == NULL) {
+        proj_context_destroy(ctx);
+        error("source crs not created");
+    }
+    
+    target_crs = proj_create(ctx, CHAR(STRING_ELT(target, 0)));
+
+    if (target_crs == NULL) {
+        proj_destroy(source_crs);
+        proj_context_destroy(ctx);
+        error("target crs not created");
+    }
+
+    operation_factory_context = proj_create_operation_factory_context(ctx,
+        NULL);
+    if (operation_factory_context == NULL) {
+        proj_destroy(source_crs); proj_destroy(target_crs);
+        proj_context_destroy(ctx);
+        error("operation factory context not created");
+    }
+
+    if (!ISNA(NUMERIC_POINTER(area_of_interest)[0])) {
+        proj_operation_factory_context_set_area_of_interest(
+            ctx, operation_factory_context,
+            NUMERIC_POINTER(area_of_interest)[0],
+            NUMERIC_POINTER(area_of_interest)[1],
+            NUMERIC_POINTER(area_of_interest)[2],
+            NUMERIC_POINTER(area_of_interest)[3]);
+    }
+
+    if (LOGICAL_POINTER(strict_containment)[0])
+        proj_operation_factory_context_set_spatial_criterion(
+            ctx, operation_factory_context,
+            PROJ_SPATIAL_CRITERION_STRICT_CONTAINMENT);
+    else proj_operation_factory_context_set_spatial_criterion(
+            ctx, operation_factory_context,
+            PROJ_SPATIAL_CRITERION_PARTIAL_INTERSECTION);
+
+    proj_operation_factory_context_set_grid_availability_use(
+            ctx, operation_factory_context,
+            PROJ_GRID_AVAILABILITY_USED_FOR_SORTING);
+
+    pj_operations = proj_create_operations(ctx,
+                source_crs, target_crs, operation_factory_context);
+    
+    if (pj_operations == NULL) {
+        proj_operation_factory_context_destroy(operation_factory_context);
+        proj_destroy(source_crs); proj_destroy(target_crs);
+        proj_context_destroy(ctx);
+        error("operations list not created");
+    }
+
+    num_operations = proj_list_get_count(pj_operations);
+
+    if (num_operations < 1L) {
+        proj_list_destroy(pj_operations);
+        proj_operation_factory_context_destroy(operation_factory_context);
+        proj_destroy(source_crs); proj_destroy(target_crs);
+        proj_context_destroy(ctx);
+        return(R_NilValue);
+    }
+
+    PROTECT(ans=NEW_LIST(7)); pc += 1;
+    SET_VECTOR_ELT(ans, 0, NEW_CHARACTER(num_operations));
+    SET_VECTOR_ELT(ans, 1, NEW_CHARACTER(num_operations));
+    SET_VECTOR_ELT(ans, 2, NEW_NUMERIC(num_operations));
+    SET_VECTOR_ELT(ans, 3, NEW_LOGICAL(num_operations));
+    SET_VECTOR_ELT(ans, 4, NEW_LOGICAL(num_operations));
+    SET_VECTOR_ELT(ans, 5, NEW_INTEGER(num_operations));
+    SET_VECTOR_ELT(ans, 6, NEW_LIST(num_operations));
+
+    PROTECT(input=NEW_LIST(5)); pc += 1;
+    SET_VECTOR_ELT(input, 0, source);
+    SET_VECTOR_ELT(input, 1, target);
+    SET_VECTOR_ELT(input, 2, area_of_interest);
+    SET_VECTOR_ELT(input, 3, strict_containment);
+    SET_VECTOR_ELT(input, 4, vis_order);
+    setAttrib(ans, install("input"), input);
+
+
+    for (i=0; i<num_operations; i++) {
+        pj_transform = proj_list_get(ctx, pj_operations, i);
+        if (LOGICAL_POINTER(vis_order)[0])
+            pj_transform = proj_normalize_for_visualization(ctx, pj_transform);
+        is_instantiable = proj_coordoperation_is_instantiable(ctx,
+            pj_transform);
+        is_ballpark = proj_coordoperation_has_ballpark_transformation(ctx,
+            pj_transform);
+        accuracy = proj_coordoperation_get_accuracy(ctx,
+            pj_transform);
+        grid_count = proj_coordoperation_get_grid_used_count(ctx,
+            pj_transform);
+        pjinfo = proj_pj_info(pj_transform);
+        SET_STRING_ELT(VECTOR_ELT(ans, 0), i,
+            COPY_TO_USER_STRING(pjinfo.description));
+        SET_STRING_ELT(VECTOR_ELT(ans, 1), i,
+            COPY_TO_USER_STRING(pjinfo.definition));
+        NUMERIC_POINTER(VECTOR_ELT(ans, 2))[i] = accuracy;
+        LOGICAL_POINTER(VECTOR_ELT(ans, 3))[i] = is_instantiable;
+        LOGICAL_POINTER(VECTOR_ELT(ans, 4))[i] = is_ballpark;
+        INTEGER_POINTER(VECTOR_ELT(ans, 5))[i] = grid_count;
+
+        if (grid_count > 0L) {
+            SET_VECTOR_ELT(VECTOR_ELT(ans, 6), i, NEW_LIST(grid_count));
+            for (j=0; j<grid_count; j++) {
+                grid_OK = proj_coordoperation_get_grid_used(ctx, pj_transform,
+                    j, &out_short_name, &out_full_name, &out_package_name,
+                    &out_url, &out_direct_download, &out_open_license,
+                    &out_available);
+                 if (grid_OK) {
+                     SET_VECTOR_ELT(VECTOR_ELT(VECTOR_ELT(ans, 6), i), j,
+                         NEW_LIST(7));
+                     SET_VECTOR_ELT(VECTOR_ELT(VECTOR_ELT(VECTOR_ELT( ans, 6),
+                         i), j), 0, NEW_CHARACTER(1));
+                     SET_STRING_ELT(VECTOR_ELT(VECTOR_ELT(VECTOR_ELT(
+                         VECTOR_ELT(ans, 6), i), j), 0), 0,
+                         COPY_TO_USER_STRING(out_short_name));
+                     SET_VECTOR_ELT(VECTOR_ELT(VECTOR_ELT(VECTOR_ELT( ans, 6),
+                         i), j), 1, NEW_CHARACTER(1));
+                     SET_STRING_ELT(VECTOR_ELT(VECTOR_ELT(VECTOR_ELT(
+                         VECTOR_ELT(ans, 6), i), j), 1), 0, 
+                         COPY_TO_USER_STRING(out_full_name));
+                     SET_VECTOR_ELT(VECTOR_ELT(VECTOR_ELT(VECTOR_ELT( ans, 6),
+                         i), j), 2, NEW_CHARACTER(1));
+                     SET_STRING_ELT(VECTOR_ELT(VECTOR_ELT(VECTOR_ELT(
+                         VECTOR_ELT(ans, 6), i), j), 2), 0, 
+                         COPY_TO_USER_STRING(out_package_name));
+                     SET_VECTOR_ELT(VECTOR_ELT(VECTOR_ELT(VECTOR_ELT( ans, 6),
+                         i), j), 3, NEW_CHARACTER(1));
+                     SET_STRING_ELT(VECTOR_ELT(VECTOR_ELT(VECTOR_ELT(
+                         VECTOR_ELT(ans, 6), i), j), 3), 0, 
+                         COPY_TO_USER_STRING(out_url));
+                     SET_VECTOR_ELT(VECTOR_ELT(VECTOR_ELT(VECTOR_ELT( ans, 6),
+                         i), j), 4, NEW_LOGICAL(1));
+                     LOGICAL_POINTER(VECTOR_ELT(VECTOR_ELT(VECTOR_ELT(
+                         VECTOR_ELT(ans, 6), i), j), 4))[0] = 
+                         out_direct_download;
+                     SET_VECTOR_ELT(VECTOR_ELT(VECTOR_ELT(VECTOR_ELT( ans, 6),
+                         i), j), 5, NEW_LOGICAL(1));
+                     LOGICAL_POINTER(VECTOR_ELT(VECTOR_ELT(VECTOR_ELT(
+                         VECTOR_ELT(ans, 6), i), j), 5))[0] = 
+                         out_open_license;
+                     SET_VECTOR_ELT(VECTOR_ELT(VECTOR_ELT(VECTOR_ELT( ans, 6),
+                         i), j), 6, NEW_LOGICAL(1));
+                     LOGICAL_POINTER(VECTOR_ELT(VECTOR_ELT(VECTOR_ELT(
+                         VECTOR_ELT(ans, 6), i), j), 6))[0] = 
+                         out_available;
+
+                 } 
+            }
+        }
+    }
+
+    proj_destroy(pj_transform);
+    proj_list_destroy(pj_operations);
+    proj_operation_factory_context_destroy(operation_factory_context);
+    proj_destroy(source_crs); proj_destroy(target_crs);
+    proj_context_destroy(ctx);
+
+    UNPROTECT(pc);
+    return(ans);
+
+}
+
 
 // blocks error messages in this context
 // https://lists.osgeo.org/pipermail/proj/2019-March/008310.html

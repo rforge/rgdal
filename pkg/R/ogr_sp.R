@@ -200,8 +200,10 @@ readOGR <- function(dsn, layer, verbose=TRUE, p4s=NULL,
         }
 
 # suggestion by Paul Hiemstra 070817
-	prj <- .Call("ogrP4S", as.character(dsn), enc2utf8(as.character(layer)), 
-		PACKAGE="rgdal")
+        morphFromESRI <- ogr_info$driver == "ESRI Shapefile"
+        stopifnot(is.logical(morphFromESRI))
+        stopifnot(length(morphFromESRI) == 1)
+	prj <- .Call("ogrP4S", as.character(dsn), enc2utf8(as.character(layer)),		as.logical(morphFromESRI), PACKAGE="rgdal")
 	if (!is.null(p4s)) {
           if (!is.na(prj)) {
               warning("p4s= argument given as: ", p4s, "\n and read as: ", prj, 
@@ -450,4 +452,50 @@ showEPSG <- function(p4s) {
 	res
 }
 
+showSRID <- function(inSRID, format="WKT2", multiline="NO") {
+    valid_WKT_formats <- c("SFSQL", "WKT1_SIMPLE", "WKT1", "WKT1_GDAL",
+        "WKT1_ESRI", "WKT2_2015", "WKT2_2018", "WKT2")
+    valid_formats <- c("PROJ", valid_WKT_formats)
+    stopifnot(is.character(inSRID))
+    stopifnot(length(inSRID) == 1L)
+    stopifnot(is.character(format))
+    stopifnot(length(format) == 1L)
+    if (!(format %in% valid_formats)) stop("invalid format value")
+    out_format <- as.integer(NA)
+    if (format %in% valid_WKT_formats) out_format <- 1L
+    if (format == "PROJ") out_format <- 2L
+    stopifnot(is.character(multiline))
+    stopifnot(length(multiline) == 1L)
+    if (!(multiline %in% c("YES", "NO"))) stop("invalid multiline value")
+    PROJ6 <- substring(as.character(.Call("PROJ4VersionInfo", 
+        PACKAGE = "rgdal")[[2]]), 1, 1) >= "6"
+    GDAL3 <- substring(getGDALVersionInfo(), 6, 6) >= "3"
+    in_format <- as.integer(NA)
+    if (substring(inSRID, 1, 1) == "+") in_format = 1L
+    if (substring(inSRID, 1, 3) == "urn") in_format = 2L
+    if (substring(inSRID, 1, 1) == "P") in_format = 3L
+    if (substring(inSRID, 1, 1) == "G") in_format = 3L
+    if (substring(inSRID, 1, 4) == "EPSG") in_format = 4L
+    epsg <- as.integer(NA)
+    if (in_format == 4L) epsg <- as.integer(substring(inSRID, 6, nchar(inSRID)))
+    format <- paste0("FORMAT=", format)
+    multiline <- paste0("MULTILINE=", multiline)
+    if (PROJ6 && GDAL3) {
+        if (!is.na(in_format)) {
+            res <- .Call("P6_SRID_show", as.character(inSRID),
+                as.character(format), as.character(multiline), 
+                as.integer(in_format), as.integer(epsg),
+                as.integer(out_format), PACKAGE="rgdal")
+        } else {
+            stop("unknown input format")
+        }
+    } else {
+        if (!is.na(in_format) && in_format == 1L) {
+            res <- showWKT(inSRID)
+        } else {
+            stop("unknown input format")
+        }
+    }
+    res
+}
  

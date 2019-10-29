@@ -239,15 +239,17 @@ ogrDrivers <- function() {
   res
 }
 
-"OGRSpatialRef" <- function(dsn, layer) {
+"OGRSpatialRef" <- function(dsn, layer, morphFromESRI=FALSE) {
   stopifnot(is.character(dsn))
   stopifnot(length(dsn) == 1L)
+  stopifnot(is.logical(morphFromESRI))
+  stopifnot(length(morphFromESRI) == 1L)
 # copy sf::st_read.default usage
   if (length(dsn) == 1 && file.exists(dsn))
     dsn <- enc2utf8(normalizePath(dsn))
   layer <- enc2utf8(layer)
   .Call("ogrP4S", as.character(dsn), as.character(layer),
-        PACKAGE="rgdal")
+        as.logical(morphFromESRI), PACKAGE="rgdal")
 }
 
 ogrListLayers <- function(dsn) {

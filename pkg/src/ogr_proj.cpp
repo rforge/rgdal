@@ -19,6 +19,91 @@
 extern "C" {
 #endif
 
+
+SEXP P6_SRID_show(SEXP inSRID, SEXP format, SEXP multiline, SEXP in_format,
+    SEXP epsg, SEXP out_format) {
+
+#if GDAL_VERSION_MAJOR == 3
+
+    OGRSpatialReference hSRS = (OGRSpatialReference) NULL;
+    char *pszSRS = NULL;
+    SEXP ans;
+    char **papszOptions = NULL;
+
+    if (INTEGER_POINTER(in_format)[0] == 1L) {
+        installErrorHandler();
+        if (hSRS.importFromProj4((const char *) CHAR(STRING_ELT(inSRID, 0))) != OGRERR_NONE) {
+            uninstallErrorHandlerAndTriggerError();
+	    error("Can't parse PROJ.4-style parameter string");
+        }
+        uninstallErrorHandlerAndTriggerError();
+    } else if (INTEGER_POINTER(in_format)[0] == 2L) {
+        installErrorHandler();
+        if (hSRS.importFromURN((const char *) CHAR(STRING_ELT(inSRID, 0))) != OGRERR_NONE) {
+            uninstallErrorHandlerAndTriggerError();
+	    error("Can't parse URN-style parameter string");
+        }
+        uninstallErrorHandlerAndTriggerError();
+    } else if (INTEGER_POINTER(in_format)[0] == 3L) {
+        installErrorHandler();
+#if GDAL_VERSION_MAJOR == 1 || ( GDAL_VERSION_MAJOR == 2 && GDAL_VERSION_MINOR <= 2 ) // thanks to Even Roualt https://github.com/OSGeo/gdal/issues/681
+//#if GDAL_VERSION_MAJOR <= 2 && GDAL_VERSION_MINOR <= 2
+        if (hSRS.importFromWkt(ppszInput) != OGRERR_NONE) 
+#else
+        if (hSRS.importFromWkt((const char **) CHAR(STRING_ELT(inSRID, 0))) != OGRERR_NONE) 
+#endif
+        {
+            uninstallErrorHandlerAndTriggerError();
+	    error("Can't parse URN-style parameter string");
+        }
+        uninstallErrorHandlerAndTriggerError();
+    } else if (INTEGER_POINTER(in_format)[0] == 4L) {
+        installErrorHandler();
+        if (hSRS.importFromEPSG(INTEGER_POINTER(epsg)[0]) != OGRERR_NONE) {
+            uninstallErrorHandlerAndTriggerError();
+	    error("Can't parse EPSG-style code");
+        }
+        uninstallErrorHandlerAndTriggerError();
+    }
+
+    PROTECT(ans=NEW_CHARACTER(1));
+
+    if (INTEGER_POINTER(out_format)[0] == 1L) {
+        installErrorHandler();
+        papszOptions = CSLAddString(papszOptions, CHAR(STRING_ELT(multiline, 0)));
+        papszOptions = CSLAddString(papszOptions, CHAR(STRING_ELT(format, 0)));
+        uninstallErrorHandlerAndTriggerError();
+
+        installErrorHandler();
+        
+        if (hSRS.exportToWkt(&pszSRS, papszOptions) != OGRERR_NONE) {
+            uninstallErrorHandlerAndTriggerError();
+	    error("Can't express as WKT");
+        }
+        uninstallErrorHandlerAndTriggerError();
+        SET_STRING_ELT(ans, 0, COPY_TO_USER_STRING(pszSRS));
+    } else if (INTEGER_POINTER(out_format)[0] == 2L) {
+        installErrorHandler();
+        if (hSRS.exportToProj4(&pszSRS) != OGRERR_NONE) {
+            SET_STRING_ELT(ans, 0, NA_STRING);
+	} else {
+            SET_STRING_ELT(ans, 0, COPY_TO_USER_STRING(pszSRS));
+        }
+        uninstallErrorHandlerAndTriggerError();
+    } else {
+        error("unknown output format");
+    }
+
+    CPLFree(pszSRS);
+
+    UNPROTECT(1);
+
+    return(ans);
+#endif
+
+}
+
+
 SEXP p4s_to_wkt(SEXP p4s, SEXP esri) {
 
     OGRSpatialReference hSRS = (OGRSpatialReference) NULL;
@@ -111,7 +196,7 @@ SEXP ogrAutoIdentifyEPSG(SEXP p4s) {
     return(ans);
 }
 
-SEXP ogrP4S(SEXP ogrsourcename, SEXP Layer) {
+SEXP ogrP4S(SEXP ogrsourcename, SEXP Layer, SEXP morphFromESRI) {
 
 #ifdef GDALV2
 //    GDALDriver *poDriver;
@@ -154,7 +239,7 @@ SEXP ogrP4S(SEXP ogrsourcename, SEXP Layer) {
 
     if (hSRS != NULL) {
         installErrorHandler();
-	hSRS->morphFromESRI();
+	if (LOGICAL_POINTER(morphFromESRI)[0]) hSRS->morphFromESRI();
         if (hSRS->exportToProj4(&pszProj4) != OGRERR_NONE) {
 //	    SET_VECTOR_ELT(ans, 0, NA_STRING);
             SET_STRING_ELT(ans, 0, NA_STRING);

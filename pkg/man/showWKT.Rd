@@ -2,6 +2,7 @@
 \alias{showWKT}
 \alias{showEPSG}
 \alias{showP4}
+\alias{showSRID}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Show Well-Known Text spatial reference system metadata}
 \description{
@@ -11,6 +12,7 @@
 showWKT(p4s, file = NULL, morphToESRI = TRUE)
 showP4(wkt, morphFromESRI=TRUE)
 showEPSG(p4s)
+showSRID(inSRID, format="WKT2", multiline="NO")
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -19,10 +21,13 @@ showEPSG(p4s)
   \item{morphToESRI}{default TRUE, morph the WKT string to the representation used by ESRI}
   \item{wkt}{A valid WKT character string representing a spatial reference system}
   \item{morphFromESRI}{default TRUE, morph the WKT string from the representation used by ESRI}
+  \item{inSRID}{Input coordinate reference string (PROJ >= 6, GDAL <= 3)}
+  \item{format}{Output format, default WKT2}
+  \item{multiline}{Multiline output, either \code{"NO"} or \code{"YES"}}
 }
 
 \value{
-  A character string containing the WKT representation of the PROJ.4 string.
+  For \code{showWKT}, a character string containing the WKT representation of the PROJ.4 string.
 }
 \references{\url{https://gdal.org/tutorials/osr_api_tut.html}}
 \author{Roger Bivand}
@@ -36,6 +41,11 @@ showWKT("+init=epsg:28992")
 showP4(showWKT("+init=epsg:28992"))
 showEPSG("+proj=utm +zone=30")
 showEPSG("+proj=longlat +ellps=WGS84")
+exts <- rgdal_extSoftVersion()
+run <- substring(exts["GDAL"], 1, 1) >= "3" && substring(exts["PROJ"], 1, 1) >= "6"
+if (run) {
+  cat(showSRID("EPSG:27700", multiline="YES"), "\n")
+}
 }
 \keyword{spatial}
 

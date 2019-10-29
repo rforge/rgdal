@@ -37,7 +37,7 @@ ogrInfo(dsn, layer, encoding=NULL,
  use_iconv=FALSE, swapAxisOrder=FALSE, require_geomType = NULL)
 ogrFIDs(dsn, layer)
 ogrDrivers()
-OGRSpatialRef(dsn, layer)
+OGRSpatialRef(dsn, layer, morphFromESRI=FALSE)
 ogrListLayers(dsn)
 \method{print}{ogrinfo}(x, ...)
 }
@@ -60,6 +60,7 @@ ogrListLayers(dsn)
   \item{require_geomType}{, default NULL, if one of: \code{c("wkbPoint", "wkbLineString", "wkbPolygon")}, then in input with multiple geometry types, the chosen type will be read}
   \item{integer64}{default \dQuote{no.loss} (from rgdal 1.2.*). From GDAL 2, fields to be read may also take Integer64 values. As R has no such storage mode, three options are offered, analogous with \code{\link{type.convert}} for numeric conversion: \dQuote{allow.loss} which clamps to 32-bit signed integer (default < rgdal 1.2), \dQuote{warn.loss} - as \dQuote{allow.loss} but warns when clamping occurs, and \dQuote{no.loss}, which reads as a character string using the formatting applied by default by GDAL (default >= rgdal 1.2). The use of 64-bit integers is usually a misunderstanding, as such data is almost always a long key ID.}
   \item{GDAL1_integer64_policy}{default FALSE, if TRUE, Integer64 fields are read as doubles}
+  \item{morphFromESRI}{default FALSE, morph from ESRI WKT1 dialect}
   \item{x}{ogrinfo object}
   \item{...}{other arguments to print method}
 }

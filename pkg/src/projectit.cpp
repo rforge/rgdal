@@ -131,6 +131,11 @@ PROJ4_proj_def_dat_Installed(void) {
 
 #ifndef PROJ6
 
+SEXP list_coordinate_ops(SEXP source, SEXP target, SEXP area_of_interest, SEXP strict_containment, SEXP viz_order) {
+    Rprintf("Not available for PROJ version < 6");
+    return(R_NilValue);
+}
+
 SEXP
 PROJcopyEPSG(SEXP tf) {
 
