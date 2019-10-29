@@ -188,7 +188,7 @@ SEXP list_coordinate_ops(SEXP source, SEXP target, SEXP area_of_interest, SEXP s
         return(R_NilValue);
     }
 
-    PROTECT(ans=NEW_LIST(7)); pc += 1;
+    PROTECT(ans=NEW_LIST(7)); pc++;
     SET_VECTOR_ELT(ans, 0, NEW_CHARACTER(num_operations));
     SET_VECTOR_ELT(ans, 1, NEW_CHARACTER(num_operations));
     SET_VECTOR_ELT(ans, 2, NEW_NUMERIC(num_operations));
@@ -197,7 +197,7 @@ SEXP list_coordinate_ops(SEXP source, SEXP target, SEXP area_of_interest, SEXP s
     SET_VECTOR_ELT(ans, 5, NEW_INTEGER(num_operations));
     SET_VECTOR_ELT(ans, 6, NEW_LIST(num_operations));
 
-    PROTECT(input=NEW_LIST(5)); pc += 1;
+    PROTECT(input=NEW_LIST(5)); pc++;
     SET_VECTOR_ELT(input, 0, source);
     SET_VECTOR_ELT(input, 1, target);
     SET_VECTOR_ELT(input, 2, area_of_interest);

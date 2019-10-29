@@ -54,7 +54,7 @@ SEXP P6_SRID_show(SEXP inSRID, SEXP format, SEXP multiline, SEXP in_format,
 #endif
         {
             uninstallErrorHandlerAndTriggerError();
-	    error("Can't parse URN-style parameter string");
+	    error("Can't parse WKT-style parameter string");
         }
         uninstallErrorHandlerAndTriggerError();
     } else if (INTEGER_POINTER(in_format)[0] == 4L) {
@@ -209,7 +209,10 @@ SEXP ogrP4S(SEXP ogrsourcename, SEXP Layer, SEXP morphFromESRI, SEXP dumpSRS) {
 
     OGRSpatialReference *hSRS = NULL;
     char *pszProj4 = NULL;
-    SEXP ans;
+    SEXP ans, Datum, ToWGS84, OSRProjVersion;
+    int i, pc=0;
+    int pnMajor, pnMinor, pnPatch;
+    const char *datum, *towgs84;
 
     installErrorHandler();
 #ifdef GDALV2
@@ -231,7 +234,7 @@ SEXP ogrP4S(SEXP ogrsourcename, SEXP Layer, SEXP morphFromESRI, SEXP dumpSRS) {
       error("Cannot open layer");
     }
 
-    PROTECT(ans=NEW_CHARACTER(1));
+    PROTECT(ans=NEW_CHARACTER(1)); pc++;
 
     installErrorHandler();
     hSRS = poLayer->GetSpatialRef();
@@ -239,26 +242,30 @@ SEXP ogrP4S(SEXP ogrsourcename, SEXP Layer, SEXP morphFromESRI, SEXP dumpSRS) {
 
     installErrorHandler();
     if (LOGICAL_POINTER(dumpSRS)[0]) {
-        int pnMajor, pnMinor, pnPatch;
-        OSRGetPROJVersion(&pnMajor, &pnMinor, &pnPatch);
-        Rprintf("OSR PROJ %d.%d.%d\n", pnMajor, pnMinor, pnPatch);
         hSRS->dumpReadable();
-        const char *datum = hSRS->GetAttrValue("DATUM");
-        if (datum != NULL) Rprintf("datum: %s\n", datum);
-        const char *towgs840 = hSRS->GetAttrValue("TOWGS84", 0);
-        if (towgs840 != NULL) Rprintf("towgs840: %s\n", towgs840);
-        const char *towgs841 = hSRS->GetAttrValue("TOWGS84", 1);
-        if (towgs841 != NULL) Rprintf("towgs841: %s\n", towgs841);
-        const char *towgs842 = hSRS->GetAttrValue("TOWGS84", 2);
-        if (towgs842 != NULL) Rprintf("towgs842: %s\n", towgs842);
-        const char *towgs843 = hSRS->GetAttrValue("TOWGS84", 3);
-        if (towgs843 != NULL) Rprintf("towgs843: %s\n", towgs843);
-        const char *towgs844 = hSRS->GetAttrValue("TOWGS84", 4);
-        if (towgs844 != NULL) Rprintf("towgs844: %s\n", towgs844);
-        const char *towgs845 = hSRS->GetAttrValue("TOWGS84", 5);
-        if (towgs845 != NULL) Rprintf("towgs845: %s\n", towgs845);
-        const char *towgs846 = hSRS->GetAttrValue("TOWGS84", 6);
-        if (towgs846 != NULL) Rprintf("towgs846: %s\n", towgs846);
+    }
+    uninstallErrorHandlerAndTriggerError();
+
+
+    installErrorHandler();
+    OSRGetPROJVersion(&pnMajor, &pnMinor, &pnPatch);
+    uninstallErrorHandlerAndTriggerError();
+    PROTECT(OSRProjVersion = NEW_INTEGER(3)); pc++;
+    INTEGER_POINTER(OSRProjVersion)[0] = pnMajor;
+    INTEGER_POINTER(OSRProjVersion)[1] = pnMinor;
+    INTEGER_POINTER(OSRProjVersion)[1] = pnPatch;
+
+    installErrorHandler();
+    datum = hSRS->GetAttrValue("DATUM");
+    uninstallErrorHandlerAndTriggerError();
+    PROTECT(Datum = NEW_CHARACTER(1)); pc++;
+    if (datum != NULL) SET_STRING_ELT(Datum, 0, COPY_TO_USER_STRING(datum));
+
+    PROTECT(ToWGS84 = NEW_CHARACTER(7)); pc++;
+    for (i=0; i<7; i++) {
+        towgs84 = hSRS->GetAttrValue("TOWGS84", i);
+        if (towgs84 != NULL) SET_STRING_ELT(ToWGS84, i,
+            COPY_TO_USER_STRING(towgs84));
     }
     uninstallErrorHandlerAndTriggerError();
 
