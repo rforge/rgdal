@@ -238,7 +238,28 @@ SEXP ogrP4S(SEXP ogrsourcename, SEXP Layer, SEXP morphFromESRI, SEXP dumpSRS) {
     uninstallErrorHandlerAndTriggerError();
 
     installErrorHandler();
-    if (LOGICAL_POINTER(dumpSRS)[0]) hSRS->dumpReadable();
+    if (LOGICAL_POINTER(dumpSRS)[0]) {
+        int pnMajor, pnMinor, pnPatch;
+        OSRGetPROJVersion(&pnMajor, &pnMinor, &pnPatch);
+        Rprintf("OSR PROJ %d.%d.%d\n", pnMajor, pnMinor, pnPatch);
+        hSRS->dumpReadable();
+        const char *datum = hSRS->GetAttrValue("DATUM");
+        if (datum != NULL) Rprintf("datum: %s\n", datum);
+        const char *towgs840 = hSRS->GetAttrValue("TOWGS84", 0);
+        if (towgs840 != NULL) Rprintf("towgs840: %s\n", towgs840);
+        const char *towgs841 = hSRS->GetAttrValue("TOWGS84", 1);
+        if (towgs841 != NULL) Rprintf("towgs841: %s\n", towgs841);
+        const char *towgs842 = hSRS->GetAttrValue("TOWGS84", 2);
+        if (towgs842 != NULL) Rprintf("towgs842: %s\n", towgs842);
+        const char *towgs843 = hSRS->GetAttrValue("TOWGS84", 3);
+        if (towgs843 != NULL) Rprintf("towgs843: %s\n", towgs843);
+        const char *towgs844 = hSRS->GetAttrValue("TOWGS84", 4);
+        if (towgs844 != NULL) Rprintf("towgs844: %s\n", towgs844);
+        const char *towgs845 = hSRS->GetAttrValue("TOWGS84", 5);
+        if (towgs845 != NULL) Rprintf("towgs845: %s\n", towgs845);
+        const char *towgs846 = hSRS->GetAttrValue("TOWGS84", 6);
+        if (towgs846 != NULL) Rprintf("towgs846: %s\n", towgs846);
+    }
     uninstallErrorHandlerAndTriggerError();
 
 
