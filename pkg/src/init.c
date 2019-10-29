@@ -52,7 +52,7 @@ static R_CallMethodDef CallEntries[] = {
     {"R_OGR_types", (DL_FUNC) &R_OGR_types, 2},
     {"RGDAL_ogrFIDs", (DL_FUNC) &RGDAL_ogrFIDs, 2},
     {"ogr_GetDriverNames", (DL_FUNC) &ogr_GetDriverNames, 0},
-    {"ogrP4S", (DL_FUNC) &ogrP4S, 3},
+    {"ogrP4S", (DL_FUNC) &ogrP4S, 4},
     {"RGDAL_ogrListLayers", (DL_FUNC) &RGDAL_ogrListLayers, 1},
     {"ogrDataFrame", (DL_FUNC) &ogrDataFrame, 4},
     {"R_OGR_CAPI_features", (DL_FUNC) &R_OGR_CAPI_features, 3},

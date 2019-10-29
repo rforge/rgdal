@@ -32,12 +32,14 @@ readOGR(dsn, layer, verbose = TRUE, p4s=NULL,
  pointDropZ=FALSE, dropNULLGeometries=TRUE,
  useC=TRUE, disambiguateFIDs=FALSE, addCommentsToPolygons=TRUE,
  encoding=NULL, use_iconv=FALSE, swapAxisOrder=FALSE, require_geomType = NULL,
- integer64="no.loss", GDAL1_integer64_policy=FALSE)
+ integer64="no.loss", GDAL1_integer64_policy=FALSE, morphFromESRI = NULL,
+ dumpSRS = FALSE)
 ogrInfo(dsn, layer, encoding=NULL,
- use_iconv=FALSE, swapAxisOrder=FALSE, require_geomType = NULL)
+ use_iconv=FALSE, swapAxisOrder=FALSE, require_geomType = NULL,
+ morphFromESRI = NULL, dumpSRS = FALSE)
 ogrFIDs(dsn, layer)
 ogrDrivers()
-OGRSpatialRef(dsn, layer, morphFromESRI=FALSE)
+OGRSpatialRef(dsn, layer, morphFromESRI=NULL, dumpSRS = FALSE)
 ogrListLayers(dsn)
 \method{print}{ogrinfo}(x, ...)
 }
@@ -60,7 +62,8 @@ ogrListLayers(dsn)
   \item{require_geomType}{, default NULL, if one of: \code{c("wkbPoint", "wkbLineString", "wkbPolygon")}, then in input with multiple geometry types, the chosen type will be read}
   \item{integer64}{default \dQuote{no.loss} (from rgdal 1.2.*). From GDAL 2, fields to be read may also take Integer64 values. As R has no such storage mode, three options are offered, analogous with \code{\link{type.convert}} for numeric conversion: \dQuote{allow.loss} which clamps to 32-bit signed integer (default < rgdal 1.2), \dQuote{warn.loss} - as \dQuote{allow.loss} but warns when clamping occurs, and \dQuote{no.loss}, which reads as a character string using the formatting applied by default by GDAL (default >= rgdal 1.2). The use of 64-bit integers is usually a misunderstanding, as such data is almost always a long key ID.}
   \item{GDAL1_integer64_policy}{default FALSE, if TRUE, Integer64 fields are read as doubles}
-  \item{morphFromESRI}{default FALSE, morph from ESRI WKT1 dialect}
+  \item{morphFromESRI}{default NULL, morph from ESRI WKT1 dialect}
+  \item{dumpSRS}{dump SRS to stdout from inside GDAL to debug conversion - developer use only}
   \item{x}{ogrinfo object}
   \item{...}{other arguments to print method}
 }
@@ -70,7 +73,7 @@ ogrListLayers(dsn)
 \value{
   A Spatial object is returned suiting the vector data source, either a SpatialPointsDataFrame (using an AttributeList for its data slot directly), a SpatialLinesDataFrame, or a SpatialPolygonsDataFrame.
 }
-\references{\url{http://www.gdal.org/ogr_formats.html}, \url{http://examples.oreilly.com/webmapping/}}
+\references{\url{https://gdal.org/drivers/vector/index.html}, \url{https://examples.oreilly.com/webmapping/}}
 \author{Roger Bivand}
 
 \note{The bases for this implementation are taken from functions in Barry Rowlingson's draft Rmap package, and from Radim Blazek's v.in.ogr program in GRASS.

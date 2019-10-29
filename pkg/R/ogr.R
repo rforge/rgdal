@@ -8,7 +8,8 @@
 
 #
 ogrInfo <- function(dsn, layer, encoding=NULL,
-  use_iconv=FALSE, swapAxisOrder=FALSE, require_geomType=NULL) {
+  use_iconv=FALSE, swapAxisOrder=FALSE, require_geomType=NULL,
+  morphFromESRI=NULL, dumpSRS=FALSE) {
   if (missing(dsn)) stop("missing dsn")
   stopifnot(is.character(dsn))
   stopifnot(length(dsn) == 1L)
@@ -168,7 +169,14 @@ ogrInfo <- function(dsn, layer, encoding=NULL,
   ogrinfo$deleted_geometries <- deleted_geometries
   ogrinfo$dsn <- dsn
   ogrinfo$layer <- layer
-  ogrinfo$p4s <- OGRSpatialRef(dsn, layer)
+  if (is.null(morphFromESRI)) {
+    if (ogrinfo$driver == "ESRI Shapefile") morphFromESRI <- TRUE
+    else morphFromESRI <- FALSE
+  }
+  if (ogrinfo$driver != "ESRI Shapefile" && morphFromESRI)
+    morphFromESRI <- FALSE
+  ogrinfo$p4s <- OGRSpatialRef(dsn, layer, morphFromESRI=morphFromESRI,
+    dumpSRS=dumpSRS)
   if (!is.null(require_geomType))
     attr(ogrinfo, "require_geomType") <- require_geomType
   if (!is.null(keepGeoms)) attr(ogrinfo, "keepGeoms") <- keepGeoms
@@ -239,17 +247,26 @@ ogrDrivers <- function() {
   res
 }
 
-"OGRSpatialRef" <- function(dsn, layer, morphFromESRI=FALSE) {
+"OGRSpatialRef" <- function(dsn, layer, morphFromESRI=NULL, dumpSRS=FALSE) {
   stopifnot(is.character(dsn))
   stopifnot(length(dsn) == 1L)
+  driver <- attr(ogrListLayers(dsn), "driver")
+  if (is.null(morphFromESRI)) {
+    if (driver == "ESRI Shapefile") morphFromESRI <- TRUE
+    else morphFromESRI <- FALSE
+  }
+  if (driver != "ESRI Shapefile" && morphFromESRI)
+    morphFromESRI <- FALSE
   stopifnot(is.logical(morphFromESRI))
   stopifnot(length(morphFromESRI) == 1L)
 # copy sf::st_read.default usage
   if (length(dsn) == 1 && file.exists(dsn))
     dsn <- enc2utf8(normalizePath(dsn))
   layer <- enc2utf8(layer)
+  stopifnot(is.logical(dumpSRS))
+  stopifnot(length(dumpSRS) == 1)
   .Call("ogrP4S", as.character(dsn), as.character(layer),
-        as.logical(morphFromESRI), PACKAGE="rgdal")
+        as.logical(morphFromESRI), as.logical(dumpSRS), PACKAGE="rgdal")
 }
 
 ogrListLayers <- function(dsn) {

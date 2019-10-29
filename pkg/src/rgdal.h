@@ -105,7 +105,7 @@ SEXP RGDAL_ogrInfo(SEXP ogrsourcename, SEXP Layer);
 SEXP R_OGR_types(SEXP dsn, SEXP layer);
 SEXP RGDAL_ogrFIDs(SEXP filename, SEXP layer);
 SEXP ogr_GetDriverNames(void);
-SEXP ogrP4S(SEXP ogrsourcename, SEXP Layer, SEXP morphFromESRI);
+SEXP ogrP4S(SEXP ogrsourcename, SEXP Layer, SEXP morphFromESRI, SEXP dumpSRS);
 SEXP RGDAL_ogrListLayers (SEXP ogrSource);
 SEXP ogrDataFrame(SEXP ogrSource, SEXP Layer, SEXP FIDs, SEXP iFields);
 SEXP R_OGR_CAPI_features(SEXP dsn, SEXP layer, SEXP comments);

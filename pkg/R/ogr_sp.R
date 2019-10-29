@@ -6,7 +6,8 @@ readOGR <- function(dsn, layer, verbose=TRUE, p4s=NULL,
 	pointDropZ=FALSE, dropNULLGeometries=TRUE, useC=TRUE,
         disambiguateFIDs=FALSE, addCommentsToPolygons=TRUE, encoding=NULL,
         use_iconv=FALSE, swapAxisOrder=FALSE, require_geomType=NULL,
-        integer64="no.loss", GDAL1_integer64_policy=FALSE) {
+        integer64="no.loss", GDAL1_integer64_policy=FALSE,
+        morphFromESRI=NULL, dumpSRS=FALSE) {
 	if (missing(dsn)) stop("missing dsn")
         stopifnot(is.character(dsn))
         stopifnot(length(dsn) == 1L)
@@ -52,7 +53,8 @@ readOGR <- function(dsn, layer, verbose=TRUE, p4s=NULL,
         
 	suppressMessages(ogr_info <- ogrInfo(dsn=dsn, layer=layer,
             encoding=encoding, use_iconv=use_iconv,
-            swapAxisOrder=swapAxisOrder, require_geomType=require_geomType))
+            swapAxisOrder=swapAxisOrder, require_geomType=require_geomType,
+            morphFromESRI=morphFromESRI, dumpSRS=dumpSRS))
         HAS_FEATURES <- TRUE
         if (!ogr_info$have_features) {
             if (dropNULLGeometries) {
@@ -200,10 +202,17 @@ readOGR <- function(dsn, layer, verbose=TRUE, p4s=NULL,
         }
 
 # suggestion by Paul Hiemstra 070817
-        morphFromESRI <- ogr_info$driver == "ESRI Shapefile"
+        if (is.null(morphFromESRI)) {
+            if (ogr_info$driver == "ESRI Shapefile") morphFromESRI <- TRUE
+            else morphFromESRI <- FALSE
+        }
+        if (ogr_info$driver != "ESRI Shapefile" && morphFromESRI)
+            morphFromESRI <- FALSE
         stopifnot(is.logical(morphFromESRI))
         stopifnot(length(morphFromESRI) == 1)
-	prj <- .Call("ogrP4S", as.character(dsn), enc2utf8(as.character(layer)),		as.logical(morphFromESRI), PACKAGE="rgdal")
+        stopifnot(is.logical(dumpSRS))
+        stopifnot(length(dumpSRS) == 1)
+	prj <- .Call("ogrP4S", as.character(dsn), enc2utf8(as.character(layer)),		as.logical(morphFromESRI), as.logical(dumpSRS), PACKAGE="rgdal")
 	if (!is.null(p4s)) {
           if (!is.na(prj)) {
               warning("p4s= argument given as: ", p4s, "\n and read as: ", prj, 

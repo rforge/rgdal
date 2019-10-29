@@ -196,7 +196,7 @@ SEXP ogrAutoIdentifyEPSG(SEXP p4s) {
     return(ans);
 }
 
-SEXP ogrP4S(SEXP ogrsourcename, SEXP Layer, SEXP morphFromESRI) {
+SEXP ogrP4S(SEXP ogrsourcename, SEXP Layer, SEXP morphFromESRI, SEXP dumpSRS) {
 
 #ifdef GDALV2
 //    GDALDriver *poDriver;
@@ -236,6 +236,11 @@ SEXP ogrP4S(SEXP ogrsourcename, SEXP Layer, SEXP morphFromESRI) {
     installErrorHandler();
     hSRS = poLayer->GetSpatialRef();
     uninstallErrorHandlerAndTriggerError();
+
+    installErrorHandler();
+    if (LOGICAL_POINTER(dumpSRS)[0]) hSRS->dumpReadable();
+    uninstallErrorHandlerAndTriggerError();
+
 
     if (hSRS != NULL) {
         installErrorHandler();

@@ -39,7 +39,7 @@ SEXP OGR_write(SEXP inp)
     SEXP ans, wkbtype_attr, comms, ofld_nms;
     int verbose = INTEGER_POINTER(getAttrib(VECTOR_ELT(inp, 5),
         install("verbose")))[0];
-    int pc=0, i, j, k, is_shpfile, shp_edge_case_fix;
+    int pc=0, i, j, k, is_shpfile, shp_edge_case_fix, dumpSRS;
 
     PROTECT(ans = NEW_CHARACTER(1)); pc++;
     PROTECT(wkbtype_attr = NEW_INTEGER(1)); pc++;
@@ -47,6 +47,8 @@ SEXP OGR_write(SEXP inp)
       install("is_shpfile")))[0]; 
     shp_edge_case_fix = INTEGER_POINTER(getAttrib(VECTOR_ELT(inp, 3),
       install("shp_edge_case_fix")))[0]; 
+    dumpSRS = INTEGER_POINTER(getAttrib(VECTOR_ELT(inp, 11), 
+      install("dumpSRS")))[0]; 
 
     installErrorHandler();
 #ifdef GDALV2
@@ -235,6 +237,11 @@ SEXP OGR_write(SEXP inp)
                     poSRS->morphToESRI();
             }
             uninstallErrorHandlerAndTriggerError();*/
+
+            installErrorHandler();
+            if (dumpSRS) poSRS->dumpReadable();
+            uninstallErrorHandlerAndTriggerError();
+
             installErrorHandler();
             poLayer = poDS->CreateLayer( CHAR(STRING_ELT(VECTOR_ELT(inp, 2),
                 0)), poSRS, wkbtype, papszCreateOptionsLayer );
