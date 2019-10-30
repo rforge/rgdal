@@ -222,7 +222,7 @@ readOGR <- function(dsn, layer, verbose=TRUE, p4s=NULL,
           PROJ6 <- substring(as.character(.Call("PROJ4VersionInfo", 
             PACKAGE = "rgdal")[[2]]), 1, 1) >= "6"
           GDAL3 <- substring(getGDALVersionInfo(), 6, 6) >= "3"
-          if (PROJ6 && GDAL3) {
+          if (!is.na(prj) && PROJ6 && GDAL3) {
               if ((!is.null(attr(prj, "datum"))) 
                   && (nchar(attr(prj, "datum")) > 0L)
                   && (length(grep("datum", c(prj))) == 0L)) {
