@@ -23,7 +23,7 @@ extern "C" {
 SEXP P6_SRID_show(SEXP inSRID, SEXP format, SEXP multiline, SEXP in_format,
     SEXP epsg, SEXP out_format) {
 
-#if GDAL_VERSION_MAJOR == 3
+#if GDAL_VERSION_MAJOR >= 3
 
     OGRSpatialReference hSRS = (OGRSpatialReference) NULL;
     char *pszSRS = NULL;
@@ -46,13 +46,7 @@ SEXP P6_SRID_show(SEXP inSRID, SEXP format, SEXP multiline, SEXP in_format,
         uninstallErrorHandlerAndTriggerError();
     } else if (INTEGER_POINTER(in_format)[0] == 3L) {
         installErrorHandler();
-#if GDAL_VERSION_MAJOR == 1 || ( GDAL_VERSION_MAJOR == 2 && GDAL_VERSION_MINOR <= 2 ) // thanks to Even Roualt https://github.com/OSGeo/gdal/issues/681
-//#if GDAL_VERSION_MAJOR <= 2 && GDAL_VERSION_MINOR <= 2
-        if (hSRS.importFromWkt(ppszInput) != OGRERR_NONE) 
-#else
-        if (hSRS.importFromWkt((const char **) CHAR(STRING_ELT(inSRID, 0))) != OGRERR_NONE) 
-#endif
-        {
+        if (hSRS.importFromWkt((const char *) CHAR(STRING_ELT(inSRID, 0))) != OGRERR_NONE) {
             uninstallErrorHandlerAndTriggerError();
 	    error("Can't parse WKT-style parameter string");
         }
@@ -99,6 +93,8 @@ SEXP P6_SRID_show(SEXP inSRID, SEXP format, SEXP multiline, SEXP in_format,
     UNPROTECT(1);
 
     return(ans);
+#else
+    return(R_NilValue);
 #endif
 
 }
