@@ -253,7 +253,7 @@ SEXP ogrP4S(SEXP ogrsourcename, SEXP Layer, SEXP morphFromESRI, SEXP dumpSRS) {
     PROTECT(OSRProjVersion = NEW_INTEGER(3)); pc++;
     INTEGER_POINTER(OSRProjVersion)[0] = pnMajor;
     INTEGER_POINTER(OSRProjVersion)[1] = pnMinor;
-    INTEGER_POINTER(OSRProjVersion)[1] = pnPatch;
+    INTEGER_POINTER(OSRProjVersion)[2] = pnPatch;
 
     installErrorHandler();
     datum = hSRS->GetAttrValue("DATUM");
@@ -262,6 +262,7 @@ SEXP ogrP4S(SEXP ogrsourcename, SEXP Layer, SEXP morphFromESRI, SEXP dumpSRS) {
     if (datum != NULL) SET_STRING_ELT(Datum, 0, COPY_TO_USER_STRING(datum));
 
     PROTECT(ToWGS84 = NEW_CHARACTER(7)); pc++;
+    installErrorHandler();
     for (i=0; i<7; i++) {
         towgs84 = hSRS->GetAttrValue("TOWGS84", i);
         if (towgs84 != NULL) SET_STRING_ELT(ToWGS84, i,
@@ -288,7 +289,12 @@ SEXP ogrP4S(SEXP ogrsourcename, SEXP Layer, SEXP morphFromESRI, SEXP dumpSRS) {
     installErrorHandler();
     delete poDS;
     uninstallErrorHandlerAndTriggerError();
-    UNPROTECT(1);
+
+    setAttrib(ans, install("towgs84"), ToWGS84);
+    setAttrib(ans, install("datum"), Datum);
+    setAttrib(ans, install("OSRProjVersion"), OSRProjVersion);
+
+    UNPROTECT(pc);
     return(ans);
 }
 #ifdef __cplusplus
