@@ -265,8 +265,22 @@ ogrDrivers <- function() {
   layer <- enc2utf8(layer)
   stopifnot(is.logical(dumpSRS))
   stopifnot(length(dumpSRS) == 1)
-  .Call("ogrP4S", as.character(dsn), as.character(layer),
+  res <- .Call("ogrP4S", as.character(dsn), as.character(layer),
         as.logical(morphFromESRI), as.logical(dumpSRS), PACKAGE="rgdal")
+  PROJ6 <- substring(as.character(.Call("PROJ4VersionInfo", 
+    PACKAGE = "rgdal")[[2]]), 1, 1) >= "6"
+  GDAL3 <- substring(getGDALVersionInfo(), 6, 6) >= "3"
+  if (!is.na(res) && PROJ6 && GDAL3) {
+    if ((!is.null(attr(res, "datum"))) && (nchar(attr(res, "datum")) > 0L)
+      && (length(grep("datum", c(res))) == 0L)) {
+      if (get_P6_datum_hard_fail()) 
+        stop("Discarded datum ", attr(res, "datum"), " in CRS definition: ",
+          c(res))
+      else warning("Discarded datum ", attr(res, "datum"),
+        " in CRS definition: ", c(res))
+    }
+  }
+  c(res)
 }
 
 ogrListLayers <- function(dsn) {

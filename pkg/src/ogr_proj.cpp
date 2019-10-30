@@ -1,4 +1,4 @@
-/* Copyright (c) 2006 Roger Bivand
+/* Copyright (c) 2006-2019 Roger Bivand
 * Function using C API and based on GPJ_grass_to_wkt from GRASS gproj
 * library by Paul Kelly and Frank Warmerdam */
 

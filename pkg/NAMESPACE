@@ -28,6 +28,7 @@ export(rgdal_extSoftVersion)
 export(project, make_EPSG, projInfo, getPROJ4VersionInfo, getPROJ4libPath,
   projNAD)
 export(CRSargs, checkCRSArgs)
+export(get_P6_datum_hard_fail, set_P6_datum_hard_fail)
 export(putRasterData, saveDataset, copyDataset, deleteDataset, saveDatasetAs)
 export(getGDALDriverNames, getDriverName, getDriverLongName, gdalDrivers)
 export(getDescription)

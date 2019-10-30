@@ -219,7 +219,21 @@ readOGR <- function(dsn, layer, verbose=TRUE, p4s=NULL,
               "\n read string overridden by given p4s= argument value")
           }
         } else {
-          p4s <- prj
+          PROJ6 <- substring(as.character(.Call("PROJ4VersionInfo", 
+            PACKAGE = "rgdal")[[2]]), 1, 1) >= "6"
+          GDAL3 <- substring(getGDALVersionInfo(), 6, 6) >= "3"
+          if (PROJ6 && GDAL3) {
+              if ((!is.null(attr(prj, "datum"))) 
+                  && (nchar(attr(prj, "datum")) > 0L)
+                  && (length(grep("datum", c(prj))) == 0L)) {
+                  if (get_P6_datum_hard_fail()) 
+                      stop("Discarded datum ", attr(prj, "datum"),
+                          " in CRS definition: ", c(prj))
+                  else warning("Discarded datum ", attr(prj, "datum"),
+                      " in CRS definition: ", c(prj))
+              }
+          }
+          p4s <- c(prj)
         }
 
 	if (!is.na(p4s) && nchar(p4s) == 0) p4s <- as.character(NA)

@@ -25,6 +25,7 @@ load_stuff <- function() {
   assign("OVERRIDE_PROJ_DATUM_WITH_TOWGS84", TRUE, envir=.RGDAL_CACHE)
   assign("silent", TRUE, envir=.RGDAL_CACHE)
   assign("has_proj_def.dat", as.logical(NA), envir=.RGDAL_CACHE)
+  assign("P6_datum_hard_fail", FALSE, envir=.RGDAL_CACHE)
   local_RGDAL_Init() #.Call('RGDAL_Init', PACKAGE="rgdal")
 }
 

@@ -20,6 +20,18 @@ projNAD <- function() {
     .Call("PROJ4NADsInstalled", PACKAGE="rgdal")
 }
 
+get_P6_datum_hard_fail <- function() {
+    get("P6_datum_hard_fail", envir=.RGDAL_CACHE)
+}
+
+set_P6_datum_hard_fail <- function(value) {
+    stopifnot(is.logical(value))
+    stopifnot(length(value) == 1L)
+    stopifnot(!is.na(value))
+    assign("P6_datum_hard_fail", value, envir=.RGDAL_CACHE)
+}
+
+
 "project" <- function(xy, proj, inv=FALSE, use_ob_tran=FALSE, legacy=TRUE, allowNAs_if_not_legacy=FALSE) {
 
     if (!is.numeric(xy)) stop("xy not numeric")

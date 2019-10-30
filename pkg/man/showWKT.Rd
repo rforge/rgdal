@@ -3,6 +3,8 @@
 \alias{showEPSG}
 \alias{showP4}
 \alias{showSRID}
+\alias{get_P6_datum_hard_fail}
+\alias{set_P6_datum_hard_fail}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Show Well-Known Text spatial reference system metadata}
 \description{
@@ -13,6 +15,8 @@ showWKT(p4s, file = NULL, morphToESRI = TRUE)
 showP4(wkt, morphFromESRI=TRUE)
 showEPSG(p4s)
 showSRID(inSRID, format="WKT2", multiline="NO")
+get_P6_datum_hard_fail()
+set_P6_datum_hard_fail(value)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -24,6 +28,7 @@ showSRID(inSRID, format="WKT2", multiline="NO")
   \item{inSRID}{Input coordinate reference string (PROJ >= 6, GDAL <= 3)}
   \item{format}{Output format, default WKT2}
   \item{multiline}{Multiline output, either \code{"NO"} or \code{"YES"}}
+  \item{value}{By default, a deprecated/ignored input DATUM key/value pair on reading a file with PROJ6 will give a warning (default FALSE); if TRUE, an error is triggered, which may be trapped using \code{try}}
 }
 
 \value{
