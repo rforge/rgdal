@@ -235,43 +235,46 @@ SEXP ogrP4S(SEXP ogrsourcename, SEXP Layer, SEXP morphFromESRI, SEXP dumpSRS) {
       error("Cannot open layer");
     }
 
-    PROTECT(ans=NEW_CHARACTER(1)); pc++;
-
     installErrorHandler();
     hSRS = poLayer->GetSpatialRef();
     uninstallErrorHandlerAndTriggerError();
 
-    installErrorHandler();
-    if (LOGICAL_POINTER(dumpSRS)[0]) {
-        hSRS->dumpReadable();
-    }
-    uninstallErrorHandlerAndTriggerError();
+    if (hSRS != NULL) {
+
+        installErrorHandler();
+        if (LOGICAL_POINTER(dumpSRS)[0]) {
+            hSRS->dumpReadable();
+        }
+        uninstallErrorHandlerAndTriggerError();
 
 
 #if GDAL_VERSION_MAJOR >= 3
-    installErrorHandler();
-    OSRGetPROJVersion(&pnMajor, &pnMinor, &pnPatch);
-    uninstallErrorHandlerAndTriggerError();
-    PROTECT(OSRProjVersion = NEW_INTEGER(3)); pc++;
-    INTEGER_POINTER(OSRProjVersion)[0] = pnMajor;
-    INTEGER_POINTER(OSRProjVersion)[1] = pnMinor;
-    INTEGER_POINTER(OSRProjVersion)[2] = pnPatch;
+        installErrorHandler();
+        OSRGetPROJVersion(&pnMajor, &pnMinor, &pnPatch);
+        uninstallErrorHandlerAndTriggerError();
+        PROTECT(OSRProjVersion = NEW_INTEGER(3)); pc++;
+        INTEGER_POINTER(OSRProjVersion)[0] = pnMajor;
+        INTEGER_POINTER(OSRProjVersion)[1] = pnMinor;
+        INTEGER_POINTER(OSRProjVersion)[2] = pnPatch;
 #endif
 
-    installErrorHandler();
-    datum = hSRS->GetAttrValue("DATUM");
-    uninstallErrorHandlerAndTriggerError();
-    PROTECT(Datum = NEW_CHARACTER(1)); pc++;
-    if (datum != NULL) SET_STRING_ELT(Datum, 0, COPY_TO_USER_STRING(datum));
+        installErrorHandler();
+        datum = hSRS->GetAttrValue("DATUM");
+        uninstallErrorHandlerAndTriggerError();
+        PROTECT(Datum = NEW_CHARACTER(1)); pc++;
+        if (datum != NULL) SET_STRING_ELT(Datum, 0, COPY_TO_USER_STRING(datum));
 
-    PROTECT(ToWGS84 = NEW_CHARACTER(7)); pc++;
-    installErrorHandler();
-    for (i=0; i<7; i++) {
-        towgs84 = hSRS->GetAttrValue("TOWGS84", i);
-        if (towgs84 != NULL) SET_STRING_ELT(ToWGS84, i,
-            COPY_TO_USER_STRING(towgs84));
+        PROTECT(ToWGS84 = NEW_CHARACTER(7)); pc++;
+        installErrorHandler();
+        for (i=0; i<7; i++) {
+            towgs84 = hSRS->GetAttrValue("TOWGS84", i);
+            if (towgs84 != NULL) SET_STRING_ELT(ToWGS84, i,
+                COPY_TO_USER_STRING(towgs84));
+        }
+        uninstallErrorHandlerAndTriggerError();
     }
-    uninstallErrorHandlerAndTriggerError();
+
+    PROTECT(ans=NEW_CHARACTER(1)); pc++;
 
 
     if (hSRS != NULL) {
@@ -284,18 +287,19 @@ SEXP ogrP4S(SEXP ogrsourcename, SEXP Layer, SEXP morphFromESRI, SEXP dumpSRS) {
             CPLFree(pszProj4);
 	}
         uninstallErrorHandlerAndTriggerError();
-      } else SET_STRING_ELT(ans, 0, NA_STRING);
+    } else SET_STRING_ELT(ans, 0, NA_STRING);
 
     installErrorHandler();
     delete poDS;
     uninstallErrorHandlerAndTriggerError();
 
-    setAttrib(ans, install("towgs84"), ToWGS84);
-    setAttrib(ans, install("datum"), Datum);
+    if (hSRS != NULL) {
+        setAttrib(ans, install("towgs84"), ToWGS84);
+        setAttrib(ans, install("datum"), Datum);
 #if GDAL_VERSION_MAJOR >= 3
-    setAttrib(ans, install("OSRProjVersion"), OSRProjVersion);
+        setAttrib(ans, install("OSRProjVersion"), OSRProjVersion);
 #endif
-
+    }
     UNPROTECT(pc);
     return(ans);
 }
