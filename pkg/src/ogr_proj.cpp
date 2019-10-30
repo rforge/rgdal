@@ -205,9 +205,14 @@ SEXP ogrP4S(SEXP ogrsourcename, SEXP Layer, SEXP morphFromESRI, SEXP dumpSRS) {
 
     OGRSpatialReference *hSRS = NULL;
     char *pszProj4 = NULL;
-    SEXP ans, Datum, ToWGS84, OSRProjVersion;
-    int i, pc=0;
+    SEXP ans, Datum, ToWGS84;
+
+#if GDAL_VERSION_MAJOR >= 3
+    SEXP OSRProjVersion;
     int pnMajor, pnMinor, pnPatch;
+#endif
+        
+    int i, pc=0;
     const char *datum, *towgs84;
 
     installErrorHandler();
