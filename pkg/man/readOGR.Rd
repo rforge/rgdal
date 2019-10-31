@@ -39,7 +39,7 @@ ogrInfo(dsn, layer, encoding=NULL,
  morphFromESRI = NULL, dumpSRS = FALSE)
 ogrFIDs(dsn, layer)
 ogrDrivers()
-OGRSpatialRef(dsn, layer, morphFromESRI=NULL, dumpSRS = FALSE)
+OGRSpatialRef(dsn, layer, morphFromESRI=NULL, dumpSRS = FALSE, driver = NULL)
 ogrListLayers(dsn)
 \method{print}{ogrinfo}(x, ...)
 }
@@ -64,6 +64,7 @@ ogrListLayers(dsn)
   \item{GDAL1_integer64_policy}{default FALSE, if TRUE, Integer64 fields are read as doubles}
   \item{morphFromESRI}{default NULL, morph from ESRI WKT1 dialect}
   \item{dumpSRS}{dump SRS to stdout from inside GDAL to debug conversion - developer use only}
+  \item{driver}{default NULL, driver found using \code{ogrListLayers} from the data source; otherwise already known and passed through from a calling function}
   \item{x}{ogrinfo object}
   \item{...}{other arguments to print method}
 }

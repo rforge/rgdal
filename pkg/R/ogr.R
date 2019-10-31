@@ -247,10 +247,11 @@ ogrDrivers <- function() {
   res
 }
 
-"OGRSpatialRef" <- function(dsn, layer, morphFromESRI=NULL, dumpSRS=FALSE) {
+"OGRSpatialRef" <- function(dsn, layer, morphFromESRI=NULL, dumpSRS=FALSE,
+  driver=NULL) {
   stopifnot(is.character(dsn))
   stopifnot(length(dsn) == 1L)
-  driver <- attr(ogrListLayers(dsn), "driver")
+  if (is.null(driver)) driver <- attr(ogrListLayers(dsn), "driver")
   if (is.null(morphFromESRI)) {
     if (driver == "ESRI Shapefile") morphFromESRI <- TRUE
     else morphFromESRI <- FALSE
@@ -267,17 +268,13 @@ ogrDrivers <- function() {
   stopifnot(length(dumpSRS) == 1)
   res <- .Call("ogrP4S", as.character(dsn), as.character(layer),
         as.logical(morphFromESRI), as.logical(dumpSRS), PACKAGE="rgdal")
-  PROJ6 <- substring(as.character(.Call("PROJ4VersionInfo", 
-    PACKAGE = "rgdal")[[2]]), 1, 1) >= "6"
-  GDAL3 <- substring(getGDALVersionInfo(), 6, 6) >= "3"
-  if (!is.na(res) && PROJ6 && GDAL3) {
+  if (!is.na(res) && new_proj_and_gdal()) {
     if ((!is.null(attr(res, "datum"))) && (nchar(attr(res, "datum")) > 0L)
       && (length(grep("datum", c(res))) == 0L)) {
-      if (get_P6_datum_hard_fail()) 
-        stop("Discarded datum ", attr(res, "datum"), " in CRS definition: ",
-          c(res))
-      else warning("Discarded datum ", attr(res, "datum"),
-        " in CRS definition: ", c(res))
+      msg <- paste0("Discarded datum ", attr(res, "datum"),
+          " in CRS definition: ", c(res))
+      if (get_P6_datum_hard_fail()) stop(msg)
+      else warning(msg)
     }
   }
   c(res)

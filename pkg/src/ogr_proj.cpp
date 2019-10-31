@@ -206,12 +206,6 @@ SEXP ogrP4S(SEXP ogrsourcename, SEXP Layer, SEXP morphFromESRI, SEXP dumpSRS) {
     OGRSpatialReference *hSRS = NULL;
     char *pszProj4 = NULL;
     SEXP ans, Datum, ToWGS84;
-
-#if GDAL_VERSION_MAJOR >= 3
-    SEXP OSRProjVersion;
-    int pnMajor, pnMinor, pnPatch;
-#endif
-        
     int i, pc=0;
     const char *datum, *towgs84;
 
@@ -246,17 +240,6 @@ SEXP ogrP4S(SEXP ogrsourcename, SEXP Layer, SEXP morphFromESRI, SEXP dumpSRS) {
             hSRS->dumpReadable();
         }
         uninstallErrorHandlerAndTriggerError();
-
-
-#if GDAL_VERSION_MAJOR >= 3
-        installErrorHandler();
-        OSRGetPROJVersion(&pnMajor, &pnMinor, &pnPatch);
-        uninstallErrorHandlerAndTriggerError();
-        PROTECT(OSRProjVersion = NEW_INTEGER(3)); pc++;
-        INTEGER_POINTER(OSRProjVersion)[0] = pnMajor;
-        INTEGER_POINTER(OSRProjVersion)[1] = pnMinor;
-        INTEGER_POINTER(OSRProjVersion)[2] = pnPatch;
-#endif
 
         installErrorHandler();
         datum = hSRS->GetAttrValue("DATUM");
@@ -296,9 +279,6 @@ SEXP ogrP4S(SEXP ogrsourcename, SEXP Layer, SEXP morphFromESRI, SEXP dumpSRS) {
     if (hSRS != NULL) {
         setAttrib(ans, install("towgs84"), ToWGS84);
         setAttrib(ans, install("datum"), Datum);
-#if GDAL_VERSION_MAJOR >= 3
-        setAttrib(ans, install("OSRProjVersion"), OSRProjVersion);
-#endif
     }
     UNPROTECT(pc);
     return(ans);

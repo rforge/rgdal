@@ -11,6 +11,24 @@ PROJis6ormore <- function() {
     verno >= 600
 }
 
+GDALis3ormore <- function() {
+    substring(getGDALVersionInfo(), 6, 6) >= "3"
+}
+
+new_proj_and_gdal <- function() {
+    PROJis6ormore() && GDALis3ormore()
+}
+
+GDAL_OSR_PROJ <- function() {
+    res <- .Call("GDAL_OSR_PROJ_", PACKAGE="rgdal")
+    if (is.null(res)) return(res)
+    res1 <- (res[1]*100)+(res[2]*10)+res[3]
+    verno <- .Call("PROJ4VersionInfo", PACKAGE="rgdal")[[2]]
+    if (res1 != verno) warning("GDAL built with PROJ ", res1,
+        " not running ", verno)
+    res1
+}
+
 getPROJ4libPath <- function() {
     res <- Sys.getenv("PROJ_LIB")
     res

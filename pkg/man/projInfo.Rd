@@ -3,6 +3,10 @@
 \alias{getPROJ4VersionInfo}
 \alias{getPROJ4libPath}
 \alias{projNAD}
+\alias{GDALis3ormore}
+\alias{PROJis6ormore}
+\alias{new_proj_and_gdal}
+\alias{GDAL_OSR_PROJ}
 %\alias{checkCRSArgs}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{List PROJ.4 tag information}
@@ -14,6 +18,10 @@ projInfo(type = "proj")
 getPROJ4VersionInfo()
 getPROJ4libPath()
 projNAD()
+GDAL_OSR_PROJ()
+GDALis3ormore()
+PROJis6ormore()
+new_proj_and_gdal()
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

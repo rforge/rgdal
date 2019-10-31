@@ -202,37 +202,27 @@ readOGR <- function(dsn, layer, verbose=TRUE, p4s=NULL,
         }
 
 # suggestion by Paul Hiemstra 070817
-        if (is.null(morphFromESRI)) {
-            if (ogr_info$driver == "ESRI Shapefile") morphFromESRI <- TRUE
-            else morphFromESRI <- FALSE
-        }
-        if (ogr_info$driver != "ESRI Shapefile" && morphFromESRI)
-            morphFromESRI <- FALSE
-        stopifnot(is.logical(morphFromESRI))
-        stopifnot(length(morphFromESRI) == 1)
-        stopifnot(is.logical(dumpSRS))
-        stopifnot(length(dumpSRS) == 1)
-	prj <- .Call("ogrP4S", as.character(dsn), enc2utf8(as.character(layer)),		as.logical(morphFromESRI), as.logical(dumpSRS), PACKAGE="rgdal")
+#        if (is.null(morphFromESRI)) {
+#            if (ogr_info$driver == "ESRI Shapefile") morphFromESRI <- TRUE
+#            else morphFromESRI <- FALSE
+#        }
+#        if (ogr_info$driver != "ESRI Shapefile" && morphFromESRI)
+#            morphFromESRI <- FALSE
+#        stopifnot(is.logical(morphFromESRI))
+#        stopifnot(length(morphFromESRI) == 1)
+#        stopifnot(is.logical(dumpSRS))
+#        stopifnot(length(dumpSRS) == 1)
+#	prj <- .Call("ogrP4S", as.character(dsn), enc2utf8(as.character(layer)),		as.logical(morphFromESRI), as.logical(dumpSRS), PACKAGE="rgdal")
+
+        prj <- OGRSpatialRef(dsn=dsn, layer=layer, morphFromESRI=morphFromESRI,
+          dumpSRS=dumpSRS, driver=ogr_info$driver)
+
 	if (!is.null(p4s)) {
           if (!is.na(prj)) {
-              warning("p4s= argument given as: ", p4s, "\n and read as: ", prj, 
-              "\n read string overridden by given p4s= argument value")
+            warning("p4s= argument given as: ", p4s, "\n and read as: ",
+              c(prj), "\n read string overridden by given p4s= argument value")
           }
         } else {
-          PROJ6 <- substring(as.character(.Call("PROJ4VersionInfo", 
-            PACKAGE = "rgdal")[[2]]), 1, 1) >= "6"
-          GDAL3 <- substring(getGDALVersionInfo(), 6, 6) >= "3"
-          if (!is.na(prj) && PROJ6 && GDAL3) {
-              if ((!is.null(attr(prj, "datum"))) 
-                  && (nchar(attr(prj, "datum")) > 0L)
-                  && (length(grep("datum", c(prj))) == 0L)) {
-                  if (get_P6_datum_hard_fail()) 
-                      stop("Discarded datum ", attr(prj, "datum"),
-                          " in CRS definition: ", c(prj))
-                  else warning("Discarded datum ", attr(prj, "datum"),
-                      " in CRS definition: ", c(prj))
-              }
-          }
           p4s <- c(prj)
         }
 

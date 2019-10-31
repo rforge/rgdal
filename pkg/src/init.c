@@ -66,6 +66,7 @@ static R_CallMethodDef CallEntries[] = {
     {"RGDAL_ogrDeleteLayer", (DL_FUNC) &RGDAL_ogrDeleteLayer, 3},
     {"RGDAL_ogrDeleteDataSource", (DL_FUNC) &RGDAL_ogrDeleteDataSource, 2},
     {"ogrCheckExists", (DL_FUNC) &ogrCheckExists, 2},
+    {"GDAL_OSR_PROJ_", (DL_FUNC) &GDAL_OSR_PROJ_, 0},
     {"PROJ4VersionInfo", (DL_FUNC) &PROJ4VersionInfo, 0},
     {"PROJ4NADsInstalled", (DL_FUNC) &PROJ4NADsInstalled, 0},
     {"PROJ4_proj_def_dat_Installed", (DL_FUNC) &PROJ4_proj_def_dat_Installed, 0},
