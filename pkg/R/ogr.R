@@ -269,10 +269,15 @@ ogrDrivers <- function() {
   res <- .Call("ogrP4S", as.character(dsn), as.character(layer),
         as.logical(morphFromESRI), as.logical(dumpSRS), PACKAGE="rgdal")
   if (!is.na(res) && new_proj_and_gdal()) {
+    no_towgs84 <- all(nchar(attr(res, "towgs84")) == 0)
+    if ((length(grep("towgs84", c(res))) == 0L) && !no_towgs84)
+      warning("TOWGS84 discarded")
     if ((!is.null(attr(res, "datum"))) && (nchar(attr(res, "datum")) > 0L)
       && (length(grep("datum", c(res))) == 0L)) {
       msg <- paste0("Discarded datum ", attr(res, "datum"),
           " in CRS definition: ", c(res))
+      if (!no_towgs84 && (length(grep("towgs84", c(res))) > 0L))
+        msg <- paste0(msg, ",\n but +towgs84= values preserved")
       if (get_P6_datum_hard_fail()) stop(msg)
       else warning(msg)
     }
