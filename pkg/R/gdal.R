@@ -49,7 +49,13 @@ getGDALCheckVersion <- function() {
 }
 
 getGDALwithGEOS <- function() {
-    .Call("RGDAL_GDALwithGEOS", PACKAGE="rgdal")
+    res <- .Call("RGDAL_GDALwithGEOS", PACKAGE="rgdal")
+    if (is.character(res)) {
+        oo <- strsplit(res, "\n")[[1]]
+        res <- "GEOS_ENABLED=YES" %in% oo
+        attr(res, "GEOS_VERSION") <- substring(oo[grep("GEOS_VERSION", oo)], 14)
+    }
+    res
 }
 
 getGDAL_DATA_Path <- function() {

@@ -20,7 +20,7 @@ new_proj_and_gdal <- function() {
 }
 
 GDAL_OSR_PROJ <- function() {
-    res <- .Call("GDAL_OSR_PROJ_", PACKAGE="rgdal")
+    res <- .Call("R_GDAL_OSR_PROJ", PACKAGE="rgdal")
     if (is.null(res)) return(res)
     res1 <- (res[1]*100)+(res[2]*10)+res[3]
     verno <- .Call("PROJ4VersionInfo", PACKAGE="rgdal")[[2]]

@@ -124,7 +124,7 @@ SEXP PROJ4NADsInstalled(void);
 SEXP PROJ4_proj_def_dat_Installed(void);
 SEXP transform(SEXP fromargs, SEXP toargs, SEXP npts, SEXP x, SEXP y, SEXP z);
 SEXP RGDAL_projInfo(SEXP type);
-SEXP GDAL_OSR_PROJ_();
+SEXP R_GDAL_OSR_PROJ();
 SEXP RGDAL_project(SEXP n, SEXP xlon, SEXP ylat, SEXP projarg, SEXP ob_tran);
 SEXP project_inv(SEXP n, SEXP x, SEXP y, SEXP projarg, SEXP ob_tran);
 

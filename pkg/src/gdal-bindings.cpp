@@ -319,12 +319,20 @@ SEXP
 RGDAL_GDALwithGEOS(void) {
     SEXP ans;
 
+    int withGEOS;
+
+#if GDAL_VERSION_MAJOR >= 3
+
+    PROTECT(ans=NEW_CHARACTER(1));
+    SET_STRING_ELT(ans, 0, COPY_TO_USER_STRING(GDALVersionInfo("BUILD_INFO")));
+
+#else
+
     PROTECT(ans=NEW_LOGICAL(1));
 
     CPLPushErrorHandler(CPLQuietErrorHandler);
     saved_err_no = 0;
 
-    int withGEOS;
     OGRGeometry *poGeometry1, *poGeometry2;
     char* pszWKT;
     pszWKT = (char*) "POINT (10 20)";
@@ -348,8 +356,10 @@ RGDAL_GDALwithGEOS(void) {
 
     CPLPopErrorHandler();
     saved_err_no = 0;
-
     LOGICAL_POINTER(ans)[0] = withGEOS;
+
+#endif
+
     UNPROTECT(1);
 
     return(ans);

@@ -290,7 +290,7 @@ SEXP list_coordinate_ops(SEXP source, SEXP target, SEXP area_of_interest, SEXP s
 
 }
 
-SEXP GDAL_OSR_PROJ_() {
+SEXP R_GDAL_OSR_PROJ() {
 
 #if GDAL_VERSION_MAJOR >= 3
         SEXP OSRProjVersion;
