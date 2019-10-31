@@ -99,6 +99,30 @@ SEXP P6_SRID_show(SEXP inSRID, SEXP format, SEXP multiline, SEXP in_format,
 
 }
 
+SEXP R_GDAL_OSR_PROJ() {
+
+#if GDAL_VERSION_MAJOR >= 3
+        SEXP OSRProjVersion;
+        int pnMajor, pnMinor, pnPatch, pc=0;
+
+        installErrorHandler();
+        OSRGetPROJVersion(&pnMajor, &pnMinor, &pnPatch);
+        uninstallErrorHandlerAndTriggerError();
+
+        PROTECT(OSRProjVersion = NEW_INTEGER(3)); pc++;
+        INTEGER_POINTER(OSRProjVersion)[0] = pnMajor;
+        INTEGER_POINTER(OSRProjVersion)[1] = pnMinor;
+        INTEGER_POINTER(OSRProjVersion)[2] = pnPatch;
+
+        UNPROTECT(pc);
+        return(OSRProjVersion);
+#else
+        return(R_NilValue);
+#endif
+
+}
+
+
 
 SEXP p4s_to_wkt(SEXP p4s, SEXP esri) {
 

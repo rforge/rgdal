@@ -290,30 +290,6 @@ SEXP list_coordinate_ops(SEXP source, SEXP target, SEXP area_of_interest, SEXP s
 
 }
 
-SEXP R_GDAL_OSR_PROJ() {
-
-#if GDAL_VERSION_MAJOR >= 3
-        SEXP OSRProjVersion;
-        int pnMajor, pnMinor, pnPatch;
-
-        installErrorHandler();
-        OSRGetPROJVersion(&pnMajor, &pnMinor, &pnPatch);
-        uninstallErrorHandlerAndTriggerError();
-
-        PROTECT(OSRProjVersion = NEW_INTEGER(3)); pc++;
-        INTEGER_POINTER(OSRProjVersion)[0] = pnMajor;
-        INTEGER_POINTER(OSRProjVersion)[1] = pnMinor;
-        INTEGER_POINTER(OSRProjVersion)[2] = pnPatch;
-
-        UNPROTECT(pc);
-        return(OSRProjVersion);
-#else
-        return(R_NilValue);
-#endif
-
-
-}
-
 
 // blocks error messages in this context
 // https://lists.osgeo.org/pipermail/proj/2019-March/008310.html
