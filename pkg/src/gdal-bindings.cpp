@@ -856,15 +856,25 @@ RGDAL_GetRasterCount(SEXP sDataset) {
 SEXP
 RGDAL_GetProjectionRef(SEXP sDataset) {
 
-  OGRSpatialReference oSRS, oSRS1;
+  OGRSpatialReference oSRS;
   char *pszSRS_WKT = NULL;
-  SEXP ans;
+  SEXP ans, Datum, ToWGS84;
+  int i, pc=0;
+  const char *datum, *towgs84;
+
 
   GDALDataset *pDataset = getGDALDatasetPtr(sDataset);
   
   installErrorHandler();
   pszSRS_WKT = (char*) pDataset->GetProjectionRef();
   uninstallErrorHandlerAndTriggerError();
+
+  if (strlen(pszSRS_WKT) == 0) {
+    PROTECT(ans = NEW_CHARACTER(1)); pc++;
+    SET_STRING_ELT(ans, 0, COPY_TO_USER_STRING(""));
+    UNPROTECT(pc);
+    return(ans);
+  }
 
   installErrorHandler();
 #if GDAL_VERSION_MAJOR == 1 || ( GDAL_VERSION_MAJOR == 2 && GDAL_VERSION_MINOR <= 2 ) // https://github.com/OSGeo/gdal/issues/681
@@ -873,16 +883,47 @@ RGDAL_GetProjectionRef(SEXP sDataset) {
 #else
   oSRS.importFromWkt( (const char*) pszSRS_WKT );
 #endif
-  oSRS.exportToProj4( &pszSRS_WKT );
-
   uninstallErrorHandlerAndTriggerError();
-  PROTECT(ans = NEW_CHARACTER(1));
-  SET_STRING_ELT(ans, 0, COPY_TO_USER_STRING(pszSRS_WKT));
 
-  installErrorHandler();
-  CPLFree( pszSRS_WKT );
-  uninstallErrorHandlerAndTriggerError();
-  UNPROTECT(1);
+  PROTECT(ans = NEW_CHARACTER(1)); pc++;
+
+  if (&oSRS != NULL) {
+
+    installErrorHandler();
+    datum = oSRS.GetAttrValue("DATUM");
+    uninstallErrorHandlerAndTriggerError();
+    PROTECT(Datum = NEW_CHARACTER(1)); pc++;
+    if (datum != NULL) SET_STRING_ELT(Datum, 0, COPY_TO_USER_STRING(datum));
+
+    PROTECT(ToWGS84 = NEW_CHARACTER(7)); pc++;
+    installErrorHandler();
+    for (i=0; i<7; i++) {
+      towgs84 = oSRS.GetAttrValue("TOWGS84", i);
+      if (towgs84 != NULL) SET_STRING_ELT(ToWGS84, i,
+        COPY_TO_USER_STRING(towgs84));
+    }
+    uninstallErrorHandlerAndTriggerError();
+  }
+
+
+  if (&oSRS != NULL) {
+    installErrorHandler();
+    if (oSRS.exportToProj4( &pszSRS_WKT ) != OGRERR_NONE) {
+      SET_STRING_ELT(ans, 0, COPY_TO_USER_STRING(""));
+    } else {
+      SET_STRING_ELT(ans, 0, COPY_TO_USER_STRING(pszSRS_WKT));
+      CPLFree( pszSRS_WKT );
+    }
+    uninstallErrorHandlerAndTriggerError();
+  } else SET_STRING_ELT(ans, 0, COPY_TO_USER_STRING(""));
+
+
+  if (&oSRS != NULL) {
+    setAttrib(ans, install("towgs84"), ToWGS84);
+    setAttrib(ans, install("datum"), Datum);
+  }
+
+  UNPROTECT(pc);
   return(ans);
 
 }
