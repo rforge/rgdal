@@ -421,7 +421,21 @@ getProjectionRef <- function(dataset, OVERRIDE_PROJ_DATUM_WITH_TOWGS84=NULL) {
   } else {
     res <- .Call('RGDAL_GetProjectionRef', dataset, PACKAGE="rgdal")
   }
-  res
+  if (!(nchar(res) == 0L) && new_proj_and_gdal()) {
+    no_towgs84 <- all(nchar(attr(res, "towgs84")) == 0)
+    if ((length(grep("towgs84", c(res))) == 0L) && !no_towgs84)
+      warning("TOWGS84 discarded")
+    if ((!is.null(attr(res, "datum"))) && (nchar(attr(res, "datum")) > 0L)
+      && (length(grep("datum", c(res))) == 0L)) {
+      msg <- paste0("Discarded datum ", attr(res, "datum"),
+          " in CRS definition: ", c(res))
+      if (!no_towgs84 && (length(grep("towgs84", c(res))) > 0L))
+        msg <- paste0(msg, ",\n but +towgs84= values preserved")
+      if (get_P6_datum_hard_fail()) stop(msg)
+      else warning(msg)
+    }
+  }
+  c(res)
 }
 
 putRasterData <- function(dataset,
@@ -766,6 +780,7 @@ get_OVERRIDE_PROJ_DATUM_WITH_TOWGS84 <- function() {
 set_OVERRIDE_PROJ_DATUM_WITH_TOWGS84 <- function(value) {
         stopifnot(is.logical(value))
         stopifnot(length(value) == 1)
+        stopifnot(!is.na(value))
         assign("OVERRIDE_PROJ_DATUM_WITH_TOWGS84", value, envir = .RGDAL_CACHE)
         get_OVERRIDE_PROJ_DATUM_WITH_TOWGS84()
 }
