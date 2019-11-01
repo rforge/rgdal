@@ -113,6 +113,7 @@ ow <- options("warn")$warn
 options("warn"=1)
 cities <- readOGR(dsn=dsn, layer="cities")
 str(slot(cities, "data"))
+if (new_proj_and_gdal()) comment(slot(cities, "proj4string"))
 cities$POPULATION <- type.convert(as.character(cities$POPULATION),
   na.strings="-99", numerals="no.loss")
 str(slot(cities, "data"))
@@ -125,20 +126,26 @@ ogrInfo(dsn=dsn, layer="kiritimati_primary_roads")
 OGRSpatialRef(dsn=dsn, layer="kiritimati_primary_roads")
 kiritimati_primary_roads <- readOGR(dsn=dsn, layer="kiritimati_primary_roads")
 summary(kiritimati_primary_roads)
+if (new_proj_and_gdal()) comment(slot(kiritimati_primary_roads, "proj4string"))
 ogrInfo(dsn=dsn, layer="scot_BNG")
 OGRSpatialRef(dsn=dsn, layer="scot_BNG")
 scot_BNG <- readOGR(dsn=dsn, layer="scot_BNG")
 summary(scot_BNG)
+if (new_proj_and_gdal()) comment(slot(scot_BNG, "proj4string"))
 if ("GML" \%in\% ogrDrivers()$name) {
   dsn <- system.file("vectors/airports.gml", package = "rgdal")[1]
   airports <- try(readOGR(dsn=dsn, layer="airports"))
-  if (class(airports) != "try-error") summary(airports)
+  if (class(airports) != "try-error") {
+    summary(airports)
+    if (new_proj_and_gdal()) comment(slot(airports, "proj4string"))
+  }
 }
 dsn <- system.file("vectors/ps_cant_31.MIF", package = "rgdal")[1]
 ogrInfo(dsn=dsn, layer="ps_cant_31")
 ps_cant_31 <- readOGR(dsn=dsn, layer="ps_cant_31")
 summary(ps_cant_31)
 sapply(as(ps_cant_31, "data.frame"), class)
+if (new_proj_and_gdal()) comment(slot(ps_cant_31, "proj4string"))
 ps_cant_31 <- readOGR(dsn=dsn, layer="ps_cant_31", stringsAsFactors=FALSE)
 summary(ps_cant_31)
 sapply(as(ps_cant_31, "data.frame"), class)
@@ -146,15 +153,23 @@ dsn <- system.file("vectors/Up.tab", package = "rgdal")[1]
 ogrInfo(dsn=dsn, layer="Up")
 Up <- readOGR(dsn=dsn, layer="Up")
 summary(Up)
+if (new_proj_and_gdal()) comment(slot(Up, "proj4string"))
 dsn <- system.file("vectors/test_trk2.gpx", package = "rgdal")[1]
 test_trk2 <- try(readOGR(dsn=dsn, layer="tracks"))
-if (class(test_trk2) != "try-error") summary(test_trk2)
+if (class(test_trk2) != "try-error") {
+  summary(test_trk2)
+  if (new_proj_and_gdal()) comment(slot(test_trk2, "proj4string"))
+}
 test_trk2pts <- try(readOGR(dsn=dsn, layer="track_points"))
-if (class(test_trk2pts) != "try-error") summary(test_trk2pts)
+if (class(test_trk2pts) != "try-error") {
+  summary(test_trk2pts)
+  if (new_proj_and_gdal()) comment(slot(test_trk2pts, "proj4string"))
+}
 dsn <- system.file("vectors", package = "rgdal")[1]
 ogrInfo(dsn=dsn, layer="trin_inca_pl03")
 birds <- readOGR(dsn=dsn, layer="trin_inca_pl03")
 summary(birds)
+if (new_proj_and_gdal()) comment(slot(birds, "proj4string"))
 dsn <- system.file("vectors/PacoursIKA2.TAB", package = "rgdal")[1]
 try(ogrInfo(dsn, "PacoursIKA2"))
 ogrInfo(dsn, "PacoursIKA2", require_geomType="wkbPoint")
