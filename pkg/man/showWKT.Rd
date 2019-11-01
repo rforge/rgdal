@@ -51,6 +51,27 @@ run <- new_proj_and_gdal()
 if (run) {
   cat(showSRID("EPSG:27700", multiline="YES"), "\n")
 }
+if (run) {
+(prj <- showSRID("EPSG:27700", "PROJ"))
+}
+if (run) {
+showSRID(paste0(prj, " +datum=OSGB36"), "WKT1")
+}
+if (run) {
+showSRID(paste0(prj, " +towgs84=370.936,-108.938,435.682"), "WKT1")
+}
+if (run) {
+showSRID(paste0(prj, " +nadgrids=OSTN15_NTv2_OSGBtoETRS.gsb"), "WKT1")
+}
+if (run) {
+showSRID(paste0(prj, " +datum=OSGB36"), "WKT2")
+}
+if (run) {
+showSRID(paste0(prj, " +towgs84=370.936,-108.938,435.682"), "WKT2")
+}
+if (run) {
+showSRID(paste0(prj, " +nadgrids=OSTN15_NTv2_OSGBtoETRS.gsb"), "WKT2")
+}
 }
 \keyword{spatial}
 
