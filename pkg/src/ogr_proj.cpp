@@ -29,6 +29,9 @@ SEXP P6_SRID_show(SEXP inSRID, SEXP format, SEXP multiline, SEXP in_format,
     char *pszSRS = NULL;
     SEXP ans;
     char **papszOptions = NULL;
+    SEXP Datum, ToWGS84;
+    int i, pc=0;
+    const char *datum, *towgs84;
 
     if (INTEGER_POINTER(in_format)[0] == 1L) {
         installErrorHandler();
@@ -60,7 +63,26 @@ SEXP P6_SRID_show(SEXP inSRID, SEXP format, SEXP multiline, SEXP in_format,
         uninstallErrorHandlerAndTriggerError();
     }
 
-    PROTECT(ans=NEW_CHARACTER(1));
+    if (&hSRS != NULL) {
+
+        installErrorHandler();
+        datum = hSRS.GetAttrValue("DATUM");
+        uninstallErrorHandlerAndTriggerError();
+        PROTECT(Datum = NEW_CHARACTER(1)); pc++;
+        if (datum != NULL) SET_STRING_ELT(Datum, 0, COPY_TO_USER_STRING(datum));
+
+        PROTECT(ToWGS84 = NEW_CHARACTER(7)); pc++;
+        installErrorHandler();
+        for (i=0; i<7; i++) {
+            towgs84 = hSRS.GetAttrValue("TOWGS84", i);
+            if (towgs84 != NULL) SET_STRING_ELT(ToWGS84, i,
+                COPY_TO_USER_STRING(towgs84));
+        }
+        uninstallErrorHandlerAndTriggerError();
+    }
+
+
+    PROTECT(ans=NEW_CHARACTER(1)); pc++;
 
     if (INTEGER_POINTER(out_format)[0] == 1L) {
         installErrorHandler();
@@ -90,7 +112,12 @@ SEXP P6_SRID_show(SEXP inSRID, SEXP format, SEXP multiline, SEXP in_format,
 
     CPLFree(pszSRS);
 
-    UNPROTECT(1);
+    if (&hSRS != NULL) {
+        setAttrib(ans, install("towgs84"), ToWGS84);
+        setAttrib(ans, install("datum"), Datum);
+    }
+
+    UNPROTECT(pc);
 
     return(ans);
 #else

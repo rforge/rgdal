@@ -269,7 +269,8 @@ ogrDrivers <- function() {
   res <- .Call("ogrP4S", as.character(dsn), as.character(layer),
         as.logical(morphFromESRI), as.logical(dumpSRS), PACKAGE="rgdal")
   if (!is.na(res) && new_proj_and_gdal()) {
-    no_towgs84 <- all(nchar(attr(res, "towgs84")) == 0)
+    no_towgs84 <- ((is.null(attr(res, "towgs84"))) && 
+      (all(nchar(attr(res, "towgs84")) == 0)))
     if ((length(grep("towgs84", c(res))) == 0L) && !no_towgs84)
       warning("TOWGS84 discarded")
     if ((!is.null(attr(res, "datum"))) && (nchar(attr(res, "datum")) > 0L)

@@ -47,7 +47,7 @@ showP4(showWKT("+init=epsg:28992"))
 showEPSG("+proj=utm +zone=30")
 showEPSG("+proj=longlat +ellps=WGS84")
 exts <- rgdal_extSoftVersion()
-run <- substring(exts["GDAL"], 1, 1) >= "3" && substring(exts["PROJ"], 1, 1) >= "6"
+run <- new_proj_and_gdal()
 if (run) {
   cat(showSRID("EPSG:27700", multiline="YES"), "\n")
 }

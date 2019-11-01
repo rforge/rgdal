@@ -480,9 +480,6 @@ showSRID <- function(inSRID, format="WKT2", multiline="NO") {
     stopifnot(is.character(multiline))
     stopifnot(length(multiline) == 1L)
     if (!(multiline %in% c("YES", "NO"))) stop("invalid multiline value")
-    PROJ6 <- substring(as.character(.Call("PROJ4VersionInfo", 
-        PACKAGE = "rgdal")[[2]]), 1, 1) >= "6"
-    GDAL3 <- substring(getGDALVersionInfo(), 6, 6) >= "3"
     in_format <- as.integer(NA)
     if (substring(inSRID, 1, 1) == "+") in_format = 1L
     if (substring(inSRID, 1, 3) == "urn") in_format = 2L
@@ -493,12 +490,27 @@ showSRID <- function(inSRID, format="WKT2", multiline="NO") {
     if (in_format == 4L) epsg <- as.integer(substring(inSRID, 6, nchar(inSRID)))
     format <- paste0("FORMAT=", format)
     multiline <- paste0("MULTILINE=", multiline)
-    if (PROJ6 && GDAL3) {
+    if (new_proj_and_gdal()) {
         if (!is.na(in_format)) {
             res <- .Call("P6_SRID_show", as.character(inSRID),
                 as.character(format), as.character(multiline), 
                 as.integer(in_format), as.integer(epsg),
                 as.integer(out_format), PACKAGE="rgdal")
+            no_towgs84 <- ((is.null(attr(res, "towgs84"))) && 
+                (all(nchar(attr(res, "towgs84")) == 0)))
+            if ((length(grep("towgs84", c(res))) == 0L) && !no_towgs84)
+                warning("TOWGS84 discarded")
+            if ((!is.null(attr(res, "datum"))) 
+                && (nchar(attr(res, "datum")) > 0L)
+                && (length(grep("datum", c(res))) == 0L)) {
+                msg <- paste0("Discarded datum ", attr(res, "datum"),
+                    " in CRS definition: ", c(res))
+                if (!no_towgs84 && (length(grep("towgs84", c(res))) > 0L))
+                    msg <- paste0(msg, ",\n but +towgs84= values preserved")
+                if (get_P6_datum_hard_fail()) stop(msg)
+                else warning(msg)
+            }
+            res <- c(res)
         } else {
             stop("unknown input format")
         }
