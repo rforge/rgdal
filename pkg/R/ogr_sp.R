@@ -496,15 +496,15 @@ showSRID <- function(inSRID, format="WKT2", multiline="NO") {
                 as.character(format), as.character(multiline), 
                 as.integer(in_format), as.integer(epsg),
                 as.integer(out_format), PACKAGE="rgdal")
-            no_towgs84 <- ((is.null(attr(res, "towgs84"))) && 
+            no_towgs84 <- ((is.null(attr(res, "towgs84"))) || 
                 (all(nchar(attr(res, "towgs84")) == 0)))
-            if ((length(grep("towgs84", c(res))) == 0L) && !no_towgs84)
-                warning("TOWGS84 discarded")
+            if ((length(grep("towgs84|TOWGS84|Position Vector", c(res))) == 0L)
+                && !no_towgs84) warning("TOWGS84 discarded")
             if ((!is.null(attr(res, "datum"))) 
                 && (nchar(attr(res, "datum")) > 0L)
-                && (length(grep("datum", c(res))) == 0L)) {
+                && (length(grep("datum|DATUM", c(res))) == 0L)) {
                 msg <- paste0("Discarded datum ", attr(res, "datum"),
-                    " in CRS definition: ", c(res))
+                    " in CRS definition")
                 if (!no_towgs84 && (length(grep("towgs84", c(res))) > 0L))
                     msg <- paste0(msg, ",\n but +towgs84= values preserved")
                 if (get_P6_datum_hard_fail()) stop(msg)
