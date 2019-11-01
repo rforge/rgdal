@@ -223,11 +223,13 @@ readOGR <- function(dsn, layer, verbose=TRUE, p4s=NULL,
               c(prj), "\n read string overridden by given p4s= argument value")
           }
         } else {
-          p4s <- c(prj)
+          p4s <- prj
         }
 
 	if (!is.na(p4s) && nchar(p4s) == 0) p4s <- as.character(NA)
-
+        if (new_proj_and_gdal()) wkt2 <- comment(p4s)
+        oCRS <- CRS(c(p4s))
+        if (new_proj_and_gdal()) comment(oCRS) <- wkt2
 
 	geometry <- .Call("R_OGR_CAPI_features", as.character(dsn), 
 		enc2utf8(as.character(layer)), comments=addCommentsToPolygons,
@@ -335,7 +337,7 @@ readOGR <- function(dsn, layer, verbose=TRUE, p4s=NULL,
 #		data <- data.frame(dlist)
 		row.names(data) <- NULL
 		res <- SpatialPointsDataFrame(coords=coords, data=data,
-			proj4string=CRS(p4s))
+			proj4string=oCRS)
 	} else if (u_eType == 2) { # lines
 		if (u_with_z != 0) warning("Z-dimension discarded")
 		n <- length(gFeatures)
@@ -354,7 +356,7 @@ readOGR <- function(dsn, layer, verbose=TRUE, p4s=NULL,
 			}
 			lnList[[i]] <- Lines(lnlist, ID=as.character(fids[i]))
 		}
-		SL <- SpatialLines(lnList, proj4string=CRS(p4s))
+		SL <- SpatialLines(lnList, proj4string=oCRS)
 #		data <- data.frame(dlist, row.names=fids)
 		res <- SpatialLinesDataFrame(SL, data)
 	} else if (u_eType == 3) { # polygons
@@ -426,7 +428,7 @@ readOGR <- function(dsn, layer, verbose=TRUE, p4s=NULL,
 		}
                 rm(gFeatures)
                 gc(verbose = FALSE)
-		SP <- SpatialPolygons(plList, proj4string=CRS(p4s))
+		SP <- SpatialPolygons(plList, proj4string=oCRS)
                 rm(plList)
                 gc(verbose = FALSE)
 #		data <- data.frame(dlist, row.names=fids)

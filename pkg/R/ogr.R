@@ -175,8 +175,11 @@ ogrInfo <- function(dsn, layer, encoding=NULL,
   }
   if (ogrinfo$driver != "ESRI Shapefile" && morphFromESRI)
     morphFromESRI <- FALSE
-  ogrinfo$p4s <- OGRSpatialRef(dsn, layer, morphFromESRI=morphFromESRI,
+  p4s0 <- OGRSpatialRef(dsn, layer, morphFromESRI=morphFromESRI,
     dumpSRS=dumpSRS)
+  if (new_proj_and_gdal()) wkt2 <- comment(p4s0)
+  ogrinfo$p4s <- c(p4s0)
+  if (new_proj_and_gdal()) ogrinfo$wkt2 <- wkt2
   if (!is.null(require_geomType))
     attr(ogrinfo, "require_geomType") <- require_geomType
   if (!is.null(keepGeoms)) attr(ogrinfo, "keepGeoms") <- keepGeoms
@@ -266,6 +269,7 @@ ogrDrivers <- function() {
   layer <- enc2utf8(layer)
   stopifnot(is.logical(dumpSRS))
   stopifnot(length(dumpSRS) == 1)
+  wkt2 <- NULL
   res <- .Call("ogrP4S", as.character(dsn), as.character(layer),
         as.logical(morphFromESRI), as.logical(dumpSRS), PACKAGE="rgdal")
   if (!is.na(res) && new_proj_and_gdal()) {
@@ -282,8 +286,11 @@ ogrDrivers <- function() {
       if (get_P6_datum_hard_fail()) stop(msg)
       else warning(msg)
     }
+    if (new_proj_and_gdal()) wkt2 <- attr(res, "WKT2_2018")
   }
-  c(res)
+  res <- c(res)
+  if (new_proj_and_gdal()) comment(res) <- wkt2
+  res
 }
 
 ogrListLayers <- function(dsn) {

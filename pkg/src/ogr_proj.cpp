@@ -259,6 +259,8 @@ SEXP ogrP4S(SEXP ogrsourcename, SEXP Layer, SEXP morphFromESRI, SEXP dumpSRS) {
     SEXP ans, Datum, ToWGS84;
     int i, pc=0;
     const char *datum, *towgs84;
+    SEXP WKT2_2018;
+    char **papszOptions = NULL, *wkt2=NULL;
 
     installErrorHandler();
 #ifdef GDALV2
@@ -292,6 +294,21 @@ SEXP ogrP4S(SEXP ogrsourcename, SEXP Layer, SEXP morphFromESRI, SEXP dumpSRS) {
         }
         uninstallErrorHandlerAndTriggerError();
 
+#if GDAL_VERSION_MAJOR >= 3
+        PROTECT(WKT2_2018 = NEW_CHARACTER(1)); pc++;
+
+        installErrorHandler();
+        papszOptions = CSLAddString(papszOptions, "FORMAT=WKT2_2018");
+        papszOptions = CSLAddString(papszOptions, "MULTILINE=NO");
+        uninstallErrorHandlerAndTriggerError();
+
+        installErrorHandler();
+        if (hSRS->exportToWkt(&wkt2, papszOptions) != OGRERR_NONE) {
+            SET_STRING_ELT(WKT2_2018, 0, NA_STRING);
+        }
+        SET_STRING_ELT(WKT2_2018, 0, COPY_TO_USER_STRING(wkt2));
+        uninstallErrorHandlerAndTriggerError();
+#endif
         installErrorHandler();
         datum = hSRS->GetAttrValue("DATUM");
         uninstallErrorHandlerAndTriggerError();
@@ -330,6 +347,9 @@ SEXP ogrP4S(SEXP ogrsourcename, SEXP Layer, SEXP morphFromESRI, SEXP dumpSRS) {
     if (hSRS != NULL) {
         setAttrib(ans, install("towgs84"), ToWGS84);
         setAttrib(ans, install("datum"), Datum);
+#if GDAL_VERSION_MAJOR >= 3
+        setAttrib(ans, install("WKT2_2018"), WKT2_2018);
+#endif
     }
     UNPROTECT(pc);
     return(ans);
