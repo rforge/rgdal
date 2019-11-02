@@ -178,18 +178,24 @@ proj4string(mg2)
 SP27GTIF <- readGDAL(system.file("pictures/SP27GTIF.TIF", 
 package = "rgdal")[1], output.dim=c(100,100))
 summary(SP27GTIF)
+slot(SP27GTIF, "proj4string")
+if (new_proj_and_gdal()) comment(slot(SP27GTIF, "proj4string"))
 image(SP27GTIF, col=grey(1:99/100))
-
 GDALinfo(system.file("pictures/cea.tif", package = "rgdal")[1])
-GDALSpatialRef(system.file("pictures/cea.tif", package = "rgdal")[1])
+(o <- GDALSpatialRef(system.file("pictures/cea.tif", package = "rgdal")[1]))
+if (new_proj_and_gdal()) comment(o)
 cea <- readGDAL(system.file("pictures/cea.tif", package = "rgdal")[1], 
 output.dim=c(100,100))
 summary(cea)
 image(cea, col=grey(1:99/100))
+slot(cea, "proj4string")
+if (new_proj_and_gdal()) comment(slot(cea, "proj4string"))
 fn <- system.file("pictures/erdas_spnad83.tif", package = "rgdal")[1]
 erdas_spnad83 <- readGDAL(fn, offset=c(50, 100), region.dim=c(400, 400), 
 output.dim=c(100,100))
 summary(erdas_spnad83)
+slot(erdas_spnad83, "proj4string")
+if (new_proj_and_gdal()) comment(slot(erdas_spnad83, "proj4string"))
 image(erdas_spnad83, col=grey(1:99/100))
 erdas_spnad83a <- readGDAL(fn, offset=c(50, 100), region.dim=c(400, 400))
 bbox(erdas_spnad83)

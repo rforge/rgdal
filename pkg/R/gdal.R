@@ -406,6 +406,7 @@ getProjectionRef <- function(dataset, OVERRIDE_PROJ_DATUM_WITH_TOWGS84=NULL) {
 
   vs <- strsplit(strsplit(getGDALVersionInfo(), ",")[[1]][1], " ")[[1]][2]
   env_absent <- is.null(getCPLConfigOption("OVERRIDE_PROJ_DATUM_WITH_TOWGS84"))
+  wkt2 <- NULL
   if ((vs > "1.8.0") && env_absent) {
     if (is.null(OVERRIDE_PROJ_DATUM_WITH_TOWGS84))
       OVERRIDE_PROJ_DATUM_WITH_TOWGS84 <- get_OVERRIDE_PROJ_DATUM_WITH_TOWGS84()
@@ -434,8 +435,11 @@ getProjectionRef <- function(dataset, OVERRIDE_PROJ_DATUM_WITH_TOWGS84=NULL) {
       if (get_P6_datum_hard_fail()) stop(msg)
       else warning(msg)
     }
+    if (new_proj_and_gdal()) wkt2 <- attr(res, "WKT2_2018")
   }
-  c(res)
+  res <- c(res)
+  if (new_proj_and_gdal()) comment(res) <- wkt2
+  res
 }
 
 putRasterData <- function(dataset,

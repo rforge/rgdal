@@ -217,6 +217,9 @@ asGDALROD_SGDF <- function(from) {
 #	p4s <- .Call("RGDAL_GetProjectionRef", x, PACKAGE="rgdal")
 	p4s <- getProjectionRef(x, OVERRIDE_PROJ_DATUM_WITH_TOWGS84=NULL)
 	if (nchar(p4s) == 0) p4s <- as.character(NA)
+        if (new_proj_and_gdal()) wkt2 <- comment(p4s)
+        oCRS <- CRS(c(p4s))
+        if (new_proj_and_gdal()) comment(oCRS) <- wkt2
 	gt = .Call('RGDAL_GetGeoTransform', x, PACKAGE="rgdal")
         if (attr(gt, "CE_Failure")) warning("GeoTransform values not available")
 	if (any(gt[c(3,5)] != 0.0)) stop("Diagonal grid not permitted")
@@ -240,7 +243,7 @@ asGDALROD_SGDF <- function(from) {
 #		names(df) = paste("band", 1:d[3], sep="")
 #	}
 	return(SpatialGridDataFrame(grid = grid, 
-		data = as.data.frame(data), proj4string=CRS(p4s)))
+		data = as.data.frame(data), proj4string=oCRS))
 #		data = data.frame(df), proj4string=CRS(p4s)))
 }
 
@@ -264,6 +267,9 @@ asSGDF_GROD <- function(x, offset, region.dim, output.dim, p4s=NULL, ..., half.c
 #	    p4s <- .Call("RGDAL_GetProjectionRef", x, PACKAGE="rgdal")
 	    p4s <- getProjectionRef(x, OVERRIDE_PROJ_DATUM_WITH_TOWGS84=OVERRIDE_PROJ_DATUM_WITH_TOWGS84)
 	if (nchar(p4s) == 0) p4s <- as.character(NA)
+        if (new_proj_and_gdal()) wkt2 <- comment(p4s)
+        oCRS <- CRS(c(p4s))
+        if (new_proj_and_gdal()) comment(oCRS) <- wkt2
 	gt = .Call('RGDAL_GetGeoTransform', x, PACKAGE="rgdal")
         if (attr(gt, "CE_Failure")) warning("GeoTransform values not available")
 	if (any(gt[c(3,5)] != 0.0)) stop("Diagonal grid not permitted")
@@ -295,7 +301,7 @@ asSGDF_GROD <- function(x, offset, region.dim, output.dim, p4s=NULL, ..., half.c
 #	df1 <- data.frame(df)
 	df1 <- as.data.frame(data)
 	data = SpatialGridDataFrame(grid = grid, 
-		data = df1, proj4string=CRS(p4s))
+		data = df1, proj4string=oCRS)
 	return(data)
 }
 
@@ -328,6 +334,9 @@ readGDAL = function(fname, offset, region.dim, output.dim, band, p4s=NULL, ..., 
 #	    p4s <- .Call("RGDAL_GetProjectionRef", x, PACKAGE="rgdal")
 	    p4s <- getProjectionRef(x, OVERRIDE_PROJ_DATUM_WITH_TOWGS84=OVERRIDE_PROJ_DATUM_WITH_TOWGS84)
 	if (nchar(p4s) == 0) p4s <- as.character(NA)
+        if (new_proj_and_gdal()) wkt2 <- comment(p4s)
+        oCRS <- CRS(c(p4s))
+        if (new_proj_and_gdal()) comment(oCRS) <- wkt2
 	gt = .Call('RGDAL_GetGeoTransform', x, PACKAGE="rgdal")
         if (attr(gt, "CE_Failure")) warning("GeoTransform values not available")
 	# [1] 178400     40      0 334000      0    -40
@@ -382,7 +391,7 @@ readGDAL = function(fname, offset, region.dim, output.dim, band, p4s=NULL, ..., 
 #			names(df) = paste("band", 1:d[3], sep="")
 #		}
 		data = SpatialGridDataFrame(grid = grid, 
-			data = as.data.frame(data), proj4string=CRS(p4s))
+			data = as.data.frame(data), proj4string=oCRS)
 	}
         assign("silent", opSilent, envir=.RGDAL_CACHE)
 	return(data)
