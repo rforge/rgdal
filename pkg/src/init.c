@@ -84,6 +84,7 @@ static R_CallMethodDef CallEntries[] = {
     {"RGDAL_GetRAT", (DL_FUNC) &RGDAL_GetRAT, 1},
     {"RGDAL_GetBandNoDataValue", (DL_FUNC) &RGDAL_GetBandNoDataValue, 1},
     {"RGDAL_SetProject", (DL_FUNC) &RGDAL_SetProject, 2},
+    {"RGDAL_SetProject_WKT2", (DL_FUNC) &RGDAL_SetProject_WKT2, 2},
     {"RGDAL_SetNoDataValue", (DL_FUNC) &RGDAL_SetNoDataValue, 2},
     {"RGDAL_SetStatistics", (DL_FUNC) &RGDAL_SetStatistics, 2},
     {"RGDAL_SetRasterColorTable", (DL_FUNC) &RGDAL_SetRasterColorTable, 4},

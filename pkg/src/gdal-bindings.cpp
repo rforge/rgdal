@@ -1960,6 +1960,35 @@ RGDAL_SetProject(SEXP sxpDataset, SEXP proj4string) {
 
   return(sxpDataset);
 }
+/* added RSB 20191103 */
+SEXP
+RGDAL_SetProject_WKT2(SEXP sxpDataset, SEXP WKT2string) {
+
+#if GDAL_VERSION_MAJOR >= 3
+
+  OGRSpatialReference oSRS;
+
+  GDALDataset *pDataset = getGDALDatasetPtr(sxpDataset);
+
+//Rprintf("%s\n", CHAR(STRING_ELT(WKT2string, 0)));
+
+  installErrorHandler();
+  oSRS.importFromWkt(CHAR(STRING_ELT(WKT2string, 0)));
+  uninstallErrorHandlerAndTriggerError();
+
+  installErrorHandler();
+  OGRErr err = pDataset->SetSpatialRef(&oSRS);
+
+  if (err == CE_Failure) 
+	warning("Failed to set projection\n");
+  uninstallErrorHandlerAndTriggerError();
+
+  return(sxpDataset);
+#else
+  return(R_NilValue);
+#endif
+}
+
 
 SEXP RGDAL_SetRasterColorTable(SEXP raster, SEXP icT, SEXP ricT, SEXP cicT) {
 

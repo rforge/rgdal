@@ -13,6 +13,8 @@
 
 
 .gd_SetProject <- function(object, proj4string) {
+# NOT UPDATED FOR PROJ >= 6
+if (new_proj_and_gdal()) warning("NOT UPDATED FOR PROJ >= 6")
     .Call("RGDAL_SetProject", object, proj4string, PACKAGE="rgdal")
 }
 
@@ -64,6 +66,8 @@ GDALcall <- function(object, option, ...) {
 
 .gd_transform <- function(projfrom, projto, n, x, y, z=NULL) {
 # pkgdown work-around
+# NOT UPDATED FOR PROJ >= 6
+if (new_proj_and_gdal()) warning("NOT UPDATED FOR PROJ >= 6")
   if (is.na(get("has_proj_def.dat", envir=.RGDAL_CACHE))) {
     assign("has_proj_def.dat", .Call("PROJ4_proj_def_dat_Installed",
       PACKAGE="rgdal"), envir=.RGDAL_CACHE)
@@ -79,6 +83,8 @@ GDALcall <- function(object, option, ...) {
 # exported version
 rawTransform <- function(projfrom, projto, n, x, y, z=NULL) {
 # pkgdown work-around
+# NOT UPDATED FOR PROJ >= 6
+if (new_proj_and_gdal()) warning("NOT UPDATED FOR PROJ >= 6")
         if (is.na(get("has_proj_def.dat", envir=.RGDAL_CACHE))) {
           assign("has_proj_def.dat", .Call("PROJ4_proj_def_dat_Installed",
           PACKAGE="rgdal"), envir=.RGDAL_CACHE)

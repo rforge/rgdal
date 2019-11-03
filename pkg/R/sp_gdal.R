@@ -458,12 +458,23 @@ create2GDAL = function(dataset, drivername = "GTiff", type = "Float32", mvFlag =
 		offset[2] + (dims[2] -0.5) * cellsize[2], 0.0, -cellsize[2])
 	.Call("RGDAL_SetGeoTransform", tds.out, gt, PACKAGE = "rgdal")
 
-	p4s <- proj4string(dataset)
-	if (!is.na(p4s) && nchar(p4s) > 0) {
-	    .Call("RGDAL_SetProject", tds.out, p4s, PACKAGE = "rgdal")
+        if (new_proj_and_gdal()) {
+            iCRS <- slot(dataset, "proj4string")
+            wkt2 <- comment(iCRS)
+            if (!is.null(wkt2)) {
+                .Call("RGDAL_SetProject_WKT2", tds.out, wkt2, PACKAGE = "rgdal")
+            } else {
+                if (getDriverName(getDriver(tds.out)) == "RST") 
+                    stop("RST files must have a valid CRS")
+            }
         } else {
-            if (getDriverName(getDriver(tds.out)) == "RST") 
-                stop("RST files must have a valid coordinate reference system")
+	    p4s <- proj4string(dataset)
+	    if (!is.na(p4s) && nchar(p4s) > 0) {
+	        .Call("RGDAL_SetProject", tds.out, p4s, PACKAGE = "rgdal")
+            } else {
+                if (getDriverName(getDriver(tds.out)) == "RST") 
+                    stop("RST files must have a valid CRS")
+            }
         }
         if (!is.null(colorTables)) {
             stopifnot(is.list(colorTables))

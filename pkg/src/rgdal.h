@@ -64,6 +64,7 @@ SEXP RGDAL_GetGeoTransform(SEXP sxpDataset);
 SEXP RGDAL_SetGeoTransform(SEXP sxpDataset, SEXP GeoTransform);
 SEXP RGDAL_GetMetadata(SEXP sDataset, SEXP tag);
 SEXP RGDAL_SetProject(SEXP sxpDataset, SEXP proj4string);
+SEXP RGDAL_SetProject_WKT2(SEXP sxpDataset, SEXP WKT2string);
 SEXP RGDAL_SetNoDataValue(SEXP sxpRasterBand, SEXP NoDataValue);
 
 SEXP RGDAL_GetRasterYSize(SEXP sDataset);
