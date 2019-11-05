@@ -211,10 +211,34 @@ SEXP OGR_write(SEXP inp)
 #endif
 
     SEXP p4s = GET_SLOT(obj, install("proj4string"));
-// const added 070604 RSB
-    const char *PROJ4 = CHAR(STRING_ELT(GET_SLOT(p4s, install("projargs")), 0));
+    SEXP comment = getAttrib(p4s, install("comment"));
+    if (comment != R_NilValue) {
+//        Rprintf("CRS comment: %s\n", CHAR(STRING_ELT(comment, 0)));
+        OGRSpatialReference* poSRS =
+            (OGRSpatialReference*)OSRNewSpatialReference(NULL);//FIXME VG
+        installErrorHandler();
+        if (poSRS->importFromWkt(CHAR(STRING_ELT(comment, 0))) != OGRERR_NONE) { //FIXME VG
+            GDALClose( poDS );
+            poSRS->Release();
+            uninstallErrorHandlerAndTriggerError();
+            error("Can't parse WKT2-style parameter string");
+        }
+        uninstallErrorHandlerAndTriggerError();
 
-    if (strcmp(PROJ4, "NA")) {
+        installErrorHandler();
+        if (dumpSRS) poSRS->dumpReadable();
+        uninstallErrorHandlerAndTriggerError();
+
+        installErrorHandler();
+        poLayer = poDS->CreateLayer( CHAR(STRING_ELT(VECTOR_ELT(inp, 2),
+            0)), poSRS, wkbtype, papszCreateOptionsLayer );
+        uninstallErrorHandlerAndTriggerError();
+
+    } else {
+// const added 070604 RSB
+        const char *PROJ4 = CHAR(STRING_ELT(GET_SLOT(p4s, install("projargs")), 0));
+
+        if (strcmp(PROJ4, "NA")) {
 //            OGRSpatialReference hSRS = NULL;
 //            OGRSpatialReference* poSRS = new OGRSpatialReference();
             OGRSpatialReference* poSRS =
@@ -247,11 +271,12 @@ SEXP OGR_write(SEXP inp)
                 0)), poSRS, wkbtype, papszCreateOptionsLayer );
             uninstallErrorHandlerAndTriggerError();
 
-    } else {
-        installErrorHandler();
-        poLayer = poDS->CreateLayer( CHAR(STRING_ELT(VECTOR_ELT(inp, 2),
-            0)), NULL, wkbtype, papszCreateOptionsLayer );
-        uninstallErrorHandlerAndTriggerError();
+        } else {
+            installErrorHandler();
+            poLayer = poDS->CreateLayer( CHAR(STRING_ELT(VECTOR_ELT(inp, 2),
+                0)), NULL, wkbtype, papszCreateOptionsLayer );
+            uninstallErrorHandlerAndTriggerError();
+        }
     }
     if( poLayer == NULL )
     {

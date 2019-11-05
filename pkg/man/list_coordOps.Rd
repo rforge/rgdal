@@ -4,8 +4,8 @@
 \title{List PROJ 6 coordinate operations}
 \description{List PROJ 6 coordinate operations for a pair of source/target coordinate reference systems}
 \usage{
-list_coordOps(src_crs, tgt_crs, area_of_interest = as.numeric(NA), strict_containment = FALSE,
- visualization_order = TRUE)
+list_coordOps(src_crs, tgt_crs, area_of_interest = as.numeric(NA), 
+ strict_containment = FALSE, visualization_order = TRUE)
 }
 
 \arguments{
