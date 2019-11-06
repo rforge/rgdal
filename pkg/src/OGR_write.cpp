@@ -212,12 +212,21 @@ SEXP OGR_write(SEXP inp)
 
     SEXP p4s = GET_SLOT(obj, install("proj4string"));
     SEXP comment = getAttrib(p4s, install("comment"));
-    if (comment != R_NilValue) {
+    char **ppszInput = NULL;
+
+    if (!isNull(comment)) {
 //        Rprintf("CRS comment: %s\n", CHAR(STRING_ELT(comment, 0)));
         OGRSpatialReference* poSRS =
             (OGRSpatialReference*)OSRNewSpatialReference(NULL);//FIXME VG
+        ppszInput = CSLAddString(ppszInput, CHAR(STRING_ELT(comment, 0)));//FIXME VG
+
         installErrorHandler();
-        if (poSRS->importFromWkt(CHAR(STRING_ELT(comment, 0))) != OGRERR_NONE) { //FIXME VG
+#if GDAL_VERSION_MAJOR == 1 || ( GDAL_VERSION_MAJOR == 2 && GDAL_VERSION_MINOR <= 2 ) // thanks to Even Roualt https://github.com/OSGeo/gdal/issues/681
+//#if GDAL_VERSION_MAJOR <= 2 && GDAL_VERSION_MINOR <= 2
+        if (poSRS->importFromWkt(ppszInput) != OGRERR_NONE) {
+#else
+        if (poSRS->importFromWkt((const char **) ppszInput) != OGRERR_NONE) {
+#endif
             GDALClose( poDS );
             poSRS->Release();
             uninstallErrorHandlerAndTriggerError();
