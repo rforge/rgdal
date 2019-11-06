@@ -259,7 +259,6 @@ SEXP ogrP4S(SEXP ogrsourcename, SEXP Layer, SEXP morphFromESRI, SEXP dumpSRS) {
     SEXP ans, Datum, ToWGS84;
     int i, pc=0;
     const char *datum, *towgs84;
-    char **papszOptions = NULL;
 
     installErrorHandler();
 #ifdef GDALV2
@@ -298,6 +297,7 @@ SEXP ogrP4S(SEXP ogrsourcename, SEXP Layer, SEXP morphFromESRI, SEXP dumpSRS) {
 #if GDAL_VERSION_MAJOR >= 3
         SEXP WKT2_2018;
         char *wkt2=NULL;
+        char **papszOptions = NULL;
         PROTECT(WKT2_2018 = NEW_CHARACTER(1)); pc++;
 
         installErrorHandler();
