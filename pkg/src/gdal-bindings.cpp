@@ -870,8 +870,9 @@ RGDAL_GetProjectionRef(SEXP sDataset) {
   pszSRS_WKT = (char*) pDataset->GetProjectionRef();
   uninstallErrorHandlerAndTriggerError();
 
+  PROTECT(ans = NEW_CHARACTER(1)); pc++;
+
   if (strlen(pszSRS_WKT) == 0) {
-    PROTECT(ans = NEW_CHARACTER(1)); pc++;
     SET_STRING_ELT(ans, 0, COPY_TO_USER_STRING(""));
     UNPROTECT(pc);
     return(ans);
@@ -885,8 +886,6 @@ RGDAL_GetProjectionRef(SEXP sDataset) {
   oSRS.importFromWkt( (const char*) pszSRS_WKT );
 #endif
   uninstallErrorHandlerAndTriggerError();
-
-  PROTECT(ans = NEW_CHARACTER(1)); pc++;
 
   if (&oSRS != NULL) {
 
@@ -921,6 +920,7 @@ RGDAL_GetProjectionRef(SEXP sDataset) {
     }
     SET_STRING_ELT(WKT2_2018, 0, COPY_TO_USER_STRING(wkt2));
     uninstallErrorHandlerAndTriggerError();
+    setAttrib(ans, install("WKT2_2018"), WKT2_2018);
 #endif
   }
 
@@ -939,9 +939,6 @@ RGDAL_GetProjectionRef(SEXP sDataset) {
   if (&oSRS != NULL) {
     setAttrib(ans, install("towgs84"), ToWGS84);
     setAttrib(ans, install("datum"), Datum);
-#if GDAL_VERSION_MAJOR >= 3
-    setAttrib(ans, install("WKT2_2018"), WKT2_2018);
-#endif
   }
 
   UNPROTECT(pc);

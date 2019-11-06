@@ -285,6 +285,8 @@ SEXP ogrP4S(SEXP ogrsourcename, SEXP Layer, SEXP morphFromESRI, SEXP dumpSRS) {
     hSRS = poLayer->GetSpatialRef();
     uninstallErrorHandlerAndTriggerError();
 
+    PROTECT(ans=NEW_CHARACTER(1)); pc++;
+
     if (hSRS != NULL) {
 
         installErrorHandler();
@@ -309,6 +311,7 @@ SEXP ogrP4S(SEXP ogrsourcename, SEXP Layer, SEXP morphFromESRI, SEXP dumpSRS) {
         }
         SET_STRING_ELT(WKT2_2018, 0, COPY_TO_USER_STRING(wkt2));
         uninstallErrorHandlerAndTriggerError();
+        setAttrib(ans, install("WKT2_2018"), WKT2_2018);
 #endif
         installErrorHandler();
         datum = hSRS->GetAttrValue("DATUM");
@@ -325,8 +328,6 @@ SEXP ogrP4S(SEXP ogrsourcename, SEXP Layer, SEXP morphFromESRI, SEXP dumpSRS) {
         }
         uninstallErrorHandlerAndTriggerError();
     }
-
-    PROTECT(ans=NEW_CHARACTER(1)); pc++;
 
 
     if (hSRS != NULL) {
@@ -348,9 +349,6 @@ SEXP ogrP4S(SEXP ogrsourcename, SEXP Layer, SEXP morphFromESRI, SEXP dumpSRS) {
     if (hSRS != NULL) {
         setAttrib(ans, install("towgs84"), ToWGS84);
         setAttrib(ans, install("datum"), Datum);
-#if GDAL_VERSION_MAJOR >= 3
-        setAttrib(ans, install("WKT2_2018"), WKT2_2018);
-#endif
     }
     UNPROTECT(pc);
     return(ans);
