@@ -862,7 +862,7 @@ RGDAL_GetProjectionRef(SEXP sDataset) {
   int i, pc=0;
   const char *datum, *towgs84;
   SEXP WKT2_2018;
-  char **papszOptions = NULL, *wkt2=NULL;
+  char **papszOptions = NULL;
 
   GDALDataset *pDataset = getGDALDatasetPtr(sDataset);
   
@@ -906,6 +906,8 @@ RGDAL_GetProjectionRef(SEXP sDataset) {
     uninstallErrorHandlerAndTriggerError();
 
 #if GDAL_VERSION_MAJOR >= 3
+    SEXP WKT2_2018;
+    char *wkt2=NULL;
     PROTECT(WKT2_2018 = NEW_CHARACTER(1)); pc++;
 
     installErrorHandler();
