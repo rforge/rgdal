@@ -190,7 +190,7 @@ SEXP wkt_to_p4s(SEXP wkt, SEXP esri) {
     if (hSRS.importFromWkt(ppszInput) != OGRERR_NONE) 
 #else
     if (hSRS.importFromWkt((const char **) ppszInput) != OGRERR_NONE) 
-#endif
+#endif 
     {
         uninstallErrorHandlerAndTriggerError();
 	error("Can't parse WKT-style parameter string");
