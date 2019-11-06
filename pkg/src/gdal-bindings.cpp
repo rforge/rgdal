@@ -874,7 +874,7 @@ RGDAL_GetProjectionRef(SEXP sDataset) {
 
   if (strlen(pszSRS_WKT) == 0) {
     SET_STRING_ELT(ans, 0, COPY_TO_USER_STRING(""));
-    UNPROTECT(pc);
+    UNPROTECT(pc); 
     return(ans);
   }
 
