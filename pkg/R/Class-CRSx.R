@@ -1,4 +1,4 @@
-# Copyright (c) 2003-4 by Barry Rowlingson and Roger Bivand
+# Copyright (c) 2003-19 by Barry Rowlingson and Roger Bivand
 
 #.valid.CRSobj <- function(object) {
 #	if (exists("is.R") && is.function(is.R) && is.R()) {
