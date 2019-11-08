@@ -444,6 +444,14 @@ if test -n "${PROJ_VERSION}" ; then
   fi
 fi
 
+AC_MSG_CHECKING([Using GDAL < 3 with PROJ >= 6])
+if test ${GDAL_MAJOR} -lt 3 -a ${PROJ_VERSION_DOT} -ge 600; then
+    AC_MSG_RESULT(yes)
+    AC_MSG_WARN([GDAL >= 3 should be used with PROJ >= 6])
+  else
+    AC_MSG_RESULT(no)
+fi
+
 AC_MSG_CHECKING([PROJ version >= 4.8.0])
 if test ${PROJ_VERSION_H} -lt 480 ; then
   AC_MSG_RESULT(no)

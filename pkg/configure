@@ -2274,6 +2274,18 @@ $as_echo "no" >&6; }
   fi
 fi
 
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking Using GDAL < 3 with PROJ >= 6" >&5
+$as_echo_n "checking Using GDAL < 3 with PROJ >= 6... " >&6; }
+if test ${GDAL_MAJOR} -lt 3 -a ${PROJ_VERSION_DOT} -ge 600; then
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: GDAL >= 3 should be used with PROJ >= 6" >&5
+$as_echo "$as_me: WARNING: GDAL >= 3 should be used with PROJ >= 6" >&2;}
+  else
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking PROJ version >= 4.8.0" >&5
 $as_echo_n "checking PROJ version >= 4.8.0... " >&6; }
 if test ${PROJ_VERSION_H} -lt 480 ; then
