@@ -32,7 +32,7 @@
 	} else return(as.character(NA))
 }
 
-checkCRSArgs <- function(uprojargs) {
+checkCRSArgs <- function(uprojargs=NA_character_) {
 # pkgdown work-around
   if (is.na(get("has_proj_def.dat", envir=.RGDAL_CACHE))) {
     assign("has_proj_def.dat", .Call("PROJ4_proj_def_dat_Installed",
@@ -69,6 +69,47 @@ checkCRSArgs <- function(uprojargs) {
   if (no_off) {
       if (length(grep("+no_off", res[[2]], fixed=TRUE)) == 0)
           res[[2]] <- sub("+no_defs", "+no_off +no_defs", res[[2]], fixed=TRUE)
+  }
+  res
+}
+
+checkCRSArgs_ng <- function(uprojargs=NA_character_, SRS_string=NULL) {
+  no_SRS <- is.null(SRS_string)
+  no_PROJ <- is.na(uprojargs)
+  res <- vector(mode="list", length=3L)
+  res[[1]] <- FALSE
+  res[[2]] <- NA_character_
+  res[[3]] <- NA_character_
+  if (!no_SRS) {
+    stopifnot(is.character(SRS_string))
+    stopifnot(length(SRS_string) == 1L)
+  }
+  if (!no_PROJ) {
+    stopifnot(is.character(uprojargs))
+    stopifnot(length(uprojargs) == 1L)
+  }
+  if (!no_SRS) {
+    uprojargs1 <- try(showSRID(SRS_string, format="PROJ", multiline="NO"))
+    if (inherits(uprojargs1, "try-error")) {
+      res[[1]] <- FALSE
+      res[[2]] <- NA_character_
+    } else {
+      res[[1]] <- TRUE
+      res[[2]] <- uprojargs1
+    }
+    wkt2 <- try(showSRID(SRS_string, format="WKT2", multiline="NO"))
+    if (!inherits(wkt2, "try-error")) res[[3]] <- wkt2
+  } else if (!no_PROJ) {
+    uprojargs1 <- try(showSRID(uprojargs, format="PROJ", multiline="NO"))
+    if (inherits(uprojargs1, "try-error")) {
+      res[[1]] <- FALSE
+      res[[2]] <- NA_character_
+    } else {
+      res[[1]] <- TRUE
+      res[[2]] <- uprojargs1
+    }
+    wkt2 <- try(showSRID(uprojargs, format="WKT2", multiline="NO"))
+    if (!inherits(wkt2, "try-error")) res[[3]] <- wkt2
   }
   res
 }

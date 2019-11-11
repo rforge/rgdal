@@ -4,6 +4,7 @@
 \alias{CRS}
 \alias{CRSargs}
 \alias{checkCRSArgs}
+\alias{checkCRSArgs_ng}
 \alias{print.CRS}
 \alias{show,CRS-method}
 \alias{RGDAL_checkCRSArgs}
@@ -26,9 +27,10 @@ Objects can be created by calls of the form \code{CRS("projargs")}, where "proja
 
 \usage{
 checkCRSArgs(uprojargs)
-}
+checkCRSArgs_ng(uprojargs=NA_character_, SRS_string=NULL)}
 \arguments{
   \item{uprojargs}{character string PROJ.4 projection arguments}
+  \item{SRS_string}{default NULL, experimental in connection with adaptation to GDAL>=3/PROJ>=6; a valid WKT string or SRS definition such as \code{"EPSG:4326"}}
 }
 \references{\url{http://proj.org/}}
 \author{Roger Bivand \email{Roger.Bivand@nhh.no}}
@@ -41,7 +43,7 @@ The 4.9.1 release of PROJ.4 omitted a small file of defaults, leading to reports
 
 \examples{
 CRSargs(CRS("+proj=longlat"))
-try(CRS("+proj=longlat +no_defs"))
+try(CRS("+proj=longlat"))
 CRSargs(CRS("+proj=longlat +datum=NAD27"))
 CRSargs(CRS("+init=epsg:4267"))
 CRSargs(CRS("+init=epsg:26978"))
