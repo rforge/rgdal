@@ -483,6 +483,7 @@ showSRID <- function(inSRID, format="WKT2", multiline="NO") {
     stopifnot(length(multiline) == 1L)
     if (!(multiline %in% c("YES", "NO"))) stop("invalid multiline value")
     in_format <- as.integer(NA)
+    if (substring(inSRID, 1, 1) == " ") stop("string starts with space")
     if (substring(inSRID, 1, 1) == "+") in_format = 1L
     if (substring(inSRID, 1, 3) == "urn") in_format = 2L
     if (substring(inSRID, 1, 1) == "P") in_format = 3L
