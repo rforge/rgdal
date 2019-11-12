@@ -67,7 +67,7 @@ The following examples will contrast the behaviour of PROJ4/GDAL2 (similar to PR
 
 This function is used for both raster and vector data read through GDAL to provide the PROJ 4 string used to specify the coordinate reference system of **sp** `"Spatial"` objects using the `"CRS"` (S4, new style) class. Such classes cannot be modified without making it impossible for users to load serialised objects, such as **sp** RDS objects from GADM [for example for Norway](https://gadm.org/download_country_v3.html).
 
-My fork of **sp** (https://github.com/rsbivand/sp) is currently at 1.3-3 or higher, and contains extra code conditionally using the **rgdal** R-Forge repository at 1.5-1 or higher. The commented out blocks were generated on a Windows platform, using PROJ4/GDAL2.
+My fork of **sp** (https://github.com/rsbivand/sp) is currently at 1.3-3 or higher, and contains extra code conditionally using the development version of **rgdal** on the R-Forge repository at 1.5-1 or higher. The commented out blocks marked PROJ4/GDAL2 were generated on a Windows platform with **sp** 1.3-2 and **rgdal** 1.4-7, using PROJ4/GDAL2. The other commented out blocks were **sp** fork and **rgdal** development version, revision 886. The uncommented output is what the package build platform put there.
 
 
 ```{r}
@@ -76,7 +76,11 @@ packageVersion("sp")
 ```
 
 ```{r}
-## [1] '1.3.2'
+## [1] '1.3.3'
+```
+
+```{r}
+## PROJ4/GDAL2 [1] '1.3.2'
 ```
 
 The `"CRS"` class definition is unchanged going forward to maintain backward compatibility.
@@ -90,8 +94,13 @@ rgdal::rgdal_extSoftVersion()
 ```
 
 ```{r}
-##           GDAL GDAL_with_GEOS         PROJ.4             sp 
-##        "2.2.3"         "TRUE"        "4.9.3"        "1.3-1"
+##           GDAL GDAL_with_GEOS           PROJ             sp 
+##        "3.0.2"         "TRUE"        "6.2.1"        "1.3-3"
+```
+
+```{r}
+## PROJ4/GDAL2           GDAL GDAL_with_GEOS         PROJ.4             sp 
+## PROJ4/GDAL2        "2.2.3"         "TRUE"        "4.9.3"        "1.3-1"
 ```
 
 ```{r}
@@ -99,7 +108,11 @@ packageVersion("rgdal")
 ```
 
 ```{r}
-## [1] '1.4.7'
+## [1] '1.5.1'
+```
+
+```{r}
+## PROJ4/GDAL2 [1] '1.4.7'
 ```
 
 The changes introduced affect `CRS()` when **rgdal** is available; if **rgdal** is not available, it is just a lightly checked string. Because some terms are deprecated or defunct, we need to be careful. GDAL's `exportToProj4()` uses the PROJ `proj_as_proj_string()` function in its new API to return the PROJ string. Terms which are deprecated or defunct may be omitted. In the PROJ6+/GDAL3+ case, `CRS()` calls `rgdal::checkCRSArgs_ng()`, calling `RGDAL_checkCRSArgs()`, a compiled function
@@ -109,13 +122,24 @@ The changes introduced affect `CRS()` when **rgdal** is available; if **rgdal** 
 ```
 
 ```{r}
+## Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO"):
+## Discarded datum Unknown_based_on_WGS84_ellipsoid in CRS definition
+
+## CRS arguments: +proj=longlat +ellps=WGS84 +no_defs
+```
+
+```{r}
 comment(crs)
+```
+
+```{r}
+## [1] "GEOGCRS[\"unknown\",DATUM[\"Unknown based on WGS84 ellipsoid\",ELLIPSOID[\"WGS 84\",6378137,298.257223563,LENGTHUNIT[\"metre\",1],ID[\"EPSG\",7030]]],PRIMEM[\"Greenwich\",0,ANGLEUNIT[\"degree\",0.0174532925199433],ID[\"EPSG\",8901]],CS[ellipsoidal,2],AXIS[\"longitude\",east,ORDER[1],ANGLEUNIT[\"degree\",0.0174532925199433,ID[\"EPSG\",9122]]],AXIS[\"latitude\",north,ORDER[2],ANGLEUNIT[\"degree\",0.0174532925199433,ID[\"EPSG\",9122]]]]"
 ```
 
 For the PROJ4/GDAL2 (and similar) cases, if **rgdal** is available, `CRS()` calls `rgdal::checkCRSArgs()`, calling `RGDAL_checkCRSArgs()`, a compiled function, which calls `pj_init_plus()` in PROJ to check the validity of the string and possibly expand terms. If this succeeds, `pj_get_def()` is used to return the PROJ string. Both of these functions are part of the deprecated PROJ API that is still accessible in PROJ 6, but will soon be made defunct. 
 
 ```{r}
-## CRS arguments: +proj=longlat +ellps=WGS84
+## PROJ4/GDAL2 CRS arguments: +proj=longlat +ellps=WGS84
 ```
 
 
@@ -124,12 +148,20 @@ For the PROJ4/GDAL2 (and similar) cases, if **rgdal** is available, `CRS()` call
 ```
 
 ```{r}
+## CRS arguments: +proj=longlat +datum=WGS84 +no_defs
+```
+
+```{r}
 comment(crs)
 ```
 
 ```{r}
-## CRS arguments:
-##  +proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0
+## [1] "GEOGCRS[\"unknown\",DATUM[\"World Geodetic System 1984\",ELLIPSOID[\"WGS 84\",6378137,298.257223563,LENGTHUNIT[\"metre\",1]],ID[\"EPSG\",6326]],PRIMEM[\"Greenwich\",0,ANGLEUNIT[\"degree\",0.0174532925199433],ID[\"EPSG\",8901]],CS[ellipsoidal,2],AXIS[\"longitude\",east,ORDER[1],ANGLEUNIT[\"degree\",0.0174532925199433,ID[\"EPSG\",9122]]],AXIS[\"latitude\",north,ORDER[2],ANGLEUNIT[\"degree\",0.0174532925199433,ID[\"EPSG\",9122]]]]"
+```
+
+```{r}
+## PROJ4/GDAL2 CRS arguments:
+## PROJ4/GDAL2  +proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0
 ```
 
 
@@ -138,12 +170,24 @@ comment(crs)
 ```
 
 ```{r}
+## Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO"): Discarded datum WGS_1984 in CRS definition,
+##  but +towgs84= values preserved
+
+## CRS arguments:
+##  +proj=longlat +ellps=WGS84 +towgs84=0,0,0,0,0,0,0 +no_defs
+```
+
+```{r}
 comment(crs)
 ```
 
 ```{r}
-## CRS arguments:
-##  +proj=longlat +towgs84=0,0,0 +ellps=WGS84
+## [1] "BOUNDCRS[SOURCECRS[GEOGCRS[\"unknown\",DATUM[\"World Geodetic System 1984\",ELLIPSOID[\"WGS 84\",6378137,298.257223563,LENGTHUNIT[\"metre\",1]],ID[\"EPSG\",6326]],PRIMEM[\"Greenwich\",0,ANGLEUNIT[\"degree\",0.0174532925199433],ID[\"EPSG\",8901]],CS[ellipsoidal,2],AXIS[\"longitude\",east,ORDER[1],ANGLEUNIT[\"degree\",0.0174532925199433,ID[\"EPSG\",9122]]],AXIS[\"latitude\",north,ORDER[2],ANGLEUNIT[\"degree\",0.0174532925199433,ID[\"EPSG\",9122]]]]],TARGETCRS[GEOGCRS[\"WGS 84\",DATUM[\"World Geodetic System 1984\",ELLIPSOID[\"WGS 84\",6378137,298.257223563,LENGTHUNIT[\"metre\",1]]],PRIMEM[\"Greenwich\",0,ANGLEUNIT[\"degree\",0.0174532925199433]],CS[ellipsoidal,2],AXIS[\"latitude\",north,ORDER[1],ANGLEUNIT[\"degree\",0.0174532925199433]],AXIS[\"longitude\",east,ORDER[2],ANGLEUNIT[\"degree\",0.0174532925199433]],ID[\"EPSG\",4326]]],ABRIDGEDTRANSFORMATION[\"Transformation from unknown to WGS84\",METHOD[\"Geocentric translations (geog2D domain)\",ID[\"EPSG\",9603]],PARAMETER[\"X-axis translation\",0,ID[\"EPSG\",8605]],PARAMETER[\"Y-axis translation\",0,ID[\"EPSG\",8606]],PARAMETER[\"Z-axis translation\",0,ID[\"EPSG\",8607]]]]"
+```
+
+```{r}
+## PROJ4/GDAL2 CRS arguments:
+## PROJ4/GDAL2  +proj=longlat +towgs84=0,0,0 +ellps=WGS84
 ```
 
 ```{r}
@@ -151,13 +195,21 @@ comment(crs)
 ```
 
 ```{r}
+## CRS arguments: +proj=longlat +datum=WGS84 +no_defs
+```
+
+```{r}
 comment(crs)
 ```
 
 ```{r}
-## CRS arguments:
-##  +init=epsg:4326 +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84
-## +towgs84=0,0,0
+## [1] "GEOGCRS[\"WGS 84\",DATUM[\"World Geodetic System 1984\",ELLIPSOID[\"WGS 84\",6378137,298.257223563,LENGTHUNIT[\"metre\",1]],ID[\"EPSG\",6326]],PRIMEM[\"Greenwich\",0,ANGLEUNIT[\"degree\",0.0174532925199433],ID[\"EPSG\",8901]],CS[ellipsoidal,2],AXIS[\"longitude\",east,ORDER[1],ANGLEUNIT[\"degree\",0.0174532925199433,ID[\"EPSG\",9122]]],AXIS[\"latitude\",north,ORDER[2],ANGLEUNIT[\"degree\",0.0174532925199433,ID[\"EPSG\",9122]]],USAGE[SCOPE[\"unknown\"],AREA[\"World\"],BBOX[-90,-180,90,180]]]"
+```
+
+```{r}
+## PROJ4/GDAL2 CRS arguments:
+## PROJ4/GDAL2  +init=epsg:4326 +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84
+## PROJ4/GDAL2 +towgs84=0,0,0
 ```
 
 
@@ -166,38 +218,120 @@ comment(crs)
 ```
 
 ```{r}
-comment(crs)
-```
+## Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO"):
+## Discarded datum OSGB_1936 in CRS definition
 
-```{r}
 ## CRS arguments:
-##  +init=epsg:27700 +proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717
-## +x_0=400000 +y_0=-100000 +datum=OSGB36 +units=m +no_defs
-## +ellps=airy
-## +towgs84=446.448,-125.157,542.060,0.1502,0.2470,0.8421,-20.4894
-```
-
-
-
-```{r}
-(crs <- CRS(SRS_string = "EPSG:27700"))
+##  +proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000
+## +y_0=-100000 +ellps=airy +units=m +no_defs
 ```
 
 ```{r}
 comment(crs)
+```
+
+```{r}
+## [1] "PROJCRS[\"OSGB 1936 / British National Grid\",BASEGEOGCRS[\"OSGB 1936\",DATUM[\"OSGB 1936\",ELLIPSOID[\"Airy 1830\",6377563.396,299.3249646,LENGTHUNIT[\"metre\",1]]],PRIMEM[\"Greenwich\",0,ANGLEUNIT[\"degree\",0.0174532925199433]],ID[\"EPSG\",4277]],CONVERSION[\"British National Grid\",METHOD[\"Transverse Mercator\",ID[\"EPSG\",9807]],PARAMETER[\"Latitude of natural origin\",49,ANGLEUNIT[\"degree\",0.0174532925199433],ID[\"EPSG\",8801]],PARAMETER[\"Longitude of natural origin\",-2,ANGLEUNIT[\"degree\",0.0174532925199433],ID[\"EPSG\",8802]],PARAMETER[\"Scale factor at natural origin\",0.9996012717,SCALEUNIT[\"unity\",1],ID[\"EPSG\",8805]],PARAMETER[\"False easting\",400000,LENGTHUNIT[\"metre\",1],ID[\"EPSG\",8806]],PARAMETER[\"False northing\",-100000,LENGTHUNIT[\"metre\",1],ID[\"EPSG\",8807]],ID[\"EPSG\",19916]],CS[Cartesian,2],AXIS[\"(E)\",east,ORDER[1],LENGTHUNIT[\"metre\",1,ID[\"EPSG\",9001]]],AXIS[\"(N)\",north,ORDER[2],LENGTHUNIT[\"metre\",1,ID[\"EPSG\",9001]]],USAGE[SCOPE[\"unknown\"],AREA[\"UK - Britain and UKCS 49°46'N to 61°01'N, 7°33'W to 3°33'E\"],BBOX[49.75,-9.2,61.14,2.88]]]"
+```
+
+```{r}
+## PROJ4/GDAL2 CRS arguments:
+## PROJ4/GDAL2  +init=epsg:27700 +proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717
+## PROJ4/GDAL2 +x_0=400000 +y_0=-100000 +datum=OSGB36 +units=m +no_defs
+## PROJ4/GDAL2 +ellps=airy
+## PROJ4/GDAL2 +towgs84=446.448,-125.157,542.060,0.1502,0.2470,0.8421,-20.4894
+```
+
+
+
+```{r}
+if (packageVersion("sp") >= "1.3.3") (crs <- CRS(SRS_string = "EPSG:27700"))
+```
+
+```{r}
+## Warning in showSRID(SRS_string, format = "PROJ", multiline = "NO"):
+## Discarded datum OSGB_1936 in CRS definition
+
+## CRS arguments:
+##  +proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000
+## +y_0=-100000 +ellps=airy +units=m +no_defs
+```
+
+```{r}
+if (packageVersion("sp") >= "1.3.3") comment(crs)
+```
+
+```{r}
+## [1] "PROJCRS[\"OSGB 1936 / British National Grid\",BASEGEOGCRS[\"OSGB 1936\",DATUM[\"OSGB 1936\",ELLIPSOID[\"Airy 1830\",6377563.396,299.3249646,LENGTHUNIT[\"metre\",1]]],PRIMEM[\"Greenwich\",0,ANGLEUNIT[\"degree\",0.0174532925199433]],ID[\"EPSG\",4277]],CONVERSION[\"British National Grid\",METHOD[\"Transverse Mercator\",ID[\"EPSG\",9807]],PARAMETER[\"Latitude of natural origin\",49,ANGLEUNIT[\"degree\",0.0174532925199433],ID[\"EPSG\",8801]],PARAMETER[\"Longitude of natural origin\",-2,ANGLEUNIT[\"degree\",0.0174532925199433],ID[\"EPSG\",8802]],PARAMETER[\"Scale factor at natural origin\",0.9996012717,SCALEUNIT[\"unity\",1],ID[\"EPSG\",8805]],PARAMETER[\"False easting\",400000,LENGTHUNIT[\"metre\",1],ID[\"EPSG\",8806]],PARAMETER[\"False northing\",-100000,LENGTHUNIT[\"metre\",1],ID[\"EPSG\",8807]]],CS[Cartesian,2],AXIS[\"(E)\",east,ORDER[1],LENGTHUNIT[\"metre\",1]],AXIS[\"(N)\",north,ORDER[2],LENGTHUNIT[\"metre\",1]],USAGE[SCOPE[\"unknown\"],AREA[\"UK - Britain and UKCS 49°46'N to 61°01'N, 7°33'W to 3°33'E\"],BBOX[49.75,-9.2,61.14,2.88]],ID[\"EPSG\",27700]]"
 ```
 
 ```{r}
 (crs <- CRS("+proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +datum=OSGB36 +units=m +no_defs"))
 ```
 
+```{r}
+## Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO"):
+## Discarded datum OSGB_1936 in CRS definition
+
+## CRS arguments:
+##  +proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000
+## +y_0=-100000 +ellps=airy +units=m +no_defs
+```
+
 
 ```{r}
 comment(crs)
 ```
 
+```{r}
+## [1] "PROJCRS[\"unknown\",BASEGEOGCRS[\"unknown\",DATUM[\"OSGB 1936\",ELLIPSOID[\"Airy 1830\",6377563.396,299.3249646,LENGTHUNIT[\"metre\",1]],ID[\"EPSG\",6277]],PRIMEM[\"Greenwich\",0,ANGLEUNIT[\"degree\",0.0174532925199433],ID[\"EPSG\",8901]]],CONVERSION[\"unknown\",METHOD[\"Transverse Mercator\",ID[\"EPSG\",9807]],PARAMETER[\"Latitude of natural origin\",49,ANGLEUNIT[\"degree\",0.0174532925199433],ID[\"EPSG\",8801]],PARAMETER[\"Longitude of natural origin\",-2,ANGLEUNIT[\"degree\",0.0174532925199433],ID[\"EPSG\",8802]],PARAMETER[\"Scale factor at natural origin\",0.9996012717,SCALEUNIT[\"unity\",1],ID[\"EPSG\",8805]],PARAMETER[\"False easting\",400000,LENGTHUNIT[\"metre\",1],ID[\"EPSG\",8806]],PARAMETER[\"False northing\",-100000,LENGTHUNIT[\"metre\",1],ID[\"EPSG\",8807]]],CS[Cartesian,2],AXIS[\"(E)\",east,ORDER[1],LENGTHUNIT[\"metre\",1,ID[\"EPSG\",9001]]],AXIS[\"(N)\",north,ORDER[2],LENGTHUNIT[\"metre\",1,ID[\"EPSG\",9001]]]]"
+```
+
 
 ```{r}
-cat(rgdal::showSRID("+init=epsg:27700", format="WKT2_2018", multiline="YES"), "\n")
+if (packageVersion("rgdal") >= "1.5.1") cat(rgdal::showSRID("+init=epsg:27700", format="WKT2_2018", multiline="YES"), "\n")
+```
+
+```{r}
+## PROJCRS["OSGB 1936 / British National Grid",
+##     BASEGEOGCRS["OSGB 1936",
+##         DATUM["OSGB 1936",
+##             ELLIPSOID["Airy 1830",6377563.396,299.3249646,
+##                 LENGTHUNIT["metre",1]]],
+##         PRIMEM["Greenwich",0,
+##             ANGLEUNIT["degree",0.0174532925199433]],
+##         ID["EPSG",4277]],
+##     CONVERSION["British National Grid",
+##         METHOD["Transverse Mercator",
+##             ID["EPSG",9807]],
+##         PARAMETER["Latitude of natural origin",49,
+##             ANGLEUNIT["degree",0.0174532925199433],
+##             ID["EPSG",8801]],
+##         PARAMETER["Longitude of natural origin",-2,
+##             ANGLEUNIT["degree",0.0174532925199433],
+##             ID["EPSG",8802]],
+##         PARAMETER["Scale factor at natural origin",0.9996012717,
+##             SCALEUNIT["unity",1],
+##             ID["EPSG",8805]],
+##         PARAMETER["False easting",400000,
+##             LENGTHUNIT["metre",1],
+##             ID["EPSG",8806]],
+##         PARAMETER["False northing",-100000,
+##             LENGTHUNIT["metre",1],
+##             ID["EPSG",8807]],
+##         ID["EPSG",19916]],
+##     CS[Cartesian,2],
+##         AXIS["(E)",east,
+##             ORDER[1],
+##             LENGTHUNIT["metre",1,
+##                 ID["EPSG",9001]]],
+##         AXIS["(N)",north,
+##             ORDER[2],
+##             LENGTHUNIT["metre",1,
+##                 ID["EPSG",9001]]],
+##     USAGE[
+##         SCOPE["unknown"],
+##         AREA["UK - Britain and UKCS 49°46'N to 61°01'N, 7°33'W to 3°33'E"],
+##         BBOX[49.75,-9.2,61.14,2.88]]]
 ```
 
