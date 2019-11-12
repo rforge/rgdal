@@ -100,6 +100,7 @@ checkCRSArgs_ng <- function(uprojargs=NA_character_, SRS_string=NULL) {
     wkt2 <- try(showSRID(SRS_string, format="WKT2", multiline="NO"))
     if (!inherits(wkt2, "try-error")) res[[3]] <- wkt2
   } else if (!no_PROJ) {
+    uprojargs <- sub("^\\s+", "", uprojargs)
     uprojargs1 <- try(showSRID(uprojargs, format="PROJ", multiline="NO"))
     if (inherits(uprojargs1, "try-error")) {
       res[[1]] <- FALSE
