@@ -14,17 +14,15 @@ vignette: >
 
 # Migration to PROJ6/GDAL3
 
-### PROJ
+## PROJ
 
 Because so much open source (and other) software uses the PROJ library and framework, many are affected when PROJ upgrades. Until very recently, PROJ has been seen as very reliable, and the changes taking place now are intended to confirm and reinforce this reliability. Before PROJ 5 (PROJ 6 is out now, PROJ 7 is coming early in 2020), the `+datum=` tag was used, perhaps with `+towgs84=` with three or seven coefficients, and possibly `+nadgrids=` where datum transformation grids were available. However, transformations from one projection to another first inversed to longitude-latitude in WGS84, then projected on to the target projection.
 
 
-### Big bump coming:
 
 'Fast-forward 35 years and PROJ.4 is everywhere: It provides coordinate handling for almost every geospatial program, open or closed source. Today,  we  see  a  drastical  increase  in  the  need  for  high  accuracy  GNSS  coordinate  handling, especially in the agricultural and construction engineering sectors.  This need for geodetic-accuracy transformations  is  not  satisfied  by  "classic  PROJ.4".  But  with  the  ubiquity  of  PROJ.4,  we  can provide these transformations "everywhere", just by implementing them as part of PROJ.4' [@evers+knudsen17].
 
 
-### Escaping the WGS84 hub/pivot: PROJ and OGC WKT2
 
 Following the introduction of geodetic modules and pipelines in PROJ 5 [@knudsen+evers17; @evers+knudsen17], PROJ 6 moves further. Changes in the legacy PROJ representation and WGS84 transformation hub have been coordinated through the [GDAL barn raising](https://gdalbarn.com/) initiative. Crucially WGS84 often ceases to be the pivot for moving between datums. A new OGC WKT is coming, and an SQLite EPSG file database has replaced CSV files. SRS will begin to support 3D by default, adding time too as SRS change. See also [PROJ migration notes](https://proj.org/development/migration.html).
 
@@ -56,7 +54,7 @@ API point of view, this means that getCoordinateReferenceSystem()
 method in Geometry objects (for instance) needs to be replaced by a
 getCoordinateMetadata() method.
 
-### Impacts of GDAL barnraising on **sp** workflows
+## Impacts of GDAL barnraising on **sp** workflows
 
 The following examples will contrast the behaviour of PROJ4/GDAL2 (similar to PROJ5/GDAL2, and PROJ4/GDAL1) and PROJ6+/GDAL3+. In particular, the behaviour of the `exportToProj4()` function in GDAL's `OGRSpatialReference` class has changed:
 
@@ -115,7 +113,9 @@ packageVersion("rgdal")
 ## PROJ4/GDAL2 [1] '1.4.7'
 ```
 
-The changes introduced affect `CRS()` when **rgdal** is available; if **rgdal** is not available, it is just a lightly checked string. Because some terms are deprecated or defunct, we need to be careful. GDAL's `exportToProj4()` uses the PROJ `proj_as_proj_string()` function in its new API to return the PROJ string. Terms which are deprecated or defunct may be omitted. In the PROJ6+/GDAL3+ case, `CRS()` calls `rgdal::checkCRSArgs_ng()`, calling `RGDAL_checkCRSArgs()`, a compiled function
+The changes introduced affect `CRS()` when **rgdal** is available; if **rgdal** is not available, the `"CRS"` object just contains a lightly checked PROJ-style string. Because some terms are deprecated or defunct from PROJ6/GDAL3, we need to be careful. GDAL's `exportToProj4()` uses the PROJ `proj_as_proj_string()` function in its new API to return the PROJ string. Terms which are deprecated or defunct may be omitted. In the PROJ6+/GDAL3+ case, `CRS()` calls `rgdal::checkCRSArgs_ng()`, a new generation function replacing the legacy `rgdal::checkCRSArgs()` function. 
+
+It passes on the input PROJ-style string to `rgdal::showSRID()`, which is a many-to-many converter. It can take PROJ-style strings, WKT strings, urn-style strings and EPSG-style strings, and converts to WKT (many types) and PROJ. The PROJ-to-PROJ conversion is equivalent to PROJ4/GDAL2 behaviour, using `importFromProj4()` and friends to instantiate an SRS object in GDAL, and `exportToProj4()` and `exportToWkt()` to emit strings. If the output string appears to be missing a specification term implied by the input, a warning is given; the warnings are at present overly cautious.
 
 ```{r}
 (crs <- CRS("+proj=longlat +ellps=WGS84"))
@@ -127,6 +127,8 @@ The changes introduced affect `CRS()` when **rgdal** is available; if **rgdal** 
 
 ## CRS arguments: +proj=longlat +ellps=WGS84 +no_defs
 ```
+
+In `rgdal::checkCRSArgs_ng()`, `rgdal::showSRID()` may be called several times. If the passed `"CRS"` object only has a non-NA PROJ-style string, this is used to populate the SRS object, as in this case. In addition to emitting a checked PROJ string, a WKT2 string is also returned (WKT2_2018), and this string is assigned as a `comment()` to the `"CRS"` object. This representation is far more robust than the PROJ-style string, giving authorities and table look-up ID values.
 
 ```{r}
 comment(crs)
@@ -142,6 +144,7 @@ For the PROJ4/GDAL2 (and similar) cases, if **rgdal** is available, `CRS()` call
 ## PROJ4/GDAL2 CRS arguments: +proj=longlat +ellps=WGS84
 ```
 
+A number of further examples will be given here, including the case of one of three `+datum=` values that are still acknowledged in GDAL3/PROJ6: `WGS84`, `NAD27` and `NAD83`.
 
 ```{r}
 (crs <- CRS("+proj=longlat +datum=WGS84"))
@@ -164,6 +167,7 @@ comment(crs)
 ## PROJ4/GDAL2  +proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0
 ```
 
+We know that `+datum`, `+towgs84`, `+nadgrids` and `+init` are fragile, so we'll try one:
 
 ```{r}
 (crs <- CRS("+proj=longlat +towgs84=0,0,0"))
@@ -177,6 +181,8 @@ comment(crs)
 ##  +proj=longlat +ellps=WGS84 +towgs84=0,0,0,0,0,0,0 +no_defs
 ```
 
+The comment here includes the `+towgs84` parameters (three of them), while the PROJ string gives seven.
+
 ```{r}
 comment(crs)
 ```
@@ -189,6 +195,8 @@ comment(crs)
 ## PROJ4/GDAL2 CRS arguments:
 ## PROJ4/GDAL2  +proj=longlat +towgs84=0,0,0 +ellps=WGS84
 ```
+
+The `+init` value is still accepted, but not repeated in the output:
 
 ```{r}
 (crs <- CRS("+init=epsg:4326"))
@@ -212,6 +220,7 @@ comment(crs)
 ## PROJ4/GDAL2 +towgs84=0,0,0
 ```
 
+An early warning of difficulties with discarded `+datum` values came with the GB datum:
 
 ```{r}
 (crs <- CRS("+init=epsg:27700"))
@@ -226,6 +235,8 @@ comment(crs)
 ## +y_0=-100000 +ellps=airy +units=m +no_defs
 ```
 
+Here, the comment has all the information that would be needed to carry out coordinate operations, but the PROJ string is defective for GDAL3/PROJ6, giving at best ballpark accuracy.
+
 ```{r}
 comment(crs)
 ```
@@ -233,6 +244,8 @@ comment(crs)
 ```{r}
 ## [1] "PROJCRS[\"OSGB 1936 / British National Grid\",BASEGEOGCRS[\"OSGB 1936\",DATUM[\"OSGB 1936\",ELLIPSOID[\"Airy 1830\",6377563.396,299.3249646,LENGTHUNIT[\"metre\",1]]],PRIMEM[\"Greenwich\",0,ANGLEUNIT[\"degree\",0.0174532925199433]],ID[\"EPSG\",4277]],CONVERSION[\"British National Grid\",METHOD[\"Transverse Mercator\",ID[\"EPSG\",9807]],PARAMETER[\"Latitude of natural origin\",49,ANGLEUNIT[\"degree\",0.0174532925199433],ID[\"EPSG\",8801]],PARAMETER[\"Longitude of natural origin\",-2,ANGLEUNIT[\"degree\",0.0174532925199433],ID[\"EPSG\",8802]],PARAMETER[\"Scale factor at natural origin\",0.9996012717,SCALEUNIT[\"unity\",1],ID[\"EPSG\",8805]],PARAMETER[\"False easting\",400000,LENGTHUNIT[\"metre\",1],ID[\"EPSG\",8806]],PARAMETER[\"False northing\",-100000,LENGTHUNIT[\"metre\",1],ID[\"EPSG\",8807]],ID[\"EPSG\",19916]],CS[Cartesian,2],AXIS[\"(E)\",east,ORDER[1],LENGTHUNIT[\"metre\",1,ID[\"EPSG\",9001]]],AXIS[\"(N)\",north,ORDER[2],LENGTHUNIT[\"metre\",1,ID[\"EPSG\",9001]]],USAGE[SCOPE[\"unknown\"],AREA[\"UK - Britain and UKCS 49°46'N to 61°01'N, 7°33'W to 3°33'E\"],BBOX[49.75,-9.2,61.14,2.88]]]"
 ```
+
+In PROJ4/GDAL2, the `+datum` and `+towgs84` values give much better transformation accuracy from the PROJ string.
 
 ```{r}
 ## PROJ4/GDAL2 CRS arguments:
@@ -242,7 +255,7 @@ comment(crs)
 ## PROJ4/GDAL2 +towgs84=446.448,-125.157,542.060,0.1502,0.2470,0.8421,-20.4894
 ```
 
-
+From **sp** 1.3-3 (my fork), `CRS()` takes a third argument to the legacy two, `projargs=` and `doCheckCRSArgs=TRUE`: `SRS_string=NULL`. This can take any string that `rgdal::showSRID()` can handle. The warning follows use of `exportToProj4()`:
 
 ```{r}
 if (packageVersion("sp") >= "1.3.3") (crs <- CRS(SRS_string = "EPSG:27700"))
@@ -264,6 +277,8 @@ if (packageVersion("sp") >= "1.3.3") comment(crs)
 ```{r}
 ## [1] "PROJCRS[\"OSGB 1936 / British National Grid\",BASEGEOGCRS[\"OSGB 1936\",DATUM[\"OSGB 1936\",ELLIPSOID[\"Airy 1830\",6377563.396,299.3249646,LENGTHUNIT[\"metre\",1]]],PRIMEM[\"Greenwich\",0,ANGLEUNIT[\"degree\",0.0174532925199433]],ID[\"EPSG\",4277]],CONVERSION[\"British National Grid\",METHOD[\"Transverse Mercator\",ID[\"EPSG\",9807]],PARAMETER[\"Latitude of natural origin\",49,ANGLEUNIT[\"degree\",0.0174532925199433],ID[\"EPSG\",8801]],PARAMETER[\"Longitude of natural origin\",-2,ANGLEUNIT[\"degree\",0.0174532925199433],ID[\"EPSG\",8802]],PARAMETER[\"Scale factor at natural origin\",0.9996012717,SCALEUNIT[\"unity\",1],ID[\"EPSG\",8805]],PARAMETER[\"False easting\",400000,LENGTHUNIT[\"metre\",1],ID[\"EPSG\",8806]],PARAMETER[\"False northing\",-100000,LENGTHUNIT[\"metre\",1],ID[\"EPSG\",8807]]],CS[Cartesian,2],AXIS[\"(E)\",east,ORDER[1],LENGTHUNIT[\"metre\",1]],AXIS[\"(N)\",north,ORDER[2],LENGTHUNIT[\"metre\",1]],USAGE[SCOPE[\"unknown\"],AREA[\"UK - Britain and UKCS 49°46'N to 61°01'N, 7°33'W to 3°33'E\"],BBOX[49.75,-9.2,61.14,2.88]],ID[\"EPSG\",27700]]"
 ```
+
+We can also use a more detailed PROJ string, but without any improvement of the output PROJ representation; the comment is OK:
 
 ```{r}
 (crs <- CRS("+proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +datum=OSGB36 +units=m +no_defs"))
@@ -287,6 +302,7 @@ comment(crs)
 ## [1] "PROJCRS[\"unknown\",BASEGEOGCRS[\"unknown\",DATUM[\"OSGB 1936\",ELLIPSOID[\"Airy 1830\",6377563.396,299.3249646,LENGTHUNIT[\"metre\",1]],ID[\"EPSG\",6277]],PRIMEM[\"Greenwich\",0,ANGLEUNIT[\"degree\",0.0174532925199433],ID[\"EPSG\",8901]]],CONVERSION[\"unknown\",METHOD[\"Transverse Mercator\",ID[\"EPSG\",9807]],PARAMETER[\"Latitude of natural origin\",49,ANGLEUNIT[\"degree\",0.0174532925199433],ID[\"EPSG\",8801]],PARAMETER[\"Longitude of natural origin\",-2,ANGLEUNIT[\"degree\",0.0174532925199433],ID[\"EPSG\",8802]],PARAMETER[\"Scale factor at natural origin\",0.9996012717,SCALEUNIT[\"unity\",1],ID[\"EPSG\",8805]],PARAMETER[\"False easting\",400000,LENGTHUNIT[\"metre\",1],ID[\"EPSG\",8806]],PARAMETER[\"False northing\",-100000,LENGTHUNIT[\"metre\",1],ID[\"EPSG\",8807]]],CS[Cartesian,2],AXIS[\"(E)\",east,ORDER[1],LENGTHUNIT[\"metre\",1,ID[\"EPSG\",9001]]],AXIS[\"(N)\",north,ORDER[2],LENGTHUNIT[\"metre\",1,ID[\"EPSG\",9001]]]]"
 ```
 
+`rgdal::showSRID()` is quite versatile, so we can display a multiline WKT string as well:
 
 ```{r}
 if (packageVersion("rgdal") >= "1.5.1") cat(rgdal::showSRID("+init=epsg:27700", format="WKT2_2018", multiline="YES"), "\n")
@@ -334,4 +350,9 @@ if (packageVersion("rgdal") >= "1.5.1") cat(rgdal::showSRID("+init=epsg:27700", 
 ##         AREA["UK - Britain and UKCS 49°46'N to 61°01'N, 7°33'W to 3°33'E"],
 ##         BBOX[49.75,-9.2,61.14,2.88]]]
 ```
+
+So far, `"CRS"` objects created on creation from **sp**, and from reading rasters and vectors in **rgdal**, are furnished with WKT comments. These are used to instantiate SRS objects when writing raster and vector objects. What remains is to convert the compiled `transform()` function and `spTransform()` methods to use the WKT comments if available instead of the PROJ string in the `"CRS"` object in each `"Spatial"` object.
+
+## Coordinate operations
+
 
