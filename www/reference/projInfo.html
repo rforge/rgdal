@@ -69,7 +69,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgdal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.1</span>
       </span>
     </div>
 
@@ -83,6 +83,18 @@
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/PROJ6_GDAL3.html">RFC: Migration to PROJ6/GDAL3</a>
+    </li>
+  </ul>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -112,7 +124,11 @@
     <pre class="usage"><span class='fu'>projInfo</span>(<span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"proj"</span>)
 <span class='fu'>getPROJ4VersionInfo</span>()
 <span class='fu'>getPROJ4libPath</span>()
-<span class='fu'>projNAD</span>()</pre>
+<span class='fu'>projNAD</span>()
+<span class='fu'>GDAL_OSR_PROJ</span>()
+<span class='fu'>GDALis3ormore</span>()
+<span class='fu'>PROJis6ormore</span>()
+<span class='fu'>new_proj_and_gdal</span>()</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -131,13 +147,13 @@
     <p>A data frame with a name and description column, and two extra columns for the "ellps" and "datum" tags.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p><a href='http://proj.maptools.org/'>http://proj.maptools.org/</a></p>
+    <p><a href='https://proj.org/'>https://proj.org/</a></p>
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
     <p>Loading the rgdal package changes the <code>PROJ\_LIB</code> environmental variable to the PROJ.4 support files bundles with the package.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>getPROJ4VersionInfo</span>()</div><div class='output co'>#&gt; [1] "Rel. 6.2.0, September 1st, 2019, [PJ_VERSION: 620]"</div><div class='input'><span class='fu'>projInfo</span>()</div><div class='output co'>#&gt;            name                                                     description
+    <pre class="examples"><div class='input'><span class='fu'>getPROJ4VersionInfo</span>()</div><div class='output co'>#&gt; [1] "Rel. 6.2.1, November 1st, 2019, [PJ_VERSION: 621]"</div><div class='input'><span class='fu'>projInfo</span>()</div><div class='output co'>#&gt;            name                                                     description
 #&gt; 1           aea                                               Albers Equal Area
 #&gt; 2          aeqd                                           Azimuthal Equidistant
 #&gt; 3        affine                                           Affine transformation

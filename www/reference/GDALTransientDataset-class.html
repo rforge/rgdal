@@ -74,7 +74,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgdal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.1</span>
       </span>
     </div>
 
@@ -88,6 +88,18 @@
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/PROJ6_GDAL3.html">RFC: Migration to PROJ6/GDAL3</a>
+    </li>
+  </ul>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -162,14 +174,14 @@ Class <code>"GDALMajorObject"</code>, by class "GDALDataset".</p>
  <code><a href='GDALReadOnlyDataset-class.html'>GDALReadOnlyDataset-class</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/list.files.html'>list.files</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>())</div><div class='output co'>#&gt; [1] "file49615f780cea.so"             "libloc_171_7f4cf440b6ec0af.rds" 
-#&gt; [3] "libloc_191_c0e0c283a59196a8.rds" "libloc_196_5c52706b1226eccf.rds"</div><div class='input'><span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>new</span>(<span class='st'>'GDALTransientDataset'</span>, <span class='kw'>driver</span><span class='kw'>=</span><span class='fu'>new</span>(<span class='st'>'GDALDriver'</span>, <span class='st'>"GTiff"</span>), <span class='kw'>rows</span><span class='kw'>=</span><span class='fl'>100</span>,
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/list.files.html'>list.files</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>())</div><div class='output co'>#&gt; [1] "file1828d6e883d7f.so"            "libloc_171_7f4cf440b6ec0af.rds" 
+#&gt; [3] "libloc_192_c62f882d03382ff3.rds" "libloc_196_5c52706b1226eccf.rds"</div><div class='input'><span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>new</span>(<span class='st'>'GDALTransientDataset'</span>, <span class='kw'>driver</span><span class='kw'>=</span><span class='fu'>new</span>(<span class='st'>'GDALDriver'</span>, <span class='st'>"GTiff"</span>), <span class='kw'>rows</span><span class='kw'>=</span><span class='fl'>100</span>,
  <span class='kw'>cols</span><span class='kw'>=</span><span class='fl'>100</span>, <span class='kw'>bands</span><span class='kw'>=</span><span class='fl'>3</span>, <span class='kw'>type</span><span class='kw'>=</span><span class='st'>'Byte'</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/dim.html'>dim</a></span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; [1] 100 100   3</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/list.files.html'>list.files</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>())</div><div class='output co'>#&gt; [1] "file49614ef2b946"                "file49615f780cea.so"            
-#&gt; [3] "libloc_171_7f4cf440b6ec0af.rds"  "libloc_191_c0e0c283a59196a8.rds"
+<span class='fu'><a href='https://rdrr.io/r/base/dim.html'>dim</a></span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; [1] 100 100   3</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/list.files.html'>list.files</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>())</div><div class='output co'>#&gt; [1] "file1828d23ed613b"               "file1828d6e883d7f.so"           
+#&gt; [3] "libloc_171_7f4cf440b6ec0af.rds"  "libloc_192_c62f882d03382ff3.rds"
 #&gt; [5] "libloc_196_5c52706b1226eccf.rds"</div><div class='input'><span class='fu'><a href='GDALReadOnlyDataset-class.html'>GDAL.close</a></span>(<span class='no'>x</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/list.files.html'>list.files</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>())</div><div class='output co'>#&gt; [1] "file49615f780cea.so"             "libloc_171_7f4cf440b6ec0af.rds" 
-#&gt; [3] "libloc_191_c0e0c283a59196a8.rds" "libloc_196_5c52706b1226eccf.rds"</div></pre>
+<span class='fu'><a href='https://rdrr.io/r/base/list.files.html'>list.files</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>())</div><div class='output co'>#&gt; [1] "file1828d6e883d7f.so"            "libloc_171_7f4cf440b6ec0af.rds" 
+#&gt; [3] "libloc_192_c62f882d03382ff3.rds" "libloc_196_5c52706b1226eccf.rds"</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

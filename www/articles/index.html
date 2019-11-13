@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Norwegian peaks over 2000m — nor2k • rgdal</title>
+<title>Articles • rgdal</title>
 
 
 <!-- jquery -->
@@ -35,9 +35,7 @@
 
 
 
-<meta property="og:title" content="Norwegian peaks over 2000m — nor2k" />
-<meta property="og:description" content="Norwegian peaks over 2000m, 3D SpatialPoints data." />
-<meta name="twitter:card" content="summary" />
+<meta property="og:title" content="Articles" />
 
 
 
@@ -56,7 +54,7 @@
   </head>
 
   <body>
-    <div class="container template-reference-topic">
+    <div class="container template-article-index">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -112,75 +110,17 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Norwegian peaks over 2000m</h1>
-    
-    <div class="hidden name"><code>nor2k.Rd</code></div>
+      <h1>Articles</h1>
     </div>
 
-    <div class="ref-description">
-    <p>Norwegian peaks over 2000m, 3D SpatialPoints data.</p>
+    <div class="section ">
+      <h3>All vignettes</h3>
+      <p class="section-desc"></p>
+
+      <ul>
+        <li><a href="PROJ6_GDAL3.html">RFC: Migration to PROJ6/GDAL3</a></li>
+      </ul>
     </div>
-
-    <pre class="usage"><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>nor2k</span>)</pre>
-
-
-    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
-
-    <p>The format is:
-Formal class 'SpatialPointsDataFrame' [package "sp"] with 5 slots
-  ..@ data       :'data.frame':	300 obs. of  3 variables:
-  .. ..$ Nr.    : int [1:300] 1 2 3 4 5 6 7 8 9 10 ...
-  .. ..$ Navn   : chr [1:300] "Galdh?piggen" "Glittertinden" "Skagast?lstinden, Store (Storen)" "Styggedalstinden, Store, ?sttoppen" ...
-  .. ..$ Kommune: chr [1:300] "Lom" "Lom" "Luster / Ardal" "Luster" ...
-  ..@ coords.nrs : num(0) 
-  ..@ coords     : num [1:300, 1:3] 463550 476550 439850 441450 441100 ...
-  .. ..- attr(*, "dimnames")=List of 2
-  .. .. ..$ : NULL
-  .. .. ..$ : chr [1:3] "East" "North" "Height"
-  ..@ bbox       : num [1:3, 1:2] 404700 6804200 2001 547250 6910050 ...
-  .. ..- attr(*, "dimnames")=List of 2
-  .. .. ..$ : chr [1:3] "East" "North" "Height"
-  .. .. ..$ : chr [1:2] "min" "max"
-  ..@ proj4string:Formal class 'CRS' [package "sp"] with 1 slots
-  .. .. ..@ projargs: chr "+proj=utm +zone=32 +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0"</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Norwegian peaks over 2000m, coordinates in EUREF89/WGS84 UTM32N, names not fully updated, here converted to ASCII.</p>
-    <h2 class="hasAnchor" id="source"><a class="anchor" href="#source"></a>Source</h2>
-
-    <p><a href='http://www.nfo2000m.no/'>http://www.nfo2000m.no/</a>; <a href='http://www.nfo2000m.no/Excel/2000m_data.xls'>http://www.nfo2000m.no/Excel/2000m_data.xls</a></p>
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>nor2k</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>nor2k</span>)</div><div class='output co'>#&gt; Object of class SpatialPointsDataFrame
-#&gt; Coordinates:
-#&gt;            min     max
-#&gt; East    404700  547250
-#&gt; North  6804200 6910050
-#&gt; Height    2001    2469
-#&gt; Is projected: TRUE 
-#&gt; proj4string :
-#&gt; [+proj=utm +zone=32 +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0]
-#&gt; Number of points: 300
-#&gt; Data attributes:
-#&gt;       Nr.             Navn             Kommune         
-#&gt;  Min.   :  1.00   Length:300         Length:300        
-#&gt;  1st Qu.: 75.75   Class :character   Class :character  
-#&gt;  Median :150.50   Mode  :character   Mode  :character  
-#&gt;  Mean   :150.50                                        
-#&gt;  3rd Qu.:225.25                                        
-#&gt;  Max.   :300.00                                        </div><div class='input'>## maybe str(nor2k) ; plot(nor2k) ...
-</div></pre>
-  </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#format">Format</a></li>
-      <li><a href="#details">Details</a></li>
-      <li><a href="#source">Source</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
   </div>
 </div>
 

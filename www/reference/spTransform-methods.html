@@ -70,7 +70,7 @@ In addition, the +towgs84 tag should be used where needed to make sure that datu
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgdal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.1</span>
       </span>
     </div>
 
@@ -84,6 +84,18 @@ In addition, the +towgs84 tag should be used where needed to make sure that datu
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/PROJ6_GDAL3.html">RFC: Migration to PROJ6/GDAL3</a>
+    </li>
+  </ul>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -150,14 +162,13 @@ Note that warnings about different projections may be issued when the PROJ.4 lib
 <span class='no'>states</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='no'>state.x77</span>, <span class='no'>state.center</span>)
 <span class='no'>states</span> <span class='kw'>&lt;-</span> <span class='no'>states</span>[<span class='no'>states</span>$<span class='no'>x</span> <span class='kw'>&gt;</span> -<span class='fl'>121</span>,]
 <span class='fu'>coordinates</span>(<span class='no'>states</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"x"</span>, <span class='st'>"y"</span>)
-<span class='fu'>proj4string</span>(<span class='no'>states</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='st'>"+proj=longlat +ellps=clrk66"</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>states</span>)</div><div class='output co'>#&gt; Object of class SpatialPointsDataFrame
+<span class='fu'>proj4string</span>(<span class='no'>states</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='st'>"+proj=longlat +ellps=clrk66"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum Unknown_based_on_Clarke_1866_ellipsoid in CRS definition</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>states</span>)</div><div class='output co'>#&gt; Object of class SpatialPointsDataFrame
 #&gt; Coordinates:
 #&gt;         min      max
 #&gt; x -120.0680 -68.9801
 #&gt; y   27.8744  47.4231
 #&gt; Is projected: FALSE 
-#&gt; proj4string : [+proj=longlat +ellps=clrk66]
+#&gt; proj4string : [+proj=longlat +ellps=clrk66 +no_defs]
 #&gt; Number of points: 48
 #&gt; Data attributes:
 #&gt;    Population        Income       Illiteracy       Life.Exp    
@@ -173,14 +184,13 @@ Note that warnings about different projections may be issued when the PROJ.4 lib
 #&gt;  Median : 6.850   Median :53.05   Median :114.50   Median : 54277  
 #&gt;  Mean   : 7.321   Mean   :52.64   Mean   :105.65   Mean   : 61749  
 #&gt;  3rd Qu.:10.625   3rd Qu.:58.62   3rd Qu.:139.25   3rd Qu.: 79914  
-#&gt;  Max.   :15.100   Max.   :67.30   Max.   :188.00   Max.   :262134  </div><div class='input'><span class='no'>state.ll83</span> <span class='kw'>&lt;-</span> <span class='fu'>spTransform</span>(<span class='no'>states</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='st'>"+proj=longlat +ellps=GRS80"</span>))
-<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>state.ll83</span>)</div><div class='output co'>#&gt; Object of class SpatialPointsDataFrame
+#&gt;  Max.   :15.100   Max.   :67.30   Max.   :188.00   Max.   :262134  </div><div class='input'><span class='no'>state.ll83</span> <span class='kw'>&lt;-</span> <span class='fu'>spTransform</span>(<span class='no'>states</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='st'>"+proj=longlat +ellps=GRS80"</span>))</div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum Unknown_based_on_GRS80_ellipsoid in CRS definition</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum Unknown_based_on_GRS80_ellipsoid in CRS definition</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>state.ll83</span>)</div><div class='output co'>#&gt; Object of class SpatialPointsDataFrame
 #&gt; Coordinates:
 #&gt;         min      max
 #&gt; x -120.0680 -68.9801
 #&gt; y   27.8744  47.4231
 #&gt; Is projected: FALSE 
-#&gt; proj4string : [+proj=longlat +ellps=GRS80]
+#&gt; proj4string : [+proj=longlat +ellps=GRS80 +no_defs]
 #&gt; Number of points: 48
 #&gt; Data attributes:
 #&gt;    Population        Income       Illiteracy       Life.Exp    
@@ -196,14 +206,14 @@ Note that warnings about different projections may be issued when the PROJ.4 lib
 #&gt;  Median : 6.850   Median :53.05   Median :114.50   Median : 54277  
 #&gt;  Mean   : 7.321   Mean   :52.64   Mean   :105.65   Mean   : 61749  
 #&gt;  3rd Qu.:10.625   3rd Qu.:58.62   3rd Qu.:139.25   3rd Qu.: 79914  
-#&gt;  Max.   :15.100   Max.   :67.30   Max.   :188.00   Max.   :262134  </div><div class='input'><span class='no'>state.merc</span> <span class='kw'>&lt;-</span> <span class='fu'>spTransform</span>(<span class='no'>states</span>, <span class='kw'>CRS</span><span class='kw'>=</span><span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='st'>"+proj=merc +ellps=GRS80"</span>))
-<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>state.merc</span>)</div><div class='output co'>#&gt; Object of class SpatialPointsDataFrame
+#&gt;  Max.   :15.100   Max.   :67.30   Max.   :188.00   Max.   :262134  </div><div class='input'><span class='no'>state.merc</span> <span class='kw'>&lt;-</span> <span class='fu'>spTransform</span>(<span class='no'>states</span>, <span class='kw'>CRS</span><span class='kw'>=</span><span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='st'>"+proj=merc +ellps=GRS80"</span>))</div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum Unknown_based_on_GRS80_ellipsoid in CRS definition</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum Unknown_based_on_GRS80_ellipsoid in CRS definition</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>state.merc</span>)</div><div class='output co'>#&gt; Object of class SpatialPointsDataFrame
 #&gt; Coordinates:
 #&gt;         min      max
 #&gt; x -13365909 -7678830
 #&gt; y   3213175  5979931
 #&gt; Is projected: TRUE 
-#&gt; proj4string : [+proj=merc +ellps=GRS80]
+#&gt; proj4string :
+#&gt; [+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +ellps=GRS80 +units=m +no_defs]
 #&gt; Number of points: 48
 #&gt; Data attributes:
 #&gt;    Population        Income       Illiteracy       Life.Exp    
@@ -220,14 +230,15 @@ Note that warnings about different projections may be issued when the PROJ.4 lib
 #&gt;  Mean   : 7.321   Mean   :52.64   Mean   :105.65   Mean   : 61749  
 #&gt;  3rd Qu.:10.625   3rd Qu.:58.62   3rd Qu.:139.25   3rd Qu.: 79914  
 #&gt;  Max.   :15.100   Max.   :67.30   Max.   :188.00   Max.   :262134  </div><div class='input'><span class='no'>state.merc</span> <span class='kw'>&lt;-</span> <span class='fu'>spTransform</span>(<span class='no'>states</span>,
- <span class='kw'>CRS</span><span class='kw'>=</span><span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='st'>"+proj=merc +ellps=GRS80 +units=us-mi"</span>))
-<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>state.merc</span>)</div><div class='output co'>#&gt; Object of class SpatialPointsDataFrame
+ <span class='kw'>CRS</span><span class='kw'>=</span><span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='st'>"+proj=merc +ellps=GRS80 +units=us-mi"</span>))</div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum Unknown_based_on_GRS80_ellipsoid in CRS definition</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum Unknown_based_on_GRS80_ellipsoid in CRS definition</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>state.merc</span>)</div><div class='output co'>#&gt; Object of class SpatialPointsDataFrame
 #&gt; Coordinates:
 #&gt;         min       max
 #&gt; x -8305.174 -4771.394
 #&gt; y  1996.571  3715.749
 #&gt; Is projected: TRUE 
-#&gt; proj4string : [+proj=merc +ellps=GRS80 +units=us-mi]
+#&gt; proj4string :
+#&gt; [+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +ellps=GRS80 +units=us-mi
+#&gt; +no_defs]
 #&gt; Number of points: 48
 #&gt; Data attributes:
 #&gt;    Population        Income       Illiteracy       Life.Exp    
@@ -265,9 +276,7 @@ Note that warnings about different projections may be issued when the PROJ.4 lib
 #&gt; x -120.0680 -68.9801
 #&gt; y   27.8744  47.4231
 #&gt; Is projected: FALSE 
-#&gt; proj4string :
-#&gt; [+init=epsg:4267 +proj=longlat +datum=NAD27 +no_defs +ellps=clrk66
-#&gt; +nadgrids=@conus,@alaska,@ntv2_0.gsb,@ntv1_can.dat]
+#&gt; proj4string : [+proj=longlat +datum=NAD27 +no_defs]
 #&gt; Number of points: 48
 #&gt; Data attributes:
 #&gt;    Population        Income       Illiteracy       Life.Exp    
@@ -290,9 +299,7 @@ Note that warnings about different projections may be issued when the PROJ.4 lib
 #&gt; x -120.0691 -68.97959
 #&gt; y   27.8747  47.42296
 #&gt; Is projected: FALSE 
-#&gt; proj4string :
-#&gt; [+init=epsg:4269 +proj=longlat +datum=NAD83 +no_defs +ellps=GRS80
-#&gt; +towgs84=0,0,0]
+#&gt; proj4string : [+proj=longlat +datum=NAD83 +no_defs]
 #&gt; Number of points: 48
 #&gt; Data attributes:
 #&gt;    Population        Income       Illiteracy       Life.Exp    
@@ -316,9 +323,9 @@ Note that warnings about different projections may be issued when the PROJ.4 lib
 #&gt; y  -429308.4 1784235
 #&gt; Is projected: TRUE 
 #&gt; proj4string :
-#&gt; [+init=epsg:26978 +proj=lcc +lat_0=36.6666666666667 +lon_0=-98.5
-#&gt; +lat_1=38.5666666666667 +lat_2=37.2666666666667 +x_0=400000 +y_0=400000
-#&gt; +datum=NAD83 +units=m +no_defs +ellps=GRS80 +towgs84=0,0,0]
+#&gt; [+proj=lcc +lat_0=36.6666666666667 +lon_0=-98.5 +lat_1=38.5666666666667
+#&gt; +lat_2=37.2666666666667 +x_0=400000 +y_0=400000 +datum=NAD83 +units=m
+#&gt; +no_defs]
 #&gt; Number of points: 48
 #&gt; Data attributes:
 #&gt;    Population        Income       Illiteracy       Life.Exp    
@@ -342,8 +349,8 @@ Note that warnings about different projections may be issued when the PROJ.4 lib
 #&gt; [1,] -103.869667 44.461676</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>meuse</span>)
 <span class='fu'>coordinates</span>(<span class='no'>meuse</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"x"</span>, <span class='st'>"y"</span>)
 <span class='fu'>proj4string</span>(<span class='no'>meuse</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='st'>"+init=epsg:28992"</span>,
- <span class='st'>"+towgs84=565.237,50.0087,465.658,-0.406857,0.350733,-1.87035,4.0812"</span>))
-<span class='co'># see http://trac.osgeo.org/gdal/ticket/1987</span>
+ <span class='st'>"+towgs84=565.237,50.0087,465.658,-0.406857,0.350733,-1.87035,4.0812"</span>))</div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum Unknown_based_on_Bessel_1841_ellipsoid in CRS definition,</span>
+#&gt; <span class='warning'> but +towgs84= values preserved</span></div><div class='input'><span class='co'># see http://trac.osgeo.org/gdal/ticket/1987</span>
 <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>meuse</span>)</div><div class='output co'>#&gt; Object of class SpatialPointsDataFrame
 #&gt; Coordinates:
 #&gt;      min    max
@@ -351,10 +358,10 @@ Note that warnings about different projections may be issued when the PROJ.4 lib
 #&gt; y 329714 333611
 #&gt; Is projected: TRUE 
 #&gt; proj4string :
-#&gt; [+init=epsg:28992
+#&gt; [+proj=sterea +lat_0=52.1561605555556 +lon_0=5.38763888888889
+#&gt; +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel
 #&gt; +towgs84=565.237,50.0087,465.658,-0.406857,0.350733,-1.87035,4.0812
-#&gt; +proj=sterea +lat_0=52.1561605555556 +lon_0=5.38763888888889
-#&gt; +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +units=m +no_defs]
+#&gt; +units=m +no_defs]
 #&gt; Number of points: 155
 #&gt; Data attributes:
 #&gt;     cadmium           copper            lead            zinc       
@@ -388,7 +395,7 @@ Note that warnings about different projections may be issued when the PROJ.4 lib
 #&gt; y 5650085.3 5653888.9
 #&gt; Is projected: TRUE 
 #&gt; proj4string :
-#&gt; [+proj=utm +zone=32 +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0]
+#&gt; [+proj=utm +zone=32 +datum=WGS84 +units=m +no_defs]
 #&gt; Number of points: 155
 #&gt; Data attributes:
 #&gt;     cadmium           copper            lead            zinc       
@@ -571,7 +578,7 @@ Note that warnings about different projections may be issued when the PROJ.4 lib
 #&gt; 159 179466 330381 270768.9 5650741
 #&gt; 164 180627 330190 271919.3 5650493</div><div class='input'><span class='no'>kiritimati_primary_roads</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='readOGR.html'>readOGR</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"vectors"</span>,
  <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"rgdal"</span>)[<span class='fl'>1</span>], <span class='st'>"kiritimati_primary_roads"</span>)</div><div class='output co'>#&gt; OGR data source with driver: ESRI Shapefile 
-#&gt; Source: "/tmp/RtmpfyIEDl/temp_libpath40c54230fdb9/rgdal/vectors", layer: "kiritimati_primary_roads"
+#&gt; Source: "/tmp/RtmphrCeNG/temp_libpath1806c1cdcb760/rgdal/vectors", layer: "kiritimati_primary_roads"
 #&gt; with 35 features
 #&gt; It has 1 fields</div><div class='input'><span class='no'>kiritimati_primary_roads_ll</span> <span class='kw'>&lt;-</span> <span class='fu'>spTransform</span>(<span class='no'>kiritimati_primary_roads</span>,
  <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='st'>"+proj=longlat +datum=WGS84"</span>))
@@ -580,10 +587,10 @@ Note that warnings about different projections may be issued when the PROJ.4 lib
 <span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>kiritimati_primary_roads_ll</span>, <span class='kw'>axes</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>las</span><span class='kw'>=</span><span class='fl'>1</span>)</div><div class='img'><img src='spTransform-methods-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='no'>opar</span>)
 <span class='no'>opar</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='kw'>mfrow</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>2</span>))
 <span class='no'>scot_BNG</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='readOGR.html'>readOGR</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"vectors"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"rgdal"</span>)[<span class='fl'>1</span>],
-   <span class='st'>"scot_BNG"</span>)</div><div class='output co'>#&gt; OGR data source with driver: ESRI Shapefile 
-#&gt; Source: "/tmp/RtmpfyIEDl/temp_libpath40c54230fdb9/rgdal/vectors", layer: "scot_BNG"
+   <span class='st'>"scot_BNG"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum OSGB_1936 in CRS definition: +proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy +units=m +no_defs</span></div><div class='output co'>#&gt; OGR data source with driver: ESRI Shapefile 
+#&gt; Source: "/tmp/RtmphrCeNG/temp_libpath1806c1cdcb760/rgdal/vectors", layer: "scot_BNG"
 #&gt; with 56 features
-#&gt; It has 13 fields</div><div class='input'><span class='no'>scot_LL</span> <span class='kw'>&lt;-</span> <span class='fu'>spTransform</span>(<span class='no'>scot_BNG</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='st'>"+proj=longlat +datum=WGS84"</span>))
+#&gt; It has 13 fields</div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum OSGB_1936 in CRS definition: +proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy +units=m +no_defs</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum Unknown_based_on_Airy_1830_ellipsoid in CRS definition</span></div><div class='input'><span class='no'>scot_LL</span> <span class='kw'>&lt;-</span> <span class='fu'>spTransform</span>(<span class='no'>scot_BNG</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='st'>"+proj=longlat +datum=WGS84"</span>))
 <span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>scot_LL</span>, <span class='kw'>axes</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
 <span class='no'>grd_LL</span> <span class='kw'>&lt;-</span> <span class='fu'>gridlines</span>(<span class='no'>scot_LL</span>, <span class='kw'>ndiscr</span><span class='kw'>=</span><span class='fl'>100</span>)
 <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>grd_LL</span>)</div><div class='output co'>#&gt; Object of class SpatialLines
@@ -592,16 +599,12 @@ Note that warnings about different projections may be issued when the PROJ.4 lib
 #&gt; x -8.621387 -0.753056
 #&gt; y 54.626555 60.843843
 #&gt; Is projected: FALSE 
-#&gt; proj4string :
-#&gt; [+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0]</div><div class='input'><span class='no'>grd_BNG</span> <span class='kw'>&lt;-</span> <span class='fu'>spTransform</span>(<span class='no'>grd_LL</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='fu'>proj4string</span>(<span class='no'>scot_BNG</span>)))
-<span class='no'>grdtxt_LL</span> <span class='kw'>&lt;-</span> <span class='fu'>gridat</span>(<span class='no'>scot_LL</span>)
-<span class='no'>grdtxt_BNG</span> <span class='kw'>&lt;-</span> <span class='fu'>spTransform</span>(<span class='no'>grdtxt_LL</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='fu'>proj4string</span>(<span class='no'>scot_BNG</span>)))
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>scot_BNG</span>, <span class='kw'>axes</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>las</span><span class='kw'>=</span><span class='fl'>1</span>)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>grd_BNG</span>, <span class='kw'>add</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>lty</span><span class='kw'>=</span><span class='fl'>2</span>)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/text.html'>text</a></span>(<span class='fu'>coordinates</span>(<span class='no'>grdtxt_BNG</span>),
+#&gt; proj4string : [+proj=longlat +datum=WGS84 +no_defs]</div><div class='input'><span class='no'>grd_BNG</span> <span class='kw'>&lt;-</span> <span class='fu'>spTransform</span>(<span class='no'>grd_LL</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='fu'>proj4string</span>(<span class='no'>scot_BNG</span>)))</div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum Unknown_based_on_Airy_1830_ellipsoid in CRS definition</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum Unknown_based_on_Airy_1830_ellipsoid in CRS definition</span></div><div class='input'><span class='no'>grdtxt_LL</span> <span class='kw'>&lt;-</span> <span class='fu'>gridat</span>(<span class='no'>scot_LL</span>)
+<span class='no'>grdtxt_BNG</span> <span class='kw'>&lt;-</span> <span class='fu'>spTransform</span>(<span class='no'>grdtxt_LL</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='fu'>proj4string</span>(<span class='no'>scot_BNG</span>)))</div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum Unknown_based_on_Airy_1830_ellipsoid in CRS definition</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum Unknown_based_on_Airy_1830_ellipsoid in CRS definition</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>scot_BNG</span>, <span class='kw'>axes</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>las</span><span class='kw'>=</span><span class='fl'>1</span>)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>grd_BNG</span>, <span class='kw'>add</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>lty</span><span class='kw'>=</span><span class='fl'>2</span>)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/text.html'>text</a></span>(<span class='fu'>coordinates</span>(<span class='no'>grdtxt_BNG</span>),
    <span class='kw'>labels</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/parse.html'>parse</a></span>(<span class='kw'>text</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span>(<span class='no'>grdtxt_BNG</span>$<span class='no'>labels</span>)))</div><div class='img'><img src='spTransform-methods-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='no'>opar</span>)
 <span class='no'>crds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='kw'>data</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>9.05</span>, <span class='fl'>48.52</span>), <span class='kw'>ncol</span><span class='kw'>=</span><span class='fl'>2</span>)
 <span class='no'>spPoint</span> <span class='kw'>&lt;-</span> <span class='fu'>SpatialPoints</span>(<span class='kw'>coords</span><span class='kw'>=</span><span class='no'>crds</span>,
- <span class='kw'>proj4string</span><span class='kw'>=</span><span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='st'>"+proj=longlat +ellps=sphere +no_defs"</span>))
-<span class='no'>a</span> <span class='kw'>&lt;-</span> <span class='fu'>spTransform</span>(<span class='no'>spPoint</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='st'>"+proj=ob_tran +o_proj=longlat"</span>,
+ <span class='kw'>proj4string</span><span class='kw'>=</span><span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='st'>"+proj=longlat +ellps=sphere +no_defs"</span>))</div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum Unknown_based_on_Normal_Sphere_r_6370997_ellipsoid in CRS definition</span></div><div class='input'><span class='no'>a</span> <span class='kw'>&lt;-</span> <span class='fu'>spTransform</span>(<span class='no'>spPoint</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='st'>"+proj=ob_tran +o_proj=longlat"</span>,
  <span class='st'>"+o_lon_p=-162 +o_lat_p=39.25 +lon_0=180 +ellps=sphere +no_defs"</span>)),
  <span class='kw'>use_ob_tran</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
 <span class='no'>a</span></div><div class='output co'>#&gt; SpatialPoints:
@@ -611,21 +614,21 @@ Note that warnings about different projections may be issued when the PROJ.4 lib
 #&gt; +o_proj=longlat +o_lon_p=-162 +o_lat_p=39.25 +lon_0=180 +ellps=sphere
 #&gt; +no_defs </div><div class='input'><span class='co'>#should be (-5.917698, -1.87195)</span>
 <span class='fu'>spTransform</span>(<span class='no'>a</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='st'>"+proj=longlat +ellps=sphere +no_defs"</span>),
- <span class='kw'>use_ob_tran</span><span class='kw'>=</span><span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; SpatialPoints:
+ <span class='kw'>use_ob_tran</span><span class='kw'>=</span><span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum Unknown_based_on_Normal_Sphere_r_6370997_ellipsoid in CRS definition</span></div><div class='output co'>#&gt; SpatialPoints:
 #&gt;      coords.x1 coords.x2
 #&gt; [1,]      9.05     48.52
 #&gt; Coordinate Reference System (CRS) arguments: +proj=longlat
 #&gt; +ellps=sphere +no_defs </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='fu'>spTransform</span>(<span class='no'>a</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='st'>"+proj=tmerc +lat_0=0 +lon_0=9 +k=1"</span>,
 <span class='st'>"+x_0=3500000 +y_0=0 +ellps=bessel +units=m +no_defs"</span>)),
- <span class='kw'>use_ob_tran</span><span class='kw'>=</span><span class='fl'>TRUE</span>))</div><div class='output co'>#&gt; Error in spTransform(a, CRS(paste("+proj=tmerc +lat_0=0 +lon_0=9 +k=1",  : 
+ <span class='kw'>use_ob_tran</span><span class='kw'>=</span><span class='fl'>TRUE</span>))</div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum Unknown_based_on_Bessel_1841_ellipsoid in CRS definition</span></div><div class='output co'>#&gt; Error in spTransform(a, CRS(paste("+proj=tmerc +lat_0=0 +lon_0=9 +k=1",  : 
 #&gt;   Use ob_tran to or from unprojected objects only</div><div class='input'><span class='fu'>spTransform</span>(<span class='no'>spPoint</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='st'>"+proj=tmerc +lat_0=0 +lon_0=9 +k=1"</span>,
-<span class='st'>"+x_0=3500000 +y_0=0 +ellps=bessel +units=m +no_defs"</span>)))</div><div class='output co'>#&gt; SpatialPoints:
+<span class='st'>"+x_0=3500000 +y_0=0 +ellps=bessel +units=m +no_defs"</span>)))</div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum Unknown_based_on_Bessel_1841_ellipsoid in CRS definition</span></div><div class='output co'>#&gt; SpatialPoints:
 #&gt;      coords.x1 coords.x2
 #&gt; [1,]   3503693   5375702
 #&gt; Coordinate Reference System (CRS) arguments: +proj=tmerc +lat_0=0
 #&gt; +lon_0=9 +k=1 +x_0=3500000 +y_0=0 +ellps=bessel +units=m +no_defs </div><div class='input'><span class='fu'>spTransform</span>(<span class='fu'>spTransform</span>(<span class='no'>a</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='st'>"+proj=longlat +ellps=sphere +no_defs"</span>),
  <span class='kw'>use_ob_tran</span><span class='kw'>=</span><span class='fl'>TRUE</span>), <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='st'>"+proj=tmerc +lat_0=0 +lon_0=9 +k=1"</span>,
-<span class='st'>"+x_0=3500000 +y_0=0 +ellps=bessel +units=m +no_defs"</span>)))</div><div class='output co'>#&gt; SpatialPoints:
+<span class='st'>"+x_0=3500000 +y_0=0 +ellps=bessel +units=m +no_defs"</span>)))</div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum Unknown_based_on_Normal_Sphere_r_6370997_ellipsoid in CRS definition</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum Unknown_based_on_Bessel_1841_ellipsoid in CRS definition</span></div><div class='output co'>#&gt; SpatialPoints:
 #&gt;      coords.x1 coords.x2
 #&gt; [1,]   3503693   5375702
 #&gt; Coordinate Reference System (CRS) arguments: +proj=tmerc +lat_0=0
@@ -637,8 +640,7 @@ Note that warnings about different projections may be issued when the PROJ.4 lib
 <span class='kw'>byrow</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>dimnames</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>NULL</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"lon"</span>, <span class='st'>"lat"</span>)));
 <span class='no'>spLines</span> <span class='kw'>&lt;-</span> <span class='fu'>SpatialLines</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fu'>Lines</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fu'>Line</span>(<span class='no'>crds1</span>), <span class='fu'>Line</span>(<span class='no'>crds2</span>),
 <span class='fu'>Line</span>(<span class='no'>crds3</span>)), <span class='kw'>ID</span><span class='kw'>=</span><span class='st'>"a"</span>)));
-<span class='no'>spLines</span>@<span class='kw'>proj4string</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='st'>"+proj=longlat +ellps=sphere +no_defs"</span>);
-<span class='fu'>bbox</span>(<span class='no'>spLines</span>);</div><div class='output co'>#&gt;   min max
+<span class='no'>spLines</span>@<span class='kw'>proj4string</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='st'>"+proj=longlat +ellps=sphere +no_defs"</span>);</div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum Unknown_based_on_Normal_Sphere_r_6370997_ellipsoid in CRS definition</span></div><div class='input'><span class='fu'>bbox</span>(<span class='no'>spLines</span>);</div><div class='output co'>#&gt;   min max
 #&gt; x   6  15
 #&gt; y  47  55</div><div class='input'><span class='no'>spLines_tr</span> <span class='kw'>&lt;-</span> <span class='fu'>spTransform</span>(<span class='no'>spLines</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='st'>"+proj=ob_tran +o_proj=longlat
 +o_lon_p=-162 +o_lat_p=39.25 +lon_0=180 +ellps=sphere +no_defs"</span>),
@@ -646,12 +648,11 @@ Note that warnings about different projections may be issued when the PROJ.4 lib
 <span class='fu'>bbox</span>(<span class='no'>spLines_tr</span>)</div><div class='output co'>#&gt;         min       max
 #&gt; x -8.163685 -1.725025
 #&gt; y -3.708442  4.807871</div><div class='input'><span class='fu'>bbox</span>(<span class='fu'>spTransform</span>(<span class='no'>spLines_tr</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='st'>"+proj=longlat +ellps=sphere"</span>),
- <span class='kw'>use_ob_tran</span><span class='kw'>=</span><span class='fl'>TRUE</span>))</div><div class='output co'>#&gt;   min max
+ <span class='kw'>use_ob_tran</span><span class='kw'>=</span><span class='fl'>TRUE</span>))</div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum Unknown_based_on_Normal_Sphere_r_6370997_ellipsoid in CRS definition</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum Unknown_based_on_Normal_Sphere_r_6370997_ellipsoid in CRS definition</span></div><div class='output co'>#&gt;   min max
 #&gt; x   6  15
 #&gt; y  47  55</div><div class='input'><span class='no'>spPolygons</span> <span class='kw'>&lt;-</span> <span class='fu'>SpatialPolygons</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fu'>Polygons</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fu'>Polygon</span>(<span class='no'>crds1</span>),
 <span class='fu'>Polygon</span>(<span class='no'>crds2</span>), <span class='fu'>Polygon</span>(<span class='no'>crds3</span>)), <span class='kw'>ID</span><span class='kw'>=</span><span class='st'>"a"</span>)));
-<span class='no'>spPolygons</span>@<span class='kw'>proj4string</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='st'>"+proj=longlat +ellps=sphere +no_defs"</span>);
-<span class='fu'>bbox</span>(<span class='no'>spPolygons</span>);</div><div class='output co'>#&gt;   min max
+<span class='no'>spPolygons</span>@<span class='kw'>proj4string</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='st'>"+proj=longlat +ellps=sphere +no_defs"</span>);</div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum Unknown_based_on_Normal_Sphere_r_6370997_ellipsoid in CRS definition</span></div><div class='input'><span class='fu'>bbox</span>(<span class='no'>spPolygons</span>);</div><div class='output co'>#&gt;   min max
 #&gt; x   6  15
 #&gt; y  47  55</div><div class='input'><span class='no'>spPolygons_tr</span> <span class='kw'>&lt;-</span> <span class='fu'>spTransform</span>(<span class='no'>spPolygons</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='st'>"+proj=ob_tran +o_proj=longlat
 +o_lon_p=-162 +o_lat_p=39.25 +lon_0=180 +ellps=sphere +no_defs"</span>),
@@ -659,7 +660,7 @@ Note that warnings about different projections may be issued when the PROJ.4 lib
 <span class='fu'>bbox</span>(<span class='no'>spPolygons_tr</span>)</div><div class='output co'>#&gt;         min       max
 #&gt; x -8.163685 -1.725025
 #&gt; y -3.708442  4.807871</div><div class='input'><span class='fu'>bbox</span>(<span class='fu'>spTransform</span>(<span class='no'>spPolygons_tr</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='st'>"+proj=longlat +ellps=sphere"</span>),
- <span class='kw'>use_ob_tran</span><span class='kw'>=</span><span class='fl'>TRUE</span>))</div><div class='output co'>#&gt;   min max
+ <span class='kw'>use_ob_tran</span><span class='kw'>=</span><span class='fl'>TRUE</span>))</div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum Unknown_based_on_Normal_Sphere_r_6370997_ellipsoid in CRS definition</span></div><div class='output co'>#&gt;   min max
 #&gt; x   6  15
 #&gt; y  47  55</div><div class='input'><span class='co'>#added after posting by Martin Ivanov</span>
 <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>nor2k</span>)
@@ -680,8 +681,7 @@ Note that warnings about different projections may be issued when the PROJ.4 lib
 #&gt;  Median :150.50   Mode  :character   Mode  :character  
 #&gt;  Mean   :150.50                                        
 #&gt;  3rd Qu.:225.25                                        
-#&gt;  Max.   :300.00                                        </div><div class='input'><span class='no'>nor2kNGO</span> <span class='kw'>&lt;-</span> <span class='fu'>spTransform</span>(<span class='no'>nor2k</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='st'>"+init=epsg:4273"</span>))
-<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>nor2kNGO</span>)</div><div class='output co'>#&gt; Object of class SpatialPointsDataFrame
+#&gt;  Max.   :300.00                                        </div><div class='input'><span class='no'>nor2kNGO</span> <span class='kw'>&lt;-</span> <span class='fu'>spTransform</span>(<span class='no'>nor2k</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='st'>"+init=epsg:4273"</span>))</div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum NGO_1948 in CRS definition</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum unknown in CRS definition</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>nor2kNGO</span>)</div><div class='output co'>#&gt; Object of class SpatialPointsDataFrame
 #&gt; Coordinates:
 #&gt;                min         max
 #&gt; East      7.194275    9.900485
@@ -689,7 +689,7 @@ Note that warnings about different projections may be issued when the PROJ.4 lib
 #&gt; Height 2001.000000 2469.000000
 #&gt; Is projected: FALSE 
 #&gt; proj4string :
-#&gt; [+init=epsg:4273 +proj=longlat +a=6377492.018 +rf=299.1528128 +no_defs]
+#&gt; [+proj=longlat +a=6377492.018 +rf=299.1528128 +no_defs]
 #&gt; Number of points: 300
 #&gt; Data attributes:
 #&gt;       Nr.             Navn             Kommune         
@@ -704,8 +704,8 @@ Note that warnings about different projections may be issued when the PROJ.4 lib
 <span class='no'>crs.step1.cf</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='st'>"+proj=lcc +lat_1=38.43333333333333"</span>,
  <span class='st'>"+lat_2=37.06666666666667 +lat_0=36.5 +lon_0=-120.5"</span>,
  <span class='st'>"+x_0=2000000.0 +y_0=500000.0 +ellps=GRS80 +units=us-ft +no_defs"</span>,
- <span class='st'>"+towgs84=-0.991,1.9072,0.5129,0.025789908,0.0096501,0.0116599,0.0"</span>))
-<span class='no'>locs.step1.cf</span> <span class='kw'>&lt;-</span> <span class='fu'>spTransform</span>(<span class='fu'>SpatialPoints</span>(<span class='no'>crds</span>,
+ <span class='st'>"+towgs84=-0.991,1.9072,0.5129,0.025789908,0.0096501,0.0116599,0.0"</span>))</div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum Unknown_based_on_GRS80_ellipsoid in CRS definition,</span>
+#&gt; <span class='warning'> but +towgs84= values preserved</span></div><div class='input'><span class='no'>locs.step1.cf</span> <span class='kw'>&lt;-</span> <span class='fu'>spTransform</span>(<span class='fu'>SpatialPoints</span>(<span class='no'>crds</span>,
  <span class='kw'>proj4string</span><span class='kw'>=</span><span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='st'>"+proj=longlat +datum=WGS84"</span>)), <span class='no'>crs.step1.cf</span>)
 <span class='fu'><a href='https://rdrr.io/r/base/warning.html'>suppressWarnings</a></span>(<span class='fu'>proj4string</span>(<span class='no'>locs.step1.cf</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='st'>"+proj=lcc"</span>,
 <span class='st'>"+lat_1=38.43333333333333 +lat_2=37.06666666666667 +lat_0=36.5"</span>,
@@ -714,26 +714,28 @@ Note that warnings about different projections may be issued when the PROJ.4 lib
 <span class='no'>locs.step2.cfb</span> <span class='kw'>&lt;-</span> <span class='fu'>spTransform</span>(<span class='no'>locs.step1.cf</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='st'>"+init=epsg:26743"</span>))
 <span class='fu'>coordinates</span>(<span class='no'>locs.step2.cfb</span>) - <span class='no'>ref</span></div><div class='output co'>#&gt;         coords.x1    coords.x2
 #&gt; [1,] 1.027249e-05 5.122856e-07
-#&gt; [2,] 1.081126e-05 5.406910e-07</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/all.equal.html'>all.equal</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/unname.html'>unname</a></span>(<span class='fu'>coordinates</span>(<span class='no'>locs.step2.cfb</span>)), <span class='no'>ref</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='co'># Test for UTM == TMERC (&lt;= 4.9.2) or UTM == ETMERC (&gt; 4.9.2)</span>
+#&gt; [2,] 1.081103e-05 5.360343e-07</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/all.equal.html'>all.equal</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/unname.html'>unname</a></span>(<span class='fu'>coordinates</span>(<span class='no'>locs.step2.cfb</span>)), <span class='no'>ref</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='co'># Test for UTM == TMERC (&lt;= 4.9.2) or UTM == ETMERC (&gt; 4.9.2)</span>
 <span class='no'>nhh</span> <span class='kw'>&lt;-</span> <span class='fu'>SpatialPointsDataFrame</span>(<span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>5.304234</span>, <span class='fl'>60.422311</span>), <span class='kw'>ncol</span><span class='kw'>=</span><span class='fl'>2</span>),
  <span class='kw'>proj4string</span><span class='kw'>=</span><span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='st'>"+init=epsg:4326"</span>), <span class='kw'>data</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>office</span><span class='kw'>=</span><span class='st'>"RSB"</span>))
-<span class='no'>nhh_utm_32N_P4</span> <span class='kw'>&lt;-</span> <span class='fu'>spTransform</span>(<span class='no'>nhh</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='st'>"+init=epsg:3044"</span>))
-<span class='no'>nhh_tmerc_P4</span> <span class='kw'>&lt;-</span> <span class='fu'>spTransform</span>(<span class='no'>nhh</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='st'>"+proj=tmerc +k=0.9996"</span>,
- <span class='st'>"+lon_0=9 +x_0=500000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"</span>)))
-<span class='no'>nhh_etmerc_P4</span> <span class='kw'>&lt;-</span> <span class='fu'>spTransform</span>(<span class='no'>nhh</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='st'>"+proj=etmerc +k=0.9996"</span>,
- <span class='st'>"+lon_0=9 +x_0=500000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"</span>)))
-<span class='fu'><a href='https://rdrr.io/r/base/all.equal.html'>all.equal</a></span>(<span class='fu'>coordinates</span>(<span class='no'>nhh_utm_32N_P4</span>), <span class='fu'>coordinates</span>(<span class='no'>nhh_tmerc_P4</span>),
+<span class='no'>nhh_utm_32N_P4</span> <span class='kw'>&lt;-</span> <span class='fu'>spTransform</span>(<span class='no'>nhh</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='st'>"+init=epsg:3044"</span>))</div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum European_Terrestrial_Reference_System_1989 in CRS definition</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum Unknown_based_on_GRS80_ellipsoid in CRS definition</span></div><div class='input'><span class='no'>nhh_tmerc_P4</span> <span class='kw'>&lt;-</span> <span class='fu'>spTransform</span>(<span class='no'>nhh</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='st'>"+proj=tmerc +k=0.9996"</span>,
+ <span class='st'>"+lon_0=9 +x_0=500000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"</span>)))</div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum Unknown_based_on_GRS80_ellipsoid in CRS definition,</span>
+#&gt; <span class='warning'> but +towgs84= values preserved</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum Unknown_based_on_GRS80_ellipsoid in CRS definition,</span>
+#&gt; <span class='warning'> but +towgs84= values preserved</span></div><div class='input'><span class='no'>nhh_etmerc_P4</span> <span class='kw'>&lt;-</span> <span class='fu'>spTransform</span>(<span class='no'>nhh</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='st'>"+proj=etmerc +k=0.9996"</span>,
+ <span class='st'>"+lon_0=9 +x_0=500000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"</span>)))</div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum Unknown_based_on_GRS80_ellipsoid in CRS definition,</span>
+#&gt; <span class='warning'> but +towgs84= values preserved</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum Unknown_based_on_GRS80_ellipsoid in CRS definition,</span>
+#&gt; <span class='warning'> but +towgs84= values preserved</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/all.equal.html'>all.equal</a></span>(<span class='fu'>coordinates</span>(<span class='no'>nhh_utm_32N_P4</span>), <span class='fu'>coordinates</span>(<span class='no'>nhh_tmerc_P4</span>),
  <span class='kw'>tolerance</span><span class='kw'>=</span><span class='fl'>1e-9</span>, <span class='kw'>scale</span><span class='kw'>=</span><span class='fl'>1</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='co'># UTM == TMERC: PROJ4 &lt;=4.9.2</span>
 <span class='fu'><a href='https://rdrr.io/r/base/all.equal.html'>all.equal</a></span>(<span class='fu'>coordinates</span>(<span class='no'>nhh_utm_32N_P4</span>), <span class='fu'>coordinates</span>(<span class='no'>nhh_etmerc_P4</span>),
  <span class='kw'>tolerance</span><span class='kw'>=</span><span class='fl'>1e-9</span>, <span class='kw'>scale</span><span class='kw'>=</span><span class='fl'>1</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='co'># UTM == ETMERC: PROJ4 &gt; 4.9.2</span>
 <span class='no'>unis</span> <span class='kw'>&lt;-</span> <span class='fu'>SpatialPointsDataFrame</span>(<span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>15.653453</span>, <span class='fl'>78.222504</span>), <span class='kw'>ncol</span><span class='kw'>=</span><span class='fl'>2</span>),
  <span class='kw'>proj4string</span><span class='kw'>=</span><span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='st'>"+init=epsg:4326"</span>), <span class='kw'>data</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>office</span><span class='kw'>=</span><span class='st'>"UNIS"</span>))
-<span class='no'>unis_utm_33N_P4</span> <span class='kw'>&lt;-</span> <span class='fu'>spTransform</span>(<span class='no'>unis</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='st'>"+init=epsg:3045"</span>))
-<span class='no'>unis_tmerc_P4</span> <span class='kw'>&lt;-</span> <span class='fu'>spTransform</span>(<span class='no'>unis</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='st'>"+proj=tmerc +k=0.9996 +lon_0=15"</span>,
- <span class='st'>"+x_0=500000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"</span>)))
-<span class='no'>unis_etmerc_P4</span> <span class='kw'>&lt;-</span> <span class='fu'>spTransform</span>(<span class='no'>unis</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='st'>"+proj=etmerc +k=0.9996"</span>,
- <span class='st'>"+lon_0=15 +x_0=500000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"</span>)))
-<span class='fu'><a href='https://rdrr.io/r/base/all.equal.html'>all.equal</a></span>(<span class='fu'>coordinates</span>(<span class='no'>unis_utm_33N_P4</span>), <span class='fu'>coordinates</span>(<span class='no'>unis_tmerc_P4</span>),
+<span class='no'>unis_utm_33N_P4</span> <span class='kw'>&lt;-</span> <span class='fu'>spTransform</span>(<span class='no'>unis</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='st'>"+init=epsg:3045"</span>))</div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum European_Terrestrial_Reference_System_1989 in CRS definition</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum Unknown_based_on_GRS80_ellipsoid in CRS definition</span></div><div class='input'><span class='no'>unis_tmerc_P4</span> <span class='kw'>&lt;-</span> <span class='fu'>spTransform</span>(<span class='no'>unis</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='st'>"+proj=tmerc +k=0.9996 +lon_0=15"</span>,
+ <span class='st'>"+x_0=500000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"</span>)))</div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum Unknown_based_on_GRS80_ellipsoid in CRS definition,</span>
+#&gt; <span class='warning'> but +towgs84= values preserved</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum Unknown_based_on_GRS80_ellipsoid in CRS definition,</span>
+#&gt; <span class='warning'> but +towgs84= values preserved</span></div><div class='input'><span class='no'>unis_etmerc_P4</span> <span class='kw'>&lt;-</span> <span class='fu'>spTransform</span>(<span class='no'>unis</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='st'>"+proj=etmerc +k=0.9996"</span>,
+ <span class='st'>"+lon_0=15 +x_0=500000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"</span>)))</div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum Unknown_based_on_GRS80_ellipsoid in CRS definition,</span>
+#&gt; <span class='warning'> but +towgs84= values preserved</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum Unknown_based_on_GRS80_ellipsoid in CRS definition,</span>
+#&gt; <span class='warning'> but +towgs84= values preserved</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/all.equal.html'>all.equal</a></span>(<span class='fu'>coordinates</span>(<span class='no'>unis_utm_33N_P4</span>), <span class='fu'>coordinates</span>(<span class='no'>unis_tmerc_P4</span>),
  <span class='kw'>tolerance</span><span class='kw'>=</span><span class='fl'>1e-9</span>, <span class='kw'>scale</span><span class='kw'>=</span><span class='fl'>1</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='co'># UTM == TMERC: PROJ4 &lt;=4.9.2</span>
 <span class='fu'><a href='https://rdrr.io/r/base/all.equal.html'>all.equal</a></span>(<span class='fu'>coordinates</span>(<span class='no'>unis_utm_33N_P4</span>), <span class='fu'>coordinates</span>(<span class='no'>unis_etmerc_P4</span>),
  <span class='kw'>tolerance</span><span class='kw'>=</span><span class='fl'>1e-9</span>, <span class='kw'>scale</span><span class='kw'>=</span><span class='fl'>1</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'># UTM == ETMERC: PROJ4 > 4.9.2

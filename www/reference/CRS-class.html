@@ -69,7 +69,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgdal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.1</span>
       </span>
     </div>
 
@@ -83,6 +83,18 @@
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/PROJ6_GDAL3.html">RFC: Migration to PROJ6/GDAL3</a>
+    </li>
+  </ul>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -109,7 +121,8 @@
     <p>Interface class to the PROJ.4 projection system. The class is defined as an empty stub accepting value NA in the sp package. If the rgdal package is available, then the class will permit spatial data to be associated with coordinate reference systems</p>
     </div>
 
-    <pre class="usage"><span class='fu'>checkCRSArgs</span>(<span class='no'>uprojargs</span>)</pre>
+    <pre class="usage"><span class='fu'>checkCRSArgs</span>(<span class='no'>uprojargs</span>)
+<span class='fu'>checkCRSArgs_ng</span>(<span class='kw'>uprojargs</span><span class='kw'>=</span><span class='fl'>NA_character_</span>, <span class='kw'>SRS_string</span><span class='kw'>=</span><span class='kw'>NULL</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -117,6 +130,10 @@
     <tr>
       <th>uprojargs</th>
       <td><p>character string PROJ.4 projection arguments</p></td>
+    </tr>
+    <tr>
+      <th>SRS_string</th>
+      <td><p>default NULL, experimental in connection with adaptation to GDAL&gt;=3/PROJ&gt;=6; a valid WKT string or SRS definition such as <code>"EPSG:4326"</code></p></td>
     </tr>
     </table>
 
@@ -146,17 +163,15 @@
 <p>The 4.9.1 release of PROJ.4 omitted a small file of defaults, leading to reports of &#8220;major axis or radius = 0 or not given&#8221; errors. From 0.9-3, rgdal checks for the presence of this file (proj_def.dat), and if not found, and under similar conditions to those used by PROJ.4, adds &#8220;+ellps=WGS84&#8221; to the input string being checked by <code>checkCRSArgs</code> The &#8220;+no_defs&#8221; tag ignores the file of defaults, and the default work-around implemented to get around this problem; strings including &#8220;init&#8221; and &#8220;datum&#8221; tags also trigger the avoidance of the work-around. Now messages are issued when a candidate CRS is checked; they may be suppressed using <code>suppressMessages</code>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>CRSargs</span>(<span class='fu'>CRS</span>(<span class='st'>"+proj=longlat"</span>))</div><div class='output co'>#&gt; [1] "+proj=longlat +ellps=GRS80"</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='fu'>CRS</span>(<span class='st'>"+proj=longlat +no_defs"</span>))</div><div class='output co'>#&gt; Error in CRS("+proj=longlat +no_defs") : 
-#&gt;   major axis or radius = 0 or not given</div><div class='input'><span class='fu'>CRSargs</span>(<span class='fu'>CRS</span>(<span class='st'>"+proj=longlat +datum=NAD27"</span>))</div><div class='output co'>#&gt; [1] "+proj=longlat +datum=NAD27 +ellps=clrk66 +nadgrids=@conus,@alaska,@ntv2_0.gsb,@ntv1_can.dat"</div><div class='input'><span class='fu'>CRSargs</span>(<span class='fu'>CRS</span>(<span class='st'>"+init=epsg:4267"</span>))</div><div class='output co'>#&gt; [1] "+init=epsg:4267 +proj=longlat +datum=NAD27 +no_defs +ellps=clrk66 +nadgrids=@conus,@alaska,@ntv2_0.gsb,@ntv1_can.dat"</div><div class='input'><span class='fu'>CRSargs</span>(<span class='fu'>CRS</span>(<span class='st'>"+init=epsg:26978"</span>))</div><div class='output co'>#&gt; [1] "+init=epsg:26978 +proj=lcc +lat_0=36.6666666666667 +lon_0=-98.5 +lat_1=38.5666666666667 +lat_2=37.2666666666667 +x_0=400000 +y_0=400000 +datum=NAD83 +units=m +no_defs +ellps=GRS80 +towgs84=0,0,0"</div><div class='input'><span class='fu'>CRSargs</span>(<span class='fu'>CRS</span>(<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='st'>"+proj=stere +lat_0=52.15616055555555"</span>,
+    <pre class="examples"><div class='input'><span class='fu'>CRSargs</span>(<span class='fu'>CRS</span>(<span class='st'>"+proj=longlat"</span>))</div><div class='output co'>#&gt; [1] "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='fu'>CRS</span>(<span class='st'>"+proj=longlat"</span>))</div><div class='output co'>#&gt; CRS arguments: +proj=longlat +datum=WGS84 +no_defs </div><div class='input'><span class='fu'>CRSargs</span>(<span class='fu'>CRS</span>(<span class='st'>"+proj=longlat +datum=NAD27"</span>))</div><div class='output co'>#&gt; [1] "+proj=longlat +datum=NAD27 +no_defs +ellps=clrk66 +nadgrids=@conus,@alaska,@ntv2_0.gsb,@ntv1_can.dat"</div><div class='input'><span class='fu'>CRSargs</span>(<span class='fu'>CRS</span>(<span class='st'>"+init=epsg:4267"</span>))</div><div class='output co'>#&gt; [1] "+proj=longlat +datum=NAD27 +no_defs +ellps=clrk66 +nadgrids=@conus,@alaska,@ntv2_0.gsb,@ntv1_can.dat"</div><div class='input'><span class='fu'>CRSargs</span>(<span class='fu'>CRS</span>(<span class='st'>"+init=epsg:26978"</span>))</div><div class='output co'>#&gt; [1] "+proj=lcc +lat_0=36.6666666666667 +lon_0=-98.5 +lat_1=38.5666666666667 +lat_2=37.2666666666667 +x_0=400000 +y_0=400000 +datum=NAD83 +units=m +no_defs +ellps=GRS80 +towgs84=0,0,0"</div><div class='input'><span class='fu'>CRSargs</span>(<span class='fu'>CRS</span>(<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='st'>"+proj=stere +lat_0=52.15616055555555"</span>,
 <span class='st'>"+lon_0=5.38763888888889 +k=0.999908 +x_0=155000 +y_0=463000 +ellps=bessel"</span>,
 <span class='st'>"+towgs84=565.237,50.0087,465.658,-0.406857,0.350733,-1.87035,4.0812"</span>,
-<span class='st'>"+units=m"</span>)))</div><div class='output co'>#&gt; [1] "+proj=stere +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.999908 +x_0=155000 +y_0=463000 +ellps=bessel +towgs84=565.237,50.0087,465.658,-0.406857,0.350733,-1.87035,4.0812 +units=m"</div><div class='input'><span class='co'># see http://trac.osgeo.org/gdal/ticket/1987</span>
-<span class='fu'>CRSargs</span>(<span class='fu'>CRS</span>(<span class='st'>"+init=epsg:28992"</span>))</div><div class='output co'>#&gt; [1] "+init=epsg:28992 +proj=sterea +lat_0=52.1561605555556 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +units=m +no_defs"</div><div class='input'><span class='no'>crs</span> <span class='kw'>&lt;-</span> <span class='fu'>CRS</span>(<span class='st'>"+init=epsg:28992"</span>)
-<span class='fu'>CRSargs</span>(<span class='fu'>CRS</span>(<span class='fu'>CRSargs</span>(<span class='no'>crs</span>)))</div><div class='output co'>#&gt; [1] "+init=epsg:28992 +proj=sterea +lat_0=52.1561605555556 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +units=m +no_defs"</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>sp</span>)
+<span class='st'>"+units=m"</span>)))</div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum Unknown_based_on_Bessel_1841_ellipsoid in CRS definition,</span>
+#&gt; <span class='warning'> but +towgs84= values preserved</span></div><div class='output co'>#&gt; [1] "+proj=stere +lat_0=52.1561605555556 +lon_0=5.38763888888889 +k=0.999908 +x_0=155000 +y_0=463000 +ellps=bessel +towgs84=565.237,50.0087,465.658,-0.406857,0.350733,-1.87035,4.0812 +units=m +no_defs"</div><div class='input'><span class='co'># see http://trac.osgeo.org/gdal/ticket/1987</span>
+<span class='fu'>CRSargs</span>(<span class='fu'>CRS</span>(<span class='st'>"+init=epsg:28992"</span>))</div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum Amersfoort in CRS definition</span></div><div class='output co'>#&gt; [1] "+proj=sterea +lat_0=52.1561605555556 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +units=m +no_defs"</div><div class='input'><span class='no'>crs</span> <span class='kw'>&lt;-</span> <span class='fu'>CRS</span>(<span class='st'>"+init=epsg:28992"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum Amersfoort in CRS definition</span></div><div class='input'><span class='fu'>CRSargs</span>(<span class='fu'>CRS</span>(<span class='fu'>CRSargs</span>(<span class='no'>crs</span>)))</div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum Unknown_based_on_Bessel_1841_ellipsoid in CRS definition</span></div><div class='output co'>#&gt; [1] "+proj=sterea +lat_0=52.1561605555556 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +units=m +no_defs"</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>sp</span>)
 <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>meuse</span>)
 <span class='fu'><a href='https://rdrr.io/pkg/sp/man/coordinates.html'>coordinates</a></span>(<span class='no'>meuse</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"x"</span>, <span class='st'>"y"</span>)
-<span class='fu'><a href='https://rdrr.io/pkg/sp/man/is.projected.html'>proj4string</a></span>(<span class='no'>meuse</span>) <span class='kw'>&lt;-</span> <span class='fu'>CRS</span>(<span class='st'>"+init=epsg:28992"</span>)
-<span class='fu'>CRSargs</span>(<span class='fu'>CRS</span>(<span class='fu'><a href='https://rdrr.io/pkg/sp/man/is.projected.html'>proj4string</a></span>(<span class='no'>meuse</span>)))</div><div class='output co'>#&gt; [1] "+init=epsg:28992 +proj=sterea +lat_0=52.1561605555556 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +units=m +no_defs"</div></pre>
+<span class='fu'><a href='https://rdrr.io/pkg/sp/man/is.projected.html'>proj4string</a></span>(<span class='no'>meuse</span>) <span class='kw'>&lt;-</span> <span class='fu'>CRS</span>(<span class='st'>"+init=epsg:28992"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum Amersfoort in CRS definition</span></div><div class='input'><span class='fu'>CRSargs</span>(<span class='fu'>CRS</span>(<span class='fu'><a href='https://rdrr.io/pkg/sp/man/is.projected.html'>proj4string</a></span>(<span class='no'>meuse</span>)))</div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum Unknown_based_on_Bessel_1841_ellipsoid in CRS definition</span></div><div class='output co'>#&gt; [1] "+proj=sterea +lat_0=52.1561605555556 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +units=m +no_defs"</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

@@ -69,7 +69,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgdal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.1</span>
       </span>
     </div>
 
@@ -83,6 +83,18 @@
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/PROJ6_GDAL3.html">RFC: Migration to PROJ6/GDAL3</a>
+    </li>
+  </ul>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -181,7 +193,7 @@
  <span class='kw'>inv</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>use_ob_tran</span><span class='kw'>=</span><span class='fl'>TRUE</span>)</div><div class='output co'>#&gt;      [,1]  [,2]
 #&gt; [1,] 9.05 48.52</div><div class='input'><span class='co'>#added after posting by Martin Ivanov</span>
 <span class='co'>#</span>
-<span class='fu'><a href='projInfo.html'>getPROJ4VersionInfo</a></span>()</div><div class='output co'>#&gt; [1] "Rel. 6.2.0, September 1st, 2019, [PJ_VERSION: 620]"</div><div class='input'><span class='co'># Test for UTM == TMERC (&lt;= 4.9.2) or UTM == ETMERC (&gt; 4.9.2)</span>
+<span class='fu'><a href='projInfo.html'>getPROJ4VersionInfo</a></span>()</div><div class='output co'>#&gt; [1] "Rel. 6.2.1, November 1st, 2019, [PJ_VERSION: 621]"</div><div class='input'><span class='co'># Test for UTM == TMERC (&lt;= 4.9.2) or UTM == ETMERC (&gt; 4.9.2)</span>
 <span class='no'>nhh</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>5.304234</span>, <span class='fl'>60.422311</span>), <span class='kw'>ncol</span><span class='kw'>=</span><span class='fl'>2</span>)
 <span class='no'>nhh_utm_32N_P4</span> <span class='kw'>&lt;-</span> <span class='fu'>project</span>(<span class='no'>nhh</span>, <span class='st'>"+init=epsg:3044"</span>)
 <span class='no'>nhh_tmerc_P4</span> <span class='kw'>&lt;-</span> <span class='fu'>project</span>(<span class='no'>nhh</span>, <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='st'>"+proj=tmerc +k=0.9996 +lon_0=9"</span>,
@@ -200,7 +212,7 @@
 <span class='fu'><a href='https://rdrr.io/r/base/all.equal.html'>all.equal</a></span>(<span class='no'>unis_utm_33N_P4</span>, <span class='no'>unis_etmerc_P4</span>, <span class='kw'>tolerance</span><span class='kw'>=</span><span class='fl'>1e-9</span>, <span class='kw'>scale</span><span class='kw'>=</span><span class='fl'>1</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='co'># UTM == ETMERC: PROJ4 &gt; 4.9.2</span>
 <span class='co'># available projections and their inverses if provided</span>
 <span class='co'># For &gt;=4.9.3 returns non-finite points rather than needing crash protection</span>
-<span class='fu'><a href='projInfo.html'>getPROJ4VersionInfo</a></span>()</div><div class='output co'>#&gt; [1] "Rel. 6.2.0, September 1st, 2019, [PJ_VERSION: 620]"</div><div class='input'><span class='no'>projs</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span>(<span class='fu'><a href='projInfo.html'>projInfo</a></span>()$<span class='no'>name</span>)
+<span class='fu'><a href='projInfo.html'>getPROJ4VersionInfo</a></span>()</div><div class='output co'>#&gt; [1] "Rel. 6.2.1, November 1st, 2019, [PJ_VERSION: 621]"</div><div class='input'><span class='no'>projs</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span>(<span class='fu'><a href='projInfo.html'>projInfo</a></span>()$<span class='no'>name</span>)
 <span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/logical.html'>logical</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span>(<span class='no'>projs</span>))
 <span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span>(<span class='no'>res</span>) <span class='kw'>&lt;-</span> <span class='no'>projs</span>
 <span class='no'>msgs</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span>(<span class='no'>projs</span>))

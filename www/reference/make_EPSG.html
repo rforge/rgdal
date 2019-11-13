@@ -69,7 +69,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgdal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.1</span>
       </span>
     </div>
 
@@ -83,6 +83,18 @@
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/PROJ6_GDAL3.html">RFC: Migration to PROJ6/GDAL3</a>
+    </li>
+  </ul>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -141,42 +153,42 @@
 <span class='co'># from PROJ 6.0.0, EPSG data is no longer stored in a flat file</span>
 <span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span>(<span class='no'>EPSG</span>) <span class='kw'>!=</span> <span class='st'>"try-error"</span>) <span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span>(<span class='no'>EPSG</span>, <span class='st'>"metadata"</span>) <span class='co'># PROJ.4 5.0.0 and later include EPSG version</span></div><div class='output co'>#&gt; NULL</div><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span>(<span class='no'>EPSG</span>) <span class='kw'>!=</span> <span class='st'>"try-error"</span>) <span class='no'>EPSG</span>[<span class='fu'><a href='https://rdrr.io/r/base/grep.html'>grep</a></span>(<span class='st'>"Oslo"</span>, <span class='no'>EPSG</span>$<span class='no'>note</span>), <span class='fl'>1</span>:<span class='fl'>2</span>]</div><div class='output co'>#&gt;       code                            note
 #&gt; 515   4817                 NGO 1948 (Oslo)
-#&gt; 2386 27391    NGO 1948 (Oslo) / NGO zone I
-#&gt; 2387 27392   NGO 1948 (Oslo) / NGO zone II
-#&gt; 2388 27393  NGO 1948 (Oslo) / NGO zone III
-#&gt; 2389 27394   NGO 1948 (Oslo) / NGO zone IV
-#&gt; 2390 27395    NGO 1948 (Oslo) / NGO zone V
-#&gt; 2391 27396   NGO 1948 (Oslo) / NGO zone VI
-#&gt; 2392 27397  NGO 1948 (Oslo) / NGO zone VII
-#&gt; 2393 27398 NGO 1948 (Oslo) / NGO zone VIII</div><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span>(<span class='no'>EPSG</span>) <span class='kw'>!=</span> <span class='st'>"try-error"</span>) <span class='no'>EPSG</span>[<span class='fl'>1925</span>:<span class='fl'>1927</span>, <span class='fl'>3</span>]</div><div class='output co'>#&gt; [1] "+proj=utm +zone=31 +ellps=GRS80 +units=m +no_defs +type=crs"
-#&gt; [2] "+proj=utm +zone=32 +ellps=GRS80 +units=m +no_defs +type=crs"
-#&gt; [3] "+proj=utm +zone=33 +ellps=GRS80 +units=m +no_defs +type=crs"</div><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span>(<span class='no'>EPSG</span>) <span class='kw'>!=</span> <span class='st'>"try-error"</span>) <span class='no'>EPSG</span>[<span class='fu'><a href='https://rdrr.io/r/base/grep.html'>grep</a></span>(<span class='st'>"Poland"</span>, <span class='no'>EPSG</span>$<span class='no'>note</span>), <span class='fl'>1</span>:<span class='fl'>2</span>]</div><div class='output co'>#&gt;      code                               note
-#&gt; 1322 2171   Pulkovo 1942(58) / Poland zone I
-#&gt; 1323 2172  Pulkovo 1942(58) / Poland zone II
-#&gt; 1324 2173 Pulkovo 1942(58) / Poland zone III
-#&gt; 1325 2174  Pulkovo 1942(58) / Poland zone IV
-#&gt; 1326 2175   Pulkovo 1942(58) / Poland zone V
-#&gt; 1327 2176      ETRS89 / Poland CS2000 zone 5
-#&gt; 1328 2177      ETRS89 / Poland CS2000 zone 6
-#&gt; 1329 2178      ETRS89 / Poland CS2000 zone 7
-#&gt; 1333 2179      ETRS89 / Poland CS2000 zone 8
-#&gt; 1334 2180               ETRS89 / Poland CS92
-#&gt; 2969 3120   Pulkovo 1942(58) / Poland zone I</div><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span>(<span class='no'>EPSG</span>) <span class='kw'>!=</span> <span class='st'>"try-error"</span>) <span class='no'>EPSG</span>[<span class='fu'><a href='https://rdrr.io/r/base/grep.html'>grep</a></span>(<span class='st'>"Amersfoort"</span>, <span class='no'>EPSG</span>$<span class='no'>note</span>), <span class='fl'>1</span>:<span class='fl'>2</span>]</div><div class='output co'>#&gt;       code                             note
+#&gt; 2408 27391    NGO 1948 (Oslo) / NGO zone I
+#&gt; 2409 27392   NGO 1948 (Oslo) / NGO zone II
+#&gt; 2410 27393  NGO 1948 (Oslo) / NGO zone III
+#&gt; 2411 27394   NGO 1948 (Oslo) / NGO zone IV
+#&gt; 2412 27395    NGO 1948 (Oslo) / NGO zone V
+#&gt; 2413 27396   NGO 1948 (Oslo) / NGO zone VI
+#&gt; 2414 27397  NGO 1948 (Oslo) / NGO zone VII
+#&gt; 2415 27398 NGO 1948 (Oslo) / NGO zone VIII</div><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span>(<span class='no'>EPSG</span>) <span class='kw'>!=</span> <span class='st'>"try-error"</span>) <span class='no'>EPSG</span>[<span class='fl'>1925</span>:<span class='fl'>1927</span>, <span class='fl'>3</span>]</div><div class='output co'>#&gt; [1] "+proj=tmerc +lat_0=0 +lon_0=147 +k=1 +x_0=49500000 +y_0=0 +ellps=krass +units=m +no_defs +type=crs"
+#&gt; [2] "+proj=tmerc +lat_0=0 +lon_0=150 +k=1 +x_0=50500000 +y_0=0 +ellps=krass +units=m +no_defs +type=crs"
+#&gt; [3] "+proj=tmerc +lat_0=0 +lon_0=153 +k=1 +x_0=51500000 +y_0=0 +ellps=krass +units=m +no_defs +type=crs"</div><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span>(<span class='no'>EPSG</span>) <span class='kw'>!=</span> <span class='st'>"try-error"</span>) <span class='no'>EPSG</span>[<span class='fu'><a href='https://rdrr.io/r/base/grep.html'>grep</a></span>(<span class='st'>"Poland"</span>, <span class='no'>EPSG</span>$<span class='no'>note</span>), <span class='fl'>1</span>:<span class='fl'>2</span>]</div><div class='output co'>#&gt;      code                               note
+#&gt; 1344 2171   Pulkovo 1942(58) / Poland zone I
+#&gt; 1345 2172  Pulkovo 1942(58) / Poland zone II
+#&gt; 1346 2173 Pulkovo 1942(58) / Poland zone III
+#&gt; 1347 2174  Pulkovo 1942(58) / Poland zone IV
+#&gt; 1348 2175   Pulkovo 1942(58) / Poland zone V
+#&gt; 1349 2176      ETRS89 / Poland CS2000 zone 5
+#&gt; 1350 2177      ETRS89 / Poland CS2000 zone 6
+#&gt; 1351 2178      ETRS89 / Poland CS2000 zone 7
+#&gt; 1355 2179      ETRS89 / Poland CS2000 zone 8
+#&gt; 1356 2180               ETRS89 / Poland CS92
+#&gt; 2991 3120   Pulkovo 1942(58) / Poland zone I</div><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span>(<span class='no'>EPSG</span>) <span class='kw'>!=</span> <span class='st'>"try-error"</span>) <span class='no'>EPSG</span>[<span class='fu'><a href='https://rdrr.io/r/base/grep.html'>grep</a></span>(<span class='st'>"Amersfoort"</span>, <span class='no'>EPSG</span>$<span class='no'>note</span>), <span class='fl'>1</span>:<span class='fl'>2</span>]</div><div class='output co'>#&gt;       code                             note
 #&gt; 230   4289                       Amersfoort
-#&gt; 2653 28991              Amersfoort / RD Old
-#&gt; 2654 28992              Amersfoort / RD New
-#&gt; 6405  7415 Amersfoort / RD New + NAP height</div><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span>(<span class='no'>EPSG</span>) <span class='kw'>!=</span> <span class='st'>"try-error"</span>) <span class='no'>EPSG</span>[<span class='fu'><a href='https://rdrr.io/r/base/grep.html'>grep</a></span>(<span class='st'>"North Carolina"</span>, <span class='no'>EPSG</span>$<span class='no'>note</span>), <span class='fl'>1</span>:<span class='fl'>2</span>]</div><div class='output co'>#&gt;       code                                                 note
-#&gt; 1468  2264                        NAD83 / North Carolina (ftUS)
-#&gt; 3158 32019                               NAD27 / North Carolina
-#&gt; 3239 32119                               NAD83 / North Carolina
-#&gt; 3819  3358                         NAD83(HARN) / North Carolina
-#&gt; 3820  3359                  NAD83(HARN) / North Carolina (ftUS)
-#&gt; 3865  3404                  NAD83(HARN) / North Carolina (ftUS)
-#&gt; 4092  3631                     NAD83(NSRS2007) / North Carolina
-#&gt; 4093  3632              NAD83(NSRS2007) / North Carolina (ftUS)
-#&gt; 5187  6542                         NAD83(2011) / North Carolina
-#&gt; 5188  6543                  NAD83(2011) / North Carolina (ftUS)
-#&gt; 6489  8768 NAD83 / North Carolina (ftUS) + NAVD88 height (ftUS)</div><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span>(<span class='no'>EPSG</span>) <span class='kw'>!=</span> <span class='st'>"try-error"</span>) <span class='no'>EPSG</span>[<span class='fl'>2202</span>, <span class='fl'>3</span>]</div><div class='output co'>#&gt; [1] "+proj=tmerc +lat_0=0 +lon_0=-96 +k=0.9999 +x_0=304800 +y_0=0 +ellps=GRS80 +units=m +no_defs +type=crs"</div></pre>
+#&gt; 2675 28991              Amersfoort / RD Old
+#&gt; 2676 28992              Amersfoort / RD New
+#&gt; 6454  7415 Amersfoort / RD New + NAP height</div><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span>(<span class='no'>EPSG</span>) <span class='kw'>!=</span> <span class='st'>"try-error"</span>) <span class='no'>EPSG</span>[<span class='fu'><a href='https://rdrr.io/r/base/grep.html'>grep</a></span>(<span class='st'>"North Carolina"</span>, <span class='no'>EPSG</span>$<span class='no'>note</span>), <span class='fl'>1</span>:<span class='fl'>2</span>]</div><div class='output co'>#&gt;       code                                                 note
+#&gt; 1490  2264                        NAD83 / North Carolina (ftUS)
+#&gt; 3180 32019                               NAD27 / North Carolina
+#&gt; 3261 32119                               NAD83 / North Carolina
+#&gt; 3841  3358                         NAD83(HARN) / North Carolina
+#&gt; 3842  3359                  NAD83(HARN) / North Carolina (ftUS)
+#&gt; 3887  3404                  NAD83(HARN) / North Carolina (ftUS)
+#&gt; 4114  3631                     NAD83(NSRS2007) / North Carolina
+#&gt; 4115  3632              NAD83(NSRS2007) / North Carolina (ftUS)
+#&gt; 5209  6542                         NAD83(2011) / North Carolina
+#&gt; 5210  6543                  NAD83(2011) / North Carolina (ftUS)
+#&gt; 6538  8768 NAD83 / North Carolina (ftUS) + NAVD88 height (ftUS)</div><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span>(<span class='no'>EPSG</span>) <span class='kw'>!=</span> <span class='st'>"try-error"</span>) <span class='no'>EPSG</span>[<span class='fl'>2202</span>, <span class='fl'>3</span>]</div><div class='output co'>#&gt; [1] "+proj=lcc +lat_0=43 +lon_0=-94 +lat_1=45.2166666666667 +lat_2=43.7833333333333 +x_0=800000.00001016 +y_0=99999.9999898399 +ellps=GRS80 +units=us-ft +no_defs +type=crs"</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
