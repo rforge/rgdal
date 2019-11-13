@@ -35,14 +35,12 @@ The object has a \code{"grids"} attribute containing a nested list of grids for 
 Fragile: work in progress
 }
 \examples{
-exts <- rgdal_extSoftVersion()
-run <- substring(exts["GDAL"], 1, 1) >= "3" && substring(exts["PROJ"], 1, 1) >= "6"
+run <- new_proj_and_gdal()
 if (run) {
-  o <- list_coordOps("EPSG:27700", "EPSG:4326")
-  print(o[1,])
+  list_coordOps("EPSG:27700", "EPSG:4326")
 }
 if (run) {
-  attr(o, "grids")[[1]][[1]]
+  list_coordOps("EPSG:27700", "EPSG:4326")
 }
 }
 

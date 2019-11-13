@@ -223,6 +223,7 @@ SEXP list_coordinate_ops(SEXP source, SEXP target, SEXP area_of_interest, SEXP s
             COPY_TO_USER_STRING(pjinfo.description));
         SET_STRING_ELT(VECTOR_ELT(ans, 1), i,
             COPY_TO_USER_STRING(pjinfo.definition));
+
         NUMERIC_POINTER(VECTOR_ELT(ans, 2))[i] = accuracy;
         LOGICAL_POINTER(VECTOR_ELT(ans, 3))[i] = is_instantiable;
         LOGICAL_POINTER(VECTOR_ELT(ans, 4))[i] = is_ballpark;

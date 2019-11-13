@@ -16,9 +16,66 @@ list_coordOps <- function(src_crs, tgt_crs, area_of_interest=as.numeric(NA), str
     names(res) <- c("description", "definition", "accuracy", "instantiable", "ballpark", "number_grids")
     grids <- res[[7]]
     res[[7]] <- NULL
-    res$definition <- unname(sapply(res$definition, function(x) gsub(" ",
+    defs <- res$definition
+    nzdefs <- nzchar(defs)
+    res$definition[nzdefs] <- unname(sapply(defs[nzdefs], function(x) gsub(" ",
         " +", paste0("+", x))))
-    res <- as.data.frame(res)
+    res$definition[!nzdefs] <- as.character(NA)
+    res <- as.data.frame(res, stringsAsFactors=FALSE)
     attr(res, "grids") <- grids
+    attr(res, "src_crs") <- src_crs
+    attr(res, "tgt_crs") <- tgt_crs
+    attr(res, "area_of_interest") <- area_of_interest
+    attr(res, "strict_containment") <- strict_containment
+    attr(res, "visualization_order") <- visualization_order
+    class(res) <- c("coordOps", class(res))
     res
+}
+
+prettify_wkt <- function(inSRID) {
+    if (substring(inSRID, 1, 1) == " ") stop("string starts with space")
+    if (substring(inSRID, 1, 1) == "+") res <- strwrap(inSRID)
+    if (substring(inSRID, 1, 3) == "urn") res <- inSRID
+    if (substring(inSRID, 1, 1) == "P" || substring(inSRID, 1, 1) == "G") 
+        res <- strwrap(gsub(",", ",", inSRID))
+    if (substring(inSRID, 1, 4) == "EPSG") res <- inSRID
+    res
+}
+
+print.coordOps <- function(x, ...) {
+    n <- nrow(x)
+    cat("Candidate coordinate operations found: ", n, "\n")
+    if (!is.na(attr(x, "area_of_interest")))
+        cat("Search specification:", paste("Area of interest: ", 
+            paste(attr(x, "area_of_interest"),
+            collapse=", ")), "\n")
+    cat("Strict containment: ", attr(x, "strict_containment"), "\n")
+    cat("Visualization order: ", attr(x, "visualization_order"), "\n")
+    in_str <- prettify_wkt(attr(x, "src_crs"))
+    if (length(in_str) == 1) cat("Source:", in_str, "\n")
+    else cat("Source:", in_str, sep="\n")
+    out_str <- prettify_wkt(attr(x, "tgt_crs"))
+    if (length(out_str) == 1) cat("Target:", out_str, "\n")
+    else cat("Target:", out_str, sep="\n")
+    nos <- which(!x$instantiable)
+    if (length(nos) > 0L) {
+        grds <- attr(x, "grids")
+        for (i in seq(along=nos)) {
+            grd <- grds[[nos[i]]]
+            ii <- length(grd)
+            if (ii > 0L) {
+                cat("Operation", nos[i], "is lacking", ii,
+                    ifelse(ii == 1L, "grid", "grids"),
+                    "with accuracy", x$accuracy[nos[i]], "\n")
+                for (j in 1:ii) {
+                    cat("Missing grid:", grd[[j]][[1]], "\n")
+                    if (nzchar(grd[[j]][[2]])) cat("Name:", grd[[j]][[2]],
+                        "\n")
+                    if (nzchar(grd[[j]][[4]])) cat("URL:", grd[[j]][[4]],
+                        "\n")
+                }
+            }
+        }
+    }
+    invisible(x)    
 }
