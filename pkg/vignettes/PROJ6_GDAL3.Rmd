@@ -128,14 +128,20 @@ It passes on the input PROJ-style string to `rgdal::showSRID()`, which is a many
 ## CRS arguments: +proj=longlat +ellps=WGS84 +no_defs
 ```
 
-In `rgdal::checkCRSArgs_ng()`, `rgdal::showSRID()` may be called several times. If the passed `"CRS"` object only has a non-NA PROJ-style string, this is used to populate the SRS object, as in this case. In addition to emitting a checked PROJ string, a WKT2 string is also returned (WKT2_2018), and this string is assigned as a `comment()` to the `"CRS"` object. This representation is far more robust than the PROJ-style string, giving authorities and table look-up ID values.
+In `rgdal::checkCRSArgs_ng()`, `rgdal::showSRID()` may be called several times. If the passed `"CRS"` object only has a non-NA PROJ-style string, this is used to populate the SRS object, as in this case. In addition to emitting a checked PROJ string, a WKT2 string is also returned (WKT2_2018), and this string is assigned as a `comment()` to the `"CRS"` object. This representation is far more robust than the PROJ-style string, giving authorities and table look-up ID values. (*WKT comment strings are reported here split across lines, because some find right-scrolling unpretty; the real format is as a character string on one line only*).
 
 ```{r}
-comment(crs)
+cat(strwrap(gsub(",", ", ", (comment(crs)))), sep="\n")
 ```
 
 ```{r}
-## [1] "GEOGCRS[\"unknown\",DATUM[\"Unknown based on WGS84 ellipsoid\",ELLIPSOID[\"WGS 84\",6378137,298.257223563,LENGTHUNIT[\"metre\",1],ID[\"EPSG\",7030]]],PRIMEM[\"Greenwich\",0,ANGLEUNIT[\"degree\",0.0174532925199433],ID[\"EPSG\",8901]],CS[ellipsoidal,2],AXIS[\"longitude\",east,ORDER[1],ANGLEUNIT[\"degree\",0.0174532925199433,ID[\"EPSG\",9122]]],AXIS[\"latitude\",north,ORDER[2],ANGLEUNIT[\"degree\",0.0174532925199433,ID[\"EPSG\",9122]]]]"
+## [1] "GEOGCRS[\"unknown\", DATUM[\"Unknown based on WGS84 ellipsoid\",
+## ELLIPSOID[\"WGS 84\", 6378137, 298.257223563, LENGTHUNIT[\"metre\", 1],
+## ID[\"EPSG\", 7030]]], PRIMEM[\"Greenwich\", 0, ANGLEUNIT[\"degree\",
+## 0.0174532925199433], ID[\"EPSG\", 8901]], CS[ellipsoidal, 2], AXIS[\"longitude\",
+## east, ORDER[1], ANGLEUNIT[\"degree\", 0.0174532925199433, ID[\"EPSG\", 9122]]],
+## AXIS[\"latitude\", north, ORDER[2], ANGLEUNIT[\"degree\", 0.0174532925199433,
+## ID[\"EPSG\", 9122]]]]"
 ```
 
 For the PROJ4/GDAL2 (and similar) cases, if **rgdal** is available, `CRS()` calls `rgdal::checkCRSArgs()`, calling `RGDAL_checkCRSArgs()`, a compiled function, which calls `pj_init_plus()` in PROJ to check the validity of the string and possibly expand terms. If this succeeds, `pj_get_def()` is used to return the PROJ string. Both of these functions are part of the deprecated PROJ API that is still accessible in PROJ 6, but will soon be made defunct. 
@@ -155,11 +161,17 @@ A number of further examples will be given here, including the case of one of th
 ```
 
 ```{r}
-comment(crs)
+cat(strwrap(gsub(",", ", ", (comment(crs)))), sep="\n")
 ```
 
 ```{r}
-## [1] "GEOGCRS[\"unknown\",DATUM[\"World Geodetic System 1984\",ELLIPSOID[\"WGS 84\",6378137,298.257223563,LENGTHUNIT[\"metre\",1]],ID[\"EPSG\",6326]],PRIMEM[\"Greenwich\",0,ANGLEUNIT[\"degree\",0.0174532925199433],ID[\"EPSG\",8901]],CS[ellipsoidal,2],AXIS[\"longitude\",east,ORDER[1],ANGLEUNIT[\"degree\",0.0174532925199433,ID[\"EPSG\",9122]]],AXIS[\"latitude\",north,ORDER[2],ANGLEUNIT[\"degree\",0.0174532925199433,ID[\"EPSG\",9122]]]]"
+## [1] "GEOGCRS[\"unknown\", DATUM[\"World Geodetic System 1984\",
+## ELLIPSOID[\"WGS 84\", 6378137, 298.257223563, LENGTHUNIT[\"metre\", 1]], 
+## ID[\"EPSG\", 6326]], PRIMEM[\"Greenwich\", 0, ANGLEUNIT[\"degree\",
+## 0.0174532925199433], ID[\"EPSG\", 8901]], CS[ellipsoidal, 2], AXIS[\"longitude\",
+## east, ORDER[1], ANGLEUNIT[\"degree\", 0.0174532925199433, ID[\"EPSG\", 9122]]],
+## AXIS[\"latitude\", north, ORDER[2], ANGLEUNIT[\"degree\", 0.0174532925199433,
+## ID[\"EPSG\", 9122]]]]"
 ```
 
 ```{r}
@@ -184,11 +196,25 @@ We know that `+datum`, `+towgs84`, `+nadgrids` and `+init` are fragile, so we'll
 The comment here includes the `+towgs84` parameters (three of them), while the PROJ string gives seven.
 
 ```{r}
-comment(crs)
+cat(strwrap(gsub(",", ", ", (comment(crs)))), sep="\n")
 ```
 
 ```{r}
-## [1] "BOUNDCRS[SOURCECRS[GEOGCRS[\"unknown\",DATUM[\"World Geodetic System 1984\",ELLIPSOID[\"WGS 84\",6378137,298.257223563,LENGTHUNIT[\"metre\",1]],ID[\"EPSG\",6326]],PRIMEM[\"Greenwich\",0,ANGLEUNIT[\"degree\",0.0174532925199433],ID[\"EPSG\",8901]],CS[ellipsoidal,2],AXIS[\"longitude\",east,ORDER[1],ANGLEUNIT[\"degree\",0.0174532925199433,ID[\"EPSG\",9122]]],AXIS[\"latitude\",north,ORDER[2],ANGLEUNIT[\"degree\",0.0174532925199433,ID[\"EPSG\",9122]]]]],TARGETCRS[GEOGCRS[\"WGS 84\",DATUM[\"World Geodetic System 1984\",ELLIPSOID[\"WGS 84\",6378137,298.257223563,LENGTHUNIT[\"metre\",1]]],PRIMEM[\"Greenwich\",0,ANGLEUNIT[\"degree\",0.0174532925199433]],CS[ellipsoidal,2],AXIS[\"latitude\",north,ORDER[1],ANGLEUNIT[\"degree\",0.0174532925199433]],AXIS[\"longitude\",east,ORDER[2],ANGLEUNIT[\"degree\",0.0174532925199433]],ID[\"EPSG\",4326]]],ABRIDGEDTRANSFORMATION[\"Transformation from unknown to WGS84\",METHOD[\"Geocentric translations (geog2D domain)\",ID[\"EPSG\",9603]],PARAMETER[\"X-axis translation\",0,ID[\"EPSG\",8605]],PARAMETER[\"Y-axis translation\",0,ID[\"EPSG\",8606]],PARAMETER[\"Z-axis translation\",0,ID[\"EPSG\",8607]]]]"
+## [1] "BOUNDCRS[SOURCECRS[GEOGCRS[\"unknown\", DATUM[\"World Geodetic System 1984\",
+## ELLIPSOID[\"WGS 84\", 6378137, 298.257223563, LENGTHUNIT[\"metre\", 1]], ID[\"EPSG\",
+## 6326]], PRIMEM[\"Greenwich\", 0, ANGLEUNIT[\"degree\", 0.0174532925199433],
+## ID[\"EPSG\", 8901]], CS[ellipsoidal, 2], AXIS[\"longitude\", east, ORDER[1],
+## ANGLEUNIT[\"degree\", 0.0174532925199433, ID[\"EPSG\", 9122]]], AXIS[\"latitude\",
+## north, ORDER[2], ANGLEUNIT[\"degree\", 0.0174532925199433, ID[\"EPSG\", 9122]]]]],
+## TARGETCRS[GEOGCRS[\"WGS 84\", DATUM[\"World Geodetic System 1984\", ELLIPSOID[\"WGS
+## 84\", 6378137, 298.257223563, LENGTHUNIT[\"metre\", 1]]], PRIMEM[\"Greenwich\", 0,
+## ANGLEUNIT[\"degree\", 0.0174532925199433]], CS[ellipsoidal, 2], AXIS[\"latitude\",
+## north, ORDER[1], ANGLEUNIT[\"degree\", 0.0174532925199433]], AXIS[\"longitude\", east,
+## ORDER[2], ANGLEUNIT[\"degree\", 0.0174532925199433]], ID[\"EPSG\", 4326]]],
+## ABRIDGEDTRANSFORMATION[\"Transformation from unknown to WGS84\", METHOD[\"Geocentric
+## translations (geog2D domain)\", ID[\"EPSG\", 9603]], PARAMETER[\"X-axis translation\",
+## 0, ID[\"EPSG\", 8605]], PARAMETER[\"Y-axis translation\", 0, ID[\"EPSG\", 8606]],
+## PARAMETER[\"Z-axis translation\", 0, ID[\"EPSG\", 8607]]]]"
 ```
 
 ```{r}
@@ -207,11 +233,17 @@ The `+init` value is still accepted, but not repeated in the output:
 ```
 
 ```{r}
-comment(crs)
+cat(strwrap(gsub(",", ", ", (comment(crs)))), sep="\n")
 ```
 
 ```{r}
-## [1] "GEOGCRS[\"WGS 84\",DATUM[\"World Geodetic System 1984\",ELLIPSOID[\"WGS 84\",6378137,298.257223563,LENGTHUNIT[\"metre\",1]],ID[\"EPSG\",6326]],PRIMEM[\"Greenwich\",0,ANGLEUNIT[\"degree\",0.0174532925199433],ID[\"EPSG\",8901]],CS[ellipsoidal,2],AXIS[\"longitude\",east,ORDER[1],ANGLEUNIT[\"degree\",0.0174532925199433,ID[\"EPSG\",9122]]],AXIS[\"latitude\",north,ORDER[2],ANGLEUNIT[\"degree\",0.0174532925199433,ID[\"EPSG\",9122]]],USAGE[SCOPE[\"unknown\"],AREA[\"World\"],BBOX[-90,-180,90,180]]]"
+## [1] "GEOGCRS[\"WGS 84\", DATUM[\"World Geodetic System 1984\", ELLIPSOID[\"WGS 84\", 
+## 6378137, 298.257223563, LENGTHUNIT[\"metre\", 1]], ID[\"EPSG\", 6326]],
+## PRIMEM[\"Greenwich\", 0, ANGLEUNIT[\"degree\", 0.0174532925199433], ID[\"EPSG\",
+## 8901]], CS[ellipsoidal, 2], AXIS[\"longitude\", east, ORDER[1], ANGLEUNIT[\"degree\",
+## 0.0174532925199433, ID[\"EPSG\", 9122]]], AXIS[\"latitude\", north, ORDER[2],
+## ANGLEUNIT[\"degree\", 0.0174532925199433, ID[\"EPSG\", 9122]]],
+## USAGE[SCOPE[\"unknown\"], AREA[\"World\"], BBOX[-90, -180, 90, 180]]]"
 ```
 
 ```{r}
@@ -238,11 +270,25 @@ An early warning of difficulties with discarded `+datum` values came with the GB
 Here, the comment has all the information that would be needed to carry out coordinate operations, but the PROJ string is defective for GDAL3/PROJ6, giving at best ballpark accuracy.
 
 ```{r}
-comment(crs)
+cat(strwrap(gsub(",", ", ", (comment(crs)))), sep="\n")
 ```
 
 ```{r}
-## [1] "PROJCRS[\"OSGB 1936 / British National Grid\",BASEGEOGCRS[\"OSGB 1936\",DATUM[\"OSGB 1936\",ELLIPSOID[\"Airy 1830\",6377563.396,299.3249646,LENGTHUNIT[\"metre\",1]]],PRIMEM[\"Greenwich\",0,ANGLEUNIT[\"degree\",0.0174532925199433]],ID[\"EPSG\",4277]],CONVERSION[\"British National Grid\",METHOD[\"Transverse Mercator\",ID[\"EPSG\",9807]],PARAMETER[\"Latitude of natural origin\",49,ANGLEUNIT[\"degree\",0.0174532925199433],ID[\"EPSG\",8801]],PARAMETER[\"Longitude of natural origin\",-2,ANGLEUNIT[\"degree\",0.0174532925199433],ID[\"EPSG\",8802]],PARAMETER[\"Scale factor at natural origin\",0.9996012717,SCALEUNIT[\"unity\",1],ID[\"EPSG\",8805]],PARAMETER[\"False easting\",400000,LENGTHUNIT[\"metre\",1],ID[\"EPSG\",8806]],PARAMETER[\"False northing\",-100000,LENGTHUNIT[\"metre\",1],ID[\"EPSG\",8807]],ID[\"EPSG\",19916]],CS[Cartesian,2],AXIS[\"(E)\",east,ORDER[1],LENGTHUNIT[\"metre\",1,ID[\"EPSG\",9001]]],AXIS[\"(N)\",north,ORDER[2],LENGTHUNIT[\"metre\",1,ID[\"EPSG\",9001]]],USAGE[SCOPE[\"unknown\"],AREA[\"UK - Britain and UKCS 49°46'N to 61°01'N, 7°33'W to 3°33'E\"],BBOX[49.75,-9.2,61.14,2.88]]]"
+## [1] "PROJCRS[\"OSGB 1936 / British National Grid\", BASEGEOGCRS[\"OSGB 1936\",
+## DATUM[\"OSGB 1936\", ELLIPSOID[\"Airy 1830\", 6377563.396, 299.3249646,
+## LENGTHUNIT[\"metre\", 1]]], PRIMEM[\"Greenwich\", 0, ANGLEUNIT[\"degree\",
+## 0.0174532925199433]], ID[\"EPSG\", 4277]], CONVERSION[\"British National Grid\",
+## METHOD[\"Transverse Mercator\", ID[\"EPSG\", 9807]], PARAMETER[\"Latitude of natural
+## origin\", 49, ANGLEUNIT[\"degree\", 0.0174532925199433], ID[\"EPSG\", 8801]],
+## PARAMETER[\"Longitude of natural origin\", -2, ANGLEUNIT[\"degree\",
+## 0.0174532925199433], ID[\"EPSG\", 8802]], PARAMETER[\"Scale factor at natural
+## origin\", 0.9996012717, SCALEUNIT[\"unity\", 1], ID[\"EPSG\", 8805]],
+## PARAMETER[\"False easting\", 400000, LENGTHUNIT[\"metre\", 1], ID[\"EPSG\", 8806]],
+## PARAMETER[\"False northing\", -100000, LENGTHUNIT[\"metre\", 1], ID[\"EPSG\", 8807]],
+## ID[\"EPSG\", 19916]], CS[Cartesian, 2], AXIS[\"(E)\", east, ORDER[1],
+## LENGTHUNIT[\"metre\", 1, ID[\"EPSG\", 9001]]], AXIS[\"(N)\", north, ORDER[2],
+## LENGTHUNIT[\"metre\", 1, ID[\"EPSG\", 9001]]], USAGE[SCOPE[\"unknown\"], AREA[\"UK -
+## Britain and UKCS 49°46'N to 61°01'N,  7°33'W to 3°33'E\"], BBOX[49.75, -9.2, 61.14, 2.88]]]"
 ```
 
 In PROJ4/GDAL2, the `+datum` and `+towgs84` values give much better transformation accuracy from the PROJ string.
@@ -271,11 +317,25 @@ if (packageVersion("sp") >= "1.3.3") (crs <- CRS(SRS_string = "EPSG:27700"))
 ```
 
 ```{r}
-if (packageVersion("sp") >= "1.3.3") comment(crs)
+if (packageVersion("sp") >= "1.3.3") cat(strwrap(gsub(",", ", ", (comment(crs)))), sep="\n")
 ```
 
 ```{r}
-## [1] "PROJCRS[\"OSGB 1936 / British National Grid\",BASEGEOGCRS[\"OSGB 1936\",DATUM[\"OSGB 1936\",ELLIPSOID[\"Airy 1830\",6377563.396,299.3249646,LENGTHUNIT[\"metre\",1]]],PRIMEM[\"Greenwich\",0,ANGLEUNIT[\"degree\",0.0174532925199433]],ID[\"EPSG\",4277]],CONVERSION[\"British National Grid\",METHOD[\"Transverse Mercator\",ID[\"EPSG\",9807]],PARAMETER[\"Latitude of natural origin\",49,ANGLEUNIT[\"degree\",0.0174532925199433],ID[\"EPSG\",8801]],PARAMETER[\"Longitude of natural origin\",-2,ANGLEUNIT[\"degree\",0.0174532925199433],ID[\"EPSG\",8802]],PARAMETER[\"Scale factor at natural origin\",0.9996012717,SCALEUNIT[\"unity\",1],ID[\"EPSG\",8805]],PARAMETER[\"False easting\",400000,LENGTHUNIT[\"metre\",1],ID[\"EPSG\",8806]],PARAMETER[\"False northing\",-100000,LENGTHUNIT[\"metre\",1],ID[\"EPSG\",8807]]],CS[Cartesian,2],AXIS[\"(E)\",east,ORDER[1],LENGTHUNIT[\"metre\",1]],AXIS[\"(N)\",north,ORDER[2],LENGTHUNIT[\"metre\",1]],USAGE[SCOPE[\"unknown\"],AREA[\"UK - Britain and UKCS 49°46'N to 61°01'N, 7°33'W to 3°33'E\"],BBOX[49.75,-9.2,61.14,2.88]],ID[\"EPSG\",27700]]"
+## [1] "PROJCRS[\"OSGB 1936 / British National Grid\", BASEGEOGCRS[\"OSGB 1936\",
+## DATUM[\"OSGB 1936\", ELLIPSOID[\"Airy 1830\", 6377563.396, 299.3249646,
+## LENGTHUNIT[\"metre\", 1]]], PRIMEM[\"Greenwich\", 0, ANGLEUNIT[\"degree\",
+## 0.0174532925199433]], ID[\"EPSG\", 4277]], CONVERSION[\"British National Grid\",
+## METHOD[\"Transverse Mercator\", ID[\"EPSG\", 9807]], PARAMETER[\"Latitude of natural
+## origin\", 49, ANGLEUNIT[\"degree\", 0.0174532925199433], ID[\"EPSG\", 8801]],
+## PARAMETER[\"Longitude of natural origin\", -2, ANGLEUNIT[\"degree\",
+## 0.0174532925199433], ID[\"EPSG\", 8802]], PARAMETER[\"Scale factor at natural
+## origin\", 0.9996012717, SCALEUNIT[\"unity\", 1], ID[\"EPSG\", 8805]],
+## PARAMETER[\"False easting\", 400000, LENGTHUNIT[\"metre\", 1], ID[\"EPSG\", 8806]],
+## PARAMETER[\"False northing\", -100000, LENGTHUNIT[\"metre\", 1], ID[\"EPSG\", 8807]]],
+## CS[Cartesian, 2], AXIS[\"(E)\", east, ORDER[1], LENGTHUNIT[\"metre\", 1]],
+## AXIS[\"(N)\", north, ORDER[2], LENGTHUNIT[\"metre\", 1]], USAGE[SCOPE[\"unknown\"],
+## AREA[\"UK - Britain and UKCS 49°46'N to 61°01'N,  7°33'W to 3°33'E\"], BBOX[49.75,
+## -9.2, 61.14, 2.88]], ID[\"EPSG\", 27700]]"
 ```
 
 We can also use a more detailed PROJ string, but without any improvement of the output PROJ representation; the comment is OK:
@@ -295,11 +355,23 @@ We can also use a more detailed PROJ string, but without any improvement of the 
 
 
 ```{r}
-comment(crs)
+cat(strwrap(gsub(",", ", ", (comment(crs)))), sep="\n")
 ```
 
 ```{r}
-## [1] "PROJCRS[\"unknown\",BASEGEOGCRS[\"unknown\",DATUM[\"OSGB 1936\",ELLIPSOID[\"Airy 1830\",6377563.396,299.3249646,LENGTHUNIT[\"metre\",1]],ID[\"EPSG\",6277]],PRIMEM[\"Greenwich\",0,ANGLEUNIT[\"degree\",0.0174532925199433],ID[\"EPSG\",8901]]],CONVERSION[\"unknown\",METHOD[\"Transverse Mercator\",ID[\"EPSG\",9807]],PARAMETER[\"Latitude of natural origin\",49,ANGLEUNIT[\"degree\",0.0174532925199433],ID[\"EPSG\",8801]],PARAMETER[\"Longitude of natural origin\",-2,ANGLEUNIT[\"degree\",0.0174532925199433],ID[\"EPSG\",8802]],PARAMETER[\"Scale factor at natural origin\",0.9996012717,SCALEUNIT[\"unity\",1],ID[\"EPSG\",8805]],PARAMETER[\"False easting\",400000,LENGTHUNIT[\"metre\",1],ID[\"EPSG\",8806]],PARAMETER[\"False northing\",-100000,LENGTHUNIT[\"metre\",1],ID[\"EPSG\",8807]]],CS[Cartesian,2],AXIS[\"(E)\",east,ORDER[1],LENGTHUNIT[\"metre\",1,ID[\"EPSG\",9001]]],AXIS[\"(N)\",north,ORDER[2],LENGTHUNIT[\"metre\",1,ID[\"EPSG\",9001]]]]"
+## [1] "PROJCRS[\"unknown\", BASEGEOGCRS[\"unknown\", DATUM[\"OSGB 1936\",
+## ELLIPSOID[\"Airy 1830\", 6377563.396, 299.3249646, LENGTHUNIT[\"metre\", 1]],
+## ID[\"EPSG\", 6277]], PRIMEM[\"Greenwich\", 0, ANGLEUNIT[\"degree\",
+## 0.0174532925199433], ID[\"EPSG\", 8901]]], CONVERSION[\"unknown\", METHOD[\"Transverse
+## Mercator\", ID[\"EPSG\", 9807]], PARAMETER[\"Latitude of natural origin\", 49,
+## ANGLEUNIT[\"degree\", 0.0174532925199433], ID[\"EPSG\", 8801]], PARAMETER[\"Longitude
+## of natural origin\", -2, ANGLEUNIT[\"degree\", 0.0174532925199433], ID[\"EPSG\",
+## 8802]], PARAMETER[\"Scale factor at natural origin\", 0.9996012717,
+## SCALEUNIT[\"unity\", 1], ID[\"EPSG\", 8805]], PARAMETER[\"False easting\", 400000,
+## LENGTHUNIT[\"metre\", 1], ID[\"EPSG\", 8806]], PARAMETER[\"False northing\", -100000,
+## LENGTHUNIT[\"metre\", 1], ID[\"EPSG\", 8807]]], CS[Cartesian, 2], AXIS[\"(E)\", east,
+## ORDER[1], LENGTHUNIT[\"metre\", 1, ID[\"EPSG\", 9001]]], AXIS[\"(N)\", north,
+## ORDER[2], LENGTHUNIT[\"metre\", 1, ID[\"EPSG\", 9001]]]]"
 ```
 
 `rgdal::showSRID()` is quite versatile, so we can display a multiline WKT string as well:
