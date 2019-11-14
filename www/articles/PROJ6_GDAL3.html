@@ -159,8 +159,8 @@
 <p>The changes introduced affect <code><a href="../reference/CRS-class.html">CRS()</a></code> when <strong>rgdal</strong> is available; if <strong>rgdal</strong> is not available, the <code>"CRS"</code> object just contains a lightly checked PROJ-style string. Because some terms are deprecated or defunct from PROJ6/GDAL3, we need to be careful. GDAL’s <code>exportToProj4()</code> uses the PROJ <code>proj_as_proj_string()</code> function in its new API to return the PROJ string. Terms which are deprecated or defunct may be omitted. In the PROJ6+/GDAL3+ case, <code><a href="../reference/CRS-class.html">CRS()</a></code> calls <code><a href="../reference/CRS-class.html">rgdal::checkCRSArgs_ng()</a></code>, a new generation function replacing the legacy <code><a href="../reference/CRS-class.html">rgdal::checkCRSArgs()</a></code> function.</p>
 <p>It passes on the input PROJ-style string to <code><a href="../reference/showWKT.html">rgdal::showSRID()</a></code>, which is a many-to-many converter. It can take PROJ-style strings, WKT strings, urn-style strings and EPSG-style strings, and converts to WKT (many types) and PROJ. The PROJ-to-PROJ conversion is equivalent to PROJ4/GDAL2 behaviour, using <code>importFromProj4()</code> and friends to instantiate an SRS object in GDAL, and <code>exportToProj4()</code> and <code>exportToWkt()</code> to emit strings. If the output string appears to be missing a specification term implied by the input, a warning is given; the warnings are at present overly cautious.</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" title="1">(crs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/CRS-class.html">CRS</a></span>(<span class="st">"+proj=longlat +ellps=WGS84"</span>))</a></code></pre></div>
-<pre><code>## Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO"):
-## Discarded datum Unknown_based_on_WGS84_ellipsoid in CRS definition</code></pre>
+<pre><code>## Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO"): Discarded
+## datum Unknown_based_on_WGS84_ellipsoid in CRS definition</code></pre>
 <pre><code>## CRS arguments: +proj=longlat +ellps=WGS84 +no_defs</code></pre>
 <div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" title="1"><span class="co">## Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO"):</span></a>
 <a class="sourceLine" id="cb18-2" title="2"><span class="co">## Discarded datum Unknown_based_on_WGS84_ellipsoid in CRS definition</span></a>
@@ -169,13 +169,12 @@
 <p>In <code><a href="../reference/CRS-class.html">rgdal::checkCRSArgs_ng()</a></code>, <code><a href="../reference/showWKT.html">rgdal::showSRID()</a></code> may be called several times. If the passed <code>"CRS"</code> object only has a non-NA PROJ-style string, this is used to populate the SRS object, as in this case. In addition to emitting a checked PROJ string, a WKT2 string is also returned (WKT2_2018), and this string is assigned as a <code><a href="https://rdrr.io/r/base/comment.html">comment()</a></code> to the <code>"CRS"</code> object. This representation is far more robust than the PROJ-style string, giving authorities and table look-up ID values. (<em>WKT comment strings are reported here split across lines, because some find right-scrolling unpretty; the real format is as a character string on one line only</em>).</p>
 <div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/cat.html">cat</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/strwrap.html">strwrap</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/grep.html">gsub</a></span>(<span class="st">","</span>, <span class="st">", "</span>, (<span class="kw"><a href="https://rdrr.io/r/base/comment.html">comment</a></span>(crs)))), <span class="dt">sep=</span><span class="st">"</span><span class="ch">\n</span><span class="st">"</span>)</a></code></pre></div>
 <pre><code>## GEOGCRS["unknown", DATUM["Unknown based on WGS84 ellipsoid",
-## ELLIPSOID["WGS 84", 6378137, 298.257223563, LENGTHUNIT["metre",
-## 1], ID["EPSG", 7030]]], PRIMEM["Greenwich", 0, ANGLEUNIT["degree",
+## ELLIPSOID["WGS 84", 6378137, 298.257223563, LENGTHUNIT["metre", 1],
+## ID["EPSG", 7030]]], PRIMEM["Greenwich", 0, ANGLEUNIT["degree",
 ## 0.0174532925199433], ID["EPSG", 8901]], CS[ellipsoidal, 2],
 ## AXIS["longitude", east, ORDER[1], ANGLEUNIT["degree",
 ## 0.0174532925199433, ID["EPSG", 9122]]], AXIS["latitude", north,
-## ORDER[2], ANGLEUNIT["degree", 0.0174532925199433, ID["EPSG",
-## 9122]]]]</code></pre>
+## ORDER[2], ANGLEUNIT["degree", 0.0174532925199433, ID["EPSG", 9122]]]]</code></pre>
 <div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" title="1"><span class="co">## [1] "GEOGCRS[\"unknown\", DATUM[\"Unknown based on WGS84 ellipsoid\",</span></a>
 <a class="sourceLine" id="cb21-2" title="2"><span class="co">## ELLIPSOID[\"WGS 84\", 6378137, 298.257223563, LENGTHUNIT[\"metre\", 1],</span></a>
 <a class="sourceLine" id="cb21-3" title="3"><span class="co">## ID[\"EPSG\", 7030]]], PRIMEM[\"Greenwich\", 0, ANGLEUNIT[\"degree\",</span></a>
@@ -190,14 +189,13 @@
 <pre><code>## CRS arguments: +proj=longlat +datum=WGS84 +no_defs</code></pre>
 <div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" title="1"><span class="co">## CRS arguments: +proj=longlat +datum=WGS84 +no_defs</span></a></code></pre></div>
 <div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/cat.html">cat</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/strwrap.html">strwrap</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/grep.html">gsub</a></span>(<span class="st">","</span>, <span class="st">", "</span>, (<span class="kw"><a href="https://rdrr.io/r/base/comment.html">comment</a></span>(crs)))), <span class="dt">sep=</span><span class="st">"</span><span class="ch">\n</span><span class="st">"</span>)</a></code></pre></div>
-<pre><code>## GEOGCRS["unknown", DATUM["World Geodetic System 1984",
-## ELLIPSOID["WGS 84", 6378137, 298.257223563, LENGTHUNIT["metre",
-## 1]], ID["EPSG", 6326]], PRIMEM["Greenwich", 0, ANGLEUNIT["degree",
-## 0.0174532925199433], ID["EPSG", 8901]], CS[ellipsoidal, 2],
-## AXIS["longitude", east, ORDER[1], ANGLEUNIT["degree",
-## 0.0174532925199433, ID["EPSG", 9122]]], AXIS["latitude", north,
-## ORDER[2], ANGLEUNIT["degree", 0.0174532925199433, ID["EPSG",
-## 9122]]]]</code></pre>
+<pre><code>## GEOGCRS["unknown", DATUM["World Geodetic System 1984", ELLIPSOID["WGS
+## 84", 6378137, 298.257223563, LENGTHUNIT["metre", 1]], ID["EPSG",
+## 6326]], PRIMEM["Greenwich", 0, ANGLEUNIT["degree", 0.0174532925199433],
+## ID["EPSG", 8901]], CS[ellipsoidal, 2], AXIS["longitude", east,
+## ORDER[1], ANGLEUNIT["degree", 0.0174532925199433, ID["EPSG", 9122]]],
+## AXIS["latitude", north, ORDER[2], ANGLEUNIT["degree",
+## 0.0174532925199433, ID["EPSG", 9122]]]]</code></pre>
 <div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" title="1"><span class="co">## [1] "GEOGCRS[\"unknown\", DATUM[\"World Geodetic System 1984\",</span></a>
 <a class="sourceLine" id="cb28-2" title="2"><span class="co">## ELLIPSOID[\"WGS 84\", 6378137, 298.257223563, LENGTHUNIT[\"metre\", 1]], </span></a>
 <a class="sourceLine" id="cb28-3" title="3"><span class="co">## ID[\"EPSG\", 6326]], PRIMEM[\"Greenwich\", 0, ANGLEUNIT[\"degree\",</span></a>
@@ -221,24 +219,23 @@
 <p>The comment here includes the <code>+towgs84</code> parameters (three of them), while the PROJ string gives seven.</p>
 <div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/cat.html">cat</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/strwrap.html">strwrap</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/grep.html">gsub</a></span>(<span class="st">","</span>, <span class="st">", "</span>, (<span class="kw"><a href="https://rdrr.io/r/base/comment.html">comment</a></span>(crs)))), <span class="dt">sep=</span><span class="st">"</span><span class="ch">\n</span><span class="st">"</span>)</a></code></pre></div>
 <pre><code>## BOUNDCRS[SOURCECRS[GEOGCRS["unknown", DATUM["World Geodetic System
-## 1984", ELLIPSOID["WGS 84", 6378137, 298.257223563,
-## LENGTHUNIT["metre", 1]], ID["EPSG", 6326]], PRIMEM["Greenwich", 0,
-## ANGLEUNIT["degree", 0.0174532925199433], ID["EPSG", 8901]],
-## CS[ellipsoidal, 2], AXIS["longitude", east, ORDER[1],
-## ANGLEUNIT["degree", 0.0174532925199433, ID["EPSG", 9122]]],
-## AXIS["latitude", north, ORDER[2], ANGLEUNIT["degree",
-## 0.0174532925199433, ID["EPSG", 9122]]]]], TARGETCRS[GEOGCRS["WGS
-## 84", DATUM["World Geodetic System 1984", ELLIPSOID["WGS 84",
-## 6378137, 298.257223563, LENGTHUNIT["metre", 1]]],
+## 1984", ELLIPSOID["WGS 84", 6378137, 298.257223563, LENGTHUNIT["metre",
+## 1]], ID["EPSG", 6326]], PRIMEM["Greenwich", 0, ANGLEUNIT["degree",
+## 0.0174532925199433], ID["EPSG", 8901]], CS[ellipsoidal, 2],
+## AXIS["longitude", east, ORDER[1], ANGLEUNIT["degree",
+## 0.0174532925199433, ID["EPSG", 9122]]], AXIS["latitude", north,
+## ORDER[2], ANGLEUNIT["degree", 0.0174532925199433, ID["EPSG", 9122]]]]],
+## TARGETCRS[GEOGCRS["WGS 84", DATUM["World Geodetic System 1984",
+## ELLIPSOID["WGS 84", 6378137, 298.257223563, LENGTHUNIT["metre", 1]]],
 ## PRIMEM["Greenwich", 0, ANGLEUNIT["degree", 0.0174532925199433]],
 ## CS[ellipsoidal, 2], AXIS["latitude", north, ORDER[1],
 ## ANGLEUNIT["degree", 0.0174532925199433]], AXIS["longitude", east,
-## ORDER[2], ANGLEUNIT["degree", 0.0174532925199433]], ID["EPSG",
-## 4326]]], ABRIDGEDTRANSFORMATION["Transformation from unknown to
-## WGS84", METHOD["Geocentric translations (geog2D domain)",
-## ID["EPSG", 9603]], PARAMETER["X-axis translation", 0, ID["EPSG",
-## 8605]], PARAMETER["Y-axis translation", 0, ID["EPSG", 8606]],
-## PARAMETER["Z-axis translation", 0, ID["EPSG", 8607]]]]</code></pre>
+## ORDER[2], ANGLEUNIT["degree", 0.0174532925199433]], ID["EPSG", 4326]]],
+## ABRIDGEDTRANSFORMATION["Transformation from unknown to WGS84",
+## METHOD["Geocentric translations (geog2D domain)", ID["EPSG", 9603]],
+## PARAMETER["X-axis translation", 0, ID["EPSG", 8605]], PARAMETER["Y-axis
+## translation", 0, ID["EPSG", 8606]], PARAMETER["Z-axis translation", 0,
+## ID["EPSG", 8607]]]]</code></pre>
 <div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" title="1"><span class="co">## [1] "BOUNDCRS[SOURCECRS[GEOGCRS[\"unknown\", DATUM[\"World Geodetic System 1984\",</span></a>
 <a class="sourceLine" id="cb36-2" title="2"><span class="co">## ELLIPSOID[\"WGS 84\", 6378137, 298.257223563, LENGTHUNIT[\"metre\", 1]], ID[\"EPSG\",</span></a>
 <a class="sourceLine" id="cb36-3" title="3"><span class="co">## 6326]], PRIMEM[\"Greenwich\", 0, ANGLEUNIT[\"degree\", 0.0174532925199433],</span></a>
@@ -261,15 +258,14 @@
 <pre><code>## CRS arguments: +proj=longlat +datum=WGS84 +no_defs</code></pre>
 <div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" title="1"><span class="co">## CRS arguments: +proj=longlat +datum=WGS84 +no_defs</span></a></code></pre></div>
 <div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/cat.html">cat</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/strwrap.html">strwrap</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/grep.html">gsub</a></span>(<span class="st">","</span>, <span class="st">", "</span>, (<span class="kw"><a href="https://rdrr.io/r/base/comment.html">comment</a></span>(crs)))), <span class="dt">sep=</span><span class="st">"</span><span class="ch">\n</span><span class="st">"</span>)</a></code></pre></div>
-<pre><code>## GEOGCRS["WGS 84", DATUM["World Geodetic System 1984",
-## ELLIPSOID["WGS 84", 6378137, 298.257223563, LENGTHUNIT["metre",
-## 1]], ID["EPSG", 6326]], PRIMEM["Greenwich", 0, ANGLEUNIT["degree",
-## 0.0174532925199433], ID["EPSG", 8901]], CS[ellipsoidal, 2],
-## AXIS["longitude", east, ORDER[1], ANGLEUNIT["degree",
-## 0.0174532925199433, ID["EPSG", 9122]]], AXIS["latitude", north,
-## ORDER[2], ANGLEUNIT["degree", 0.0174532925199433, ID["EPSG",
-## 9122]]], USAGE[SCOPE["unknown"], AREA["World"], BBOX[-90, -180,
-## 90, 180]]]</code></pre>
+<pre><code>## GEOGCRS["WGS 84", DATUM["World Geodetic System 1984", ELLIPSOID["WGS
+## 84", 6378137, 298.257223563, LENGTHUNIT["metre", 1]], ID["EPSG",
+## 6326]], PRIMEM["Greenwich", 0, ANGLEUNIT["degree", 0.0174532925199433],
+## ID["EPSG", 8901]], CS[ellipsoidal, 2], AXIS["longitude", east,
+## ORDER[1], ANGLEUNIT["degree", 0.0174532925199433, ID["EPSG", 9122]]],
+## AXIS["latitude", north, ORDER[2], ANGLEUNIT["degree",
+## 0.0174532925199433, ID["EPSG", 9122]]], USAGE[SCOPE["unknown"],
+## AREA["World"], BBOX[-90, -180, 90, 180]]]</code></pre>
 <div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb43-1" title="1"><span class="co">## [1] "GEOGCRS[\"WGS 84\", DATUM[\"World Geodetic System 1984\", ELLIPSOID[\"WGS 84\", </span></a>
 <a class="sourceLine" id="cb43-2" title="2"><span class="co">## 6378137, 298.257223563, LENGTHUNIT[\"metre\", 1]], ID[\"EPSG\", 6326]],</span></a>
 <a class="sourceLine" id="cb43-3" title="3"><span class="co">## PRIMEM[\"Greenwich\", 0, ANGLEUNIT[\"degree\", 0.0174532925199433], ID[\"EPSG\",</span></a>
@@ -282,8 +278,8 @@
 <a class="sourceLine" id="cb44-3" title="3"><span class="co">## PROJ4/GDAL2 +towgs84=0,0,0</span></a></code></pre></div>
 <p>An early warning of difficulties with discarded <code>+datum</code> values came with the GB datum:</p>
 <div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb45-1" title="1">(crs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/CRS-class.html">CRS</a></span>(<span class="st">"+init=epsg:27700"</span>))</a></code></pre></div>
-<pre><code>## Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO"):
-## Discarded datum OSGB_1936 in CRS definition</code></pre>
+<pre><code>## Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO"): Discarded
+## datum OSGB_1936 in CRS definition</code></pre>
 <pre><code>## CRS arguments:
 ##  +proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000
 ## +y_0=-100000 +ellps=airy +units=m +no_defs</code></pre>
@@ -295,24 +291,23 @@
 <a class="sourceLine" id="cb48-6" title="6"><span class="co">## +y_0=-100000 +ellps=airy +units=m +no_defs</span></a></code></pre></div>
 <p>Here, the comment has all the information that would be needed to carry out coordinate operations, but the PROJ string is defective for GDAL3/PROJ6, giving at best ballpark accuracy.</p>
 <div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb49-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/cat.html">cat</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/strwrap.html">strwrap</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/grep.html">gsub</a></span>(<span class="st">","</span>, <span class="st">", "</span>, (<span class="kw"><a href="https://rdrr.io/r/base/comment.html">comment</a></span>(crs)))), <span class="dt">sep=</span><span class="st">"</span><span class="ch">\n</span><span class="st">"</span>)</a></code></pre></div>
-<pre><code>## PROJCRS["OSGB 1936 / British National Grid", BASEGEOGCRS["OSGB
-## 1936", DATUM["OSGB 1936", ELLIPSOID["Airy 1830", 6377563.396,
-## 299.3249646, LENGTHUNIT["metre", 1]]], PRIMEM["Greenwich", 0,
-## ANGLEUNIT["degree", 0.0174532925199433]], ID["EPSG", 4277]],
-## CONVERSION["British National Grid", METHOD["Transverse Mercator",
-## ID["EPSG", 9807]], PARAMETER["Latitude of natural origin", 49,
-## ANGLEUNIT["degree", 0.0174532925199433], ID["EPSG", 8801]],
-## PARAMETER["Longitude of natural origin", -2, ANGLEUNIT["degree",
-## 0.0174532925199433], ID["EPSG", 8802]], PARAMETER["Scale factor at
-## natural origin", 0.9996012717, SCALEUNIT["unity", 1], ID["EPSG",
-## 8805]], PARAMETER["False easting", 400000, LENGTHUNIT["metre", 1],
-## ID["EPSG", 8806]], PARAMETER["False northing", -100000,
-## LENGTHUNIT["metre", 1], ID["EPSG", 8807]], ID["EPSG", 19916]],
-## CS[Cartesian, 2], AXIS["(E)", east, ORDER[1], LENGTHUNIT["metre",
-## 1, ID["EPSG", 9001]]], AXIS["(N)", north, ORDER[2],
+<pre><code>## PROJCRS["OSGB 1936 / British National Grid", BASEGEOGCRS["OSGB 1936",
+## DATUM["OSGB 1936", ELLIPSOID["Airy 1830", 6377563.396, 299.3249646,
+## LENGTHUNIT["metre", 1]]], PRIMEM["Greenwich", 0, ANGLEUNIT["degree",
+## 0.0174532925199433]], ID["EPSG", 4277]], CONVERSION["British National
+## Grid", METHOD["Transverse Mercator", ID["EPSG", 9807]],
+## PARAMETER["Latitude of natural origin", 49, ANGLEUNIT["degree",
+## 0.0174532925199433], ID["EPSG", 8801]], PARAMETER["Longitude of natural
+## origin", -2, ANGLEUNIT["degree", 0.0174532925199433], ID["EPSG",
+## 8802]], PARAMETER["Scale factor at natural origin", 0.9996012717,
+## SCALEUNIT["unity", 1], ID["EPSG", 8805]], PARAMETER["False easting",
+## 400000, LENGTHUNIT["metre", 1], ID["EPSG", 8806]], PARAMETER["False
+## northing", -100000, LENGTHUNIT["metre", 1], ID["EPSG", 8807]],
+## ID["EPSG", 19916]], CS[Cartesian, 2], AXIS["(E)", east, ORDER[1],
+## LENGTHUNIT["metre", 1, ID["EPSG", 9001]]], AXIS["(N)", north, ORDER[2],
 ## LENGTHUNIT["metre", 1, ID["EPSG", 9001]]], USAGE[SCOPE["unknown"],
-## AREA["UK - Britain and UKCS 49°46'N to 61°01'N, 7°33'W to
-## 3°33'E"], BBOX[49.75, -9.2, 61.14, 2.88]]]</code></pre>
+## AREA["UK - Britain and UKCS 49°46'N to 61°01'N, 7°33'W to 3°33'E"],
+## BBOX[49.75, -9.2, 61.14, 2.88]]]</code></pre>
 <div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb51-1" title="1"><span class="co">## [1] "PROJCRS[\"OSGB 1936 / British National Grid\", BASEGEOGCRS[\"OSGB 1936\",</span></a>
 <a class="sourceLine" id="cb51-2" title="2"><span class="co">## DATUM[\"OSGB 1936\", ELLIPSOID[\"Airy 1830\", 6377563.396, 299.3249646,</span></a>
 <a class="sourceLine" id="cb51-3" title="3"><span class="co">## LENGTHUNIT[\"metre\", 1]]], PRIMEM[\"Greenwich\", 0, ANGLEUNIT[\"degree\",</span></a>
@@ -336,8 +331,8 @@
 <a class="sourceLine" id="cb52-5" title="5"><span class="co">## PROJ4/GDAL2 +towgs84=446.448,-125.157,542.060,0.1502,0.2470,0.8421,-20.4894</span></a></code></pre></div>
 <p>From <strong>sp</strong> 1.3-3 (my fork), <code><a href="../reference/CRS-class.html">CRS()</a></code> takes a third argument to the legacy two, <code>projargs=</code> and <code>doCheckCRSArgs=TRUE</code>: <code>SRS_string=NULL</code>. This can take any string that <code><a href="../reference/showWKT.html">rgdal::showSRID()</a></code> can handle. The warning follows use of <code>exportToProj4()</code>:</p>
 <div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb53-1" title="1"><span class="cf">if</span> (<span class="kw"><a href="https://rdrr.io/r/utils/packageDescription.html">packageVersion</a></span>(<span class="st">"sp"</span>) <span class="op">&gt;=</span><span class="st"> "1.3.3"</span>) (crs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/CRS-class.html">CRS</a></span>(<span class="dt">SRS_string =</span> <span class="st">"EPSG:27700"</span>))</a></code></pre></div>
-<pre><code>## Warning in showSRID(SRS_string, format = "PROJ", multiline = "NO"):
-## Discarded datum OSGB_1936 in CRS definition</code></pre>
+<pre><code>## Warning in showSRID(SRS_string, format = "PROJ", multiline = "NO"): Discarded
+## datum OSGB_1936 in CRS definition</code></pre>
 <pre><code>## CRS arguments:
 ##  +proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000
 ## +y_0=-100000 +ellps=airy +units=m +no_defs</code></pre>
@@ -348,23 +343,22 @@
 <a class="sourceLine" id="cb56-5" title="5"><span class="co">##  +proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000</span></a>
 <a class="sourceLine" id="cb56-6" title="6"><span class="co">## +y_0=-100000 +ellps=airy +units=m +no_defs</span></a></code></pre></div>
 <div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb57-1" title="1"><span class="cf">if</span> (<span class="kw"><a href="https://rdrr.io/r/utils/packageDescription.html">packageVersion</a></span>(<span class="st">"sp"</span>) <span class="op">&gt;=</span><span class="st"> "1.3.3"</span>) <span class="kw"><a href="https://rdrr.io/r/base/cat.html">cat</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/strwrap.html">strwrap</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/grep.html">gsub</a></span>(<span class="st">","</span>, <span class="st">", "</span>, (<span class="kw"><a href="https://rdrr.io/r/base/comment.html">comment</a></span>(crs)))), <span class="dt">sep=</span><span class="st">"</span><span class="ch">\n</span><span class="st">"</span>)</a></code></pre></div>
-<pre><code>## PROJCRS["OSGB 1936 / British National Grid", BASEGEOGCRS["OSGB
-## 1936", DATUM["OSGB 1936", ELLIPSOID["Airy 1830", 6377563.396,
-## 299.3249646, LENGTHUNIT["metre", 1]]], PRIMEM["Greenwich", 0,
-## ANGLEUNIT["degree", 0.0174532925199433]], ID["EPSG", 4277]],
-## CONVERSION["British National Grid", METHOD["Transverse Mercator",
-## ID["EPSG", 9807]], PARAMETER["Latitude of natural origin", 49,
-## ANGLEUNIT["degree", 0.0174532925199433], ID["EPSG", 8801]],
-## PARAMETER["Longitude of natural origin", -2, ANGLEUNIT["degree",
-## 0.0174532925199433], ID["EPSG", 8802]], PARAMETER["Scale factor at
-## natural origin", 0.9996012717, SCALEUNIT["unity", 1], ID["EPSG",
-## 8805]], PARAMETER["False easting", 400000, LENGTHUNIT["metre", 1],
-## ID["EPSG", 8806]], PARAMETER["False northing", -100000,
-## LENGTHUNIT["metre", 1], ID["EPSG", 8807]]], CS[Cartesian, 2],
-## AXIS["(E)", east, ORDER[1], LENGTHUNIT["metre", 1]], AXIS["(N)",
-## north, ORDER[2], LENGTHUNIT["metre", 1]], USAGE[SCOPE["unknown"],
-## AREA["UK - Britain and UKCS 49°46'N to 61°01'N, 7°33'W to
-## 3°33'E"], BBOX[49.75, -9.2, 61.14, 2.88]], ID["EPSG", 27700]]</code></pre>
+<pre><code>## PROJCRS["OSGB 1936 / British National Grid", BASEGEOGCRS["OSGB 1936",
+## DATUM["OSGB 1936", ELLIPSOID["Airy 1830", 6377563.396, 299.3249646,
+## LENGTHUNIT["metre", 1]]], PRIMEM["Greenwich", 0, ANGLEUNIT["degree",
+## 0.0174532925199433]], ID["EPSG", 4277]], CONVERSION["British National
+## Grid", METHOD["Transverse Mercator", ID["EPSG", 9807]],
+## PARAMETER["Latitude of natural origin", 49, ANGLEUNIT["degree",
+## 0.0174532925199433], ID["EPSG", 8801]], PARAMETER["Longitude of natural
+## origin", -2, ANGLEUNIT["degree", 0.0174532925199433], ID["EPSG",
+## 8802]], PARAMETER["Scale factor at natural origin", 0.9996012717,
+## SCALEUNIT["unity", 1], ID["EPSG", 8805]], PARAMETER["False easting",
+## 400000, LENGTHUNIT["metre", 1], ID["EPSG", 8806]], PARAMETER["False
+## northing", -100000, LENGTHUNIT["metre", 1], ID["EPSG", 8807]]],
+## CS[Cartesian, 2], AXIS["(E)", east, ORDER[1], LENGTHUNIT["metre", 1]],
+## AXIS["(N)", north, ORDER[2], LENGTHUNIT["metre", 1]],
+## USAGE[SCOPE["unknown"], AREA["UK - Britain and UKCS 49°46'N to 61°01'N,
+## 7°33'W to 3°33'E"], BBOX[49.75, -9.2, 61.14, 2.88]], ID["EPSG", 27700]]</code></pre>
 <div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb59-1" title="1"><span class="co">## [1] "PROJCRS[\"OSGB 1936 / British National Grid\", BASEGEOGCRS[\"OSGB 1936\",</span></a>
 <a class="sourceLine" id="cb59-2" title="2"><span class="co">## DATUM[\"OSGB 1936\", ELLIPSOID[\"Airy 1830\", 6377563.396, 299.3249646,</span></a>
 <a class="sourceLine" id="cb59-3" title="3"><span class="co">## LENGTHUNIT[\"metre\", 1]]], PRIMEM[\"Greenwich\", 0, ANGLEUNIT[\"degree\",</span></a>
@@ -382,8 +376,8 @@
 <a class="sourceLine" id="cb59-15" title="15"><span class="co">## -9.2, 61.14, 2.88]], ID[\"EPSG\", 27700]]"</span></a></code></pre></div>
 <p>We can also use a more detailed PROJ string, but without any improvement of the output PROJ representation; the comment is OK:</p>
 <div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb60-1" title="1">(crs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/CRS-class.html">CRS</a></span>(<span class="st">"+proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +datum=OSGB36 +units=m +no_defs"</span>))</a></code></pre></div>
-<pre><code>## Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO"):
-## Discarded datum OSGB_1936 in CRS definition</code></pre>
+<pre><code>## Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO"): Discarded
+## datum OSGB_1936 in CRS definition</code></pre>
 <pre><code>## CRS arguments:
 ##  +proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000
 ## +y_0=-100000 +ellps=airy +units=m +no_defs</code></pre>
@@ -395,20 +389,19 @@
 <a class="sourceLine" id="cb63-6" title="6"><span class="co">## +y_0=-100000 +ellps=airy +units=m +no_defs</span></a></code></pre></div>
 <div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb64-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/cat.html">cat</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/strwrap.html">strwrap</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/grep.html">gsub</a></span>(<span class="st">","</span>, <span class="st">", "</span>, (<span class="kw"><a href="https://rdrr.io/r/base/comment.html">comment</a></span>(crs)))), <span class="dt">sep=</span><span class="st">"</span><span class="ch">\n</span><span class="st">"</span>)</a></code></pre></div>
 <pre><code>## PROJCRS["unknown", BASEGEOGCRS["unknown", DATUM["OSGB 1936",
-## ELLIPSOID["Airy 1830", 6377563.396, 299.3249646,
-## LENGTHUNIT["metre", 1]], ID["EPSG", 6277]], PRIMEM["Greenwich", 0,
-## ANGLEUNIT["degree", 0.0174532925199433], ID["EPSG", 8901]]],
-## CONVERSION["unknown", METHOD["Transverse Mercator", ID["EPSG",
-## 9807]], PARAMETER["Latitude of natural origin", 49,
-## ANGLEUNIT["degree", 0.0174532925199433], ID["EPSG", 8801]],
-## PARAMETER["Longitude of natural origin", -2, ANGLEUNIT["degree",
-## 0.0174532925199433], ID["EPSG", 8802]], PARAMETER["Scale factor at
-## natural origin", 0.9996012717, SCALEUNIT["unity", 1], ID["EPSG",
-## 8805]], PARAMETER["False easting", 400000, LENGTHUNIT["metre", 1],
-## ID["EPSG", 8806]], PARAMETER["False northing", -100000,
-## LENGTHUNIT["metre", 1], ID["EPSG", 8807]]], CS[Cartesian, 2],
-## AXIS["(E)", east, ORDER[1], LENGTHUNIT["metre", 1, ID["EPSG",
-## 9001]]], AXIS["(N)", north, ORDER[2], LENGTHUNIT["metre", 1,
+## ELLIPSOID["Airy 1830", 6377563.396, 299.3249646, LENGTHUNIT["metre",
+## 1]], ID["EPSG", 6277]], PRIMEM["Greenwich", 0, ANGLEUNIT["degree",
+## 0.0174532925199433], ID["EPSG", 8901]]], CONVERSION["unknown",
+## METHOD["Transverse Mercator", ID["EPSG", 9807]], PARAMETER["Latitude of
+## natural origin", 49, ANGLEUNIT["degree", 0.0174532925199433],
+## ID["EPSG", 8801]], PARAMETER["Longitude of natural origin", -2,
+## ANGLEUNIT["degree", 0.0174532925199433], ID["EPSG", 8802]],
+## PARAMETER["Scale factor at natural origin", 0.9996012717,
+## SCALEUNIT["unity", 1], ID["EPSG", 8805]], PARAMETER["False easting",
+## 400000, LENGTHUNIT["metre", 1], ID["EPSG", 8806]], PARAMETER["False
+## northing", -100000, LENGTHUNIT["metre", 1], ID["EPSG", 8807]]],
+## CS[Cartesian, 2], AXIS["(E)", east, ORDER[1], LENGTHUNIT["metre", 1,
+## ID["EPSG", 9001]]], AXIS["(N)", north, ORDER[2], LENGTHUNIT["metre", 1,
 ## ID["EPSG", 9001]]]]</code></pre>
 <div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb66-1" title="1"><span class="co">## [1] "PROJCRS[\"unknown\", BASEGEOGCRS[\"unknown\", DATUM[\"OSGB 1936\",</span></a>
 <a class="sourceLine" id="cb66-2" title="2"><span class="co">## ELLIPSOID[\"Airy 1830\", 6377563.396, 299.3249646, LENGTHUNIT[\"metre\", 1]],</span></a>
@@ -507,9 +500,531 @@
 <a class="sourceLine" id="cb69-40" title="40"><span class="co">##         BBOX[49.75,-9.2,61.14,2.88]]]</span></a></code></pre></div>
 <p>So far, <code>"CRS"</code> objects created on creation from <strong>sp</strong>, and from reading rasters and vectors in <strong>rgdal</strong>, are furnished with WKT comments. These are used to instantiate SRS objects when writing raster and vector objects. What remains is to convert the compiled <code><a href="https://rdrr.io/r/base/transform.html">transform()</a></code> function and <code><a href="../reference/spTransform-methods.html">spTransform()</a></code> methods to use the WKT comments if available instead of the PROJ string in the <code>"CRS"</code> object in each <code>"Spatial"</code> object.</p>
 </div>
-<div id="coordinate-operations" class="section level2 unnumbered">
+<div id="coordinate-operations" class="section level2">
 <h2 class="hasAnchor">
 <a href="#coordinate-operations" class="anchor"></a>Coordinate operations</h2>
+<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb70-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(rgdal)</a></code></pre></div>
+<pre><code>## rgdal: version: 1.5-1, (SVN revision 892)
+##  Geospatial Data Abstraction Library extensions to R successfully loaded
+##  Loaded GDAL runtime: GDAL 3.0.2, released 2019/10/28
+##  Path to GDAL shared files: 
+##  GDAL binary built with GEOS: TRUE 
+##  Loaded PROJ.4 runtime: Rel. 6.2.1, November 1st, 2019, [PJ_VERSION: 621]
+##  Path to PROJ.4 shared files: (autodetected)
+##  Linking to sp version: 1.3-3</code></pre>
+<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb72-1" title="1"><span class="co">## rgdal: version: 1.5-1, (SVN revision 870)</span></a>
+<a class="sourceLine" id="cb72-2" title="2"><span class="co">##  Geospatial Data Abstraction Library extensions to R successfully loaded</span></a>
+<a class="sourceLine" id="cb72-3" title="3"><span class="co">##  Loaded GDAL runtime: GDAL 3.0.2, released 2019/10/28</span></a>
+<a class="sourceLine" id="cb72-4" title="4"><span class="co">##  Path to GDAL shared files: </span></a>
+<a class="sourceLine" id="cb72-5" title="5"><span class="co">##  GDAL binary built with GEOS: TRUE </span></a>
+<a class="sourceLine" id="cb72-6" title="6"><span class="co">##  Loaded PROJ.4 runtime: Rel. 6.2.1, November 1st, 2019, [PJ_VERSION: 621]</span></a>
+<a class="sourceLine" id="cb72-7" title="7"><span class="co">##  Path to PROJ.4 shared files: (autodetected)</span></a>
+<a class="sourceLine" id="cb72-8" title="8"><span class="co">##  Linking to sp version: 1.3-3</span></a></code></pre></div>
+<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb73-1" title="1">run &lt;-<span class="st"> </span><span class="kw"><a href="../reference/projInfo.html">new_proj_and_gdal</a></span>()</a></code></pre></div>
+<p>We can first show what happens when searching for instantiable coordinate operations. These are coordinate operations that can be created by look-up in the PROJ database given the information in the input description. Here the datum has been discarded.</p>
+<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb74-1" title="1">discarded_datum &lt;-<span class="st"> </span><span class="kw"><a href="../reference/showWKT.html">showSRID</a></span>(<span class="st">"EPSG:27700"</span>, <span class="st">"PROJ"</span>)</a></code></pre></div>
+<pre><code>## Warning in showSRID("EPSG:27700", "PROJ"): Discarded datum OSGB_1936 in CRS
+## definition</code></pre>
+<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb76-1" title="1"><span class="co">## Warning in showSRID("EPSG:27700", "PROJ"): Discarded datum OSGB_1936 in CRS</span></a>
+<a class="sourceLine" id="cb76-2" title="2"><span class="co">## definition</span></a></code></pre></div>
+<p>Consequently, when searching for coordinate operations to transform to geographical coordinates and the WGS84 datum, and using <code>importFromProj4()</code> to instantiate the source SRS, the only operation found only has the Airy ellipse information to guide its search. The <code><a href="../reference/list_coordOps.html">list_coordOps()</a></code> function takes two SRS descriptions, and returns coordinate operations found by look-up. We need to add the <code>type</code> tag to a PROJ string here.</p>
+<div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb77-1" title="1">(x &lt;-<span class="st"> </span><span class="kw"><a href="../reference/list_coordOps.html">list_coordOps</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(discarded_datum, <span class="st">" +type=crs"</span>), <span class="st">"EPSG:4326"</span>))</a></code></pre></div>
+<pre><code>## Candidate coordinate operations found:  1 
+## Strict containment:  FALSE 
+## Visualization order:  TRUE 
+## Source: +proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000
+##         +y_0=-100000 +ellps=airy +units=m +no_defs +type=crs
+## Target: EPSG:4326 
+## Best instantiable operation has only ballpark accuracy 
+## Description: Inverse of unknown + Ballpark geographic offset from unknown to
+##              WGS 84 + axis order change (2D)
+## Definition:  +proj=pipeline +step +inv +proj=tmerc +lat_0=49 +lon_0=-2
+##              +k=0.9996012717 +x_0=400000 +y_0=-100000
+##              +ellps=airy +step +proj=unitconvert +xy_in=rad
+##              +xy_out=deg</code></pre>
+<div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb79-1" title="1"><span class="co">## Candidate coordinate operations found:  1 </span></a>
+<a class="sourceLine" id="cb79-2" title="2"><span class="co">## Strict containment:  FALSE </span></a>
+<a class="sourceLine" id="cb79-3" title="3"><span class="co">## Visualization order:  TRUE </span></a>
+<a class="sourceLine" id="cb79-4" title="4"><span class="co">## Source: +proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000</span></a>
+<a class="sourceLine" id="cb79-5" title="5"><span class="co">##         +y_0=-100000 +ellps=airy +units=m +no_defs +type=crs</span></a>
+<a class="sourceLine" id="cb79-6" title="6"><span class="co">## Target: EPSG:4326 </span></a>
+<a class="sourceLine" id="cb79-7" title="7"><span class="co">## Best instantiable operation has only ballpark accuracy </span></a>
+<a class="sourceLine" id="cb79-8" title="8"><span class="co">## Description: Inverse of unknown + Ballpark geographic offset from unknown to</span></a>
+<a class="sourceLine" id="cb79-9" title="9"><span class="co">##              WGS 84 + axis order change (2D)</span></a>
+<a class="sourceLine" id="cb79-10" title="10"><span class="co">## Definition:  +proj=pipeline +step +inv +proj=tmerc +lat_0=49 +lon_0=-2</span></a>
+<a class="sourceLine" id="cb79-11" title="11"><span class="co">##              +k=0.9996012717 +x_0=400000 +y_0=-100000</span></a>
+<a class="sourceLine" id="cb79-12" title="12"><span class="co">##              +ellps=airy +step +proj=unitconvert +xy_in=rad</span></a>
+<a class="sourceLine" id="cb79-13" title="13"><span class="co">##              +xy_out=deg</span></a></code></pre></div>
+<p>The <code><a href="../reference/list_coordOps.html">best_instantiable_coordOp()</a></code> function retuns the best instantiable coordinate operation, in this case the only one, with a description attribute. This is the current best available in calling <code><a href="../reference/spTransform-methods.html">spTransform()</a></code> with <code>"CRS"</code> objects with discarded <code>+datum=</code> tags.</p>
+<div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb80-1" title="1"><span class="kw"><a href="../reference/list_coordOps.html">best_instantiable_coordOp</a></span>(x)</a></code></pre></div>
+<pre><code>## Warning in best_instantiable_coordOp(x): Best instantiable operation has only
+## ballpark accuracy</code></pre>
+<pre><code>## [1] "+proj=pipeline +step +inv +proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy +step +proj=unitconvert +xy_in=rad +xy_out=deg"
+## attr(,"description")
+## [1] "Inverse of unknown + Ballpark geographic offset from unknown to WGS 84 + axis order change (2D)"</code></pre>
+<div class="sourceCode" id="cb83"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb83-1" title="1"><span class="co">## Warning in best_instantiable_coordOp(x): Best instantiable operation has only</span></a>
+<a class="sourceLine" id="cb83-2" title="2"><span class="co">## ballpark accuracy</span></a>
+<a class="sourceLine" id="cb83-3" title="3"><span class="co">## [1] "+proj=pipeline +step +inv +proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717</span></a>
+<a class="sourceLine" id="cb83-4" title="4"><span class="co">## +x_0=400000 +y_0=-100000 +ellps=airy +step +proj=unitconvert +xy_in=rad +xy_out=deg"</span></a>
+<a class="sourceLine" id="cb83-5" title="5"><span class="co">## attr(,"description")</span></a>
+<a class="sourceLine" id="cb83-6" title="6"><span class="co">## [1] "Inverse of unknown + Ballpark geographic offset from unknown to WGS 84 + </span></a>
+<a class="sourceLine" id="cb83-7" title="7"><span class="co">## axis order change (2D)"</span></a></code></pre></div>
+<p>If we add back the discarded <code>+datum=</code> tag with a valid value, we give the search process what it needs to find more coordinate operations.</p>
+<div class="sourceCode" id="cb84"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb84-1" title="1"><span class="kw"><a href="../reference/list_coordOps.html">list_coordOps</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(discarded_datum, <span class="st">" +datum=OSGB36 +type=crs"</span>), <span class="st">"EPSG:4326"</span>)</a></code></pre></div>
+<pre><code>## Candidate coordinate operations found:  7 
+## Strict containment:  FALSE 
+## Visualization order:  TRUE 
+## Source: +proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000
+##         +y_0=-100000 +ellps=airy +units=m +no_defs
+##         +datum=OSGB36 +type=crs
+## Target: EPSG:4326 
+## Best instantiable operation has accuracy: 2 m
+## Description: Inverse of unknown + axis order change (2D) + OSGB 1936 to WGS
+##              84 (6) + axis order change (2D)
+## Definition:  +proj=pipeline +step +inv +proj=tmerc +lat_0=49 +lon_0=-2
+##              +k=0.9996012717 +x_0=400000 +y_0=-100000
+##              +ellps=airy +step +proj=push +v_3 +step +proj=cart
+##              +ellps=airy +step +proj=helmert +x=446.448
+##              +y=-125.157 +z=542.06 +rx=0.15 +ry=0.247 +rz=0.842
+##              +s=-20.489 +convention=position_vector +step +inv
+##              +proj=cart +ellps=WGS84 +step +proj=pop +v_3 +step
+##              +proj=unitconvert +xy_in=rad +xy_out=deg
+## Operation 6 is lacking 1 grid with accuracy 1 m
+## Missing grid: OSTN15_NTv2_OSGBtoETRS.gsb 
+## URL: https://download.osgeo.org/proj/proj-datumgrid-europe-latest.zip</code></pre>
+<p>Now we have 7 operations, one the ballpark accuracy operation with unknown accuracy found above, 5 others that can be instantiated, of which the best has 2m accuracy, and an operation that cannot be instantiated because a publically available grid is missing. On download and installation of this grid, 1m accuracy could be achieved.</p>
+<div class="sourceCode" id="cb86"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb86-1" title="1"><span class="co">## Candidate coordinate operations found:  7 </span></a>
+<a class="sourceLine" id="cb86-2" title="2"><span class="co">## Strict containment:  FALSE </span></a>
+<a class="sourceLine" id="cb86-3" title="3"><span class="co">## Visualization order:  TRUE </span></a>
+<a class="sourceLine" id="cb86-4" title="4"><span class="co">## Source: +proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000</span></a>
+<a class="sourceLine" id="cb86-5" title="5"><span class="co">##         +y_0=-100000 +ellps=airy +units=m +no_defs</span></a>
+<a class="sourceLine" id="cb86-6" title="6"><span class="co">##         +datum=OSGB36 +type=crs</span></a>
+<a class="sourceLine" id="cb86-7" title="7"><span class="co">## Target: EPSG:4326 </span></a>
+<a class="sourceLine" id="cb86-8" title="8"><span class="co">## Best instantiable operation has accuracy: 2 m</span></a>
+<a class="sourceLine" id="cb86-9" title="9"><span class="co">## Description: Inverse of unknown + axis order change (2D) + OSGB 1936 to WGS</span></a>
+<a class="sourceLine" id="cb86-10" title="10"><span class="co">##              84 (6) + axis order change (2D)</span></a>
+<a class="sourceLine" id="cb86-11" title="11"><span class="co">## Definition:  +proj=pipeline +step +inv +proj=tmerc +lat_0=49 +lon_0=-2</span></a>
+<a class="sourceLine" id="cb86-12" title="12"><span class="co">##              +k=0.9996012717 +x_0=400000 +y_0=-100000</span></a>
+<a class="sourceLine" id="cb86-13" title="13"><span class="co">##              +ellps=airy +step +proj=push +v_3 +step +proj=cart</span></a>
+<a class="sourceLine" id="cb86-14" title="14"><span class="co">##              +ellps=airy +step +proj=helmert +x=446.448</span></a>
+<a class="sourceLine" id="cb86-15" title="15"><span class="co">##              +y=-125.157 +z=542.06 +rx=0.15 +ry=0.247 +rz=0.842</span></a>
+<a class="sourceLine" id="cb86-16" title="16"><span class="co">##              +s=-20.489 +convention=position_vector +step +inv</span></a>
+<a class="sourceLine" id="cb86-17" title="17"><span class="co">##              +proj=cart +ellps=WGS84 +step +proj=pop +v_3 +step</span></a>
+<a class="sourceLine" id="cb86-18" title="18"><span class="co">##              +proj=unitconvert +xy_in=rad +xy_out=deg</span></a>
+<a class="sourceLine" id="cb86-19" title="19"><span class="co">## Operation 6 is lacking 1 grid with accuracy 1 m</span></a>
+<a class="sourceLine" id="cb86-20" title="20"><span class="co">## Missing grid: OSTN15_NTv2_OSGBtoETRS.gsb </span></a>
+<a class="sourceLine" id="cb86-21" title="21"><span class="co">## URL: https://download.osgeo.org/proj/proj-datumgrid-europe-latest.zip</span></a></code></pre></div>
+<p>If we pass the source WKT string to <code><a href="../reference/list_coordOps.html">list_coordOps()</a></code> we get 6 operations back, now without the ballpark accuracy operation; this would be the situation in which WKT comments if present were used to construct the source and target SRS:</p>
+<div class="sourceCode" id="cb87"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb87-1" title="1">wkt_source_datum &lt;-<span class="st"> </span><span class="kw"><a href="../reference/showWKT.html">showSRID</a></span>(<span class="st">"EPSG:27700"</span>, <span class="st">"WKT2"</span>)</a>
+<a class="sourceLine" id="cb87-2" title="2">wkt_target_datum &lt;-<span class="st"> </span><span class="kw"><a href="../reference/showWKT.html">showSRID</a></span>(<span class="st">"EPSG:4326"</span>, <span class="st">"WKT2"</span>)</a>
+<a class="sourceLine" id="cb87-3" title="3">(x &lt;-<span class="st"> </span><span class="kw"><a href="../reference/list_coordOps.html">list_coordOps</a></span>(wkt_source_datum, wkt_target_datum))</a></code></pre></div>
+<pre><code>## Candidate coordinate operations found:  6 
+## Strict containment:  FALSE 
+## Visualization order:  TRUE 
+## Source: PROJCRS["OSGB 1936 / British National Grid", BASEGEOGCRS["OSGB
+##         1936", DATUM["OSGB 1936", ELLIPSOID["Airy 1830",
+##         6377563.396, 299.3249646, LENGTHUNIT["metre", 1]]],
+##         PRIMEM["Greenwich", 0, ANGLEUNIT["degree",
+##         0.0174532925199433]], ID["EPSG", 4277]],
+##         CONVERSION["British National Grid", METHOD["Transverse
+##         Mercator", ID["EPSG", 9807]], PARAMETER["Latitude of
+##         natural origin", 49, ANGLEUNIT["degree",
+##         0.0174532925199433], ID["EPSG", 8801]],
+##         PARAMETER["Longitude of natural origin", -2,
+##         ANGLEUNIT["degree", 0.0174532925199433], ID["EPSG",
+##         8802]], PARAMETER["Scale factor at natural origin",
+##         0.9996012717, SCALEUNIT["unity", 1], ID["EPSG", 8805]],
+##         PARAMETER["False easting", 400000, LENGTHUNIT["metre",
+##         1], ID["EPSG", 8806]], PARAMETER["False northing",
+##         -100000, LENGTHUNIT["metre", 1], ID["EPSG", 8807]]],
+##         CS[Cartesian, 2], AXIS["(E)", east, ORDER[1],
+##         LENGTHUNIT["metre", 1]], AXIS["(N)", north, ORDER[2],
+##         LENGTHUNIT["metre", 1]], USAGE[SCOPE["unknown"],
+##         AREA["UK - Britain and UKCS 49°46'N to 61°01'N, 7°33'W
+##         to 3°33'E"], BBOX[49.75, -9.2, 61.14, 2.88]],
+##         ID["EPSG", 27700]]
+## Target:
+## GEOGCRS["WGS 84", DATUM["World Geodetic System 1984",
+##         ELLIPSOID["WGS 84", 6378137, 298.257223563,
+##         LENGTHUNIT["metre", 1]]], PRIMEM["Greenwich", 0,
+##         ANGLEUNIT["degree", 0.0174532925199433]],
+##         CS[ellipsoidal, 2], AXIS["geodetic latitude (Lat)",
+##         north, ORDER[1], ANGLEUNIT["degree",
+##         0.0174532925199433]], AXIS["geodetic longitude (Lon)",
+##         east, ORDER[2], ANGLEUNIT["degree",
+##         0.0174532925199433]], USAGE[SCOPE["unknown"],
+##         AREA["World"], BBOX[-90, -180, 90, 180]], ID["EPSG",
+##         4326]]
+## Best instantiable operation has accuracy: 2 m
+## Description: Inverse of British National Grid + OSGB 1936 to WGS 84 (6) +
+##              axis order change (2D)
+## Definition:  +proj=pipeline +step +inv +proj=tmerc +lat_0=49 +lon_0=-2
+##              +k=0.9996012717 +x_0=400000 +y_0=-100000
+##              +ellps=airy +step +proj=push +v_3 +step +proj=cart
+##              +ellps=airy +step +proj=helmert +x=446.448
+##              +y=-125.157 +z=542.06 +rx=0.15 +ry=0.247 +rz=0.842
+##              +s=-20.489 +convention=position_vector +step +inv
+##              +proj=cart +ellps=WGS84 +step +proj=pop +v_3 +step
+##              +proj=unitconvert +xy_in=rad +xy_out=deg
+## Operation 6 is lacking 1 grid with accuracy 1 m
+## Missing grid: OSTN15_NTv2_OSGBtoETRS.gsb 
+## URL: https://download.osgeo.org/proj/proj-datumgrid-europe-latest.zip</code></pre>
+<div class="sourceCode" id="cb89"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb89-1" title="1"><span class="co">## Candidate coordinate operations found:  6 </span></a>
+<a class="sourceLine" id="cb89-2" title="2"><span class="co">## Strict containment:  FALSE </span></a>
+<a class="sourceLine" id="cb89-3" title="3"><span class="co">## Visualization order:  TRUE </span></a>
+<a class="sourceLine" id="cb89-4" title="4"><span class="co">## Source: PROJCRS["OSGB 1936 / British National Grid", BASEGEOGCRS["OSGB</span></a>
+<a class="sourceLine" id="cb89-5" title="5"><span class="co">##         1936", DATUM["OSGB 1936", ELLIPSOID["Airy 1830",</span></a>
+<a class="sourceLine" id="cb89-6" title="6"><span class="co">##         6377563.396, 299.3249646, LENGTHUNIT["metre", 1]]],</span></a>
+<a class="sourceLine" id="cb89-7" title="7"><span class="co">##         PRIMEM["Greenwich", 0, ANGLEUNIT["degree",</span></a>
+<a class="sourceLine" id="cb89-8" title="8"><span class="co">##         0.0174532925199433]], ID["EPSG", 4277]],</span></a>
+<a class="sourceLine" id="cb89-9" title="9"><span class="co">##         CONVERSION["British National Grid", METHOD["Transverse</span></a>
+<a class="sourceLine" id="cb89-10" title="10"><span class="co">##         Mercator", ID["EPSG", 9807]], PARAMETER["Latitude of</span></a>
+<a class="sourceLine" id="cb89-11" title="11"><span class="co">##         natural origin", 49, ANGLEUNIT["degree",</span></a>
+<a class="sourceLine" id="cb89-12" title="12"><span class="co">##         0.0174532925199433], ID["EPSG", 8801]],</span></a>
+<a class="sourceLine" id="cb89-13" title="13"><span class="co">##         PARAMETER["Longitude of natural origin", -2,</span></a>
+<a class="sourceLine" id="cb89-14" title="14"><span class="co">##         ANGLEUNIT["degree", 0.0174532925199433], ID["EPSG",</span></a>
+<a class="sourceLine" id="cb89-15" title="15"><span class="co">##         8802]], PARAMETER["Scale factor at natural origin",</span></a>
+<a class="sourceLine" id="cb89-16" title="16"><span class="co">##         0.9996012717, SCALEUNIT["unity", 1], ID["EPSG", 8805]],</span></a>
+<a class="sourceLine" id="cb89-17" title="17"><span class="co">##         PARAMETER["False easting", 400000, LENGTHUNIT["metre",</span></a>
+<a class="sourceLine" id="cb89-18" title="18"><span class="co">##         1], ID["EPSG", 8806]], PARAMETER["False northing",</span></a>
+<a class="sourceLine" id="cb89-19" title="19"><span class="co">##         -100000, LENGTHUNIT["metre", 1], ID["EPSG", 8807]]],</span></a>
+<a class="sourceLine" id="cb89-20" title="20"><span class="co">##         CS[Cartesian, 2], AXIS["(E)", east, ORDER[1],</span></a>
+<a class="sourceLine" id="cb89-21" title="21"><span class="co">##         LENGTHUNIT["metre", 1]], AXIS["(N)", north, ORDER[2],</span></a>
+<a class="sourceLine" id="cb89-22" title="22"><span class="co">##         LENGTHUNIT["metre", 1]], USAGE[SCOPE["unknown"],</span></a>
+<a class="sourceLine" id="cb89-23" title="23"><span class="co">##         AREA["UK - Britain and UKCS 49°46'N to 61°01'N, 7°33'W</span></a>
+<a class="sourceLine" id="cb89-24" title="24"><span class="co">##         to 3°33'E"], BBOX[49.75, -9.2, 61.14, 2.88]],</span></a>
+<a class="sourceLine" id="cb89-25" title="25"><span class="co">##         ID["EPSG", 27700]]</span></a>
+<a class="sourceLine" id="cb89-26" title="26"><span class="co">## Target: GEOGCRS["WGS 84", DATUM["World Geodetic System 1984",</span></a>
+<a class="sourceLine" id="cb89-27" title="27"><span class="co">##         ELLIPSOID["WGS 84", 6378137, 298.257223563,</span></a>
+<a class="sourceLine" id="cb89-28" title="28"><span class="co">##         LENGTHUNIT["metre", 1]]], PRIMEM["Greenwich", 0,</span></a>
+<a class="sourceLine" id="cb89-29" title="29"><span class="co">##         ANGLEUNIT["degree", 0.0174532925199433]],</span></a>
+<a class="sourceLine" id="cb89-30" title="30"><span class="co">##         CS[ellipsoidal, 2], AXIS["geodetic latitude (Lat)",</span></a>
+<a class="sourceLine" id="cb89-31" title="31"><span class="co">##         north, ORDER[1], ANGLEUNIT["degree",</span></a>
+<a class="sourceLine" id="cb89-32" title="32"><span class="co">##         0.0174532925199433]], AXIS["geodetic longitude (Lon)",</span></a>
+<a class="sourceLine" id="cb89-33" title="33"><span class="co">##         east, ORDER[2], ANGLEUNIT["degree",</span></a>
+<a class="sourceLine" id="cb89-34" title="34"><span class="co">##         0.0174532925199433]], USAGE[SCOPE["unknown"],</span></a>
+<a class="sourceLine" id="cb89-35" title="35"><span class="co">##         AREA["World"], BBOX[-90, -180, 90, 180]], ID["EPSG",</span></a>
+<a class="sourceLine" id="cb89-36" title="36"><span class="co">##         4326]]</span></a>
+<a class="sourceLine" id="cb89-37" title="37"><span class="co">## Best instantiable operation has accuracy: 2 m</span></a>
+<a class="sourceLine" id="cb89-38" title="38"><span class="co">## Description: Inverse of British National Grid + OSGB 1936 to WGS 84 (6) +</span></a>
+<a class="sourceLine" id="cb89-39" title="39"><span class="co">##              axis order change (2D)</span></a>
+<a class="sourceLine" id="cb89-40" title="40"><span class="co">## Definition:  +proj=pipeline +step +inv +proj=tmerc +lat_0=49 +lon_0=-2</span></a>
+<a class="sourceLine" id="cb89-41" title="41"><span class="co">##              +k=0.9996012717 +x_0=400000 +y_0=-100000</span></a>
+<a class="sourceLine" id="cb89-42" title="42"><span class="co">##              +ellps=airy +step +proj=push +v_3 +step +proj=cart</span></a>
+<a class="sourceLine" id="cb89-43" title="43"><span class="co">##              +ellps=airy +step +proj=helmert +x=446.448</span></a>
+<a class="sourceLine" id="cb89-44" title="44"><span class="co">##              +y=-125.157 +z=542.06 +rx=0.15 +ry=0.247 +rz=0.842</span></a>
+<a class="sourceLine" id="cb89-45" title="45"><span class="co">##              +s=-20.489 +convention=position_vector +step +inv</span></a>
+<a class="sourceLine" id="cb89-46" title="46"><span class="co">##              +proj=cart +ellps=WGS84 +step +proj=pop +v_3 +step</span></a>
+<a class="sourceLine" id="cb89-47" title="47"><span class="co">##              +proj=unitconvert +xy_in=rad +xy_out=deg</span></a>
+<a class="sourceLine" id="cb89-48" title="48"><span class="co">## Operation 6 is lacking 1 grid with accuracy 1 m</span></a>
+<a class="sourceLine" id="cb89-49" title="49"><span class="co">## Missing grid: OSTN15_NTv2_OSGBtoETRS.gsb </span></a>
+<a class="sourceLine" id="cb89-50" title="50"><span class="co">## URL: https://download.osgeo.org/proj/proj-datumgrid-europe-latest.zip</span></a></code></pre></div>
+<div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb90-1" title="1"><span class="kw"><a href="../reference/list_coordOps.html">best_instantiable_coordOp</a></span>(x)</a></code></pre></div>
+<pre><code>## [1] "+proj=pipeline +step +inv +proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy +step +proj=push +v_3 +step +proj=cart +ellps=airy +step +proj=helmert +x=446.448 +y=-125.157 +z=542.06 +rx=0.15 +ry=0.247 +rz=0.842 +s=-20.489 +convention=position_vector +step +inv +proj=cart +ellps=WGS84 +step +proj=pop +v_3 +step +proj=unitconvert +xy_in=rad +xy_out=deg"
+## attr(,"description")
+## [1] "Inverse of British National Grid + OSGB 1936 to WGS 84 (6) + axis order change (2D)"</code></pre>
+<div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb92-1" title="1"><span class="co">## [1] "+proj=pipeline +step +inv +proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717</span></a>
+<a class="sourceLine" id="cb92-2" title="2"><span class="co">## +x_0=400000 +y_0=-100000 +ellps=airy +step +proj=push +v_3 +step +proj=cart</span></a>
+<a class="sourceLine" id="cb92-3" title="3"><span class="co">## +ellps=airy +step +proj=helmert +x=446.448 +y=-125.157 +z=542.06 +rx=0.15 +ry=0.247</span></a>
+<a class="sourceLine" id="cb92-4" title="4"><span class="co">## +rz=0.842 +s=-20.489 +convention=position_vector +step +inv +proj=cart +ellps=WGS84</span></a>
+<a class="sourceLine" id="cb92-5" title="5"><span class="co">## +step +proj=pop +v_3 +step +proj=unitconvert +xy_in=rad +xy_out=deg"</span></a>
+<a class="sourceLine" id="cb92-6" title="6"><span class="co">## attr(,"description")</span></a>
+<a class="sourceLine" id="cb92-7" title="7"><span class="co">## [1] "Inverse of British National Grid + OSGB 1936 to WGS 84 (6) + axis order change (2D)"</span></a></code></pre></div>
+<p>Turning to a different example, a Brazilian UTM25S Corrego Alegre 1970-72 datum, and looking for coordinate operations transform to UTM25S SIRGAS 2000, we see that a <code>+towgs84=</code> tag was preserved.</p>
+<div class="sourceCode" id="cb93"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb93-1" title="1">discarded_datum &lt;-<span class="st"> </span><span class="kw"><a href="../reference/showWKT.html">showSRID</a></span>(<span class="st">"EPSG:22525"</span>, <span class="st">"PROJ"</span>)</a></code></pre></div>
+<pre><code>## Warning in showSRID("EPSG:22525", "PROJ"): Discarded datum Corrego_Alegre_1970-72 in CRS definition,
+##  but +towgs84= values preserved</code></pre>
+<div class="sourceCode" id="cb95"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb95-1" title="1"><span class="co">## Warning in showSRID("EPSG:22525", "PROJ"): Discarded datum Corrego_Alegre_1970-72 in CRS definition,</span></a>
+<a class="sourceLine" id="cb95-2" title="2"><span class="co">##  but +towgs84= values preserved</span></a></code></pre></div>
+<p>This meant that while only ballpark accuracy is reported, a Helmert transformation is carried out:</p>
+<div class="sourceCode" id="cb96"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb96-1" title="1">(x &lt;-<span class="st"> </span><span class="kw"><a href="../reference/list_coordOps.html">list_coordOps</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(discarded_datum, <span class="st">" +type=crs"</span>), <span class="st">"EPSG:31985"</span>))</a></code></pre></div>
+<pre><code>## Candidate coordinate operations found:  1 
+## Strict containment:  FALSE 
+## Visualization order:  TRUE 
+## Source: +proj=utm +zone=25 +south +ellps=intl
+##         +towgs84=-205.57,168.77,-4.12,0,0,0,0 +units=m +no_defs
+##         +type=crs
+## Target: EPSG:31985 
+## Best instantiable operation has only ballpark accuracy 
+## Description: Inverse of UTM zone 25S + Transformation from unknown to WGS84
+##              + Inverse of SIRGAS 2000 to WGS 84 (1) + UTM zone
+##              25S
+## Definition:  +proj=pipeline +step +inv +proj=utm +zone=25 +south +ellps=intl
+##              +step +proj=push +v_3 +step +proj=cart +ellps=intl
+##              +step +proj=helmert +x=-205.57 +y=168.77 +z=-4.12
+##              +rx=0 +ry=0 +rz=0 +s=0 +convention=position_vector
+##              +step +inv +proj=cart +ellps=GRS80 +step +proj=pop
+##              +v_3 +step +proj=utm +zone=25 +south +ellps=GRS80</code></pre>
+<div class="sourceCode" id="cb98"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb98-1" title="1"><span class="co">## Candidate coordinate operations found:  1 </span></a>
+<a class="sourceLine" id="cb98-2" title="2"><span class="co">## Strict containment:  FALSE </span></a>
+<a class="sourceLine" id="cb98-3" title="3"><span class="co">## Visualization order:  TRUE </span></a>
+<a class="sourceLine" id="cb98-4" title="4"><span class="co">## Source: +proj=utm +zone=25 +south +ellps=intl</span></a>
+<a class="sourceLine" id="cb98-5" title="5"><span class="co">##         +towgs84=-205.57,168.77,-4.12,0,0,0,0 +units=m +no_defs</span></a>
+<a class="sourceLine" id="cb98-6" title="6"><span class="co">##         +type=crs</span></a>
+<a class="sourceLine" id="cb98-7" title="7"><span class="co">## Target: EPSG:31985 </span></a>
+<a class="sourceLine" id="cb98-8" title="8"><span class="co">## Best instantiable operation has only ballpark accuracy </span></a>
+<a class="sourceLine" id="cb98-9" title="9"><span class="co">## Description: Inverse of UTM zone 25S + Transformation from unknown to WGS84</span></a>
+<a class="sourceLine" id="cb98-10" title="10"><span class="co">##              + Inverse of SIRGAS 2000 to WGS 84 (1) + UTM zone</span></a>
+<a class="sourceLine" id="cb98-11" title="11"><span class="co">##              25S</span></a>
+<a class="sourceLine" id="cb98-12" title="12"><span class="co">## Definition:  +proj=pipeline +step +inv +proj=utm +zone=25 +south +ellps=intl</span></a>
+<a class="sourceLine" id="cb98-13" title="13"><span class="co">##              +step +proj=push +v_3 +step +proj=cart +ellps=intl</span></a>
+<a class="sourceLine" id="cb98-14" title="14"><span class="co">##              +step +proj=helmert +x=-205.57 +y=168.77 +z=-4.12</span></a>
+<a class="sourceLine" id="cb98-15" title="15"><span class="co">##              +rx=0 +ry=0 +rz=0 +s=0 +convention=position_vector</span></a>
+<a class="sourceLine" id="cb98-16" title="16"><span class="co">##              +step +inv +proj=cart +ellps=GRS80 +step +proj=pop</span></a>
+<a class="sourceLine" id="cb98-17" title="17"><span class="co">##              +v_3 +step +proj=utm +zone=25 +south +ellps=GRS80</span></a></code></pre></div>
+<div class="sourceCode" id="cb99"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb99-1" title="1"><span class="kw"><a href="../reference/list_coordOps.html">best_instantiable_coordOp</a></span>(x)</a></code></pre></div>
+<pre><code>## Warning in best_instantiable_coordOp(x): Best instantiable operation has only
+## ballpark accuracy</code></pre>
+<pre><code>## [1] "+proj=pipeline +step +inv +proj=utm +zone=25 +south +ellps=intl +step +proj=push +v_3 +step +proj=cart +ellps=intl +step +proj=helmert +x=-205.57 +y=168.77 +z=-4.12 +rx=0 +ry=0 +rz=0 +s=0 +convention=position_vector +step +inv +proj=cart +ellps=GRS80 +step +proj=pop +v_3 +step +proj=utm +zone=25 +south +ellps=GRS80"
+## attr(,"description")
+## [1] "Inverse of UTM zone 25S + Transformation from unknown to WGS84 + Inverse of SIRGAS 2000 to WGS 84 (1) + UTM zone 25S"</code></pre>
+<div class="sourceCode" id="cb102"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb102-1" title="1"><span class="co">## Warning in best_instantiable_coordOp(x): Best instantiable operation has only</span></a>
+<a class="sourceLine" id="cb102-2" title="2"><span class="co">## ballpark accuracy</span></a>
+<a class="sourceLine" id="cb102-3" title="3"><span class="co">## [1] "+proj=pipeline +step +inv +proj=utm +zone=25 +south +ellps=intl +step</span></a>
+<a class="sourceLine" id="cb102-4" title="4"><span class="co">## +proj=push +v_3 +step +proj=cart +ellps=intl +step +proj=helmert +x=-205.57</span></a>
+<a class="sourceLine" id="cb102-5" title="5"><span class="co">## +y=168.77 +z=-4.12 +rx=0 +ry=0 +rz=0 +s=0 +convention=position_vector +step +inv</span></a>
+<a class="sourceLine" id="cb102-6" title="6"><span class="co">## +proj=cart +ellps=GRS80 +step +proj=pop +v_3 +step +proj=utm +zone=25 +south</span></a>
+<a class="sourceLine" id="cb102-7" title="7"><span class="co">## +ellps=GRS80"</span></a>
+<a class="sourceLine" id="cb102-8" title="8"><span class="co">## attr(,"description")</span></a>
+<a class="sourceLine" id="cb102-9" title="9"><span class="co">## [1] "Inverse of UTM zone 25S + Transformation from unknown to WGS84 + Inverse of</span></a>
+<a class="sourceLine" id="cb102-10" title="10"><span class="co">## SIRGAS 2000 to WGS 84 (1) + UTM zone 25S"</span></a></code></pre></div>
+<p>If we move to input WKT strings when searching for coordinate operations, we get to the same result with unknown accuracy but using a Helmert transformation:</p>
+<div class="sourceCode" id="cb103"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb103-1" title="1">wkt_source_datum &lt;-<span class="st"> </span><span class="kw"><a href="../reference/showWKT.html">showSRID</a></span>(<span class="st">"EPSG:22525"</span>, <span class="st">"WKT2"</span>)</a>
+<a class="sourceLine" id="cb103-2" title="2">wkt_target_datum &lt;-<span class="st"> </span><span class="kw"><a href="../reference/showWKT.html">showSRID</a></span>(<span class="st">"EPSG:31985"</span>, <span class="st">"WKT2"</span>)</a>
+<a class="sourceLine" id="cb103-3" title="3">(x &lt;-<span class="st"> </span><span class="kw"><a href="../reference/list_coordOps.html">list_coordOps</a></span>(wkt_source_datum, wkt_target_datum))</a></code></pre></div>
+<pre><code>## Candidate coordinate operations found:  1 
+## Strict containment:  FALSE 
+## Visualization order:  TRUE 
+## Source: BOUNDCRS[SOURCECRS[PROJCRS["Corrego Alegre 1970-72 / UTM zone
+##         25S", BASEGEOGCRS["Corrego Alegre 1970-72",
+##         DATUM["Corrego Alegre 1970-72",
+##         ELLIPSOID["International 1924", 6378388, 297,
+##         LENGTHUNIT["metre", 1]]], PRIMEM["Greenwich", 0,
+##         ANGLEUNIT["degree", 0.0174532925199433]], ID["EPSG",
+##         4225]], CONVERSION["UTM zone 25S", METHOD["Transverse
+##         Mercator", ID["EPSG", 9807]], PARAMETER["Latitude of
+##         natural origin", 0, ANGLEUNIT["degree",
+##         0.0174532925199433], ID["EPSG", 8801]],
+##         PARAMETER["Longitude of natural origin", -33,
+##         ANGLEUNIT["degree", 0.0174532925199433], ID["EPSG",
+##         8802]], PARAMETER["Scale factor at natural origin",
+##         0.9996, SCALEUNIT["unity", 1], ID["EPSG", 8805]],
+##         PARAMETER["False easting", 500000, LENGTHUNIT["metre",
+##         1], ID["EPSG", 8806]], PARAMETER["False northing",
+##         10000000, LENGTHUNIT["metre", 1], ID["EPSG", 8807]]],
+##         CS[Cartesian, 2], AXIS["(E)", east, ORDER[1],
+##         LENGTHUNIT["metre", 1]], AXIS["(N)", north, ORDER[2],
+##         LENGTHUNIT["metre", 1]], USAGE[SCOPE["unknown"],
+##         AREA["Brazil - east of 36°W onshore"], BBOX[-10.1, -36,
+##         -4.99, -34.74]], ID["EPSG", 22525]]],
+##         TARGETCRS[GEOGCRS["WGS 84", DATUM["World Geodetic
+##         System 1984", ELLIPSOID["WGS 84", 6378137,
+##         298.257223563, LENGTHUNIT["metre", 1]]],
+##         PRIMEM["Greenwich", 0, ANGLEUNIT["degree",
+##         0.0174532925199433]], CS[ellipsoidal, 2],
+##         AXIS["latitude", north, ORDER[1], ANGLEUNIT["degree",
+##         0.0174532925199433]], AXIS["longitude", east, ORDER[2],
+##         ANGLEUNIT["degree", 0.0174532925199433]], ID["EPSG",
+##         4326]]], ABRIDGEDTRANSFORMATION["Corrego Alegre 1970-72
+##         to WGS 84 (3)", VERSION["PBS-Bra 1983"],
+##         METHOD["Geocentric translations (geog2D domain)",
+##         ID["EPSG", 9603]], PARAMETER["X-axis translation",
+##         -205.57, ID["EPSG", 8605]], PARAMETER["Y-axis
+##         translation", 168.77, ID["EPSG", 8606]],
+##         PARAMETER["Z-axis translation", -4.12, ID["EPSG",
+##         8607]], USAGE[SCOPE["Medium and small scale mapping."],
+##         AREA["Brazil - Corrego Alegre 1970-1972"], BBOX[-33.78,
+##         -58.16, -2.68, -34.74]], ID["EPSG", 6192],
+##         REMARK["Formed by concatenation of tfms codes 6191 and
+##         1877. Used by Petrobras and ANP until February 2005
+##         when replaced by Corrego Alegre 1970-72 to WGS 84 (4)
+##         (tfm code 6194)."]]]
+## Target:
+## BOUNDCRS[SOURCECRS[PROJCRS["SIRGAS 2000 / UTM zone 25S",
+##         BASEGEOGCRS["SIRGAS 2000", DATUM["Sistema de Referencia
+##         Geocentrico para las AmericaS 2000", ELLIPSOID["GRS
+##         1980", 6378137, 298.257222101, LENGTHUNIT["metre",
+##         1]]], PRIMEM["Greenwich", 0, ANGLEUNIT["degree",
+##         0.0174532925199433]], ID["EPSG", 4674]],
+##         CONVERSION["UTM zone 25S", METHOD["Transverse
+##         Mercator", ID["EPSG", 9807]], PARAMETER["Latitude of
+##         natural origin", 0, ANGLEUNIT["degree",
+##         0.0174532925199433], ID["EPSG", 8801]],
+##         PARAMETER["Longitude of natural origin", -33,
+##         ANGLEUNIT["degree", 0.0174532925199433], ID["EPSG",
+##         8802]], PARAMETER["Scale factor at natural origin",
+##         0.9996, SCALEUNIT["unity", 1], ID["EPSG", 8805]],
+##         PARAMETER["False easting", 500000, LENGTHUNIT["metre",
+##         1], ID["EPSG", 8806]], PARAMETER["False northing",
+##         10000000, LENGTHUNIT["metre", 1], ID["EPSG", 8807]]],
+##         CS[Cartesian, 2], AXIS["(E)", east, ORDER[1],
+##         LENGTHUNIT["metre", 1]], AXIS["(N)", north, ORDER[2],
+##         LENGTHUNIT["metre", 1]], USAGE[SCOPE["unknown"],
+##         AREA["Brazil - 36°W to 30°W"], BBOX[-23.8, -36, 4.19,
+##         -29.99]], ID["EPSG", 31985]]], TARGETCRS[GEOGCRS["WGS
+##         84", DATUM["World Geodetic System 1984", ELLIPSOID["WGS
+##         84", 6378137, 298.257223563, LENGTHUNIT["metre", 1]]],
+##         PRIMEM["Greenwich", 0, ANGLEUNIT["degree",
+##         0.0174532925199433]], CS[ellipsoidal, 2],
+##         AXIS["latitude", north, ORDER[1], ANGLEUNIT["degree",
+##         0.0174532925199433]], AXIS["longitude", east, ORDER[2],
+##         ANGLEUNIT["degree", 0.0174532925199433]], ID["EPSG",
+##         4326]]], ABRIDGEDTRANSFORMATION["SIRGAS 2000 to WGS 84
+##         (1)", VERSION["OGP-C&amp;S America"], METHOD["Geocentric
+##         translations (geog2D domain)", ID["EPSG", 9603]],
+##         PARAMETER["X-axis translation", 0, ID["EPSG", 8605]],
+##         PARAMETER["Y-axis translation", 0, ID["EPSG", 8606]],
+##         PARAMETER["Z-axis translation", 0, ID["EPSG", 8607]],
+##         USAGE[SCOPE["Accuracy 1m."], AREA["Latin America -
+##         SIRGAS 2000 by country"], BBOX[-59.87, -122.19, 32.72,
+##         -25.28]], ID["EPSG", 15894]]]
+## Best instantiable operation has only ballpark accuracy 
+## Description: Inverse of UTM zone 25S + Corrego Alegre 1970-72 to WGS 84 (3)
+##              + Inverse of SIRGAS 2000 to WGS 84 (1) + UTM zone
+##              25S
+## Definition:  +proj=pipeline +step +inv +proj=utm +zone=25 +south +ellps=intl
+##              +step +proj=push +v_3 +step +proj=cart +ellps=intl
+##              +step +proj=helmert +x=-205.57 +y=168.77 +z=-4.12
+##              +step +inv +proj=cart +ellps=GRS80 +step +proj=pop
+##              +v_3 +step +proj=utm +zone=25 +south +ellps=GRS80</code></pre>
+<div class="sourceCode" id="cb105"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb105-1" title="1"><span class="co">## Candidate coordinate operations found:  1 </span></a>
+<a class="sourceLine" id="cb105-2" title="2"><span class="co">## Strict containment:  FALSE </span></a>
+<a class="sourceLine" id="cb105-3" title="3"><span class="co">## Visualization order:  TRUE </span></a>
+<a class="sourceLine" id="cb105-4" title="4"><span class="co">## Source: BOUNDCRS[SOURCECRS[PROJCRS["Corrego Alegre 1970-72 / UTM zone</span></a>
+<a class="sourceLine" id="cb105-5" title="5"><span class="co">##         25S", BASEGEOGCRS["Corrego Alegre 1970-72",</span></a>
+<a class="sourceLine" id="cb105-6" title="6"><span class="co">##         DATUM["Corrego Alegre 1970-72",</span></a>
+<a class="sourceLine" id="cb105-7" title="7"><span class="co">##         ELLIPSOID["International 1924", 6378388, 297,</span></a>
+<a class="sourceLine" id="cb105-8" title="8"><span class="co">##         LENGTHUNIT["metre", 1]]], PRIMEM["Greenwich", 0,</span></a>
+<a class="sourceLine" id="cb105-9" title="9"><span class="co">##         ANGLEUNIT["degree", 0.0174532925199433]], ID["EPSG",</span></a>
+<a class="sourceLine" id="cb105-10" title="10"><span class="co">##         4225]], CONVERSION["UTM zone 25S", METHOD["Transverse</span></a>
+<a class="sourceLine" id="cb105-11" title="11"><span class="co">##         Mercator", ID["EPSG", 9807]], PARAMETER["Latitude of</span></a>
+<a class="sourceLine" id="cb105-12" title="12"><span class="co">##         natural origin", 0, ANGLEUNIT["degree",</span></a>
+<a class="sourceLine" id="cb105-13" title="13"><span class="co">##         0.0174532925199433], ID["EPSG", 8801]],</span></a>
+<a class="sourceLine" id="cb105-14" title="14"><span class="co">##         PARAMETER["Longitude of natural origin", -33,</span></a>
+<a class="sourceLine" id="cb105-15" title="15"><span class="co">##         ANGLEUNIT["degree", 0.0174532925199433], ID["EPSG",</span></a>
+<a class="sourceLine" id="cb105-16" title="16"><span class="co">##         8802]], PARAMETER["Scale factor at natural origin",</span></a>
+<a class="sourceLine" id="cb105-17" title="17"><span class="co">##         0.9996, SCALEUNIT["unity", 1], ID["EPSG", 8805]],</span></a>
+<a class="sourceLine" id="cb105-18" title="18"><span class="co">##         PARAMETER["False easting", 500000, LENGTHUNIT["metre",</span></a>
+<a class="sourceLine" id="cb105-19" title="19"><span class="co">##         1], ID["EPSG", 8806]], PARAMETER["False northing",</span></a>
+<a class="sourceLine" id="cb105-20" title="20"><span class="co">##         10000000, LENGTHUNIT["metre", 1], ID["EPSG", 8807]]],</span></a>
+<a class="sourceLine" id="cb105-21" title="21"><span class="co">##         CS[Cartesian, 2], AXIS["(E)", east, ORDER[1],</span></a>
+<a class="sourceLine" id="cb105-22" title="22"><span class="co">##         LENGTHUNIT["metre", 1]], AXIS["(N)", north, ORDER[2],</span></a>
+<a class="sourceLine" id="cb105-23" title="23"><span class="co">##         LENGTHUNIT["metre", 1]], USAGE[SCOPE["unknown"],</span></a>
+<a class="sourceLine" id="cb105-24" title="24"><span class="co">##         AREA["Brazil - east of 36°W onshore"], BBOX[-10.1, -36,</span></a>
+<a class="sourceLine" id="cb105-25" title="25"><span class="co">##         -4.99, -34.74]], ID["EPSG", 22525]]],</span></a>
+<a class="sourceLine" id="cb105-26" title="26"><span class="co">##         TARGETCRS[GEOGCRS["WGS 84", DATUM["World Geodetic</span></a>
+<a class="sourceLine" id="cb105-27" title="27"><span class="co">##         System 1984", ELLIPSOID["WGS 84", 6378137,</span></a>
+<a class="sourceLine" id="cb105-28" title="28"><span class="co">##         298.257223563, LENGTHUNIT["metre", 1]]],</span></a>
+<a class="sourceLine" id="cb105-29" title="29"><span class="co">##         PRIMEM["Greenwich", 0, ANGLEUNIT["degree",</span></a>
+<a class="sourceLine" id="cb105-30" title="30"><span class="co">##         0.0174532925199433]], CS[ellipsoidal, 2],</span></a>
+<a class="sourceLine" id="cb105-31" title="31"><span class="co">##         AXIS["latitude", north, ORDER[1], ANGLEUNIT["degree",</span></a>
+<a class="sourceLine" id="cb105-32" title="32"><span class="co">##         0.0174532925199433]], AXIS["longitude", east, ORDER[2],</span></a>
+<a class="sourceLine" id="cb105-33" title="33"><span class="co">##         ANGLEUNIT["degree", 0.0174532925199433]], ID["EPSG",</span></a>
+<a class="sourceLine" id="cb105-34" title="34"><span class="co">##         4326]]], ABRIDGEDTRANSFORMATION["Corrego Alegre 1970-72</span></a>
+<a class="sourceLine" id="cb105-35" title="35"><span class="co">##         to WGS 84 (3)", VERSION["PBS-Bra 1983"],</span></a>
+<a class="sourceLine" id="cb105-36" title="36"><span class="co">##         METHOD["Geocentric translations (geog2D domain)",</span></a>
+<a class="sourceLine" id="cb105-37" title="37"><span class="co">##         ID["EPSG", 9603]], PARAMETER["X-axis translation",</span></a>
+<a class="sourceLine" id="cb105-38" title="38"><span class="co">##         -205.57, ID["EPSG", 8605]], PARAMETER["Y-axis</span></a>
+<a class="sourceLine" id="cb105-39" title="39"><span class="co">##         translation", 168.77, ID["EPSG", 8606]],</span></a>
+<a class="sourceLine" id="cb105-40" title="40"><span class="co">##         PARAMETER["Z-axis translation", -4.12, ID["EPSG",</span></a>
+<a class="sourceLine" id="cb105-41" title="41"><span class="co">##         8607]], USAGE[SCOPE["Medium and small scale mapping."],</span></a>
+<a class="sourceLine" id="cb105-42" title="42"><span class="co">##         AREA["Brazil - Corrego Alegre 1970-1972"], BBOX[-33.78,</span></a>
+<a class="sourceLine" id="cb105-43" title="43"><span class="co">##         -58.16, -2.68, -34.74]], ID["EPSG", 6192],</span></a>
+<a class="sourceLine" id="cb105-44" title="44"><span class="co">##         REMARK["Formed by concatenation of tfms codes 6191 and</span></a>
+<a class="sourceLine" id="cb105-45" title="45"><span class="co">##         1877. Used by Petrobras and ANP until February 2005</span></a>
+<a class="sourceLine" id="cb105-46" title="46"><span class="co">##         when replaced by Corrego Alegre 1970-72 to WGS 84 (4)</span></a>
+<a class="sourceLine" id="cb105-47" title="47"><span class="co">##         (tfm code 6194)."]]]</span></a>
+<a class="sourceLine" id="cb105-48" title="48"><span class="co">## Target:</span></a>
+<a class="sourceLine" id="cb105-49" title="49"><span class="co">## BOUNDCRS[SOURCECRS[PROJCRS["SIRGAS 2000 / UTM zone 25S",</span></a>
+<a class="sourceLine" id="cb105-50" title="50"><span class="co">##         BASEGEOGCRS["SIRGAS 2000", DATUM["Sistema de Referencia</span></a>
+<a class="sourceLine" id="cb105-51" title="51"><span class="co">##         Geocentrico para las AmericaS 2000", ELLIPSOID["GRS</span></a>
+<a class="sourceLine" id="cb105-52" title="52"><span class="co">##         1980", 6378137, 298.257222101, LENGTHUNIT["metre",</span></a>
+<a class="sourceLine" id="cb105-53" title="53"><span class="co">##         1]]], PRIMEM["Greenwich", 0, ANGLEUNIT["degree",</span></a>
+<a class="sourceLine" id="cb105-54" title="54"><span class="co">##         0.0174532925199433]], ID["EPSG", 4674]],</span></a>
+<a class="sourceLine" id="cb105-55" title="55"><span class="co">##         CONVERSION["UTM zone 25S", METHOD["Transverse</span></a>
+<a class="sourceLine" id="cb105-56" title="56"><span class="co">##         Mercator", ID["EPSG", 9807]], PARAMETER["Latitude of</span></a>
+<a class="sourceLine" id="cb105-57" title="57"><span class="co">##         natural origin", 0, ANGLEUNIT["degree",</span></a>
+<a class="sourceLine" id="cb105-58" title="58"><span class="co">##         0.0174532925199433], ID["EPSG", 8801]],</span></a>
+<a class="sourceLine" id="cb105-59" title="59"><span class="co">##         PARAMETER["Longitude of natural origin", -33,</span></a>
+<a class="sourceLine" id="cb105-60" title="60"><span class="co">##         ANGLEUNIT["degree", 0.0174532925199433], ID["EPSG",</span></a>
+<a class="sourceLine" id="cb105-61" title="61"><span class="co">##         8802]], PARAMETER["Scale factor at natural origin",</span></a>
+<a class="sourceLine" id="cb105-62" title="62"><span class="co">##         0.9996, SCALEUNIT["unity", 1], ID["EPSG", 8805]],</span></a>
+<a class="sourceLine" id="cb105-63" title="63"><span class="co">##         PARAMETER["False easting", 500000, LENGTHUNIT["metre",</span></a>
+<a class="sourceLine" id="cb105-64" title="64"><span class="co">##         1], ID["EPSG", 8806]], PARAMETER["False northing",</span></a>
+<a class="sourceLine" id="cb105-65" title="65"><span class="co">##         10000000, LENGTHUNIT["metre", 1], ID["EPSG", 8807]]],</span></a>
+<a class="sourceLine" id="cb105-66" title="66"><span class="co">##         CS[Cartesian, 2], AXIS["(E)", east, ORDER[1],</span></a>
+<a class="sourceLine" id="cb105-67" title="67"><span class="co">##         LENGTHUNIT["metre", 1]], AXIS["(N)", north, ORDER[2],</span></a>
+<a class="sourceLine" id="cb105-68" title="68"><span class="co">##         LENGTHUNIT["metre", 1]], USAGE[SCOPE["unknown"],</span></a>
+<a class="sourceLine" id="cb105-69" title="69"><span class="co">##         AREA["Brazil - 36°W to 30°W"], BBOX[-23.8, -36, 4.19,</span></a>
+<a class="sourceLine" id="cb105-70" title="70"><span class="co">##         -29.99]], ID["EPSG", 31985]]], TARGETCRS[GEOGCRS["WGS</span></a>
+<a class="sourceLine" id="cb105-71" title="71"><span class="co">##         84", DATUM["World Geodetic System 1984", ELLIPSOID["WGS</span></a>
+<a class="sourceLine" id="cb105-72" title="72"><span class="co">##         84", 6378137, 298.257223563, LENGTHUNIT["metre", 1]]],</span></a>
+<a class="sourceLine" id="cb105-73" title="73"><span class="co">##         PRIMEM["Greenwich", 0, ANGLEUNIT["degree",</span></a>
+<a class="sourceLine" id="cb105-74" title="74"><span class="co">##         0.0174532925199433]], CS[ellipsoidal, 2],</span></a>
+<a class="sourceLine" id="cb105-75" title="75"><span class="co">##         AXIS["latitude", north, ORDER[1], ANGLEUNIT["degree",</span></a>
+<a class="sourceLine" id="cb105-76" title="76"><span class="co">##         0.0174532925199433]], AXIS["longitude", east, ORDER[2],</span></a>
+<a class="sourceLine" id="cb105-77" title="77"><span class="co">##         ANGLEUNIT["degree", 0.0174532925199433]], ID["EPSG",</span></a>
+<a class="sourceLine" id="cb105-78" title="78"><span class="co">##         4326]]], ABRIDGEDTRANSFORMATION["SIRGAS 2000 to WGS 84</span></a>
+<a class="sourceLine" id="cb105-79" title="79"><span class="co">##         (1)", VERSION["OGP-C&amp;S America"], METHOD["Geocentric</span></a>
+<a class="sourceLine" id="cb105-80" title="80"><span class="co">##         translations (geog2D domain)", ID["EPSG", 9603]],</span></a>
+<a class="sourceLine" id="cb105-81" title="81"><span class="co">##         PARAMETER["X-axis translation", 0, ID["EPSG", 8605]],</span></a>
+<a class="sourceLine" id="cb105-82" title="82"><span class="co">##         PARAMETER["Y-axis translation", 0, ID["EPSG", 8606]],</span></a>
+<a class="sourceLine" id="cb105-83" title="83"><span class="co">##         PARAMETER["Z-axis translation", 0, ID["EPSG", 8607]],</span></a>
+<a class="sourceLine" id="cb105-84" title="84"><span class="co">##         USAGE[SCOPE["Accuracy 1m."], AREA["Latin America -</span></a>
+<a class="sourceLine" id="cb105-85" title="85"><span class="co">##         SIRGAS 2000 by country"], BBOX[-59.87, -122.19, 32.72,</span></a>
+<a class="sourceLine" id="cb105-86" title="86"><span class="co">##         -25.28]], ID["EPSG", 15894]]]</span></a>
+<a class="sourceLine" id="cb105-87" title="87"><span class="co">## Best instantiable operation has only ballpark accuracy </span></a>
+<a class="sourceLine" id="cb105-88" title="88"><span class="co">## Description: Inverse of UTM zone 25S + Corrego Alegre 1970-72 to WGS 84 (3)</span></a>
+<a class="sourceLine" id="cb105-89" title="89"><span class="co">##              + Inverse of SIRGAS 2000 to WGS 84 (1) + UTM zone</span></a>
+<a class="sourceLine" id="cb105-90" title="90"><span class="co">##              25S</span></a>
+<a class="sourceLine" id="cb105-91" title="91"><span class="co">## Definition:  +proj=pipeline +step +inv +proj=utm +zone=25 +south +ellps=intl</span></a>
+<a class="sourceLine" id="cb105-92" title="92"><span class="co">##              +step +proj=push +v_3 +step +proj=cart +ellps=intl</span></a>
+<a class="sourceLine" id="cb105-93" title="93"><span class="co">##              +step +proj=helmert +x=-205.57 +y=168.77 +z=-4.12</span></a>
+<a class="sourceLine" id="cb105-94" title="94"><span class="co">##              +step +inv +proj=cart +ellps=GRS80 +step +proj=pop</span></a>
+<a class="sourceLine" id="cb105-95" title="95"><span class="co">##              +v_3 +step +proj=utm +zone=25 +south +ellps=GRS80</span></a></code></pre></div>
+<p>If we define the look-up terms directly, in this case and unlike that for the OSGB36 datum, we find more operations than when using WKT strings. Now we find one operation with known accuracy (5m), and that a further operation would be possible if a required grid had been present, this grid is not in the PROJ download archive, as no URL is given.</p>
+<div class="sourceCode" id="cb106"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb106-1" title="1">(x &lt;-<span class="st"> </span><span class="kw"><a href="../reference/list_coordOps.html">list_coordOps</a></span>(<span class="st">"EPSG:22525"</span>, <span class="st">"EPSG:31985"</span>))</a></code></pre></div>
+<pre><code>## Candidate coordinate operations found:  2 
+## Strict containment:  FALSE 
+## Visualization order:  TRUE 
+## Source: EPSG:22525 
+## Target: EPSG:31985 
+## Best instantiable operation has accuracy: 5 m
+## Description: Inverse of UTM zone 25S + Corrego Alegre 1970-72 to SIRGAS 2000
+##              (2) + UTM zone 25S
+## Definition:  +proj=pipeline +step +inv +proj=utm +zone=25 +south +ellps=intl
+##              +step +proj=push +v_3 +step +proj=cart +ellps=intl
+##              +step +proj=helmert +x=-206.05 +y=168.28 +z=-3.82
+##              +step +inv +proj=cart +ellps=GRS80 +step +proj=pop
+##              +v_3 +step +proj=utm +zone=25 +south +ellps=GRS80
+## Operation 2 is lacking 1 grid with accuracy 2 m
+## Missing grid: CA7072_003.gsb</code></pre>
+<div class="sourceCode" id="cb108"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb108-1" title="1"><span class="co">## Candidate coordinate operations found:  2 </span></a>
+<a class="sourceLine" id="cb108-2" title="2"><span class="co">## Strict containment:  FALSE </span></a>
+<a class="sourceLine" id="cb108-3" title="3"><span class="co">## Visualization order:  TRUE </span></a>
+<a class="sourceLine" id="cb108-4" title="4"><span class="co">## Source: EPSG:22525 </span></a>
+<a class="sourceLine" id="cb108-5" title="5"><span class="co">## Target: EPSG:31985 </span></a>
+<a class="sourceLine" id="cb108-6" title="6"><span class="co">## Best instantiable operation has accuracy: 5 m</span></a>
+<a class="sourceLine" id="cb108-7" title="7"><span class="co">## Description: Inverse of UTM zone 25S + Corrego Alegre 1970-72 to SIRGAS 2000</span></a>
+<a class="sourceLine" id="cb108-8" title="8"><span class="co">##              (2) + UTM zone 25S</span></a>
+<a class="sourceLine" id="cb108-9" title="9"><span class="co">## Definition:  +proj=pipeline +step +inv +proj=utm +zone=25 +south +ellps=intl</span></a>
+<a class="sourceLine" id="cb108-10" title="10"><span class="co">##              +step +proj=push +v_3 +step +proj=cart +ellps=intl</span></a>
+<a class="sourceLine" id="cb108-11" title="11"><span class="co">##              +step +proj=helmert +x=-206.05 +y=168.28 +z=-3.82</span></a>
+<a class="sourceLine" id="cb108-12" title="12"><span class="co">##              +step +inv +proj=cart +ellps=GRS80 +step +proj=pop</span></a>
+<a class="sourceLine" id="cb108-13" title="13"><span class="co">##              +v_3 +step +proj=utm +zone=25 +south +ellps=GRS80</span></a>
+<a class="sourceLine" id="cb108-14" title="14"><span class="co">## Operation 2 is lacking 1 grid with accuracy 2 m</span></a>
+<a class="sourceLine" id="cb108-15" title="15"><span class="co">## Missing grid: CA7072_003.gsb</span></a></code></pre></div>
+<div class="sourceCode" id="cb109"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb109-1" title="1"><span class="kw"><a href="../reference/list_coordOps.html">best_instantiable_coordOp</a></span>(x)</a></code></pre></div>
+<pre><code>## [1] "+proj=pipeline +step +inv +proj=utm +zone=25 +south +ellps=intl +step +proj=push +v_3 +step +proj=cart +ellps=intl +step +proj=helmert +x=-206.05 +y=168.28 +z=-3.82 +step +inv +proj=cart +ellps=GRS80 +step +proj=pop +v_3 +step +proj=utm +zone=25 +south +ellps=GRS80"
+## attr(,"description")
+## [1] "Inverse of UTM zone 25S + Corrego Alegre 1970-72 to SIRGAS 2000 (2) + UTM zone 25S"</code></pre>
+<div class="sourceCode" id="cb111"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb111-1" title="1"><span class="co">## [1] "+proj=pipeline +step +inv +proj=utm +zone=25 +south +ellps=intl +step</span></a>
+<a class="sourceLine" id="cb111-2" title="2"><span class="co">## +proj=push +v_3 +step +proj=cart +ellps=intl +step +proj=helmert +x=-206.05</span></a>
+<a class="sourceLine" id="cb111-3" title="3"><span class="co">## +y=168.28 +z=-3.82 +step +inv +proj=cart +ellps=GRS80 +step +proj=pop +v_3 +step</span></a>
+<a class="sourceLine" id="cb111-4" title="4"><span class="co">## +proj=utm +zone=25 +south +ellps=GRS80"</span></a>
+<a class="sourceLine" id="cb111-5" title="5"><span class="co">## attr(,"description")</span></a>
+<a class="sourceLine" id="cb111-6" title="6"><span class="co">## [1] "Inverse of UTM zone 25S + Corrego Alegre 1970-72 to SIRGAS 2000 (2) + </span></a>
+<a class="sourceLine" id="cb111-7" title="7"><span class="co">## UTM zone 25S"</span></a></code></pre></div>
 <div id="refs" class="references">
 <div id="ref-evers+knudsen17">
 <p>Evers, Kristian, and Thomas Knudsen. 2017. <em>Transformation Pipelines for Proj.4</em>. <a href="https://www.fig.net/resources/proceedings/fig_proceedings/fig2017/papers/iss6b/ISS6B_evers_knudsen_9156.pdf">https://www.fig.net/resources/proceedings/fig_proceedings/fig2017/papers/iss6b/ISS6B_evers_knudsen_9156.pdf</a>.</p>
