@@ -39,7 +39,7 @@ export(toSigned, toUnSigned)
 export(getDriver, GDAL.close, GDAL.open, getColorTable,
   getGeoTransFunc, sub.GDROD, SGDF2PCT, vec2RGB, asSGDF_GROD, RGB2PCT)
 export(make_EPSG, project, readGDAL, writeGDAL, create2GDAL)
-export(showWKT, showEPSG, showP4, showSRID, list_coordOps)
+export(showWKT, showEPSG, showP4, showSRID, list_coordOps, best_instantiable_coordOp)
 export(readOGR, ogrInfo, ogrFIDs, ogrDrivers, writeOGR, ogrListLayers)
 export(GDALinfo, print.GDALobj, getGDALVersionInfo, getGDALCheckVersion, getGDAL_DATA_Path, getGDALwithGEOS)
 export(displayDataset)

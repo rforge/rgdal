@@ -14,6 +14,7 @@ list_coordOps <- function(src_crs, tgt_crs, area_of_interest=as.numeric(NA), str
         strict_containment, visualization_order, PACKAGE="rgdal")
     if (is.null(res)) stop("function not available without PROJ 6")
     names(res) <- c("description", "definition", "accuracy", "instantiable", "ballpark", "number_grids")
+    is.na(res$accuracy) <- res$accuracy < 0
     grids <- res[[7]]
     res[[7]] <- NULL
     defs <- res$definition
@@ -34,10 +35,12 @@ list_coordOps <- function(src_crs, tgt_crs, area_of_interest=as.numeric(NA), str
 
 prettify_wkt <- function(inSRID) {
     if (substring(inSRID, 1, 1) == " ") stop("string starts with space")
-    if (substring(inSRID, 1, 1) == "+") res <- strwrap(inSRID)
+    if (substring(inSRID, 1, 1) == "+")
+        res <- strwrap(inSRID, exdent=8, width=0.8*getOption("width"))
     if (substring(inSRID, 1, 3) == "urn") res <- inSRID
-    if (substring(inSRID, 1, 1) == "P" || substring(inSRID, 1, 1) == "G") 
-        res <- strwrap(gsub(",", ",", inSRID))
+    if (substring(inSRID, 1, 1) == "P" || substring(inSRID, 1, 1) == "G" || substring(inSRID, 1, 1) == "B" || substring(inSRID, 1, 1) == "S") 
+        res <- strwrap(gsub(",", ", ", inSRID), exdent=8,
+            width=0.8*getOption("width"))
     if (substring(inSRID, 1, 4) == "EPSG") res <- inSRID
     res
 }
@@ -53,11 +56,25 @@ print.coordOps <- function(x, ...) {
     cat("Visualization order: ", attr(x, "visualization_order"), "\n")
     in_str <- prettify_wkt(attr(x, "src_crs"))
     if (length(in_str) == 1) cat("Source:", in_str, "\n")
-    else cat("Source:", in_str, sep="\n")
+    else {cat("Source: "); cat(in_str, sep="\n")}
     out_str <- prettify_wkt(attr(x, "tgt_crs"))
     if (length(out_str) == 1) cat("Target:", out_str, "\n")
     else cat("Target:", out_str, sep="\n")
     nos <- which(!x$instantiable)
+    if (length(nos) > 0L) xx <- x[-nos,]
+    else xx <- x
+    xx <- xx[order(xx$accuracy),]
+    if (is.na(xx$accuracy[1]))
+      cat("Best instantiable operation has only ballpark accuracy", "\n")
+    else cat("Best instantiable operation has accuracy:", xx$accuracy[1], "m\n")
+    cat("Description: ")
+    desc <- strwrap(xx$description[1], exdent=13, width=0.8*getOption("width"))
+    if (length(desc) == 1L) cat(desc, "\n")
+    else cat(desc, sep="\n")
+    cat("Definition:  ")
+    def <- strwrap(xx$definition[1], exdent=13, width=0.8*getOption("width"))
+    if (length(def) == 1L) cat(def, "\n")
+    else cat(def, sep="\n")
     if (length(nos) > 0L) {
         grds <- attr(x, "grids")
         for (i in seq(along=nos)) {
@@ -66,7 +83,7 @@ print.coordOps <- function(x, ...) {
             if (ii > 0L) {
                 cat("Operation", nos[i], "is lacking", ii,
                     ifelse(ii == 1L, "grid", "grids"),
-                    "with accuracy", x$accuracy[nos[i]], "\n")
+                    "with accuracy", x$accuracy[nos[i]], "m\n")
                 for (j in 1:ii) {
                     cat("Missing grid:", grd[[j]][[1]], "\n")
                     if (nzchar(grd[[j]][[2]])) cat("Name:", grd[[j]][[2]],
@@ -77,5 +94,19 @@ print.coordOps <- function(x, ...) {
             }
         }
     }
+    
     invisible(x)    
 }
+
+best_instantiable_coordOp <- function(x) {
+    stopifnot(inherits(x, "coordOps"))
+    nos <- which(!x$instantiable)
+    if (length(nos) > 0L) xx <- x[-nos,]
+    else xx <- x
+    xx <- xx[order(xx$accuracy),]
+    if (is.na(xx$accuracy[1]))
+      warning("Best instantiable operation has only ballpark accuracy")
+    res <- xx$definition[1]
+    attr(res, "description") <- xx$description[1]
+    res
+} 

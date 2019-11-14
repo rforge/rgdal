@@ -427,4 +427,383 @@ So far, `"CRS"` objects created on creation from **sp**, and from reading raster
 
 ## Coordinate operations
 
+```{r}
+library(rgdal)
+```
+
+
+```{r}
+## rgdal: version: 1.5-1, (SVN revision 870)
+##  Geospatial Data Abstraction Library extensions to R successfully loaded
+##  Loaded GDAL runtime: GDAL 3.0.2, released 2019/10/28
+##  Path to GDAL shared files: 
+##  GDAL binary built with GEOS: TRUE 
+##  Loaded PROJ.4 runtime: Rel. 6.2.1, November 1st, 2019, [PJ_VERSION: 621]
+##  Path to PROJ.4 shared files: (autodetected)
+##  Linking to sp version: 1.3-3
+```
+
+
+```{r}
+run <- new_proj_and_gdal()
+```
+
+We can first show what happens when searching for instantiable coordinate operations. These are coordinate operations that can be created by look-up in the PROJ database given the information in the input description. Here the datum has been discarded.
+
+```{r, eval=run}
+discarded_datum <- showSRID("EPSG:27700", "PROJ")
+```
+
+```{r}
+## Warning in showSRID("EPSG:27700", "PROJ"): Discarded datum OSGB_1936 in CRS
+## definition
+```
+ 
+Consequently, when searching for coordinate operations to transform to geographical coordinates and the WGS84 datum, and using `importFromProj4()` to instantiate the source SRS, the only operation found only has the Airy ellipse information to guide its search. The `list_coordOps()` function takes two SRS descriptions, and returns coordinate operations found by look-up. We need to add the `type` tag to a PROJ string here.
+
+```{r, eval=run}
+(x <- list_coordOps(paste0(discarded_datum, " +type=crs"), "EPSG:4326"))
+```
+
+```{r}
+## Candidate coordinate operations found:  1 
+## Strict containment:  FALSE 
+## Visualization order:  TRUE 
+## Source: +proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000
+##         +y_0=-100000 +ellps=airy +units=m +no_defs +type=crs
+## Target: EPSG:4326 
+## Best instantiable operation has only ballpark accuracy 
+## Description: Inverse of unknown + Ballpark geographic offset from unknown to
+##              WGS 84 + axis order change (2D)
+## Definition:  +proj=pipeline +step +inv +proj=tmerc +lat_0=49 +lon_0=-2
+##              +k=0.9996012717 +x_0=400000 +y_0=-100000
+##              +ellps=airy +step +proj=unitconvert +xy_in=rad
+##              +xy_out=deg
+```
+
+The `best_instantiable_coordOp()` function retuns the best instantiable coordinate operation, in this case the only one, with a description attribute. This is the current best available in calling `spTransform()` with `"CRS"` objects with discarded `+datum=` tags.
+
+```{r, eval=run}
+best_instantiable_coordOp(x)
+```
+
+```{r}
+## Warning in best_instantiable_coordOp(x): Best instantiable operation has only
+## ballpark accuracy
+## [1] "+proj=pipeline +step +inv +proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717
+## +x_0=400000 +y_0=-100000 +ellps=airy +step +proj=unitconvert +xy_in=rad +xy_out=deg"
+## attr(,"description")
+## [1] "Inverse of unknown + Ballpark geographic offset from unknown to WGS 84 + 
+## axis order change (2D)"
+```
+
+If we add back the discarded `+datum=` tag with a valid value, we give the search process what it needs to find more coordinate operations.
+
+```{r, eval=run}
+list_coordOps(paste0(discarded_datum, " +datum=OSGB36 +type=crs"), "EPSG:4326")
+```
+
+Now we have 7 operations, one the ballpark accuracy operation with unknown accuracy found above, 5 others that can be instantiated, of which the best has 2m accuracy, and an operation that cannot be instantiated because a publically available grid is missing. On download and installation of this grid, 1m accuracy could be achieved.
+
+```{r}
+## Candidate coordinate operations found:  7 
+## Strict containment:  FALSE 
+## Visualization order:  TRUE 
+## Source: +proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000
+##         +y_0=-100000 +ellps=airy +units=m +no_defs
+##         +datum=OSGB36 +type=crs
+## Target: EPSG:4326 
+## Best instantiable operation has accuracy: 2 m
+## Description: Inverse of unknown + axis order change (2D) + OSGB 1936 to WGS
+##              84 (6) + axis order change (2D)
+## Definition:  +proj=pipeline +step +inv +proj=tmerc +lat_0=49 +lon_0=-2
+##              +k=0.9996012717 +x_0=400000 +y_0=-100000
+##              +ellps=airy +step +proj=push +v_3 +step +proj=cart
+##              +ellps=airy +step +proj=helmert +x=446.448
+##              +y=-125.157 +z=542.06 +rx=0.15 +ry=0.247 +rz=0.842
+##              +s=-20.489 +convention=position_vector +step +inv
+##              +proj=cart +ellps=WGS84 +step +proj=pop +v_3 +step
+##              +proj=unitconvert +xy_in=rad +xy_out=deg
+## Operation 6 is lacking 1 grid with accuracy 1 m
+## Missing grid: OSTN15_NTv2_OSGBtoETRS.gsb 
+## URL: https://download.osgeo.org/proj/proj-datumgrid-europe-latest.zip
+```
+
+If we pass the source WKT string to `list_coordOps()` we get 6 operations back, now without the ballpark accuracy operation; this would be the situation in which WKT comments if present were used to construct the source and target SRS:
+
+```{r, eval=run}
+wkt_source_datum <- showSRID("EPSG:27700", "WKT2")
+wkt_target_datum <- showSRID("EPSG:4326", "WKT2")
+(x <- list_coordOps(wkt_source_datum, wkt_target_datum))
+```
+
+```{r}
+## Candidate coordinate operations found:  6 
+## Strict containment:  FALSE 
+## Visualization order:  TRUE 
+## Source: PROJCRS["OSGB 1936 / British National Grid", BASEGEOGCRS["OSGB
+##         1936", DATUM["OSGB 1936", ELLIPSOID["Airy 1830",
+##         6377563.396, 299.3249646, LENGTHUNIT["metre", 1]]],
+##         PRIMEM["Greenwich", 0, ANGLEUNIT["degree",
+##         0.0174532925199433]], ID["EPSG", 4277]],
+##         CONVERSION["British National Grid", METHOD["Transverse
+##         Mercator", ID["EPSG", 9807]], PARAMETER["Latitude of
+##         natural origin", 49, ANGLEUNIT["degree",
+##         0.0174532925199433], ID["EPSG", 8801]],
+##         PARAMETER["Longitude of natural origin", -2,
+##         ANGLEUNIT["degree", 0.0174532925199433], ID["EPSG",
+##         8802]], PARAMETER["Scale factor at natural origin",
+##         0.9996012717, SCALEUNIT["unity", 1], ID["EPSG", 8805]],
+##         PARAMETER["False easting", 400000, LENGTHUNIT["metre",
+##         1], ID["EPSG", 8806]], PARAMETER["False northing",
+##         -100000, LENGTHUNIT["metre", 1], ID["EPSG", 8807]]],
+##         CS[Cartesian, 2], AXIS["(E)", east, ORDER[1],
+##         LENGTHUNIT["metre", 1]], AXIS["(N)", north, ORDER[2],
+##         LENGTHUNIT["metre", 1]], USAGE[SCOPE["unknown"],
+##         AREA["UK - Britain and UKCS 49°46'N to 61°01'N, 7°33'W
+##         to 3°33'E"], BBOX[49.75, -9.2, 61.14, 2.88]],
+##         ID["EPSG", 27700]]
+## Target: GEOGCRS["WGS 84", DATUM["World Geodetic System 1984",
+##         ELLIPSOID["WGS 84", 6378137, 298.257223563,
+##         LENGTHUNIT["metre", 1]]], PRIMEM["Greenwich", 0,
+##         ANGLEUNIT["degree", 0.0174532925199433]],
+##         CS[ellipsoidal, 2], AXIS["geodetic latitude (Lat)",
+##         north, ORDER[1], ANGLEUNIT["degree",
+##         0.0174532925199433]], AXIS["geodetic longitude (Lon)",
+##         east, ORDER[2], ANGLEUNIT["degree",
+##         0.0174532925199433]], USAGE[SCOPE["unknown"],
+##         AREA["World"], BBOX[-90, -180, 90, 180]], ID["EPSG",
+##         4326]]
+## Best instantiable operation has accuracy: 2 m
+## Description: Inverse of British National Grid + OSGB 1936 to WGS 84 (6) +
+##              axis order change (2D)
+## Definition:  +proj=pipeline +step +inv +proj=tmerc +lat_0=49 +lon_0=-2
+##              +k=0.9996012717 +x_0=400000 +y_0=-100000
+##              +ellps=airy +step +proj=push +v_3 +step +proj=cart
+##              +ellps=airy +step +proj=helmert +x=446.448
+##              +y=-125.157 +z=542.06 +rx=0.15 +ry=0.247 +rz=0.842
+##              +s=-20.489 +convention=position_vector +step +inv
+##              +proj=cart +ellps=WGS84 +step +proj=pop +v_3 +step
+##              +proj=unitconvert +xy_in=rad +xy_out=deg
+## Operation 6 is lacking 1 grid with accuracy 1 m
+## Missing grid: OSTN15_NTv2_OSGBtoETRS.gsb 
+## URL: https://download.osgeo.org/proj/proj-datumgrid-europe-latest.zip
+```
+
+```{r, eval=run}
+best_instantiable_coordOp(x)
+```
+
+```{r}
+## [1] "+proj=pipeline +step +inv +proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717
+## +x_0=400000 +y_0=-100000 +ellps=airy +step +proj=push +v_3 +step +proj=cart
+## +ellps=airy +step +proj=helmert +x=446.448 +y=-125.157 +z=542.06 +rx=0.15 +ry=0.247
+## +rz=0.842 +s=-20.489 +convention=position_vector +step +inv +proj=cart +ellps=WGS84
+## +step +proj=pop +v_3 +step +proj=unitconvert +xy_in=rad +xy_out=deg"
+## attr(,"description")
+## [1] "Inverse of British National Grid + OSGB 1936 to WGS 84 (6) + axis order change (2D)"
+```
+
+Turning to a different example, a Brazilian UTM25S Corrego Alegre 1970-72 datum, and looking for coordinate operations transform to UTM25S SIRGAS 2000, we see that a `+towgs84=` tag was preserved.
+
+```{r, eval=run}
+discarded_datum <- showSRID("EPSG:22525", "PROJ")
+```
+
+```{r}
+## Warning in showSRID("EPSG:22525", "PROJ"): Discarded datum Corrego_Alegre_1970-72 in CRS definition,
+##  but +towgs84= values preserved
+```
+
+This meant that while only ballpark accuracy is reported, a Helmert transformation is carried out:
+
+```{r, eval=run}
+(x <- list_coordOps(paste0(discarded_datum, " +type=crs"), "EPSG:31985"))
+```
+
+
+```{r}
+## Candidate coordinate operations found:  1 
+## Strict containment:  FALSE 
+## Visualization order:  TRUE 
+## Source: +proj=utm +zone=25 +south +ellps=intl
+##         +towgs84=-205.57,168.77,-4.12,0,0,0,0 +units=m +no_defs
+##         +type=crs
+## Target: EPSG:31985 
+## Best instantiable operation has only ballpark accuracy 
+## Description: Inverse of UTM zone 25S + Transformation from unknown to WGS84
+##              + Inverse of SIRGAS 2000 to WGS 84 (1) + UTM zone
+##              25S
+## Definition:  +proj=pipeline +step +inv +proj=utm +zone=25 +south +ellps=intl
+##              +step +proj=push +v_3 +step +proj=cart +ellps=intl
+##              +step +proj=helmert +x=-205.57 +y=168.77 +z=-4.12
+##              +rx=0 +ry=0 +rz=0 +s=0 +convention=position_vector
+##              +step +inv +proj=cart +ellps=GRS80 +step +proj=pop
+##              +v_3 +step +proj=utm +zone=25 +south +ellps=GRS80
+```
+
+
+```{r, eval=run}
+best_instantiable_coordOp(x)
+```
+
+```{r}
+## Warning in best_instantiable_coordOp(x): Best instantiable operation has only
+## ballpark accuracy
+## [1] "+proj=pipeline +step +inv +proj=utm +zone=25 +south +ellps=intl +step
+## +proj=push +v_3 +step +proj=cart +ellps=intl +step +proj=helmert +x=-205.57
+## +y=168.77 +z=-4.12 +rx=0 +ry=0 +rz=0 +s=0 +convention=position_vector +step +inv
+## +proj=cart +ellps=GRS80 +step +proj=pop +v_3 +step +proj=utm +zone=25 +south
+## +ellps=GRS80"
+## attr(,"description")
+## [1] "Inverse of UTM zone 25S + Transformation from unknown to WGS84 + Inverse of
+## SIRGAS 2000 to WGS 84 (1) + UTM zone 25S"
+```
+
+If we move to input WKT strings when searching for coordinate operations, we get to the same result with unknown accuracy but using a Helmert transformation:
+
+```{r, eval=run}
+wkt_source_datum <- showSRID("EPSG:22525", "WKT2")
+wkt_target_datum <- showSRID("EPSG:31985", "WKT2")
+(x <- list_coordOps(wkt_source_datum, wkt_target_datum))
+```
+
+```{r}
+## Candidate coordinate operations found:  1 
+## Strict containment:  FALSE 
+## Visualization order:  TRUE 
+## Source: BOUNDCRS[SOURCECRS[PROJCRS["Corrego Alegre 1970-72 / UTM zone
+##         25S", BASEGEOGCRS["Corrego Alegre 1970-72",
+##         DATUM["Corrego Alegre 1970-72",
+##         ELLIPSOID["International 1924", 6378388, 297,
+##         LENGTHUNIT["metre", 1]]], PRIMEM["Greenwich", 0,
+##         ANGLEUNIT["degree", 0.0174532925199433]], ID["EPSG",
+##         4225]], CONVERSION["UTM zone 25S", METHOD["Transverse
+##         Mercator", ID["EPSG", 9807]], PARAMETER["Latitude of
+##         natural origin", 0, ANGLEUNIT["degree",
+##         0.0174532925199433], ID["EPSG", 8801]],
+##         PARAMETER["Longitude of natural origin", -33,
+##         ANGLEUNIT["degree", 0.0174532925199433], ID["EPSG",
+##         8802]], PARAMETER["Scale factor at natural origin",
+##         0.9996, SCALEUNIT["unity", 1], ID["EPSG", 8805]],
+##         PARAMETER["False easting", 500000, LENGTHUNIT["metre",
+##         1], ID["EPSG", 8806]], PARAMETER["False northing",
+##         10000000, LENGTHUNIT["metre", 1], ID["EPSG", 8807]]],
+##         CS[Cartesian, 2], AXIS["(E)", east, ORDER[1],
+##         LENGTHUNIT["metre", 1]], AXIS["(N)", north, ORDER[2],
+##         LENGTHUNIT["metre", 1]], USAGE[SCOPE["unknown"],
+##         AREA["Brazil - east of 36°W onshore"], BBOX[-10.1, -36,
+##         -4.99, -34.74]], ID["EPSG", 22525]]],
+##         TARGETCRS[GEOGCRS["WGS 84", DATUM["World Geodetic
+##         System 1984", ELLIPSOID["WGS 84", 6378137,
+##         298.257223563, LENGTHUNIT["metre", 1]]],
+##         PRIMEM["Greenwich", 0, ANGLEUNIT["degree",
+##         0.0174532925199433]], CS[ellipsoidal, 2],
+##         AXIS["latitude", north, ORDER[1], ANGLEUNIT["degree",
+##         0.0174532925199433]], AXIS["longitude", east, ORDER[2],
+##         ANGLEUNIT["degree", 0.0174532925199433]], ID["EPSG",
+##         4326]]], ABRIDGEDTRANSFORMATION["Corrego Alegre 1970-72
+##         to WGS 84 (3)", VERSION["PBS-Bra 1983"],
+##         METHOD["Geocentric translations (geog2D domain)",
+##         ID["EPSG", 9603]], PARAMETER["X-axis translation",
+##         -205.57, ID["EPSG", 8605]], PARAMETER["Y-axis
+##         translation", 168.77, ID["EPSG", 8606]],
+##         PARAMETER["Z-axis translation", -4.12, ID["EPSG",
+##         8607]], USAGE[SCOPE["Medium and small scale mapping."],
+##         AREA["Brazil - Corrego Alegre 1970-1972"], BBOX[-33.78,
+##         -58.16, -2.68, -34.74]], ID["EPSG", 6192],
+##         REMARK["Formed by concatenation of tfms codes 6191 and
+##         1877. Used by Petrobras and ANP until February 2005
+##         when replaced by Corrego Alegre 1970-72 to WGS 84 (4)
+##         (tfm code 6194)."]]]
+## Target:
+## BOUNDCRS[SOURCECRS[PROJCRS["SIRGAS 2000 / UTM zone 25S",
+##         BASEGEOGCRS["SIRGAS 2000", DATUM["Sistema de Referencia
+##         Geocentrico para las AmericaS 2000", ELLIPSOID["GRS
+##         1980", 6378137, 298.257222101, LENGTHUNIT["metre",
+##         1]]], PRIMEM["Greenwich", 0, ANGLEUNIT["degree",
+##         0.0174532925199433]], ID["EPSG", 4674]],
+##         CONVERSION["UTM zone 25S", METHOD["Transverse
+##         Mercator", ID["EPSG", 9807]], PARAMETER["Latitude of
+##         natural origin", 0, ANGLEUNIT["degree",
+##         0.0174532925199433], ID["EPSG", 8801]],
+##         PARAMETER["Longitude of natural origin", -33,
+##         ANGLEUNIT["degree", 0.0174532925199433], ID["EPSG",
+##         8802]], PARAMETER["Scale factor at natural origin",
+##         0.9996, SCALEUNIT["unity", 1], ID["EPSG", 8805]],
+##         PARAMETER["False easting", 500000, LENGTHUNIT["metre",
+##         1], ID["EPSG", 8806]], PARAMETER["False northing",
+##         10000000, LENGTHUNIT["metre", 1], ID["EPSG", 8807]]],
+##         CS[Cartesian, 2], AXIS["(E)", east, ORDER[1],
+##         LENGTHUNIT["metre", 1]], AXIS["(N)", north, ORDER[2],
+##         LENGTHUNIT["metre", 1]], USAGE[SCOPE["unknown"],
+##         AREA["Brazil - 36°W to 30°W"], BBOX[-23.8, -36, 4.19,
+##         -29.99]], ID["EPSG", 31985]]], TARGETCRS[GEOGCRS["WGS
+##         84", DATUM["World Geodetic System 1984", ELLIPSOID["WGS
+##         84", 6378137, 298.257223563, LENGTHUNIT["metre", 1]]],
+##         PRIMEM["Greenwich", 0, ANGLEUNIT["degree",
+##         0.0174532925199433]], CS[ellipsoidal, 2],
+##         AXIS["latitude", north, ORDER[1], ANGLEUNIT["degree",
+##         0.0174532925199433]], AXIS["longitude", east, ORDER[2],
+##         ANGLEUNIT["degree", 0.0174532925199433]], ID["EPSG",
+##         4326]]], ABRIDGEDTRANSFORMATION["SIRGAS 2000 to WGS 84
+##         (1)", VERSION["OGP-C&S America"], METHOD["Geocentric
+##         translations (geog2D domain)", ID["EPSG", 9603]],
+##         PARAMETER["X-axis translation", 0, ID["EPSG", 8605]],
+##         PARAMETER["Y-axis translation", 0, ID["EPSG", 8606]],
+##         PARAMETER["Z-axis translation", 0, ID["EPSG", 8607]],
+##         USAGE[SCOPE["Accuracy 1m."], AREA["Latin America -
+##         SIRGAS 2000 by country"], BBOX[-59.87, -122.19, 32.72,
+##         -25.28]], ID["EPSG", 15894]]]
+## Best instantiable operation has only ballpark accuracy 
+## Description: Inverse of UTM zone 25S + Corrego Alegre 1970-72 to WGS 84 (3)
+##              + Inverse of SIRGAS 2000 to WGS 84 (1) + UTM zone
+##              25S
+## Definition:  +proj=pipeline +step +inv +proj=utm +zone=25 +south +ellps=intl
+##              +step +proj=push +v_3 +step +proj=cart +ellps=intl
+##              +step +proj=helmert +x=-205.57 +y=168.77 +z=-4.12
+##              +step +inv +proj=cart +ellps=GRS80 +step +proj=pop
+##              +v_3 +step +proj=utm +zone=25 +south +ellps=GRS80
+```
+
+If we define the look-up terms directly, in this case and unlike that for the OSGB36 datum, we find more operations than when using WKT strings. Now we find one operation with known accuracy (5m), and that a further operation would be possible if a required grid had been present, this grid is not in the PROJ download archive, as no URL is given. 
+
+```{r, eval=run}
+(x <- list_coordOps("EPSG:22525", "EPSG:31985"))
+```
+
+```{r}
+## Candidate coordinate operations found:  2 
+## Strict containment:  FALSE 
+## Visualization order:  TRUE 
+## Source: EPSG:22525 
+## Target: EPSG:31985 
+## Best instantiable operation has accuracy: 5 m
+## Description: Inverse of UTM zone 25S + Corrego Alegre 1970-72 to SIRGAS 2000
+##              (2) + UTM zone 25S
+## Definition:  +proj=pipeline +step +inv +proj=utm +zone=25 +south +ellps=intl
+##              +step +proj=push +v_3 +step +proj=cart +ellps=intl
+##              +step +proj=helmert +x=-206.05 +y=168.28 +z=-3.82
+##              +step +inv +proj=cart +ellps=GRS80 +step +proj=pop
+##              +v_3 +step +proj=utm +zone=25 +south +ellps=GRS80
+## Operation 2 is lacking 1 grid with accuracy 2 m
+## Missing grid: CA7072_003.gsb
+```
+
+
+
+```{r, eval=run}
+best_instantiable_coordOp(x)
+```
+
+
+```{r}
+## [1] "+proj=pipeline +step +inv +proj=utm +zone=25 +south +ellps=intl +step
+## +proj=push +v_3 +step +proj=cart +ellps=intl +step +proj=helmert +x=-206.05
+## +y=168.28 +z=-3.82 +step +inv +proj=cart +ellps=GRS80 +step +proj=pop +v_3 +step
+## +proj=utm +zone=25 +south +ellps=GRS80"
+## attr(,"description")
+## [1] "Inverse of UTM zone 25S + Corrego Alegre 1970-72 to SIRGAS 2000 (2) + 
+## UTM zone 25S"
+```
 
