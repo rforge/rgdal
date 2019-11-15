@@ -213,7 +213,7 @@
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>cities</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='readOGR.html'>readOGR</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"vectors"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"rgdal"</span>)[<span class='fl'>1</span>], <span class='st'>"cities"</span>)</div><div class='output co'>#&gt; OGR data source with driver: ESRI Shapefile 
-#&gt; Source: "/tmp/RtmpT6lJMt/temp_libpath3b94a57f4c17c/rgdal/vectors", layer: "cities"
+#&gt; Source: "/tmp/RtmpZ2B1Mt/temp_libpath4c809eff7646/rgdal/vectors", layer: "cities"
 #&gt; with 606 features
 #&gt; It has 4 fields
 #&gt; Integer64 fields read as strings:  POPULATION </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span>(<span class='no'>cities</span>$<span class='no'>POPULATION</span>) <span class='kw'>&lt;-</span> <span class='no'>cities</span>$<span class='no'>POPULATION</span> <span class='kw'>==</span> -<span class='fl'>99</span>
@@ -253,7 +253,7 @@
 <span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='fu'>writeOGR</span>(<span class='no'>cities</span>, <span class='no'>td</span>, <span class='st'>"cities"</span>, <span class='kw'>driver</span><span class='kw'>=</span><span class='st'>"ESRI Shapefile"</span>))</div><div class='output co'>#&gt; Error in writeOGR(cities, td, "cities", driver = "ESRI Shapefile") : 
 #&gt;   layer exists, use a new layer name</div><div class='input'><span class='fu'>writeOGR</span>(<span class='no'>cities</span>, <span class='no'>td</span>, <span class='st'>"cities"</span>, <span class='kw'>driver</span><span class='kw'>=</span><span class='st'>"ESRI Shapefile"</span>, <span class='kw'>overwrite_layer</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
 <span class='no'>cities2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='readOGR.html'>readOGR</a></span>(<span class='no'>td</span>, <span class='st'>"cities"</span>)</div><div class='output co'>#&gt; OGR data source with driver: ESRI Shapefile 
-#&gt; Source: "/tmp/Rtmpm0wA8S/rgdal_examples", layer: "cities"
+#&gt; Source: "/tmp/Rtmpi9bFcI/rgdal_examples", layer: "cities"
 #&gt; with 606 features
 #&gt; It has 4 fields</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>cities2</span>$<span class='no'>POPULATION</span>)</div><div class='output co'>#&gt;  1270000  1550000  1140000  1190000  1225000  1250000  1300000  1400000 
 #&gt;        5        4        3        3        3        3        3        3 
@@ -312,7 +312,7 @@
 #&gt; It has 0 fields
 #&gt; [1] "0 0"
 #&gt; OGR data source with driver: GeoJSON 
-#&gt; Source: "/tmp/Rtmpm0wA8S/file3bb46a805bc5", layer: "GeoJSON"
+#&gt; Source: "/tmp/Rtmpi9bFcI/file4ca947775f8b8", layer: "GeoJSON"
 #&gt; with 1 features
 #&gt; It has 1 fields
 #&gt; [1] "0 0"
@@ -333,7 +333,7 @@
   <span class='fu'>writeOGR</span>(<span class='no'>meuse_ll</span>[<span class='st'>"zinc"</span>], <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='no'>td</span>, <span class='st'>"meuse.kml"</span>, <span class='kw'>sep</span><span class='kw'>=</span><span class='st'>"/"</span>), <span class='st'>"zinc"</span>, <span class='st'>"KML"</span>)
 }</div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum Amersfoort in CRS definition</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/list.files.html'>list.files</a></span>(<span class='no'>td</span>)</div><div class='output co'>#&gt; [1] "cities.dbf" "cities.prj" "cities.shp" "cities.shx" "meuse.kml" </div><div class='input'><span class='no'>roads</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='readOGR.html'>readOGR</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"vectors"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"rgdal"</span>)[<span class='fl'>1</span>],
  <span class='st'>"kiritimati_primary_roads"</span>)</div><div class='output co'>#&gt; OGR data source with driver: ESRI Shapefile 
-#&gt; Source: "/tmp/RtmpT6lJMt/temp_libpath3b94a57f4c17c/rgdal/vectors", layer: "kiritimati_primary_roads"
+#&gt; Source: "/tmp/RtmpZ2B1Mt/temp_libpath4c809eff7646/rgdal/vectors", layer: "kiritimati_primary_roads"
 #&gt; with 35 features
 #&gt; It has 1 fields</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>roads</span>)</div><div class='output co'>#&gt; Object of class SpatialLinesDataFrame
 #&gt; Coordinates:
@@ -357,7 +357,7 @@
   <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>roads2</span>)
 }
 <span class='no'>scot_BNG</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='readOGR.html'>readOGR</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"vectors"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"rgdal"</span>)[<span class='fl'>1</span>], <span class='st'>"scot_BNG"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum OSGB_1936 in CRS definition: +proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy +units=m +no_defs</span></div><div class='output co'>#&gt; OGR data source with driver: ESRI Shapefile 
-#&gt; Source: "/tmp/RtmpT6lJMt/temp_libpath3b94a57f4c17c/rgdal/vectors", layer: "scot_BNG"
+#&gt; Source: "/tmp/RtmpZ2B1Mt/temp_libpath4c809eff7646/rgdal/vectors", layer: "scot_BNG"
 #&gt; with 56 features
 #&gt; It has 13 fields</div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum OSGB_1936 in CRS definition: +proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy +units=m +no_defs</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum Unknown_based_on_Airy_1830_ellipsoid in CRS definition</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>scot_BNG</span>)</div><div class='output co'>#&gt; Object of class SpatialPolygonsDataFrame
 #&gt; Coordinates:
@@ -413,7 +413,7 @@
 <span class='fu'><a href='https://rdrr.io/r/base/list.files.html'>list.files</a></span>(<span class='no'>td</span>)</div><div class='output co'>#&gt; [1] "cities.dbf"   "cities.prj"   "cities.shp"   "cities.shx"   "meuse.kml"   
 #&gt; [6] "scot_BNG.mid" "scot_BNG.mif"</div><div class='input'><span class='no'>scot_BNG3</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='readOGR.html'>readOGR</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='no'>td</span>, <span class='st'>"scot_BNG.mif"</span>, <span class='kw'>sep</span><span class='kw'>=</span><span class='st'>"/"</span>), <span class='st'>"scot_BNG"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum OSGB_1936 in CRS definition: +proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy +towgs84=375,-111,431,0,0,0,0 +units=m +no_defs,</span>
 #&gt; <span class='warning'> but +towgs84= values preserved</span></div><div class='output co'>#&gt; OGR data source with driver: MapInfo File 
-#&gt; Source: "/tmp/Rtmpm0wA8S/rgdal_examples/scot_BNG.mif", layer: "scot_BNG"
+#&gt; Source: "/tmp/Rtmpi9bFcI/rgdal_examples/scot_BNG.mif", layer: "scot_BNG"
 #&gt; with 56 features
 #&gt; It has 13 fields</div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum OSGB_1936 in CRS definition: +proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy +towgs84=375,-111,431,0,0,0,0 +units=m +no_defs,</span>
 #&gt; <span class='warning'> but +towgs84= values preserved</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum Unknown_based_on_Airy_1830_ellipsoid in CRS definition,</span>

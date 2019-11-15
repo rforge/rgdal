@@ -504,13 +504,13 @@
 <h2 class="hasAnchor">
 <a href="#coordinate-operations" class="anchor"></a>Coordinate operations</h2>
 <div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb70-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(rgdal)</a></code></pre></div>
-<pre><code>## rgdal: version: 1.5-1, (SVN revision 892)
+<pre><code>## rgdal: version: 1.5-1, (SVN revision 894)
 ##  Geospatial Data Abstraction Library extensions to R successfully loaded
 ##  Loaded GDAL runtime: GDAL 3.0.2, released 2019/10/28
-##  Path to GDAL shared files: 
+##  Path to GDAL shared files: /usr/local/share/gdal
 ##  GDAL binary built with GEOS: TRUE 
 ##  Loaded PROJ.4 runtime: Rel. 6.2.1, November 1st, 2019, [PJ_VERSION: 621]
-##  Path to PROJ.4 shared files: (autodetected)
+##  Path to PROJ.4 shared files: /usr/local/share/proj
 ##  Linking to sp version: 1.3-3</code></pre>
 <div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb72-1" title="1"><span class="co">## rgdal: version: 1.5-1, (SVN revision 870)</span></a>
 <a class="sourceLine" id="cb72-2" title="2"><span class="co">##  Geospatial Data Abstraction Library extensions to R successfully loaded</span></a>
@@ -1025,6 +1025,158 @@
 <a class="sourceLine" id="cb111-5" title="5"><span class="co">## attr(,"description")</span></a>
 <a class="sourceLine" id="cb111-6" title="6"><span class="co">## [1] "Inverse of UTM zone 25S + Corrego Alegre 1970-72 to SIRGAS 2000 (2) + </span></a>
 <a class="sourceLine" id="cb111-7" title="7"><span class="co">## UTM zone 25S"</span></a></code></pre></div>
+</div>
+<div id="transformations" class="section level2">
+<h2 class="hasAnchor">
+<a href="#transformations" class="anchor"></a>Transformations</h2>
+<p>The problem raised by the modernisation of PROJ can be encapsulated in this example of Scotland (once again the commented out runs are from a PROJ6/GDAL3 platform, the live runs from the platform building the vignette):</p>
+<div class="sourceCode" id="cb112"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb112-1" title="1">scot_BNG &lt;-<span class="st"> </span><span class="kw"><a href="../reference/readOGR.html">readOGR</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"vectors"</span>, <span class="dt">package=</span><span class="st">"rgdal"</span>), <span class="st">"scot_BNG"</span>)</a></code></pre></div>
+<pre><code>## Warning in OGRSpatialRef(dsn, layer, morphFromESRI = morphFromESRI, dumpSRS =
+## dumpSRS): Discarded datum OSGB_1936 in CRS definition: +proj=tmerc +lat_0=49
+## +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy +units=m +no_defs</code></pre>
+<pre><code>## OGR data source with driver: ESRI Shapefile 
+## Source: "/tmp/RtmpZ2B1Mt/temp_libpath4c809eff7646/rgdal/vectors", layer: "scot_BNG"
+## with 56 features
+## It has 13 fields</code></pre>
+<pre><code>## Warning in OGRSpatialRef(dsn = dsn, layer = layer, morphFromESRI =
+## morphFromESRI, : Discarded datum OSGB_1936 in CRS definition: +proj=tmerc
+## +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy
+## +units=m +no_defs</code></pre>
+<pre><code>## Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO"): Discarded
+## datum Unknown_based_on_Airy_1830_ellipsoid in CRS definition</code></pre>
+<div class="sourceCode" id="cb117"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb117-1" title="1"><span class="co">## Warning in OGRSpatialRef(dsn, layer, morphFromESRI = morphFromESRI, dumpSRS =</span></a>
+<a class="sourceLine" id="cb117-2" title="2"><span class="co">## dumpSRS): Discarded datum OSGB_1936 in CRS definition: +proj=tmerc +lat_0=49</span></a>
+<a class="sourceLine" id="cb117-3" title="3"><span class="co">## +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy +units=m +no_defs</span></a>
+<a class="sourceLine" id="cb117-4" title="4"><span class="co">## OGR data source with driver: ESRI Shapefile </span></a>
+<a class="sourceLine" id="cb117-5" title="5"><span class="co">## Source: "/home/rsb/lib/r_libs/rgdal/vectors", layer: "scot_BNG"</span></a>
+<a class="sourceLine" id="cb117-6" title="6"><span class="co">## with 56 features</span></a>
+<a class="sourceLine" id="cb117-7" title="7"><span class="co">## It has 13 fields</span></a>
+<a class="sourceLine" id="cb117-8" title="8"><span class="co">## Warning in OGRSpatialRef(dsn = dsn, layer = layer, morphFromESRI =</span></a>
+<a class="sourceLine" id="cb117-9" title="9"><span class="co">## morphFromESRI, : Discarded datum OSGB_1936 in CRS definition: +proj=tmerc</span></a>
+<a class="sourceLine" id="cb117-10" title="10"><span class="co">## +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy</span></a>
+<a class="sourceLine" id="cb117-11" title="11"><span class="co">## +units=m +no_defs</span></a>
+<a class="sourceLine" id="cb117-12" title="12"><span class="co">## Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO"): Discarded</span></a>
+<a class="sourceLine" id="cb117-13" title="13"><span class="co">## datum Unknown_based_on_Airy_1830_ellipsoid in CRS definition</span></a></code></pre></div>
+<p>On reading with PROJ6/GDAL3, we discard the <code>+datum</code> tag, so losing information and ending up with a bounding box with positional accuracy degraded to an unknown extent, using the pre-PROJ6 adaptation CRS representation:</p>
+<div class="sourceCode" id="cb118"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb118-1" title="1">(load_status &lt;-<span class="st"> </span><span class="kw"><a href="../reference/spTransform-methods.html">get_transform_wkt_comment</a></span>())</a></code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<div class="sourceCode" id="cb120"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb120-1" title="1"><span class="co">## [1] TRUE</span></a></code></pre></div>
+<p>(Again, commented output blocks are run on a PROJ6/GDAL3 platform).</p>
+<div class="sourceCode" id="cb121"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb121-1" title="1"><span class="kw"><a href="../reference/spTransform-methods.html">set_transform_wkt_comment</a></span>(<span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb121-2" title="2">scot_LL &lt;-<span class="st"> </span><span class="kw"><a href="../reference/spTransform-methods.html">spTransform</a></span>(scot_BNG, <span class="kw"><a href="../reference/CRS-class.html">CRS</a></span>(<span class="st">"+proj=longlat +datum=WGS84"</span>))</a>
+<a class="sourceLine" id="cb121-3" title="3">(b0 &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/sp/man/bbox.html">bbox</a></span>(scot_LL))</a></code></pre></div>
+<pre><code>##         min       max
+## x -8.621387 -0.753056
+## y 54.626555 60.843843</code></pre>
+<div class="sourceCode" id="cb123"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb123-1" title="1"><span class="co">##         min       max</span></a>
+<a class="sourceLine" id="cb123-2" title="2"><span class="co">## x -8.621387 -0.753056</span></a>
+<a class="sourceLine" id="cb123-3" title="3"><span class="co">## y 54.626555 60.843843</span></a></code></pre></div>
+<p>We might fake the PROJ string by extracting the <code>"CRS"</code> object:</p>
+<div class="sourceCode" id="cb124"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb124-1" title="1">(crs &lt;-<span class="st"> </span><span class="kw">slot</span>(scot_BNG, <span class="st">"proj4string"</span>))</a></code></pre></div>
+<pre><code>## CRS arguments:
+##  +proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000
+## +y_0=-100000 +ellps=airy +units=m +no_defs</code></pre>
+<div class="sourceCode" id="cb126"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb126-1" title="1"><span class="co">## CRS arguments:</span></a>
+<a class="sourceLine" id="cb126-2" title="2"><span class="co">##  +proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000</span></a>
+<a class="sourceLine" id="cb126-3" title="3"><span class="co">## +y_0=-100000 +ellps=airy +units=m +no_defs</span></a></code></pre></div>
+<div class="sourceCode" id="cb127"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb127-1" title="1"><span class="kw">slot</span>(crs, <span class="st">"projargs"</span>)</a></code></pre></div>
+<pre><code>## [1] "+proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy +units=m +no_defs"</code></pre>
+<div class="sourceCode" id="cb129"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb129-1" title="1"><span class="co">## [1] "+proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000</span></a>
+<a class="sourceLine" id="cb129-2" title="2"><span class="co">## +ellps=airy +units=m +no_defs"</span></a></code></pre></div>
+<p>and updating the PROJ string in-place if we know a sensible incantation:</p>
+<div class="sourceCode" id="cb130"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb130-1" title="1"><span class="kw">slot</span>(crs, <span class="st">"projargs"</span>) &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="kw">slot</span>(crs, <span class="st">"projargs"</span>), <span class="st">" +datum=OSGB36"</span>)</a>
+<a class="sourceLine" id="cb130-2" title="2"><span class="kw">slot</span>(scot_BNG, <span class="st">"proj4string"</span>) &lt;-<span class="st"> </span>crs</a>
+<a class="sourceLine" id="cb130-3" title="3">scot_LL1 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/spTransform-methods.html">spTransform</a></span>(scot_BNG, <span class="kw"><a href="../reference/CRS-class.html">CRS</a></span>(<span class="st">"+proj=longlat +datum=WGS84"</span>))</a>
+<a class="sourceLine" id="cb130-4" title="4">(b1 &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/sp/man/bbox.html">bbox</a></span>(scot_LL1))</a></code></pre></div>
+<pre><code>##         min       max
+## x -8.622158 -0.755071
+## y 54.626633 60.843232</code></pre>
+<div class="sourceCode" id="cb132"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb132-1" title="1"><span class="co">##         min       max</span></a>
+<a class="sourceLine" id="cb132-2" title="2"><span class="co">## x -8.622158 -0.755071</span></a>
+<a class="sourceLine" id="cb132-3" title="3"><span class="co">## y 54.626633 60.843232</span></a></code></pre></div>
+<p>The two bounding boxes differ a good deal:</p>
+<div class="sourceCode" id="cb133"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb133-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/all.equal.html">all.equal</a></span>(b0, b1, <span class="dt">scale=</span><span class="dv">1</span>)</a></code></pre></div>
+<pre><code>## [1] "Mean absolute difference: 0.0008689328"</code></pre>
+<div class="sourceCode" id="cb135"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb135-1" title="1"><span class="co">## [1] "Mean absolute difference: 0.0008689328"</span></a></code></pre></div>
+<p>The SW corner of Scotland differs by about 50m, the NE corner by almost 130m:</p>
+<div class="sourceCode" id="cb136"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb136-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/diag.html">diag</a></span>(<span class="kw"><a href="https://rdrr.io/pkg/sp/man/spDistsN1.html">spDists</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/t.html">t</a></span>(b0), <span class="kw"><a href="https://rdrr.io/r/base/t.html">t</a></span>(b1), <span class="dt">longlat=</span><span class="ot">TRUE</span>))<span class="op">*</span><span class="dv">1000</span></a></code></pre></div>
+<pre><code>## [1]  50.56708 128.99003</code></pre>
+<div class="sourceCode" id="cb138"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb138-1" title="1"><span class="co">## [1]  50.56708 128.99003</span></a></code></pre></div>
+<p>Re-instating the use of WKT comments lets us use the transformation path which instantiates the coordinate operation from the WKT strings in the <code>"CRS"</code> object comments:</p>
+<div class="sourceCode" id="cb139"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb139-1" title="1"><span class="kw"><a href="../reference/spTransform-methods.html">set_transform_wkt_comment</a></span>(load_status)</a></code></pre></div>
+<div class="sourceCode" id="cb140"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb140-1" title="1">scot_BNG &lt;-<span class="st"> </span><span class="kw"><a href="../reference/readOGR.html">readOGR</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"vectors"</span>, <span class="dt">package=</span><span class="st">"rgdal"</span>), <span class="st">"scot_BNG"</span>)</a></code></pre></div>
+<pre><code>## Warning in OGRSpatialRef(dsn, layer, morphFromESRI = morphFromESRI, dumpSRS =
+## dumpSRS): Discarded datum OSGB_1936 in CRS definition: +proj=tmerc +lat_0=49
+## +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy +units=m +no_defs</code></pre>
+<pre><code>## OGR data source with driver: ESRI Shapefile 
+## Source: "/tmp/RtmpZ2B1Mt/temp_libpath4c809eff7646/rgdal/vectors", layer: "scot_BNG"
+## with 56 features
+## It has 13 fields</code></pre>
+<pre><code>## Warning in OGRSpatialRef(dsn = dsn, layer = layer, morphFromESRI =
+## morphFromESRI, : Discarded datum OSGB_1936 in CRS definition: +proj=tmerc
+## +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy
+## +units=m +no_defs</code></pre>
+<pre><code>## Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO"): Discarded
+## datum Unknown_based_on_Airy_1830_ellipsoid in CRS definition</code></pre>
+<div class="sourceCode" id="cb145"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb145-1" title="1"><span class="co">## Warning in OGRSpatialRef(dsn, layer, morphFromESRI = morphFromESRI, dumpSRS =</span></a>
+<a class="sourceLine" id="cb145-2" title="2"><span class="co">## dumpSRS): Discarded datum OSGB_1936 in CRS definition: +proj=tmerc +lat_0=49</span></a>
+<a class="sourceLine" id="cb145-3" title="3"><span class="co">## +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy +units=m +no_defs</span></a>
+<a class="sourceLine" id="cb145-4" title="4"><span class="co">## OGR data source with driver: ESRI Shapefile </span></a>
+<a class="sourceLine" id="cb145-5" title="5"><span class="co">## Source: "/home/rsb/lib/r_libs/rgdal/vectors", layer: "scot_BNG"</span></a>
+<a class="sourceLine" id="cb145-6" title="6"><span class="co">## with 56 features</span></a>
+<a class="sourceLine" id="cb145-7" title="7"><span class="co">## It has 13 fields</span></a>
+<a class="sourceLine" id="cb145-8" title="8"><span class="co">## Warning in OGRSpatialRef(dsn = dsn, layer = layer, morphFromESRI =</span></a>
+<a class="sourceLine" id="cb145-9" title="9"><span class="co">## morphFromESRI, : Discarded datum OSGB_1936 in CRS definition: +proj=tmerc</span></a>
+<a class="sourceLine" id="cb145-10" title="10"><span class="co">## +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy</span></a>
+<a class="sourceLine" id="cb145-11" title="11"><span class="co">## +units=m +no_defs</span></a>
+<a class="sourceLine" id="cb145-12" title="12"><span class="co">## Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO"): Discarded</span></a>
+<a class="sourceLine" id="cb145-13" title="13"><span class="co">## datum Unknown_based_on_Airy_1830_ellipsoid in CRS definition</span></a></code></pre></div>
+<div class="sourceCode" id="cb146"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb146-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span>(scot_LL2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/spTransform-methods.html">spTransform</a></span>(scot_BNG, <span class="kw"><a href="../reference/CRS-class.html">CRS</a></span>(<span class="st">"+proj=longlat +datum=WGS84"</span>)))</a></code></pre></div>
+<pre><code>##    user  system elapsed 
+##   3.124   0.041   3.185</code></pre>
+<div class="sourceCode" id="cb148"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb148-1" title="1"><span class="co">##    user  system elapsed </span></a>
+<a class="sourceLine" id="cb148-2" title="2"><span class="co">##   3.431   0.037   3.546</span></a></code></pre></div>
+<div class="sourceCode" id="cb149"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb149-1" title="1">(b2 &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/sp/man/bbox.html">bbox</a></span>(scot_LL2))</a></code></pre></div>
+<pre><code>##         min        max
+## x -8.622158 -0.7550709
+## y 54.626633 60.8432318</code></pre>
+<div class="sourceCode" id="cb151"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb151-1" title="1"><span class="co">##         min        max</span></a>
+<a class="sourceLine" id="cb151-2" title="2"><span class="co">## x -8.622158 -0.7550709</span></a>
+<a class="sourceLine" id="cb151-3" title="3"><span class="co">## y 54.626633 60.8432318</span></a></code></pre></div>
+<div class="sourceCode" id="cb152"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb152-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/all.equal.html">all.equal</a></span>(b1, b2, <span class="dt">scale=</span><span class="dv">1</span>)</a></code></pre></div>
+<pre><code>## [1] "Mean absolute difference: 3.361822e-08"</code></pre>
+<div class="sourceCode" id="cb154"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb154-1" title="1"><span class="co">## [1] "Mean absolute difference: 3.361822e-08"</span></a></code></pre></div>
+<p>The coordinate operation last used may be retrieved with (default empty):</p>
+<div class="sourceCode" id="cb155"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb155-1" title="1"><span class="kw"><a href="../reference/spTransform-methods.html">get_last_coordOp</a></span>()</a></code></pre></div>
+<pre><code>## [1] "+proj=pipeline +step +inv +proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy +step +proj=push +v_3 +step +proj=cart +ellps=airy +step +proj=helmert +x=446.448 +y=-125.157 +z=542.06 +rx=0.15 +ry=0.247 +rz=0.842 +s=-20.489 +convention=position_vector +step +inv +proj=cart +ellps=WGS84 +step +proj=pop +v_3 +step +proj=unitconvert +xy_in=rad +xy_out=deg"</code></pre>
+<div class="sourceCode" id="cb157"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb157-1" title="1"><span class="co">## [1] "+proj=pipeline +step +inv +proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717</span></a>
+<a class="sourceLine" id="cb157-2" title="2"><span class="co">## +x_0=400000 +y_0=-100000 +ellps=airy +step +proj=push +v_3 +step +proj=cart</span></a>
+<a class="sourceLine" id="cb157-3" title="3"><span class="co">## +ellps=airy +step +proj=helmert +x=446.448 +y=-125.157 +z=542.06 +rx=0.15 +ry=0.247</span></a>
+<a class="sourceLine" id="cb157-4" title="4"><span class="co">## +rz=0.842 +s=-20.489 +convention=position_vector +step +inv +proj=cart +ellps=WGS84</span></a>
+<a class="sourceLine" id="cb157-5" title="5"><span class="co">## +step +proj=pop +v_3 +step +proj=unitconvert +xy_in=rad +xy_out=deg"</span></a></code></pre></div>
+<p>If a given coordinate operation needs to be repeated, a good deal of time can be saved, as searches for coordinate operations take place once for <code>"SpatialPoints"</code> objects, but for <code>"SpatialLines"</code> and <code>"SpatialPolygons"</code> objects once for each "<code>Line"</code> or <code>"Polygon"</code> object:</p>
+<div class="sourceCode" id="cb158"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb158-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span>(scot_LL3 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/spTransform-methods.html">spTransform</a></span>(scot_BNG, <span class="kw"><a href="../reference/CRS-class.html">CRS</a></span>(<span class="st">"+proj=longlat +datum=WGS84"</span>),</a>
+<a class="sourceLine" id="cb158-2" title="2">                                    <span class="dt">coordOp=</span><span class="kw"><a href="../reference/spTransform-methods.html">get_last_coordOp</a></span>()))</a></code></pre></div>
+<pre><code>##    user  system elapsed 
+##   0.055   0.001   0.057</code></pre>
+<div class="sourceCode" id="cb160"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb160-1" title="1"><span class="co">##    user  system elapsed </span></a>
+<a class="sourceLine" id="cb160-2" title="2"><span class="co">##   0.066   0.002   0.070</span></a></code></pre></div>
+<div class="sourceCode" id="cb161"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb161-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/all.equal.html">all.equal</a></span>(b2, <span class="kw"><a href="https://rdrr.io/pkg/sp/man/bbox.html">bbox</a></span>(scot_LL3), <span class="dt">scale=</span><span class="dv">1</span>)</a></code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<div class="sourceCode" id="cb163"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb163-1" title="1"><span class="co">## [1] TRUE</span></a></code></pre></div>
+<p>The possibility of speeding up frequently used coordinate operations shows how listing candidate coordinate operations from a direct search lets us use functions from the previous section:</p>
+<div class="sourceCode" id="cb164"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb164-1" title="1">wkt_source_datum &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/comment.html">comment</a></span>(<span class="kw">slot</span>(scot_BNG, <span class="st">"proj4string"</span>))</a>
+<a class="sourceLine" id="cb164-2" title="2">wkt_target_datum &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/comment.html">comment</a></span>(<span class="kw"><a href="../reference/CRS-class.html">CRS</a></span>(<span class="st">"+proj=longlat +datum=WGS84"</span>))</a>
+<a class="sourceLine" id="cb164-3" title="3">x &lt;-<span class="st"> </span><span class="kw"><a href="../reference/list_coordOps.html">list_coordOps</a></span>(wkt_source_datum, wkt_target_datum)</a>
+<a class="sourceLine" id="cb164-4" title="4"><span class="kw"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span>(scot_LL4 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/spTransform-methods.html">spTransform</a></span>(scot_BNG, <span class="kw"><a href="../reference/CRS-class.html">CRS</a></span>(<span class="st">"+proj=longlat +datum=WGS84"</span>),</a>
+<a class="sourceLine" id="cb164-5" title="5">                                    <span class="dt">coordOp=</span><span class="kw"><a href="../reference/list_coordOps.html">best_instantiable_coordOp</a></span>(x)))</a></code></pre></div>
+<pre><code>##    user  system elapsed 
+##   0.056   0.001   0.057</code></pre>
+<div class="sourceCode" id="cb166"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb166-1" title="1"><span class="co">##    user  system elapsed </span></a>
+<a class="sourceLine" id="cb166-2" title="2"><span class="co">##   0.066   0.002   0.069</span></a></code></pre></div>
+<div class="sourceCode" id="cb167"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb167-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/all.equal.html">all.equal</a></span>(b2, <span class="kw"><a href="https://rdrr.io/pkg/sp/man/bbox.html">bbox</a></span>(scot_LL4), <span class="dt">scale=</span><span class="dv">1</span>)</a></code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<div class="sourceCode" id="cb169"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb169-1" title="1"><span class="co">## [1] TRUE</span></a></code></pre></div>
 <div id="refs" class="references">
 <div id="ref-evers+knudsen17">
 <p>Evers, Kristian, and Thomas Knudsen. 2017. <em>Transformation Pipelines for Proj.4</em>. <a href="https://www.fig.net/resources/proceedings/fig_proceedings/fig2017/papers/iss6b/ISS6B_evers_knudsen_9156.pdf">https://www.fig.net/resources/proceedings/fig_proceedings/fig2017/papers/iss6b/ISS6B_evers_knudsen_9156.pdf</a>.</p>
@@ -1048,6 +1200,7 @@
 <li><a href="#proj">PROJ</a></li>
       <li><a href="#impacts-of-gdal-barnraising-on-sp-workflows">Impacts of GDAL barnraising on <strong>sp</strong> workflows</a></li>
       <li><a href="#coordinate-operations">Coordinate operations</a></li>
+      <li><a href="#transformations">Transformations</a></li>
       </ul>
 </li>
       </ul>
