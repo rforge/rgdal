@@ -307,7 +307,7 @@ RGDAL_GDAL_DATA_Info(void) {
 
     PROTECT(ans=NEW_CHARACTER(1));
     installErrorHandler();
-    SET_STRING_ELT(ans, 0, COPY_TO_USER_STRING(CSVFilename( "prime_meridian.csv" )));
+    SET_STRING_ELT(ans, 0, COPY_TO_USER_STRING(CSVFilename( "stateplane.csv" )));
     uninstallErrorHandlerAndTriggerError();
 
     UNPROTECT(1);

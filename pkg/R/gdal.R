@@ -60,7 +60,7 @@ getGDALwithGEOS <- function() {
 
 getGDAL_DATA_Path <- function() {
     res <- .Call("RGDAL_GDAL_DATA_Info", PACKAGE="rgdal")
-    res <- sub("prime_meridian.csv", "", res)
+    res <- sub("stateplane.csv", "", res)
     n <- nchar(res)
     res <- substring(res, 1, n-1)
     res

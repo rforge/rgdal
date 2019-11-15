@@ -131,7 +131,18 @@ PROJ4_proj_def_dat_Installed(void) {
 
 #ifndef PROJ6
 
+SEXP get_proj_search_path(void) {
+    Rprintf("Not available for PROJ version < 6");
+    return(R_NilValue);
+}
+
+
 SEXP list_coordinate_ops(SEXP source, SEXP target, SEXP area_of_interest, SEXP strict_containment, SEXP viz_order) {
+    Rprintf("Not available for PROJ version < 6");
+    return(R_NilValue);
+}
+
+SEXP transform_ng(SEXP fromargs, SEXP toargs, SEXP coordOp, SEXP npts, SEXP x, SEXP y, SEXP z) {
     Rprintf("Not available for PROJ version < 6");
     return(R_NilValue);
 }

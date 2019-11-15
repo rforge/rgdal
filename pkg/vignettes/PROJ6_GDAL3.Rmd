@@ -807,3 +807,221 @@ best_instantiable_coordOp(x)
 ## UTM zone 25S"
 ```
 
+## Transformations
+
+The problem raised by the modernisation of PROJ can be encapsulated in this example of Scotland (once again the commented out runs are from a PROJ6/GDAL3 platform, the live runs from the platform building the vignette):
+
+```{r}
+scot_BNG <- readOGR(system.file("vectors", package="rgdal"), "scot_BNG")
+```
+
+```{r}
+## Warning in OGRSpatialRef(dsn, layer, morphFromESRI = morphFromESRI, dumpSRS =
+## dumpSRS): Discarded datum OSGB_1936 in CRS definition: +proj=tmerc +lat_0=49
+## +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy +units=m +no_defs
+## OGR data source with driver: ESRI Shapefile 
+## Source: "/home/rsb/lib/r_libs/rgdal/vectors", layer: "scot_BNG"
+## with 56 features
+## It has 13 fields
+## Warning in OGRSpatialRef(dsn = dsn, layer = layer, morphFromESRI =
+## morphFromESRI, : Discarded datum OSGB_1936 in CRS definition: +proj=tmerc
+## +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy
+## +units=m +no_defs
+## Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO"): Discarded
+## datum Unknown_based_on_Airy_1830_ellipsoid in CRS definition
+```
+
+On reading with PROJ6/GDAL3, we discard the `+datum` tag, so losing information and ending up with a bounding box with positional accuracy degraded to an unknown extent, using the pre-PROJ6 adaptation CRS representation:
+
+```{r}
+(load_status <- get_transform_wkt_comment())
+```
+
+```{r}
+## [1] TRUE
+```
+
+(Again, commented output blocks are run on a PROJ6/GDAL3 platform).
+
+```{r}
+set_transform_wkt_comment(FALSE)
+scot_LL <- spTransform(scot_BNG, CRS("+proj=longlat +datum=WGS84"))
+(b0 <- bbox(scot_LL))
+```
+
+```{r}
+##         min       max
+## x -8.621387 -0.753056
+## y 54.626555 60.843843
+```
+
+We might fake the PROJ string by extracting the `"CRS"` object:
+
+```{r}
+(crs <- slot(scot_BNG, "proj4string"))
+```
+
+```{r}
+## CRS arguments:
+##  +proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000
+## +y_0=-100000 +ellps=airy +units=m +no_defs
+```
+
+
+```{r}
+slot(crs, "projargs")
+```
+
+```{r}
+## [1] "+proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000
+## +ellps=airy +units=m +no_defs"
+```
+
+and updating the PROJ string in-place if we know a sensible incantation:
+
+```{r}
+slot(crs, "projargs") <- paste0(slot(crs, "projargs"), " +datum=OSGB36")
+slot(scot_BNG, "proj4string") <- crs
+scot_LL1 <- spTransform(scot_BNG, CRS("+proj=longlat +datum=WGS84"))
+(b1 <- bbox(scot_LL1))
+```
+
+```{r}
+##         min       max
+## x -8.622158 -0.755071
+## y 54.626633 60.843232
+```
+
+The two bounding boxes differ a good deal:
+
+```{r}
+all.equal(b0, b1, scale=1)
+```
+
+```{r}
+## [1] "Mean absolute difference: 0.0008689328"
+```
+
+The SW corner of Scotland differs by about 50m, the NE corner by almost 130m:
+
+```{r}
+diag(spDists(t(b0), t(b1), longlat=TRUE))*1000
+```
+
+```{r}
+## [1]  50.56708 128.99003
+```
+
+
+Re-instating the use of WKT comments lets us use the transformation path which instantiates the coordinate operation from the WKT strings in the `"CRS"` object comments:
+
+```{r}
+set_transform_wkt_comment(load_status)
+```
+
+```{r}
+scot_BNG <- readOGR(system.file("vectors", package="rgdal"), "scot_BNG")
+```
+
+```{r}
+## Warning in OGRSpatialRef(dsn, layer, morphFromESRI = morphFromESRI, dumpSRS =
+## dumpSRS): Discarded datum OSGB_1936 in CRS definition: +proj=tmerc +lat_0=49
+## +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy +units=m +no_defs
+## OGR data source with driver: ESRI Shapefile 
+## Source: "/home/rsb/lib/r_libs/rgdal/vectors", layer: "scot_BNG"
+## with 56 features
+## It has 13 fields
+## Warning in OGRSpatialRef(dsn = dsn, layer = layer, morphFromESRI =
+## morphFromESRI, : Discarded datum OSGB_1936 in CRS definition: +proj=tmerc
+## +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy
+## +units=m +no_defs
+## Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO"): Discarded
+## datum Unknown_based_on_Airy_1830_ellipsoid in CRS definition
+```
+
+```{r}
+system.time(scot_LL2 <- spTransform(scot_BNG, CRS("+proj=longlat +datum=WGS84")))
+```
+
+```{r}
+##    user  system elapsed 
+##   3.431   0.037   3.546
+```
+
+```{r}
+(b2 <- bbox(scot_LL2))
+```
+
+```{r}
+##         min        max
+## x -8.622158 -0.7550709
+## y 54.626633 60.8432318
+```
+
+```{r}
+all.equal(b1, b2, scale=1)
+```
+
+```{r}
+## [1] "Mean absolute difference: 3.361822e-08"
+```
+
+The coordinate operation last used may be retrieved with (default empty):
+
+```{r}
+get_last_coordOp()
+```
+
+```{r}
+## [1] "+proj=pipeline +step +inv +proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717
+## +x_0=400000 +y_0=-100000 +ellps=airy +step +proj=push +v_3 +step +proj=cart
+## +ellps=airy +step +proj=helmert +x=446.448 +y=-125.157 +z=542.06 +rx=0.15 +ry=0.247
+## +rz=0.842 +s=-20.489 +convention=position_vector +step +inv +proj=cart +ellps=WGS84
+## +step +proj=pop +v_3 +step +proj=unitconvert +xy_in=rad +xy_out=deg"
+```
+
+If a given coordinate operation needs to be repeated, a good deal of time can be saved, as searches for coordinate operations take place once for `"SpatialPoints"` objects, but for `"SpatialLines"` and `"SpatialPolygons"` objects once for each "`Line"` or `"Polygon"` object:
+
+```{r, eval=run}
+system.time(scot_LL3 <- spTransform(scot_BNG, CRS("+proj=longlat +datum=WGS84"),
+                                    coordOp=get_last_coordOp()))
+```
+
+```{r}
+##    user  system elapsed 
+##   0.066   0.002   0.070
+```
+
+
+```{r, eval=run}
+all.equal(b2, bbox(scot_LL3), scale=1)
+```
+
+```{r}
+## [1] TRUE
+```
+
+The possibility of speeding up frequently used coordinate operations shows how listing candidate coordinate operations from a direct search lets us use functions from the previous section:
+
+
+```{r, eval=run}
+wkt_source_datum <- comment(slot(scot_BNG, "proj4string"))
+wkt_target_datum <- comment(CRS("+proj=longlat +datum=WGS84"))
+x <- list_coordOps(wkt_source_datum, wkt_target_datum)
+system.time(scot_LL4 <- spTransform(scot_BNG, CRS("+proj=longlat +datum=WGS84"),
+                                    coordOp=best_instantiable_coordOp(x)))
+```
+
+```{r}
+##    user  system elapsed 
+##   0.066   0.002   0.069
+```
+
+
+```{r, eval=run}
+all.equal(b2, bbox(scot_LL4), scale=1)
+```
+
+```{r}
+## [1] TRUE
+```

@@ -26,6 +26,8 @@ load_stuff <- function() {
   assign("silent", TRUE, envir=.RGDAL_CACHE)
   assign("has_proj_def.dat", as.logical(NA), envir=.RGDAL_CACHE)
   assign("P6_datum_hard_fail", FALSE, envir=.RGDAL_CACHE)
+  assign("transform_wkt_comment", new_proj_and_gdal(), envir=.RGDAL_CACHE)
+  assign(".last_coordOp", "", envir=.RGDAL_CACHE)
   local_RGDAL_Init() #.Call('RGDAL_Init', PACKAGE="rgdal")
 }
 
@@ -37,7 +39,10 @@ local_RGDAL_Init <- function() .Call('RGDAL_Init', PACKAGE="rgdal")
 
   gdl <- getGDAL_DATA_Path()
   pl <- getPROJ4libPath()
-  if (nchar(pl) == 0) pl <- "(autodetected)"
+  if (nchar(pl) == 0) {
+    if (is.null(attr(pl, "search_path"))) pl <- "(autodetected)"
+    else pl <- attr(pl, "search_path")
+  }
   fn <- system.file("SVN_VERSION", package="rgdal")
   if (file.exists(fn)) {
     svn_version <- scan(fn, what=character(1), sep="\n", quiet=TRUE)

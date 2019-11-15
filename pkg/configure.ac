@@ -287,15 +287,15 @@ else
   fi
 fi
 
-GDAL_DATA_TEST_FILE="${GDAL_DATADIR}/pcs.csv"
-AC_MSG_CHECKING(GDAL: ${GDAL_DATADIR}/pcs.csv readable)
+GDAL_DATA_TEST_FILE="${GDAL_DATADIR}/stateplane.csv"
+AC_MSG_CHECKING(GDAL: ${GDAL_DATADIR}/stateplane.csv readable)
 if test -r "${GDAL_DATA_TEST_FILE}" ; then
   AC_MSG_RESULT(yes)
 else
   AC_MSG_RESULT(no)
-  if test "${GDAL_GE_250}" = no; then
-    AC_MSG_ERROR([pcs.csv not found in GDAL data directory.])
-  fi
+#  if test "${GDAL_GE_250}" = no; then
+    AC_MSG_ERROR([stateplane.csv not found in GDAL data directory.])
+#  fi
 fi
 
 # PROJ.4

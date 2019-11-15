@@ -107,6 +107,16 @@ SEXP RGDAL_projInfo(SEXP type) {
     return(ans);
 }
 
+SEXP get_proj_search_path(void) {
+
+    SEXP res;
+    PROTECT(res = NEW_CHARACTER(1));
+    SET_STRING_ELT(res, 0, COPY_TO_USER_STRING(proj_info().searchpath));
+    UNPROTECT(1);
+    return(res);
+
+}
+
 // unname(sapply(o[[2]], function(x) gsub(" ", " +", paste0("+", x))))
 
 SEXP list_coordinate_ops(SEXP source, SEXP target, SEXP area_of_interest, SEXP strict_containment, SEXP vis_order) {
@@ -290,6 +300,221 @@ SEXP list_coordinate_ops(SEXP source, SEXP target, SEXP area_of_interest, SEXP s
     return(ans);
 
 }
+
+SEXP transform_ng(SEXP fromargs, SEXP toargs, SEXP coordOp, SEXP npts, SEXP x, SEXP y, SEXP z) {
+
+    PJ_CONTEXT *ctx = proj_context_create();
+    PJ *source_crs, *target_crs;
+    PJ* pj_transform = NULL;
+
+    int i, n, nwarn=0, ob_tran, have_z, pc=0, have_CO;
+    double *xx, *yy, *zz=NULL;
+    SEXP use_ob_tran = getAttrib(npts, install("ob_tran"));
+    SEXP res;
+
+    if (coordOp == R_NilValue) have_CO = 0;
+    else have_CO = 1;
+
+    if (z == R_NilValue) have_z = 0;
+    else have_z = 1;
+
+    if (use_ob_tran == R_NilValue) ob_tran = 0;
+    else if (INTEGER_POINTER(use_ob_tran)[0] == 1) ob_tran = 1;
+    else if (INTEGER_POINTER(use_ob_tran)[0] == -1) ob_tran = -1;
+    else ob_tran = 0;
+	
+//Rprintf("have_CO: %d, have_z: %d, ob_tran: %d\n", have_CO, have_z, ob_tran);
+
+    if (have_CO) {
+//Rprintf("coordinate operation input: %s\n", CHAR(STRING_ELT(coordOp, 0)));
+        if ((pj_transform = proj_create(ctx, CHAR(STRING_ELT(coordOp, 0)))) == 0) {
+            proj_context_destroy(ctx);
+	    error("coordinate operation creation failed: %s", proj_errno_string(proj_context_errno(ctx)));
+        }
+    } else {
+//Rprintf("source crs input: %s\n", CHAR(STRING_ELT(fromargs, 0)));
+    	if ((source_crs = proj_create(ctx, CHAR(STRING_ELT(fromargs, 0)))) == 0) {
+            proj_context_destroy(ctx);
+	    error("source crs creation failed: %s", proj_errno_string(proj_context_errno(ctx)));
+        }
+	
+//Rprintf("source crs: %s\n", proj_pj_info(source_crs).description); not filled for WKT
+//Rprintf("target crs input:  %s\n", CHAR(STRING_ELT(toargs, 0)));
+	if ((target_crs = proj_create(ctx, CHAR(STRING_ELT(toargs, 0)))) == 0) {
+            proj_destroy(source_crs);
+            proj_context_destroy(ctx);
+	    error("target crs creation failed: %s", proj_errno_string(proj_context_errno(ctx)));
+        }
+//Rprintf("target crs: %s\n", proj_pj_info(target_crs).description); not filled for WKT
+        if ((pj_transform = proj_create_crs_to_crs_from_pj(ctx, source_crs,
+            target_crs, 0, NULL)) == 0) {
+            proj_destroy(target_crs);
+            proj_destroy(source_crs);
+            proj_context_destroy(ctx);
+	    error("coordinate operation creation from WKT failed: %s", proj_errno_string(proj_context_errno(ctx)));
+        }
+
+    }
+//Rprintf("%s\n", proj_pj_info(pj_transform).definition);
+
+    n = INTEGER_POINTER(npts)[0];
+    xx = (double *) R_alloc((size_t) n, sizeof(double));
+    yy = (double *) R_alloc((size_t) n, sizeof(double));
+    if (have_z) zz = (double *) R_alloc((size_t) n, sizeof(double));
+
+    for (i=0; i < n; i++) {
+        xx[i] = NUMERIC_POINTER(x)[i];
+	yy[i] = NUMERIC_POINTER(y)[i];
+	if (have_z) zz[i] = NUMERIC_POINTER(z)[i];
+    }
+/*	if ( pj_is_latlong(fromPJ) || ob_tran == 1) {
+		for (i=0; i < n; i++) {
+       			 xx[i] *= DEG_TO_RAD;
+       			 yy[i] *= DEG_TO_RAD;
+		}
+	}*/
+    size_t stride = sizeof(double), n1;
+    if (ob_tran != 0) {
+        if (have_z) {
+            if ((n1 = proj_trans_generic(pj_transform, PJ_INV, xx, stride,
+                (size_t) n, yy, stride, (size_t) n, zz, stride, (size_t) n,
+                NULL, stride, 0)) != n) {
+                proj_destroy(pj_transform);
+                if (!have_CO) {
+                    proj_destroy(target_crs);
+                    proj_destroy(source_crs);
+                }
+                proj_context_destroy(ctx);
+        	error("error in proj_transform_generic: %n of %n coordinates succeeded\n  %s",
+                    n1, n, proj_errno_string(proj_context_errno(ctx)));
+	    }
+        } else {
+              if((n1 = proj_trans_generic(pj_transform, PJ_INV, xx, stride,
+                (size_t) n, yy, stride, (size_t) n, NULL, stride, 0,
+                NULL, stride, 0)) != n) {
+                proj_destroy(pj_transform);
+                if (!have_CO) {
+                    proj_destroy(target_crs);
+                    proj_destroy(source_crs);
+                }
+                proj_context_destroy(ctx);
+        	error("error in proj_transform_generic: %n of %n coordinates succeeded\n  %s",
+                    n1, n, proj_errno_string(proj_context_errno(ctx)));
+            }
+        }
+    } else {
+	if (have_z) {
+	    if((n1 = proj_trans_generic(pj_transform, PJ_FWD, xx, stride,
+                (size_t) n, yy, stride, (size_t) n, zz, stride, (size_t) n,
+                NULL, stride, 0)) != n) {
+                proj_destroy(pj_transform);
+                if (!have_CO) {
+                    proj_destroy(target_crs);
+                    proj_destroy(source_crs);
+                }
+                proj_context_destroy(ctx);
+        	error("error in proj_transform_generic: %n of %n coordinates succeeded\n  %s",
+                    n1, n, proj_errno_string(proj_context_errno(ctx)));
+	    }
+        } else {
+	      if((n1 = proj_trans_generic(pj_transform, PJ_FWD, xx, stride,
+                (size_t) n, yy, stride, (size_t) n, NULL, stride, 0,
+                NULL, stride, 0)) != n) {
+                proj_destroy(pj_transform);
+                if (!have_CO) {
+                    proj_destroy(target_crs);
+                    proj_destroy(source_crs);
+                }
+                proj_context_destroy(ctx);
+        	error("error in proj_transform_generic: %n of %n coordinates succeeded\n  %s",
+                    n1, n, proj_errno_string(proj_context_errno(ctx)));
+            }
+        }
+    }
+//Rprintf("%s\n", proj_pj_info(pj_transform).definition);
+    if (have_z) {PROTECT(res = NEW_LIST(6)); pc++;}
+    else {PROTECT(res = NEW_LIST(5)); pc++;}
+    SET_VECTOR_ELT(res, 0, NEW_NUMERIC(n));
+    SET_VECTOR_ELT(res, 1, NEW_NUMERIC(n));
+    if (have_z) {
+        SET_VECTOR_ELT(res, 2, NEW_NUMERIC(n));
+        SET_VECTOR_ELT(res, 5, NEW_CHARACTER(1));
+    } else {
+        SET_VECTOR_ELT(res, 4, NEW_CHARACTER(1));
+    }
+
+    if (have_z) {
+        if (have_CO) {
+            SET_VECTOR_ELT(res, 3, fromargs);
+            SET_VECTOR_ELT(res, 4, toargs);
+        } else {
+            SET_VECTOR_ELT(res, 3, NEW_CHARACTER(1));
+            SET_VECTOR_ELT(res, 4, NEW_CHARACTER(1));
+            SET_STRING_ELT(VECTOR_ELT(res, 3), 0, 
+		COPY_TO_USER_STRING(proj_pj_info(source_crs).definition));
+	    SET_STRING_ELT(VECTOR_ELT(res, 4), 0, 
+		COPY_TO_USER_STRING(proj_pj_info(target_crs).definition));
+        }
+	SET_STRING_ELT(VECTOR_ELT(res, 5), 0, 
+	    COPY_TO_USER_STRING(proj_pj_info(pj_transform).definition));
+    } else {
+        if (have_CO) {
+            SET_VECTOR_ELT(res, 2, fromargs);
+            SET_VECTOR_ELT(res, 3, toargs);
+        } else {
+            SET_VECTOR_ELT(res, 2, NEW_CHARACTER(1));
+            SET_VECTOR_ELT(res, 3, NEW_CHARACTER(1));
+	    SET_STRING_ELT(VECTOR_ELT(res, 2), 0, 
+		COPY_TO_USER_STRING(proj_pj_info(source_crs).definition));
+	    SET_STRING_ELT(VECTOR_ELT(res, 3), 0, 
+		COPY_TO_USER_STRING(proj_pj_info(target_crs).definition));
+	}
+        SET_STRING_ELT(VECTOR_ELT(res, 4), 0, 
+	    COPY_TO_USER_STRING(proj_pj_info(pj_transform).definition));
+    }
+
+/*	if ( pj_is_latlong(toPJ) || ob_tran == -1) {
+		for (i=0; i < n; i++) {
+               		xx[i] *= RAD_TO_DEG;
+               		yy[i] *= RAD_TO_DEG;
+            	}
+	} */
+
+    proj_destroy(pj_transform);
+    if (!have_CO) {
+         proj_destroy(target_crs);
+         proj_destroy(source_crs);
+    }
+    proj_context_destroy(ctx);
+
+    if (have_z) {
+        for (i=0; i < n; i++) {
+	    if (xx[i] == HUGE_VAL || yy[i] == HUGE_VAL || zz[i] == HUGE_VAL
+	        || ISNAN(xx[i]) || ISNAN(yy[i]) || ISNAN(zz[i])) {
+                nwarn++;
+/*		    Rprintf("transformed point not finite\n");*/
+	    }
+	    NUMERIC_POINTER(VECTOR_ELT(res, 0))[i] = xx[i];
+	    NUMERIC_POINTER(VECTOR_ELT(res, 1))[i] = yy[i];
+	    NUMERIC_POINTER(VECTOR_ELT(res, 2))[i] = zz[i];
+        }
+    } else {
+	for (i=0; i < n; i++) {
+	    if (xx[i] == HUGE_VAL || yy[i] == HUGE_VAL 
+	        || ISNAN(xx[i]) || ISNAN(yy[i])) {
+                nwarn++;
+/*		    Rprintf("transformed point not finite\n");*/
+	    }
+	    NUMERIC_POINTER(VECTOR_ELT(res, 0))[i] = xx[i];
+	    NUMERIC_POINTER(VECTOR_ELT(res, 1))[i] = yy[i];
+	}
+    }
+
+    if (nwarn > 0) warning("%d projected point(s) not finite", nwarn);
+    UNPROTECT(pc);
+    return(res);
+}
+
 
 
 // blocks error messages in this context

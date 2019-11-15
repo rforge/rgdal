@@ -2084,18 +2084,18 @@ else
   fi
 fi
 
-GDAL_DATA_TEST_FILE="${GDAL_DATADIR}/pcs.csv"
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking GDAL: ${GDAL_DATADIR}/pcs.csv readable" >&5
-$as_echo_n "checking GDAL: ${GDAL_DATADIR}/pcs.csv readable... " >&6; }
+GDAL_DATA_TEST_FILE="${GDAL_DATADIR}/stateplane.csv"
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking GDAL: ${GDAL_DATADIR}/stateplane.csv readable" >&5
+$as_echo_n "checking GDAL: ${GDAL_DATADIR}/stateplane.csv readable... " >&6; }
 if test -r "${GDAL_DATA_TEST_FILE}" ; then
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 else
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-  if test "${GDAL_GE_250}" = no; then
-    as_fn_error $? "pcs.csv not found in GDAL data directory." "$LINENO" 5
-  fi
+#  if test "${GDAL_GE_250}" = no; then
+    as_fn_error $? "stateplane.csv not found in GDAL data directory." "$LINENO" 5
+#  fi
 fi
 
 # PROJ.4
