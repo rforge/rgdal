@@ -939,9 +939,19 @@ scot_BNG <- readOGR(system.file("vectors", package="rgdal"), "scot_BNG")
 ## datum Unknown_based_on_Airy_1830_ellipsoid in CRS definition
 ```
 
+In **rgdal** 1.5-2, the coordinate operation lookup is done once for the first matrix of coordinates, and passed then on to subsequent transformations:
+
 ```{r}
 system.time(scot_LL2 <- spTransform(scot_BNG, CRS("+proj=longlat +datum=WGS84")))
 ```
+
+```{r}
+##    user  system elapsed 
+##   0.095   0.000   0.096
+```
+
+
+Timings for **rgdal** 1.5-1, when look-up was repeated for each matrix of coordinates:
 
 ```{r}
 ##    user  system elapsed 

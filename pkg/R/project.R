@@ -362,14 +362,16 @@ setMethod("spTransform", signature("SpatialGridDataFrame", "CRS"),
 	input <- slot(x, "Lines")
 	n <- length(input)
 	output <- vector(mode="list", length=n)
+        out_coordOp <- NULL
 	for (i in 1:n) {
             output[[i]] <- .spTransform_Line(input[[i]], 
 		to_args=to_args, from_args=from_args, ii=ii, jj=i,
                 use_ob_tran=use_ob_tran, coordOp=coordOp)
-            if (get_transform_wkt_comment() && i == n) {
+            if (is.null(coordOp) && get_transform_wkt_comment() && i == 1) {
                 out_coordOp <- attr(output[[i]], "coordOp")
-                attr(output[[i]], "coordOp") <- NULL
+                coordOp <-  gsub(" ", " +", paste0("+", out_coordOp))
             }
+            attr(output[[i]], "coordOp") <- NULL
         }
 	x <- Lines(output, ID)
         if (get_transform_wkt_comment()) attr(x, "coordOp") <- out_coordOp
@@ -438,13 +440,14 @@ setMethod("spTransform", signature("SpatialGridDataFrame", "CRS"),
             output[[i]] <- .spTransform_Lines(input[[i]], 
 		to_args=to_args, from_args=from_args, ii=i,
                 use_ob_tran=use_ob_tran, coordOp=coordOp)
-            if (get_transform_wkt_comment() && i == n) {
+            if (is.null(coordOp) && get_transform_wkt_comment() && i == 1) {
                 out_coordOp <- attr(output[[i]], "coordOp")
-                attr(output[[i]], "coordOp") <- NULL
+                coordOp <-  gsub(" ", " +", paste0("+", out_coordOp))
             }
+            attr(output[[i]], "coordOp") <- NULL
         }
-        if (get_transform_wkt_comment()) assign(".last_coordOp", gsub(" ",
-            " +", paste0("+", out_coordOp)), envir=.RGDAL_CACHE)
+        if (get_transform_wkt_comment()) assign(".last_coordOp", coordOp,
+            envir=.RGDAL_CACHE)
 	res <- SpatialLines(output, proj4string=CRSobj)
 	res
 }
@@ -495,14 +498,16 @@ setMethod("spTransform", signature("SpatialLinesDataFrame", "CRS"), spTransform.
 	input <- slot(x, "Polygons")
 	n <- length(input)
 	output <- vector(mode="list", length=n)
+        out_coordOp <- NULL
 	for (i in 1:n) {
             output[[i]] <- .spTransform_Polygon(input[[i]], 
 		to_args=to_args, from_args=from_args, ii=ii, jj=i,
                 use_ob_tran=use_ob_tran, coordOp=coordOp)
-            if (get_transform_wkt_comment() && i == n) {
+            if (is.null(coordOp) && get_transform_wkt_comment() && i == 1) {
                 out_coordOp <- attr(output[[i]], "coordOp")
-                attr(output[[i]], "coordOp") <- NULL
+                coordOp <-  gsub(" ", " +", paste0("+", out_coordOp))
             }
+            attr(output[[i]], "coordOp") <- NULL
         }
 	res <- Polygons(output, ID)
         if (!is.null(comment(x))) comment(res) <- comment(x)
@@ -571,13 +576,14 @@ setMethod("spTransform", signature("SpatialLinesDataFrame", "CRS"), spTransform.
             output[[i]] <- .spTransform_Polygons(input[[i]], 
 		to_args=to_args, from_args=from_args, ii=i,
                 use_ob_tran=use_ob_tran, coordOp=coordOp)
-            if (get_transform_wkt_comment() && i == n) {
+            if (is.null(coordOp) && get_transform_wkt_comment() && i == 1) {
                 out_coordOp <- attr(output[[i]], "coordOp")
-                attr(output[[i]], "coordOp") <- NULL
+                coordOp <-  gsub(" ", " +", paste0("+", out_coordOp))
             }
+            attr(output[[i]], "coordOp") <- NULL
         }
-        if (get_transform_wkt_comment()) assign(".last_coordOp", gsub(" ",
-            " +", paste0("+", out_coordOp)), envir=.RGDAL_CACHE)
+        if (get_transform_wkt_comment()) assign(".last_coordOp", coordOp, 
+            envir=.RGDAL_CACHE)
 	res <- SpatialPolygons(output, pO=slot(x, "plotOrder"), 
 		proj4string=CRSobj)
 	res
