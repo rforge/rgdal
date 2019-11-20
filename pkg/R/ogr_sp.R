@@ -488,6 +488,8 @@ showSRID <- function(inSRID, format="WKT2", multiline="NO") {
     if (substring(inSRID, 1, 3) == "urn") in_format = 2L
     if (substring(inSRID, 1, 1) == "P") in_format = 3L
     if (substring(inSRID, 1, 1) == "G") in_format = 3L
+    if (substring(inSRID, 1, 1) == "B") in_format = 3L
+    if (substring(inSRID, 1, 1) == "S") in_format = 3L
     if (substring(inSRID, 1, 4) == "EPSG") in_format = 4L
     epsg <- as.integer(NA)
     if (in_format == 4L) epsg <- as.integer(substring(inSRID, 6, nchar(inSRID)))

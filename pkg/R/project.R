@@ -201,6 +201,12 @@ if (!isGeneric("spTransform"))
                 warning("NULL source CRS comment, falling back to PROJ string")
 	        if (is.na(from_args)) 
 		    stop("No transformation possible from NA source CRS")
+                if (length(grep("\\+init\\=", from_args)) > 0) {
+                    warning("+init dropped in PROJ string")
+                    strres <- unlist(strsplit(from_args, " "))
+                    from_args <- paste(strres[-grep("\\+init\\=", strres)],
+                        collapse=" ")
+                }
             } else {
                 from_args <- comment(slot(x, "proj4string"))
             }
@@ -209,6 +215,12 @@ if (!isGeneric("spTransform"))
 	        to_args <- paste0(slot(CRSobj, "projargs"), " +type=crs")
 	        if (is.na(to_args)) 
 		    stop("No transformation possible to NA target CRS")
+                if (length(grep("\\+init\\=", to_args)) > 0) {
+                    warning("+init dropped in PROJ string")
+                    strres <- unlist(strsplit(to_args, " "))
+                    to_args <- paste(strres[-grep("\\+init\\=", strres)],
+                        collapse=" ")
+                }
             } else {
                 to_args <- comment(CRSobj)
             }
@@ -387,6 +399,12 @@ setMethod("spTransform", signature("SpatialGridDataFrame", "CRS"),
                 warning("NULL source CRS comment, falling back to PROJ string")
 	        if (is.na(from_args)) 
 		    stop("No transformation possible from NA source CRS")
+                if (length(grep("\\+init\\=", from_args)) > 0) {
+                    warning("+init dropped in PROJ string")
+                    strres <- unlist(strsplit(from_args, " "))
+                    from_args <- paste(strres[-grep("\\+init\\=", strres)],
+                        collapse=" ")
+                }
             } else {
                 from_args <- comment(slot(x, "proj4string"))
             }
@@ -395,6 +413,12 @@ setMethod("spTransform", signature("SpatialGridDataFrame", "CRS"),
 	        to_args <- paste0(slot(CRSobj, "projargs"), " +type=crs")
 	        if (is.na(to_args)) 
 		    stop("No transformation possible to NA target CRS")
+                if (length(grep("\\+init\\=", to_args)) > 0) {
+                    warning("+init dropped in PROJ string")
+                    strres <- unlist(strsplit(to_args, " "))
+                    to_args <- paste(strres[-grep("\\+init\\=", strres)],
+                        collapse=" ")
+                }
             } else {
                 to_args <- comment(CRSobj)
             }
@@ -523,6 +547,12 @@ setMethod("spTransform", signature("SpatialLinesDataFrame", "CRS"), spTransform.
                 warning("NULL source CRS comment, falling back to PROJ string")
 	        if (is.na(from_args)) 
 		    stop("No transformation possible from NA source CRS")
+                if (length(grep("\\+init\\=", from_args)) > 0) {
+                    warning("+init dropped in PROJ string")
+                    strres <- unlist(strsplit(from_args, " "))
+                    from_args <- paste(strres[-grep("\\+init\\=", strres)],
+                        collapse=" ")
+                }
             } else {
                 from_args <- comment(slot(x, "proj4string"))
             }
@@ -531,6 +561,12 @@ setMethod("spTransform", signature("SpatialLinesDataFrame", "CRS"), spTransform.
 	        to_args <- paste0(slot(CRSobj, "projargs"), " +type=crs")
 	        if (is.na(to_args)) 
 		    stop("No transformation possible to NA target CRS")
+                if (length(grep("\\+init\\=", to_args)) > 0) {
+                    warning("+init dropped in PROJ string")
+                    strres <- unlist(strsplit(to_args, " "))
+                    to_args <- paste(strres[-grep("\\+init\\=", strres)],
+                        collapse=" ")
+                }
             } else {
                 to_args <- comment(CRSobj)
             }
