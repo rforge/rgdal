@@ -408,7 +408,7 @@ readOGR <- function(dsn, layer, verbose=TRUE, p4s=NULL,
 				}
 				t0 <- try(pllist[[j]] <- Polygon(cmat),
                                     silent=TRUE)
-                                if (inherits(t0 "try-error")) {
+                                if (inherits(t0, "try-error")) {
                                      print(cmat)
                                      print(t0)
                                      stop("i: ", i, ", j: ", j,
