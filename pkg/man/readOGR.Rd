@@ -135,7 +135,7 @@ if (new_proj_and_gdal()) comment(slot(scot_BNG, "proj4string"))
 if ("GML" \%in\% ogrDrivers()$name) {
   dsn <- system.file("vectors/airports.gml", package = "rgdal")[1]
   airports <- try(readOGR(dsn=dsn, layer="airports"))
-  if (class(airports) != "try-error") {
+  if (!inherits(airports, "try-error")) {
     summary(airports)
     if (new_proj_and_gdal()) comment(slot(airports, "proj4string"))
   }
@@ -156,12 +156,12 @@ summary(Up)
 if (new_proj_and_gdal()) comment(slot(Up, "proj4string"))
 dsn <- system.file("vectors/test_trk2.gpx", package = "rgdal")[1]
 test_trk2 <- try(readOGR(dsn=dsn, layer="tracks"))
-if (class(test_trk2) != "try-error") {
+if (!inherits(test_trk2, "try-error")) {
   summary(test_trk2)
   if (new_proj_and_gdal()) comment(slot(test_trk2, "proj4string"))
 }
 test_trk2pts <- try(readOGR(dsn=dsn, layer="track_points"))
-if (class(test_trk2pts) != "try-error") {
+if (!inherits(test_trk2pts, "try-error")) {
   summary(test_trk2pts)
   if (new_proj_and_gdal()) comment(slot(test_trk2pts, "proj4string"))
 }
