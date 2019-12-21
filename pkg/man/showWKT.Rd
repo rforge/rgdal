@@ -5,6 +5,8 @@
 \alias{showSRID}
 \alias{get_P6_datum_hard_fail}
 \alias{set_P6_datum_hard_fail}
+\alias{get_thin_PROJ6_warnings}
+\alias{set_thin_PROJ6_warnings}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Show Well-Known Text spatial reference system metadata}
 \description{
@@ -17,6 +19,8 @@ showEPSG(p4s)
 showSRID(inSRID, format="WKT2", multiline="NO")
 get_P6_datum_hard_fail()
 set_P6_datum_hard_fail(value)
+get_thin_PROJ6_warnings()
+set_thin_PROJ6_warnings(value)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -39,6 +43,7 @@ set_P6_datum_hard_fail(value)
 
 \seealso{\code{\link[sp]{is.projected}}, \code{\link[sp]{CRS-class}}}
 \examples{
+set_thin_PROJ6_warnings(TRUE)
 cities <- readOGR(system.file("vectors", package = "rgdal")[1], "cities")
 readLines(system.file("vectors/cities.prj", package = "rgdal")[1])
 showWKT(proj4string(cities))

@@ -54,6 +54,7 @@ In fixing a bug in the correct handling of SFS polygon geometries in version 1.1
 
 \seealso{\code{\link{readOGR}}}
 \examples{
+set_thin_PROJ6_warnings(TRUE)
 cities <- readOGR(system.file("vectors", package = "rgdal")[1], "cities")
 is.na(cities$POPULATION) <- cities$POPULATION == -99
 summary(cities$POPULATION)

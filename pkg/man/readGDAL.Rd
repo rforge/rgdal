@@ -140,6 +140,7 @@ use \code{\link[sp]{flipVertical}}.}
 \author{Edzer Pebesma, Roger Bivand}
 
 \examples{
+set_thin_PROJ6_warnings(TRUE)
 library(grid)
 GDALinfo(system.file("external/test.ag", package="sp")[1])
 x <- readGDAL(system.file("external/test.ag", package="sp")[1])

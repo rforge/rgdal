@@ -217,9 +217,9 @@ SEXP OGR_write(SEXP inp)
 
     if (!isNull(comment)) {
 //        Rprintf("CRS comment: %s\n", CHAR(STRING_ELT(comment, 0)));
-        OGRSpatialReference* poSRS =
-            (OGRSpatialReference*)OSRNewSpatialReference(NULL);//FIXME VG
+        OGRSpatialReference *poSRS = new OGRSpatialReference;//FIXME VG
         ppszInput = CSLAddString(ppszInput, CHAR(STRING_ELT(comment, 0)));//FIXME VG
+
 
         installErrorHandler();
 #if GDAL_VERSION_MAJOR == 1 || ( GDAL_VERSION_MAJOR == 2 && GDAL_VERSION_MINOR <= 2 ) // thanks to Even Roualt https://github.com/OSGeo/gdal/issues/681
@@ -234,6 +234,14 @@ SEXP OGR_write(SEXP inp)
             error("Can't parse WKT2-style parameter string");
         }
         uninstallErrorHandlerAndTriggerError();
+
+#if GDAL_VERSION_MAJOR >= 3
+        installErrorHandler();
+Rprintf("OGR_write input AxisMappingStrategy %d\n", poSRS->GetAxisMappingStrategy());
+        poSRS->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
+        uninstallErrorHandlerAndTriggerError();
+Rprintf("OGR_write output AxisMappingStrategy %d\n", poSRS->GetAxisMappingStrategy());
+#endif
 
         installErrorHandler();
         if (dumpSRS) poSRS->dumpReadable();
@@ -251,8 +259,7 @@ SEXP OGR_write(SEXP inp)
         if (strcmp(PROJ4, "NA")) {
 //            OGRSpatialReference hSRS = NULL;
 //            OGRSpatialReference* poSRS = new OGRSpatialReference();
-            OGRSpatialReference* poSRS =
-                (OGRSpatialReference*)OSRNewSpatialReference(NULL);//FIXME VG
+            OGRSpatialReference* poSRS = new OGRSpatialReference;//FIXME VG
             installErrorHandler();
 //            if (hSRS.importFromProj4(PROJ4) != OGRERR_NONE) {
             if (poSRS->importFromProj4(PROJ4) != OGRERR_NONE) { //FIXME VG

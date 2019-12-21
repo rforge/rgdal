@@ -1,4 +1,5 @@
 suppressPackageStartupMessages(library(rgdal))
+set_thin_PROJ6_warnings(TRUE)
 data(state)
 xy <- cbind(state.center$x, state.center$y)
 res <- project(xy, "+proj=lcc +lat_1=48 +lat_2=33 +lon_0=-100 +ellps=GRS80")

@@ -1035,3 +1035,231 @@ all.equal(b2, bbox(scot_LL4), scale=1)
 ```{r}
 ## [1] TRUE
 ```
+
+## Axis swapping
+
+```{r}
+library(rgdal)
+library(sf)
+```
+
+```{r}
+packageVersion("rgdal")
+rgdal_extSoftVersion()
+packageVersion("sf")
+sf_extSoftVersion()
+```
+
+
+```{r}
+pt0_lonlat_sf <- st_sfc(st_point(c(10,46)), crs = 4326)
+pt0_laea89_sf <- st_transform(pt0_lonlat_sf, 3035)
+pt0_wgs32n_sf <- st_transform(pt0_lonlat_sf, 32632)
+pt0_psmerc_sf <- st_transform(pt0_lonlat_sf, 3857)
+```
+
+
+```{r}
+pt0_lonlat <- as(pt0_lonlat_sf, "Spatial")
+pt0_laea89 <- as(pt0_laea89_sf, "Spatial")
+```
+
+```{r}
+pt0_wgs32n <- as(pt0_wgs32n_sf, "Spatial")
+pt0_psmerc <- as(pt0_psmerc_sf, "Spatial")
+```
+
+```{r}
+coordinates(pt0_lonlat)
+```
+
+```{r}
+coordinates(pt0_laea89)
+```
+
+
+```{r}
+coordinates(pt0_wgs32n)
+```
+
+
+```{r}
+coordinates(pt0_psmerc)
+```
+
+```{r}
+#library(mapview)
+#mapview(pt0_lonlat) + mapview(pt0_laea89) + mapview(pt0_wgs32n) + mapview(pt0_psmerc)
+```
+
+
+```{r}
+st_transform(st_as_sfc(pt0_laea89), 4326)[[1]]
+## POINT (10 46)
+st_transform(st_as_sfc(pt0_wgs32n), 4326)[[1]]
+## POINT (10 46)
+st_transform(st_as_sfc(pt0_psmerc), 4326)[[1]]
+## POINT (10 46)
+```
+
+```{r}
+coordinates(pt0_lonlat)
+```
+
+```{r}
+coordinates(pt0_laea89)
+```
+
+
+
+```{r}
+coordinates(pt0_wgs32n)
+```
+
+
+```{r}
+coordinates(pt0_psmerc)
+```
+
+```{r}
+pt1_lonlat_laea89 <- spTransform(pt0_lonlat, CRS(SRS_string = "EPSG:3035"))
+get_last_coordOp()
+```
+
+
+```{r}
+if (!isTRUE(all.equal(coordinates(pt0_laea89), coordinates(pt1_lonlat_laea89)))) print(rbind(coordinates(pt0_laea89), coordinates(pt1_lonlat_laea89))) else TRUE
+```
+```{r}
+list_coordOps(comment(slot(pt0_lonlat, "proj4string")), "EPSG:3035")
+```
+
+```{r}
+list_coordOps(comment(slot(pt0_lonlat, "proj4string")), comment(CRS("+init=epsg:3035")))
+```
+
+
+```{r}
+pt1_lonlat_laea89_1 <- spTransform(pt0_lonlat, CRS("+init=epsg:3035"))
+get_last_coordOp()
+```
+
+
+```{r}
+if (!isTRUE(all.equal(coordinates(pt0_laea89), coordinates(pt1_lonlat_laea89_1)))) print(rbind(coordinates(pt0_laea89), coordinates(pt1_lonlat_laea89_1))) else TRUE
+```
+
+
+```{r}
+pt1_lonlat_wgs32n <- spTransform(pt0_lonlat, CRS(SRS_string = "EPSG:32632"))
+get_last_coordOp()
+```
+
+
+```{r}
+if (!isTRUE(all.equal(coordinates(pt0_wgs32n), coordinates(pt1_lonlat_wgs32n)))) print(rbind(coordinates(pt0_wgs32n), coordinates(pt1_lonlat_wgs32n))) else TRUE
+```
+
+```{r}
+pt1_lonlat_psmerc <- spTransform(pt0_lonlat, CRS(SRS_string = "EPSG:3857"))
+get_last_coordOp()
+```
+
+
+```{r}
+if (!isTRUE(all.equal(coordinates(pt0_psmerc), coordinates(pt1_lonlat_psmerc)))) print(rbind(coordinates(pt0_psmerc), coordinates(pt1_lonlat_psmerc))) else TRUE
+```
+
+```{r}
+pt1_laea89_lonlat <- spTransform(pt0_laea89, CRS(SRS_string = "EPSG:4326"))
+get_last_coordOp()
+```
+
+
+```{r}
+if (!isTRUE(all.equal(coordinates(pt0_lonlat), coordinates(pt1_laea89_lonlat)))) print(rbind(coordinates(pt0_lonlat), coordinates(pt1_laea89_lonlat)))  else TRUE #EPSG:4326
+```
+
+
+```{r}
+pt1_laea89_wgs32n <- spTransform(pt0_laea89, CRS(SRS_string = "EPSG:32632"))
+get_last_coordOp()
+```
+
+
+```{r}
+if (!isTRUE(all.equal(coordinates(pt0_wgs32n), coordinates(pt1_laea89_wgs32n)))) print(rbind(coordinates(pt0_wgs32n), coordinates(pt1_laea89_wgs32n))) else TRUE
+```
+
+```{r}
+pt1_laea89_psmerc <- spTransform(pt0_laea89, CRS(SRS_string = "EPSG:3857"))
+get_last_coordOp()
+```
+
+
+```{r}
+if (!isTRUE(all.equal(coordinates(pt0_psmerc), coordinates(pt1_laea89_psmerc)))) print(rbind(coordinates(pt0_psmerc), coordinates(pt1_laea89_psmerc))) else TRUE
+```
+
+```{r}
+pt1_wgs32n_lonlat <- spTransform(pt0_wgs32n, CRS(SRS_string = "EPSG:4326"))
+get_last_coordOp()
+```
+
+
+```{r}
+if (!isTRUE(all.equal(coordinates(pt0_lonlat), coordinates(pt1_wgs32n_lonlat)))) print(rbind(coordinates(pt0_lonlat), coordinates(pt1_wgs32n_lonlat))) else TRUE
+```
+
+
+```{r}
+pt1_wgs32n_laea89 <- spTransform(pt0_wgs32n, CRS(SRS_string = "EPSG:3035"))
+get_last_coordOp()
+```
+
+
+```{r}
+if (!isTRUE(all.equal(coordinates(pt0_laea89), coordinates(pt1_wgs32n_laea89)))) print(rbind(coordinates(pt0_laea89), coordinates(pt1_wgs32n_laea89))) else TRUE
+```
+
+```{r}
+pt1_wgs32n_psmerc <- spTransform(pt0_wgs32n, CRS(SRS_string = "EPSG:3857"))
+get_last_coordOp()
+```
+
+```{r}
+if (!isTRUE(all.equal(coordinates(pt0_psmerc), coordinates(pt1_wgs32n_psmerc)))) print(rbind(coordinates(pt0_psmerc), coordinates(pt1_wgs32n_psmerc))) else TRUE
+```
+
+
+
+```{r}
+pt1_psmerc_lonlat <- spTransform(pt0_psmerc, CRS(SRS_string = "EPSG:4326"))
+get_last_coordOp()
+```
+
+```{r}
+if (!isTRUE(all.equal(coordinates(pt0_lonlat), coordinates(pt1_psmerc_lonlat)))) print(rbind(coordinates(pt0_lonlat), coordinates(pt1_psmerc_lonlat))) else TRUE #EPSG:4326
+```
+
+```{r}
+pt1_psmerc_laea89 <- spTransform(pt0_psmerc, CRS(SRS_string = "EPSG:3035"))
+get_last_coordOp()
+```
+
+```{r}
+if (!isTRUE(all.equal(coordinates(pt0_laea89), coordinates(pt1_psmerc_laea89)))) print(rbind(coordinates(pt0_laea89), coordinates(pt1_psmerc_laea89))) else TRUE
+```
+
+```{r}
+pt1_psmerc_wgs32n <- spTransform(pt0_psmerc, CRS(SRS_string = "EPSG:32632"))
+get_last_coordOp()
+```
+
+
+
+```{r}
+if (!isTRUE(all.equal(coordinates(pt0_wgs32n), coordinates(pt1_psmerc_wgs32n)))) print(rbind(coordinates(pt0_wgs32n), coordinates(pt1_psmerc_wgs32n))) else TRUE
+```
+
+

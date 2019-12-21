@@ -99,6 +99,7 @@ Because some drivers support reading string, integer and real list fields, suppo
 }
 \seealso{\code{\link[sp]{SpatialPointsDataFrame-class}}, \code{\link[sp]{SpatialLinesDataFrame-class}}, \code{\link[sp]{SpatialPolygonsDataFrame-class}}, \code{\link[maptools]{readShapePoly}}, \code{\link[base]{iconv}}}
 \examples{
+set_thin_PROJ6_warnings(TRUE)
 ogrDrivers()
 dsn <- system.file("vectors", package = "rgdal")[1]
 ogrListLayers(dsn)

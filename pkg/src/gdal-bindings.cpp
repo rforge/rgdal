@@ -903,6 +903,9 @@ RGDAL_GetProjectionRef(SEXP sDataset) {
     uninstallErrorHandlerAndTriggerError();
 
 #if GDAL_VERSION_MAJOR >= 3
+Rprintf("RGDAL_GetProjectionRef input AxisMappingStrategy %d\n", oSRS.GetAxisMappingStrategy());
+    oSRS.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
+Rprintf("RGDAL_GetProjectionRef output AxisMappingStrategy %d\n", oSRS.GetAxisMappingStrategy());
     SEXP WKT2_2018;
     char *wkt2=NULL;
     char **papszOptions = NULL;
@@ -1946,6 +1949,13 @@ RGDAL_SetProject(SEXP sxpDataset, SEXP proj4string) {
 
   installErrorHandler();
   oSRS.importFromProj4(CHAR(STRING_ELT(proj4string, 0)));
+
+#if GDAL_VERSION_MAJOR >= 3
+Rprintf("RGDAL_SetProject input AxisMappingStrategy %d\n", oSRS.GetAxisMappingStrategy());
+  oSRS.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
+Rprintf("RGDAL_SetProject output AxisMappingStrategy %d\n", oSRS.GetAxisMappingStrategy());
+#endif
+  
   oSRS.exportToWkt( &pszSRS_WKT );
   uninstallErrorHandlerAndTriggerError();
 
@@ -1973,6 +1983,11 @@ RGDAL_SetProject_WKT2(SEXP sxpDataset, SEXP WKT2string) {
 
   installErrorHandler();
   oSRS.importFromWkt(CHAR(STRING_ELT(WKT2string, 0)));
+
+Rprintf("RGDAL_SetProject_WKT2 input AxisMappingStrategy %d\n", oSRS.GetAxisMappingStrategy());
+  oSRS.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
+Rprintf("RGDAL_SetProject_WKT2 output AxisMappingStrategy %d\n", oSRS.GetAxisMappingStrategy());
+
   uninstallErrorHandlerAndTriggerError();
 
   installErrorHandler();

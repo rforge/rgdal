@@ -81,6 +81,7 @@ Note that from PROJ.4 4.9.3, the definition of UTM is changed from TMERC to ETME
 \author{Roger Bivand \email{Roger.Bivand@nhh.no}}
 
 \examples{
+set_thin_PROJ6_warnings(TRUE)
 data(state)
 states <- data.frame(state.x77, state.center)
 states <- states[states$x > -121,]

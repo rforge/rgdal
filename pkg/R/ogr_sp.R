@@ -467,6 +467,18 @@ showEPSG <- function(p4s) {
 	res
 }
 
+get_thin_PROJ6_warnings <- function() {
+    get("thin_PROJ6_warnings", envir=.RGDAL_CACHE)
+}
+
+set_thin_PROJ6_warnings <- function(value) {
+    stopifnot(is.logical(value))
+    stopifnot(length(value) == 1L)
+    stopifnot(!is.na(value))
+    assign("thin_PROJ6_warnings", value, envir=.RGDAL_CACHE)
+}
+
+
 showSRID <- function(inSRID, format="WKT2", multiline="NO") {
     valid_WKT_formats <- c("SFSQL", "WKT1_SIMPLE", "WKT1", "WKT1_GDAL",
         "WKT1_ESRI", "WKT2_2015", "WKT2_2018", "WKT2")
@@ -513,7 +525,19 @@ showSRID <- function(inSRID, format="WKT2", multiline="NO") {
                 if (!no_towgs84 && (length(grep("towgs84", c(res))) > 0L))
                     msg <- paste0(msg, ",\n but +towgs84= values preserved")
                 if (get_P6_datum_hard_fail()) stop(msg)
-                else warning(msg)
+                else {
+                    if (!get_thin_PROJ6_warnings()) {
+                        warning(msg)
+                    } else {
+                        if (get("PROJ6_warnings_count",
+                            envir=.RGDAL_CACHE) == 0L) {
+                            warning(paste0("PROJ6/GDAL3 PROJ string degradation in workflow\n repeated warnings suppressed\n ", msg))
+                            assign("PROJ6_warnings_count",
+                                get("PROJ6_warnings_count",
+                                envir=.RGDAL_CACHE) + 1L, envir=.RGDAL_CACHE)
+                        }
+                    }
+                }
             }
             res <- c(res)
         } else {
