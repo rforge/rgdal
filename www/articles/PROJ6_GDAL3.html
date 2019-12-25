@@ -134,7 +134,7 @@
 <p>My fork of <strong>sp</strong> (<a href="https://github.com/rsbivand/sp" class="uri">https://github.com/rsbivand/sp</a>) is currently at 1.3-3 or higher, and contains extra code conditionally using the development version of <strong>rgdal</strong> on the R-Forge repository at 1.5-1 or higher. The commented out blocks marked PROJ4/GDAL2 were generated on a Windows platform with <strong>sp</strong> 1.3-2 and <strong>rgdal</strong> 1.4-7, using PROJ4/GDAL2. The other commented out blocks were <strong>sp</strong> fork and <strong>rgdal</strong> development version, revision 886. The uncommented output is what the package build platform put there.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(sp)</a>
 <a class="sourceLine" id="cb1-2" title="2"><span class="kw"><a href="https://rdrr.io/r/utils/packageDescription.html">packageVersion</a></span>(<span class="st">"sp"</span>)</a></code></pre></div>
-<pre><code>## [1] '1.3.3'</code></pre>
+<pre><code>## [1] '1.3.4'</code></pre>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="co">## [1] '1.3.3'</span></a></code></pre></div>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="co">## PROJ4/GDAL2 [1] '1.3.2'</span></a></code></pre></div>
 <p>The <code>"CRS"</code> class definition is unchanged going forward to maintain backward compatibility.</p>
@@ -146,8 +146,10 @@
 ## Name:   projargs
 ## Class: character</code></pre>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1">rgdal<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/rgdal/man/GDALDriver-class.html">rgdal_extSoftVersion</a></span>()</a></code></pre></div>
-<pre><code>##           GDAL GDAL_with_GEOS           PROJ             sp 
-##        "3.0.2"         "TRUE"        "6.2.1"        "1.3-3"</code></pre>
+<pre><code>##                  GDAL        GDAL_with_GEOS                  PROJ 
+## "3.1.0dev-2acbe38cb4"                "TRUE"               "6.2.1" 
+##                    sp 
+##               "1.3-4"</code></pre>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1"><span class="co">##           GDAL GDAL_with_GEOS           PROJ             sp </span></a>
 <a class="sourceLine" id="cb9-2" title="2"><span class="co">##        "3.0.2"         "TRUE"        "6.2.1"        "1.3-3"</span></a></code></pre></div>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1"><span class="co">## PROJ4/GDAL2           GDAL GDAL_with_GEOS         PROJ.4             sp </span></a>
@@ -504,14 +506,14 @@
 <h2 class="hasAnchor">
 <a href="#coordinate-operations" class="anchor"></a>Coordinate operations</h2>
 <div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb70-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(rgdal)</a></code></pre></div>
-<pre><code>## rgdal: version: 1.5-2, (SVN revision 896)
+<pre><code>## rgdal: version: 1.5-2, (SVN revision 904)
 ##  Geospatial Data Abstraction Library extensions to R successfully loaded
-##  Loaded GDAL runtime: GDAL 3.0.2, released 2019/10/28
+##  Loaded GDAL runtime: GDAL 3.1.0dev-2acbe38cb4, released 2019/12/17
 ##  Path to GDAL shared files: /usr/local/share/gdal
 ##  GDAL binary built with GEOS: TRUE 
 ##  Loaded PROJ.4 runtime: Rel. 6.2.1, November 1st, 2019, [PJ_VERSION: 621]
 ##  Path to PROJ.4 shared files: /usr/local/share/proj
-##  Linking to sp version: 1.3-3</code></pre>
+##  Linking to sp version: 1.3-4</code></pre>
 <div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb72-1" title="1"><span class="co">## rgdal: version: 1.5-1, (SVN revision 870)</span></a>
 <a class="sourceLine" id="cb72-2" title="2"><span class="co">##  Geospatial Data Abstraction Library extensions to R successfully loaded</span></a>
 <a class="sourceLine" id="cb72-3" title="3"><span class="co">##  Loaded GDAL runtime: GDAL 3.0.2, released 2019/10/28</span></a>
@@ -1035,7 +1037,7 @@
 ## dumpSRS): Discarded datum OSGB_1936 in CRS definition: +proj=tmerc +lat_0=49
 ## +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy +units=m +no_defs</code></pre>
 <pre><code>## OGR data source with driver: ESRI Shapefile 
-## Source: "/tmp/RtmpIl4nA7/temp_libpath572574d7eceb/rgdal/vectors", layer: "scot_BNG"
+## Source: "/tmp/RtmpW2KVEI/temp_libpath41a795fbb33f8/rgdal/vectors", layer: "scot_BNG"
 ## with 56 features
 ## It has 13 fields</code></pre>
 <pre><code>## Warning in OGRSpatialRef(dsn = dsn, layer = layer, morphFromESRI =
@@ -1109,7 +1111,7 @@
 ## dumpSRS): Discarded datum OSGB_1936 in CRS definition: +proj=tmerc +lat_0=49
 ## +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy +units=m +no_defs</code></pre>
 <pre><code>## OGR data source with driver: ESRI Shapefile 
-## Source: "/tmp/RtmpIl4nA7/temp_libpath572574d7eceb/rgdal/vectors", layer: "scot_BNG"
+## Source: "/tmp/RtmpW2KVEI/temp_libpath41a795fbb33f8/rgdal/vectors", layer: "scot_BNG"
 ## with 56 features
 ## It has 13 fields</code></pre>
 <pre><code>## Warning in OGRSpatialRef(dsn = dsn, layer = layer, morphFromESRI =
@@ -1134,7 +1136,7 @@
 <p>In <strong>rgdal</strong> 1.5-2, the coordinate operation lookup is done once for the first matrix of coordinates, and passed then on to subsequent transformations:</p>
 <div class="sourceCode" id="cb146"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb146-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span>(scot_LL2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/spTransform-methods.html">spTransform</a></span>(scot_BNG, <span class="kw"><a href="../reference/CRS-class.html">CRS</a></span>(<span class="st">"+proj=longlat +datum=WGS84"</span>)))</a></code></pre></div>
 <pre><code>##    user  system elapsed 
-##   0.094   0.002   0.098</code></pre>
+##   0.087   0.004   0.105</code></pre>
 <div class="sourceCode" id="cb148"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb148-1" title="1"><span class="co">##    user  system elapsed </span></a>
 <a class="sourceLine" id="cb148-2" title="2"><span class="co">##   0.095   0.000   0.096</span></a></code></pre></div>
 <p>Timings for <strong>rgdal</strong> 1.5-1, when look-up was repeated for each matrix of coordinates:</p>
@@ -1162,7 +1164,7 @@
 <div class="sourceCode" id="cb159"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb159-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span>(scot_LL3 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/spTransform-methods.html">spTransform</a></span>(scot_BNG, <span class="kw"><a href="../reference/CRS-class.html">CRS</a></span>(<span class="st">"+proj=longlat +datum=WGS84"</span>),</a>
 <a class="sourceLine" id="cb159-2" title="2">                                    <span class="dt">coordOp=</span><span class="kw"><a href="../reference/spTransform-methods.html">get_last_coordOp</a></span>()))</a></code></pre></div>
 <pre><code>##    user  system elapsed 
-##   0.060   0.001   0.062</code></pre>
+##   0.058   0.002   0.061</code></pre>
 <div class="sourceCode" id="cb161"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb161-1" title="1"><span class="co">##    user  system elapsed </span></a>
 <a class="sourceLine" id="cb161-2" title="2"><span class="co">##   0.066   0.002   0.070</span></a></code></pre></div>
 <div class="sourceCode" id="cb162"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb162-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/all.equal.html">all.equal</a></span>(b2, <span class="kw"><a href="https://rdrr.io/pkg/sp/man/bbox.html">bbox</a></span>(scot_LL3), <span class="dt">scale=</span><span class="dv">1</span>)</a></code></pre></div>
@@ -1175,12 +1177,203 @@
 <a class="sourceLine" id="cb165-4" title="4"><span class="kw"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span>(scot_LL4 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/spTransform-methods.html">spTransform</a></span>(scot_BNG, <span class="kw"><a href="../reference/CRS-class.html">CRS</a></span>(<span class="st">"+proj=longlat +datum=WGS84"</span>),</a>
 <a class="sourceLine" id="cb165-5" title="5">                                    <span class="dt">coordOp=</span><span class="kw"><a href="../reference/list_coordOps.html">best_instantiable_coordOp</a></span>(x)))</a></code></pre></div>
 <pre><code>##    user  system elapsed 
-##   0.058   0.002   0.060</code></pre>
+##   0.061   0.000   0.061</code></pre>
 <div class="sourceCode" id="cb167"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb167-1" title="1"><span class="co">##    user  system elapsed </span></a>
 <a class="sourceLine" id="cb167-2" title="2"><span class="co">##   0.066   0.002   0.069</span></a></code></pre></div>
 <div class="sourceCode" id="cb168"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb168-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/all.equal.html">all.equal</a></span>(b2, <span class="kw"><a href="https://rdrr.io/pkg/sp/man/bbox.html">bbox</a></span>(scot_LL4), <span class="dt">scale=</span><span class="dv">1</span>)</a></code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
 <div class="sourceCode" id="cb170"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb170-1" title="1"><span class="co">## [1] TRUE</span></a></code></pre></div>
+</div>
+<div id="axis-swapping" class="section level2">
+<h2 class="hasAnchor">
+<a href="#axis-swapping" class="anchor"></a>Axis swapping</h2>
+<p>Luigi Ranghetti and Lorenzo Busetto provided <a href="http://rpubs.com/ranghetti/sptransform-issue">input</a> with regard to axis swapping in <strong>rgdal</strong>. The task is to provide round-trip coordinate identity for four CRS. Here, we use just <strong>sp</strong>/<strong>rgdal</strong> to create the input objects:</p>
+<div class="sourceCode" id="cb171"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb171-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(rgdal)</a></code></pre></div>
+<div class="sourceCode" id="cb172"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb172-1" title="1"><span class="kw"><a href="https://rdrr.io/r/utils/packageDescription.html">packageVersion</a></span>(<span class="st">"rgdal"</span>)</a></code></pre></div>
+<pre><code>## [1] '1.5.2'</code></pre>
+<div class="sourceCode" id="cb174"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb174-1" title="1"><span class="kw"><a href="../reference/GDALDriver-class.html">rgdal_extSoftVersion</a></span>()</a></code></pre></div>
+<pre><code>##                  GDAL        GDAL_with_GEOS                  PROJ 
+## "3.1.0dev-2acbe38cb4"                "TRUE"               "6.2.1" 
+##                    sp 
+##               "1.3-4"</code></pre>
+<div class="sourceCode" id="cb176"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb176-1" title="1">pt0_lonlat &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/sp/man/SpatialPoints.html">SpatialPoints</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">10</span>,<span class="dv">46</span>), <span class="dt">nrow=</span><span class="dv">1</span>), <span class="dt">proj4string=</span> <span class="kw"><a href="../reference/CRS-class.html">CRS</a></span>(<span class="st">"+init=epsg:4326"</span>))</a>
+<a class="sourceLine" id="cb176-2" title="2">pt0_laea89 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/spTransform-methods.html">spTransform</a></span>(pt0_lonlat, <span class="kw"><a href="../reference/CRS-class.html">CRS</a></span>(<span class="st">"+init=epsg:3035"</span>))</a></code></pre></div>
+<pre><code>## Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO"): Discarded
+## datum European_Terrestrial_Reference_System_1989 in CRS definition</code></pre>
+<div class="sourceCode" id="cb178"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb178-1" title="1">pt0_wgs32n &lt;-<span class="st"> </span><span class="kw"><a href="../reference/spTransform-methods.html">spTransform</a></span>(pt0_lonlat, <span class="kw"><a href="../reference/CRS-class.html">CRS</a></span>(<span class="st">"+init=epsg:32632"</span>))</a>
+<a class="sourceLine" id="cb178-2" title="2">pt0_psmerc &lt;-<span class="st"> </span><span class="kw"><a href="../reference/spTransform-methods.html">spTransform</a></span>(pt0_lonlat, <span class="kw"><a href="../reference/CRS-class.html">CRS</a></span>(<span class="st">"+init=epsg:3857"</span>))</a></code></pre></div>
+<pre><code>## Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO"): Discarded
+## datum WGS_1984 in CRS definition</code></pre>
+<div class="sourceCode" id="cb180"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb180-1" title="1"><span class="kw"><a href="https://rdrr.io/pkg/sp/man/coordinates.html">coordinates</a></span>(pt0_lonlat)</a></code></pre></div>
+<pre><code>##      coords.x1 coords.x2
+## [1,]        10        46</code></pre>
+<div class="sourceCode" id="cb182"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb182-1" title="1"><span class="kw"><a href="https://rdrr.io/pkg/sp/man/coordinates.html">coordinates</a></span>(pt0_laea89)</a></code></pre></div>
+<pre><code>##      coords.x1 coords.x2
+## [1,]   4321000   2543009</code></pre>
+<div class="sourceCode" id="cb184"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb184-1" title="1"><span class="kw"><a href="https://rdrr.io/pkg/sp/man/coordinates.html">coordinates</a></span>(pt0_wgs32n)</a></code></pre></div>
+<pre><code>##      coords.x1 coords.x2
+## [1,]  577432.2   5094534</code></pre>
+<div class="sourceCode" id="cb186"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb186-1" title="1"><span class="kw"><a href="https://rdrr.io/pkg/sp/man/coordinates.html">coordinates</a></span>(pt0_psmerc)</a></code></pre></div>
+<pre><code>##      coords.x1 coords.x2
+## [1,]   1113195   5780349</code></pre>
+<p>We put the input (source) objects into a list:</p>
+<div class="sourceCode" id="cb188"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb188-1" title="1">from &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">pt0_lonlat=</span>pt0_lonlat, <span class="dt">pt0_psmerc=</span>pt0_psmerc, <span class="dt">pt0_wgs32n=</span>pt0_wgs32n, <span class="dt">pt0_laea89=</span>pt0_laea89)</a>
+<a class="sourceLine" id="cb188-2" title="2"><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(from)</a></code></pre></div>
+<pre><code>## [1] "pt0_lonlat" "pt0_psmerc" "pt0_wgs32n" "pt0_laea89"</code></pre>
+<div class="sourceCode" id="cb190"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb190-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/lapply.html">sapply</a></span>(from, proj4string)</a></code></pre></div>
+<pre><code>##                                                                                                         pt0_lonlat 
+##                                                                              "+proj=longlat +datum=WGS84 +no_defs" 
+##                                                                                                         pt0_psmerc 
+## "+proj=merc +a=6378137 +b=6378137 +lat_ts=0 +lon_0=0 +x_0=0 +y_0=0 +k=1 +units=m +nadgrids=@null +wktext +no_defs" 
+##                                                                                                         pt0_wgs32n 
+##                                                                "+proj=utm +zone=32 +datum=WGS84 +units=m +no_defs" 
+##                                                                                                         pt0_laea89 
+##                          "+proj=laea +lat_0=52 +lon_0=10 +x_0=4321000 +y_0=3210000 +ellps=GRS80 +units=m +no_defs"</code></pre>
+<p>and the target EPSG codes into a vector:</p>
+<div class="sourceCode" id="cb192"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb192-1" title="1">to &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"4326"</span>, <span class="st">"3857"</span>, <span class="st">"32632"</span>, <span class="st">"3035"</span>)</a></code></pre></div>
+<p>From SVN revision 903, a global <strong>rgdal</strong> option can be set to enforce visualization order in <code><a href="../reference/spTransform-methods.html">spTransform()</a></code> methods (the default value when the package is loaded is <code>TRUE</code>) when no <code>coordOp=</code> argument is given, and the coordinate operation has to be found automatically:</p>
+<div class="sourceCode" id="cb193"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb193-1" title="1"><span class="kw"><a href="../reference/spTransform-methods.html">get_enforce_xy</a></span>()</a></code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<div class="sourceCode" id="cb195"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb195-1" title="1"><span class="kw"><a href="../reference/spTransform-methods.html">set_enforce_xy</a></span>(<span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb195-2" title="2"><span class="kw"><a href="../reference/spTransform-methods.html">get_enforce_xy</a></span>()</a></code></pre></div>
+<pre><code>## [1] FALSE</code></pre>
+<p>Setting it to false gives failing round-trips for two of the four CRS:</p>
+<div class="sourceCode" id="cb197"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb197-1" title="1">out_EPSG_non_viz &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/logical.html">as.logical</a></span>(<span class="ot">NA</span>), <span class="dt">nrow=</span><span class="dv">4</span>, <span class="dt">ncol=</span><span class="dv">4</span>)</a>
+<a class="sourceLine" id="cb197-2" title="2"><span class="kw"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span>(out_EPSG_non_viz) &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(from)</a>
+<a class="sourceLine" id="cb197-3" title="3"><span class="kw"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(out_EPSG_non_viz) &lt;-<span class="st"> </span>to</a>
+<a class="sourceLine" id="cb197-4" title="4"><span class="cf">for</span> (j <span class="cf">in</span> <span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="dt">along=</span>from)) {</a>
+<a class="sourceLine" id="cb197-5" title="5">  <span class="cf">for</span> (i <span class="cf">in</span> <span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="dt">along=</span>to)) {</a>
+<a class="sourceLine" id="cb197-6" title="6">    pt1 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/spTransform-methods.html">spTransform</a></span>(from[[j]], <span class="kw"><a href="../reference/CRS-class.html">CRS</a></span>(<span class="dt">SRS_string =</span> <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"EPSG:"</span>, to[i])))</a>
+<a class="sourceLine" id="cb197-7" title="7">    out_EPSG_non_viz[i, j] &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/Logic.html">isTRUE</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/all.equal.html">all.equal</a></span>(<span class="kw"><a href="https://rdrr.io/pkg/sp/man/coordinates.html">coordinates</a></span>(from[[i]]),</a>
+<a class="sourceLine" id="cb197-8" title="8">      <span class="kw"><a href="https://rdrr.io/pkg/sp/man/coordinates.html">coordinates</a></span>(pt1)))</a>
+<a class="sourceLine" id="cb197-9" title="9">  }</a>
+<a class="sourceLine" id="cb197-10" title="10">}</a>
+<a class="sourceLine" id="cb197-11" title="11">out_EPSG_non_viz</a></code></pre></div>
+<pre><code>##       pt0_lonlat pt0_psmerc pt0_wgs32n pt0_laea89
+## 4326       FALSE      FALSE      FALSE      FALSE
+## 3857        TRUE       TRUE       TRUE       TRUE
+## 32632       TRUE       TRUE       TRUE       TRUE
+## 3035       FALSE      FALSE      FALSE      FALSE</code></pre>
+<p>Resetting to the default (<code>TRUE</code>) value gives round-trip success:</p>
+<div class="sourceCode" id="cb199"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb199-1" title="1"><span class="kw"><a href="../reference/spTransform-methods.html">set_enforce_xy</a></span>(<span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb199-2" title="2"><span class="kw"><a href="../reference/spTransform-methods.html">get_enforce_xy</a></span>()</a></code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<div class="sourceCode" id="cb201"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb201-1" title="1">out_EPSG &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/logical.html">as.logical</a></span>(<span class="ot">NA</span>), <span class="dt">nrow=</span><span class="dv">4</span>, <span class="dt">ncol=</span><span class="dv">4</span>)</a>
+<a class="sourceLine" id="cb201-2" title="2"><span class="kw"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span>(out_EPSG) &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(from)</a>
+<a class="sourceLine" id="cb201-3" title="3"><span class="kw"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(out_EPSG) &lt;-<span class="st"> </span>to</a>
+<a class="sourceLine" id="cb201-4" title="4"><span class="cf">for</span> (j <span class="cf">in</span> <span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="dt">along=</span>from)) {</a>
+<a class="sourceLine" id="cb201-5" title="5">  <span class="cf">for</span> (i <span class="cf">in</span> <span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="dt">along=</span>to)) {</a>
+<a class="sourceLine" id="cb201-6" title="6">    pt1 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/spTransform-methods.html">spTransform</a></span>(from[[j]], <span class="kw"><a href="../reference/CRS-class.html">CRS</a></span>(<span class="dt">SRS_string =</span> <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"EPSG:"</span>, to[i])))</a>
+<a class="sourceLine" id="cb201-7" title="7">    out_EPSG[i, j] &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/Logic.html">isTRUE</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/all.equal.html">all.equal</a></span>(<span class="kw"><a href="https://rdrr.io/pkg/sp/man/coordinates.html">coordinates</a></span>(from[[i]]),</a>
+<a class="sourceLine" id="cb201-8" title="8">      <span class="kw"><a href="https://rdrr.io/pkg/sp/man/coordinates.html">coordinates</a></span>(pt1)))</a>
+<a class="sourceLine" id="cb201-9" title="9">  }</a>
+<a class="sourceLine" id="cb201-10" title="10">}</a>
+<a class="sourceLine" id="cb201-11" title="11">out_EPSG</a></code></pre></div>
+<pre><code>##       pt0_lonlat pt0_psmerc pt0_wgs32n pt0_laea89
+## 4326        TRUE       TRUE       TRUE       TRUE
+## 3857        TRUE       TRUE       TRUE       TRUE
+## 32632       TRUE       TRUE       TRUE       TRUE
+## 3035        TRUE       TRUE       TRUE       TRUE</code></pre>
+<p>If we instantiate the target CRS simply using a PROJ string with <code>+init=</code> rather than using the <code><a href="../reference/CRS-class.html">CRS()</a></code> <code>SRS_string=</code> argument, it appears that visualization order is chosen anyway, whatever the status of <code>enforce_xy</code>:</p>
+<div class="sourceCode" id="cb203"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb203-1" title="1"><span class="kw"><a href="../reference/spTransform-methods.html">get_enforce_xy</a></span>()</a></code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<div class="sourceCode" id="cb205"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb205-1" title="1"><span class="kw"><a href="../reference/spTransform-methods.html">set_enforce_xy</a></span>(<span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb205-2" title="2"><span class="kw"><a href="../reference/spTransform-methods.html">get_enforce_xy</a></span>()</a></code></pre></div>
+<pre><code>## [1] FALSE</code></pre>
+<div class="sourceCode" id="cb207"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb207-1" title="1">out_init_non_viz &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/logical.html">as.logical</a></span>(<span class="ot">NA</span>), <span class="dt">nrow=</span><span class="dv">4</span>, <span class="dt">ncol=</span><span class="dv">4</span>)</a>
+<a class="sourceLine" id="cb207-2" title="2"><span class="kw"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span>(out_init_non_viz) &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(from)</a>
+<a class="sourceLine" id="cb207-3" title="3"><span class="kw"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(out_init_non_viz) &lt;-<span class="st"> </span>to</a>
+<a class="sourceLine" id="cb207-4" title="4"><span class="cf">for</span> (j <span class="cf">in</span> <span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="dt">along=</span>from)) {</a>
+<a class="sourceLine" id="cb207-5" title="5">  <span class="cf">for</span> (i <span class="cf">in</span> <span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="dt">along=</span>to)) {</a>
+<a class="sourceLine" id="cb207-6" title="6">    pt1 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/spTransform-methods.html">spTransform</a></span>(from[[j]], <span class="kw"><a href="../reference/CRS-class.html">CRS</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"+init=epsg:"</span>, to[i])))</a>
+<a class="sourceLine" id="cb207-7" title="7">    out_init_non_viz[i, j] &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/Logic.html">isTRUE</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/all.equal.html">all.equal</a></span>(<span class="kw"><a href="https://rdrr.io/pkg/sp/man/coordinates.html">coordinates</a></span>(from[[i]]),</a>
+<a class="sourceLine" id="cb207-8" title="8">      <span class="kw"><a href="https://rdrr.io/pkg/sp/man/coordinates.html">coordinates</a></span>(pt1)))</a>
+<a class="sourceLine" id="cb207-9" title="9">  }</a>
+<a class="sourceLine" id="cb207-10" title="10">}</a>
+<a class="sourceLine" id="cb207-11" title="11">out_init_non_viz</a></code></pre></div>
+<pre><code>##       pt0_lonlat pt0_psmerc pt0_wgs32n pt0_laea89
+## 4326        TRUE       TRUE       TRUE       TRUE
+## 3857        TRUE       TRUE       TRUE       TRUE
+## 32632       TRUE       TRUE       TRUE       TRUE
+## 3035        TRUE       TRUE       TRUE       TRUE</code></pre>
+<div class="sourceCode" id="cb209"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb209-1" title="1"><span class="kw"><a href="../reference/spTransform-methods.html">set_enforce_xy</a></span>(<span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb209-2" title="2"><span class="kw"><a href="../reference/spTransform-methods.html">get_enforce_xy</a></span>()</a></code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<div class="sourceCode" id="cb211"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb211-1" title="1">out_init &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/logical.html">as.logical</a></span>(<span class="ot">NA</span>), <span class="dt">nrow=</span><span class="dv">4</span>, <span class="dt">ncol=</span><span class="dv">4</span>)</a>
+<a class="sourceLine" id="cb211-2" title="2"><span class="kw"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span>(out_init) &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(from)</a>
+<a class="sourceLine" id="cb211-3" title="3"><span class="kw"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(out_init) &lt;-<span class="st"> </span>to</a>
+<a class="sourceLine" id="cb211-4" title="4"><span class="cf">for</span> (j <span class="cf">in</span> <span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="dt">along=</span>from)) {</a>
+<a class="sourceLine" id="cb211-5" title="5">  <span class="cf">for</span> (i <span class="cf">in</span> <span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="dt">along=</span>to)) {</a>
+<a class="sourceLine" id="cb211-6" title="6">    pt1 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/spTransform-methods.html">spTransform</a></span>(from[[j]], <span class="kw"><a href="../reference/CRS-class.html">CRS</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"+init=epsg:"</span>, to[i])))</a>
+<a class="sourceLine" id="cb211-7" title="7">    out_init[i, j] &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/Logic.html">isTRUE</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/all.equal.html">all.equal</a></span>(<span class="kw"><a href="https://rdrr.io/pkg/sp/man/coordinates.html">coordinates</a></span>(from[[i]]),</a>
+<a class="sourceLine" id="cb211-8" title="8">      <span class="kw"><a href="https://rdrr.io/pkg/sp/man/coordinates.html">coordinates</a></span>(pt1)))</a>
+<a class="sourceLine" id="cb211-9" title="9">  }</a>
+<a class="sourceLine" id="cb211-10" title="10">}</a>
+<a class="sourceLine" id="cb211-11" title="11">out_init</a></code></pre></div>
+<pre><code>##       pt0_lonlat pt0_psmerc pt0_wgs32n pt0_laea89
+## 4326        TRUE       TRUE       TRUE       TRUE
+## 3857        TRUE       TRUE       TRUE       TRUE
+## 32632       TRUE       TRUE       TRUE       TRUE
+## 3035        TRUE       TRUE       TRUE       TRUE</code></pre>
+<p>Finally, by listing candidate coordinate operations first, and choosing the best one, use can be made of the <code><a href="../reference/list_coordOps.html">list_coordOps()</a></code> <code>visualization_order=</code> argument, with default value <code>TRUE</code>; here it is given explicitly. This gives round trip success:</p>
+<div class="sourceCode" id="cb213"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb213-1" title="1">out_EPSG &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/logical.html">as.logical</a></span>(<span class="ot">NA</span>), <span class="dt">nrow=</span><span class="dv">4</span>, <span class="dt">ncol=</span><span class="dv">4</span>)</a>
+<a class="sourceLine" id="cb213-2" title="2"><span class="kw"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span>(out_EPSG) &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(from)</a>
+<a class="sourceLine" id="cb213-3" title="3"><span class="kw"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(out_EPSG) &lt;-<span class="st"> </span>to</a>
+<a class="sourceLine" id="cb213-4" title="4"><span class="cf">for</span> (j <span class="cf">in</span> <span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="dt">along=</span>from)) {</a>
+<a class="sourceLine" id="cb213-5" title="5">  <span class="cf">for</span> (i <span class="cf">in</span> <span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="dt">along=</span>to)) {</a>
+<a class="sourceLine" id="cb213-6" title="6">    coo1 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/list_coordOps.html">list_coordOps</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/comment.html">comment</a></span>(<span class="kw">slot</span>(from[[j]], <span class="st">"proj4string"</span>)),</a>
+<a class="sourceLine" id="cb213-7" title="7">                          <span class="kw"><a href="https://rdrr.io/r/base/comment.html">comment</a></span>(<span class="kw"><a href="../reference/CRS-class.html">CRS</a></span>(<span class="dt">SRS_string =</span> <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"EPSG:"</span>, to[i]))),</a>
+<a class="sourceLine" id="cb213-8" title="8">                          <span class="dt">visualization_order=</span><span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb213-9" title="9">    pt1 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/spTransform-methods.html">spTransform</a></span>(from[[j]], <span class="kw"><a href="../reference/CRS-class.html">CRS</a></span>(<span class="dt">SRS_string =</span> <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"EPSG:"</span>, to[i])),</a>
+<a class="sourceLine" id="cb213-10" title="10">      <span class="dt">coordOp=</span><span class="kw"><a href="../reference/list_coordOps.html">best_instantiable_coordOp</a></span>(coo1))</a>
+<a class="sourceLine" id="cb213-11" title="11">    out_EPSG[i, j] &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/Logic.html">isTRUE</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/all.equal.html">all.equal</a></span>(<span class="kw"><a href="https://rdrr.io/pkg/sp/man/coordinates.html">coordinates</a></span>(from[[i]]),</a>
+<a class="sourceLine" id="cb213-12" title="12">      <span class="kw"><a href="https://rdrr.io/pkg/sp/man/coordinates.html">coordinates</a></span>(pt1)))</a>
+<a class="sourceLine" id="cb213-13" title="13">  }</a>
+<a class="sourceLine" id="cb213-14" title="14">}</a>
+<a class="sourceLine" id="cb213-15" title="15">out_EPSG</a></code></pre></div>
+<pre><code>##       pt0_lonlat pt0_psmerc pt0_wgs32n pt0_laea89
+## 4326        TRUE       TRUE       TRUE       TRUE
+## 3857        TRUE       TRUE       TRUE       TRUE
+## 32632       TRUE       TRUE       TRUE       TRUE
+## 3035        TRUE       TRUE       TRUE       TRUE</code></pre>
+<p>The setting of the <code><a href="../reference/list_coordOps.html">list_coordOps()</a></code> <code>visualization_order=</code> argument overrides the global option value (as would setting <code>enforce_xy=</code> in calls to <code><a href="../reference/spTransform-methods.html">spTransform()</a></code>):</p>
+<div class="sourceCode" id="cb215"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb215-1" title="1">out_EPSG_non_viz1 &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/logical.html">as.logical</a></span>(<span class="ot">NA</span>), <span class="dt">nrow=</span><span class="dv">4</span>, <span class="dt">ncol=</span><span class="dv">4</span>)</a>
+<a class="sourceLine" id="cb215-2" title="2"><span class="kw"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span>(out_EPSG_non_viz1) &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(from)</a>
+<a class="sourceLine" id="cb215-3" title="3"><span class="kw"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(out_EPSG_non_viz1) &lt;-<span class="st"> </span>to</a>
+<a class="sourceLine" id="cb215-4" title="4"><span class="cf">for</span> (j <span class="cf">in</span> <span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="dt">along=</span>from)) {</a>
+<a class="sourceLine" id="cb215-5" title="5">  <span class="cf">for</span> (i <span class="cf">in</span> <span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="dt">along=</span>to)) {</a>
+<a class="sourceLine" id="cb215-6" title="6">    coo1 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/list_coordOps.html">list_coordOps</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/comment.html">comment</a></span>(<span class="kw">slot</span>(from[[j]], <span class="st">"proj4string"</span>)),</a>
+<a class="sourceLine" id="cb215-7" title="7">                          <span class="kw"><a href="https://rdrr.io/r/base/comment.html">comment</a></span>(<span class="kw"><a href="../reference/CRS-class.html">CRS</a></span>(<span class="dt">SRS_string =</span> <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"EPSG:"</span>, to[i]))),</a>
+<a class="sourceLine" id="cb215-8" title="8">                          <span class="dt">visualization_order=</span><span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb215-9" title="9">    pt1 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/spTransform-methods.html">spTransform</a></span>(from[[j]], <span class="kw"><a href="../reference/CRS-class.html">CRS</a></span>(<span class="dt">SRS_string =</span> <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"EPSG:"</span>, to[i])),</a>
+<a class="sourceLine" id="cb215-10" title="10">      <span class="dt">coordOp=</span><span class="kw"><a href="../reference/list_coordOps.html">best_instantiable_coordOp</a></span>(coo1))</a>
+<a class="sourceLine" id="cb215-11" title="11">    out_EPSG_non_viz1[i, j] &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/Logic.html">isTRUE</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/all.equal.html">all.equal</a></span>(<span class="kw"><a href="https://rdrr.io/pkg/sp/man/coordinates.html">coordinates</a></span>(from[[i]]),</a>
+<a class="sourceLine" id="cb215-12" title="12">      <span class="kw"><a href="https://rdrr.io/pkg/sp/man/coordinates.html">coordinates</a></span>(pt1)))</a>
+<a class="sourceLine" id="cb215-13" title="13">  }</a>
+<a class="sourceLine" id="cb215-14" title="14">}</a>
+<a class="sourceLine" id="cb215-15" title="15">out_EPSG_non_viz1</a></code></pre></div>
+<pre><code>##       pt0_lonlat pt0_psmerc pt0_wgs32n pt0_laea89
+## 4326       FALSE      FALSE      FALSE      FALSE
+## 3857        TRUE       TRUE       TRUE       TRUE
+## 32632       TRUE       TRUE       TRUE       TRUE
+## 3035       FALSE      FALSE      FALSE      FALSE</code></pre>
+<div class="sourceCode" id="cb217"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb217-1" title="1">out_EPSG_non_viz2 &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/logical.html">as.logical</a></span>(<span class="ot">NA</span>), <span class="dt">nrow=</span><span class="dv">4</span>, <span class="dt">ncol=</span><span class="dv">4</span>)</a>
+<a class="sourceLine" id="cb217-2" title="2"><span class="kw"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span>(out_EPSG_non_viz2) &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(from)</a>
+<a class="sourceLine" id="cb217-3" title="3"><span class="kw"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(out_EPSG_non_viz2) &lt;-<span class="st"> </span>to</a>
+<a class="sourceLine" id="cb217-4" title="4"><span class="cf">for</span> (j <span class="cf">in</span> <span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="dt">along=</span>from)) {</a>
+<a class="sourceLine" id="cb217-5" title="5">  <span class="cf">for</span> (i <span class="cf">in</span> <span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="dt">along=</span>to)) {</a>
+<a class="sourceLine" id="cb217-6" title="6">    pt1 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/spTransform-methods.html">spTransform</a></span>(from[[j]], <span class="kw"><a href="../reference/CRS-class.html">CRS</a></span>(<span class="dt">SRS_string =</span> <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"EPSG:"</span>, to[i])),</a>
+<a class="sourceLine" id="cb217-7" title="7">      <span class="dt">enforce_xy=</span><span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb217-8" title="8">    out_EPSG_non_viz2[i, j] &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/Logic.html">isTRUE</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/all.equal.html">all.equal</a></span>(<span class="kw"><a href="https://rdrr.io/pkg/sp/man/coordinates.html">coordinates</a></span>(from[[i]]),</a>
+<a class="sourceLine" id="cb217-9" title="9">      <span class="kw"><a href="https://rdrr.io/pkg/sp/man/coordinates.html">coordinates</a></span>(pt1)))</a>
+<a class="sourceLine" id="cb217-10" title="10">  }</a>
+<a class="sourceLine" id="cb217-11" title="11">}</a>
+<a class="sourceLine" id="cb217-12" title="12">out_EPSG_non_viz2</a></code></pre></div>
+<pre><code>##       pt0_lonlat pt0_psmerc pt0_wgs32n pt0_laea89
+## 4326       FALSE      FALSE      FALSE      FALSE
+## 3857        TRUE       TRUE       TRUE       TRUE
+## 32632       TRUE       TRUE       TRUE       TRUE
+## 3035       FALSE      FALSE      FALSE      FALSE</code></pre>
 <div id="refs" class="references">
 <div id="ref-evers+knudsen17">
 <p>Evers, Kristian, and Thomas Knudsen. 2017. <em>Transformation Pipelines for Proj.4</em>. <a href="https://www.fig.net/resources/proceedings/fig_proceedings/fig2017/papers/iss6b/ISS6B_evers_knudsen_9156.pdf">https://www.fig.net/resources/proceedings/fig_proceedings/fig2017/papers/iss6b/ISS6B_evers_knudsen_9156.pdf</a>.</p>
@@ -1205,6 +1398,7 @@
       <li><a href="#impacts-of-gdal-barnraising-on-sp-workflows">Impacts of GDAL barnraising on <strong>sp</strong> workflows</a></li>
       <li><a href="#coordinate-operations">Coordinate operations</a></li>
       <li><a href="#transformations">Transformations</a></li>
+      <li><a href="#axis-swapping">Axis swapping</a></li>
       </ul>
 </li>
       </ul>

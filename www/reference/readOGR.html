@@ -280,7 +280,8 @@ lines or <code>layer="track_points"</code> points.</p>
     <div class='dont-index'><p><code><a href='https://rdrr.io/pkg/sp/man/SpatialPointsDataFrame-class.html'>SpatialPointsDataFrame-class</a></code>, <code><a href='https://rdrr.io/pkg/sp/man/SpatialLinesDataFrame-class.html'>SpatialLinesDataFrame-class</a></code>, <code><a href='https://rdrr.io/pkg/sp/man/SpatialPolygonsDataFrame-class.html'>SpatialPolygonsDataFrame-class</a></code>, <code><a href='https://rdrr.io/pkg/maptools/man/readShapePoly.html'>readShapePoly</a></code>, <code><a href='https://rdrr.io/r/base/iconv.html'>iconv</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>ogrDrivers</span>()</div><div class='output co'>#&gt;              name                                                     long_name
+    <pre class="examples"><div class='input'><span class='fu'><a href='showWKT.html'>set_thin_PROJ6_warnings</a></span>(<span class='fl'>TRUE</span>)
+<span class='fu'>ogrDrivers</span>()</div><div class='output co'>#&gt;              name                                                     long_name
 #&gt; 1      AeronavFAA                                                   Aeronav FAA
 #&gt; 2      AmigoCloud                                                    AmigoCloud
 #&gt; 3          ARCGEN                                             Arc/Info Generate
@@ -300,12 +301,12 @@ lines or <code>layer="track_points"</code> points.</p>
 #&gt; 17  ElasticSearch                                                Elastic Search
 #&gt; 18 ESRI Shapefile                                                ESRI Shapefile
 #&gt; 19       ESRIJSON                                                      ESRIJSON
-#&gt; 20     Geoconcept                                                    Geoconcept
-#&gt; 21        GeoJSON                                                       GeoJSON
-#&gt; 22     GeoJSONSeq                                              GeoJSON Sequence
-#&gt; 23       Geomedia                                                 Geomedia .mdb
-#&gt; 24         GeoRSS                                                        GeoRSS
-#&gt; 25            GFT                                          Google Fusion Tables
+#&gt; 20     FlatGeobuf                                                    FlatGeobuf
+#&gt; 21     Geoconcept                                                    Geoconcept
+#&gt; 22        GeoJSON                                                       GeoJSON
+#&gt; 23     GeoJSONSeq                                              GeoJSON Sequence
+#&gt; 24       Geomedia                                                 Geomedia .mdb
+#&gt; 25         GeoRSS                                                        GeoRSS
 #&gt; 26            GML                               Geography Markup Language (GML)
 #&gt; 27          GMLAS Geography Markup Language (GML) driven by application schemas
 #&gt; 28           GPKG                                                    GeoPackage
@@ -328,43 +329,44 @@ lines or <code>layer="track_points"</code> points.</p>
 #&gt; 45            NAS                                                   NAS - ALKIS
 #&gt; 46         netCDF                                    Network Common Data Format
 #&gt; 47            NGW                                                   NextGIS Web
-#&gt; 48           ODBC                                                          ODBC
-#&gt; 49            ODS          Open Document/ LibreOffice / OpenOffice Spreadsheet 
-#&gt; 50        OGR_GMT                                      GMT ASCII Vectors (.gmt)
-#&gt; 51        OGR_PDS                                  Planetary Data Systems TABLE
-#&gt; 52       OGR_SDTS                                                          SDTS
-#&gt; 53        OGR_VRT                                      VRT - Virtual Datasource
-#&gt; 54        OpenAir                                                       OpenAir
-#&gt; 55    OpenFileGDB                                                  ESRI FileGDB
-#&gt; 56            OSM                                     OpenStreetMap XML and PBF
-#&gt; 57         PCIDSK                                          PCIDSK Database File
-#&gt; 58            PDF                                                Geospatial PDF
-#&gt; 59           PDS4                                  NASA Planetary Data System 4
-#&gt; 60         PGDUMP                                           PostgreSQL SQL dump
-#&gt; 61           PGeo                                     ESRI Personal GeoDatabase
-#&gt; 62       PLSCENES                                        Planet Labs Scenes API
-#&gt; 63     PostgreSQL                                            PostgreSQL/PostGIS
-#&gt; 64            REC                                                 EPIInfo .REC 
-#&gt; 65            S57                                                IHO S-57 (ENC)
-#&gt; 66       SEGUKOOA                                          SEG-P1 / UKOOA P1/90
-#&gt; 67           SEGY                                                         SEG-Y
-#&gt; 68        Selafin                                                       Selafin
-#&gt; 69         SQLite                                           SQLite / Spatialite
-#&gt; 70            SUA               Tim Newport-Peace's Special Use Airspace Format
-#&gt; 71            SVG                                      Scalable Vector Graphics
-#&gt; 72            SXF                                   Storage and eXchange Format
-#&gt; 73          TIGER                                        U.S. Census TIGER/Line
-#&gt; 74       TopoJSON                                                      TopoJSON
-#&gt; 75        UK .NTF                                                       UK .NTF
-#&gt; 76            VDV                           VDV-451/VDV-452/INTREST Data Format
-#&gt; 77            VFK                          Czech Cadastral Exchange Data Format
-#&gt; 78           Walk                                                          Walk
-#&gt; 79           WAsP                                              WAsP .map format
-#&gt; 80            WFS                                 OGC WFS (Web Feature Service)
-#&gt; 81           WFS3                        OGC WFS 3 client (Web Feature Service)
-#&gt; 82            XLS                                               MS Excel format
-#&gt; 83           XLSX                                MS Office Open XML spreadsheet
-#&gt; 84         XPlane                          X-Plane/Flightgear aeronautical data
+#&gt; 48          OAPIF                                            OGC API - Features
+#&gt; 49           ODBC                                                          ODBC
+#&gt; 50            ODS          Open Document/ LibreOffice / OpenOffice Spreadsheet 
+#&gt; 51        OGR_GMT                                      GMT ASCII Vectors (.gmt)
+#&gt; 52        OGR_PDS                                  Planetary Data Systems TABLE
+#&gt; 53       OGR_SDTS                                                          SDTS
+#&gt; 54        OGR_VRT                                      VRT - Virtual Datasource
+#&gt; 55        OpenAir                                                       OpenAir
+#&gt; 56    OpenFileGDB                                                  ESRI FileGDB
+#&gt; 57            OSM                                     OpenStreetMap XML and PBF
+#&gt; 58         PCIDSK                                          PCIDSK Database File
+#&gt; 59            PDF                                                Geospatial PDF
+#&gt; 60           PDS4                                  NASA Planetary Data System 4
+#&gt; 61         PGDUMP                                           PostgreSQL SQL dump
+#&gt; 62           PGeo                                     ESRI Personal GeoDatabase
+#&gt; 63       PLSCENES                                        Planet Labs Scenes API
+#&gt; 64     PostgreSQL                                            PostgreSQL/PostGIS
+#&gt; 65            REC                                                 EPIInfo .REC 
+#&gt; 66            S57                                                IHO S-57 (ENC)
+#&gt; 67       SEGUKOOA                                          SEG-P1 / UKOOA P1/90
+#&gt; 68           SEGY                                                         SEG-Y
+#&gt; 69        Selafin                                                       Selafin
+#&gt; 70         SQLite                                           SQLite / Spatialite
+#&gt; 71            SUA               Tim Newport-Peace's Special Use Airspace Format
+#&gt; 72            SVG                                      Scalable Vector Graphics
+#&gt; 73            SXF                                   Storage and eXchange Format
+#&gt; 74          TIGER                                        U.S. Census TIGER/Line
+#&gt; 75       TopoJSON                                                      TopoJSON
+#&gt; 76        UK .NTF                                                       UK .NTF
+#&gt; 77            VDV                           VDV-451/VDV-452/INTREST Data Format
+#&gt; 78            VFK                          Czech Cadastral Exchange Data Format
+#&gt; 79          VICAR                                               MIPL VICAR file
+#&gt; 80           Walk                                                          Walk
+#&gt; 81           WAsP                                              WAsP .map format
+#&gt; 82            WFS                                 OGC WFS (Web Feature Service)
+#&gt; 83            XLS                                               MS Excel format
+#&gt; 84           XLSX                                MS Office Open XML spreadsheet
+#&gt; 85         XPlane                          X-Plane/Flightgear aeronautical data
 #&gt;    write  copy isVector
 #&gt; 1  FALSE FALSE     TRUE
 #&gt; 2   TRUE FALSE     TRUE
@@ -388,8 +390,8 @@ lines or <code>layer="track_points"</code> points.</p>
 #&gt; 20  TRUE FALSE     TRUE
 #&gt; 21  TRUE FALSE     TRUE
 #&gt; 22  TRUE FALSE     TRUE
-#&gt; 23 FALSE FALSE     TRUE
-#&gt; 24  TRUE FALSE     TRUE
+#&gt; 23  TRUE FALSE     TRUE
+#&gt; 24 FALSE FALSE     TRUE
 #&gt; 25  TRUE FALSE     TRUE
 #&gt; 26  TRUE FALSE     TRUE
 #&gt; 27 FALSE  TRUE     TRUE
@@ -413,50 +415,51 @@ lines or <code>layer="track_points"</code> points.</p>
 #&gt; 45 FALSE FALSE     TRUE
 #&gt; 46  TRUE  TRUE     TRUE
 #&gt; 47  TRUE  TRUE     TRUE
-#&gt; 48  TRUE FALSE     TRUE
+#&gt; 48 FALSE FALSE     TRUE
 #&gt; 49  TRUE FALSE     TRUE
 #&gt; 50  TRUE FALSE     TRUE
-#&gt; 51 FALSE FALSE     TRUE
+#&gt; 51  TRUE FALSE     TRUE
 #&gt; 52 FALSE FALSE     TRUE
 #&gt; 53 FALSE FALSE     TRUE
 #&gt; 54 FALSE FALSE     TRUE
 #&gt; 55 FALSE FALSE     TRUE
 #&gt; 56 FALSE FALSE     TRUE
-#&gt; 57  TRUE FALSE     TRUE
-#&gt; 58  TRUE  TRUE     TRUE
+#&gt; 57 FALSE FALSE     TRUE
+#&gt; 58  TRUE FALSE     TRUE
 #&gt; 59  TRUE  TRUE     TRUE
-#&gt; 60  TRUE FALSE     TRUE
-#&gt; 61 FALSE FALSE     TRUE
+#&gt; 60  TRUE  TRUE     TRUE
+#&gt; 61  TRUE FALSE     TRUE
 #&gt; 62 FALSE FALSE     TRUE
-#&gt; 63  TRUE FALSE     TRUE
-#&gt; 64 FALSE FALSE     TRUE
-#&gt; 65  TRUE FALSE     TRUE
-#&gt; 66 FALSE FALSE     TRUE
+#&gt; 63 FALSE FALSE     TRUE
+#&gt; 64  TRUE FALSE     TRUE
+#&gt; 65 FALSE FALSE     TRUE
+#&gt; 66  TRUE FALSE     TRUE
 #&gt; 67 FALSE FALSE     TRUE
-#&gt; 68  TRUE FALSE     TRUE
+#&gt; 68 FALSE FALSE     TRUE
 #&gt; 69  TRUE FALSE     TRUE
-#&gt; 70 FALSE FALSE     TRUE
+#&gt; 70  TRUE FALSE     TRUE
 #&gt; 71 FALSE FALSE     TRUE
 #&gt; 72 FALSE FALSE     TRUE
-#&gt; 73  TRUE FALSE     TRUE
-#&gt; 74 FALSE FALSE     TRUE
+#&gt; 73 FALSE FALSE     TRUE
+#&gt; 74  TRUE FALSE     TRUE
 #&gt; 75 FALSE FALSE     TRUE
-#&gt; 76  TRUE FALSE     TRUE
-#&gt; 77 FALSE FALSE     TRUE
+#&gt; 76 FALSE FALSE     TRUE
+#&gt; 77  TRUE FALSE     TRUE
 #&gt; 78 FALSE FALSE     TRUE
-#&gt; 79  TRUE FALSE     TRUE
+#&gt; 79  TRUE  TRUE     TRUE
 #&gt; 80 FALSE FALSE     TRUE
-#&gt; 81 FALSE FALSE     TRUE
+#&gt; 81  TRUE FALSE     TRUE
 #&gt; 82 FALSE FALSE     TRUE
-#&gt; 83  TRUE FALSE     TRUE
-#&gt; 84 FALSE FALSE     TRUE</div><div class='input'><span class='no'>dsn</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"vectors"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"rgdal"</span>)[<span class='fl'>1</span>]
+#&gt; 83 FALSE FALSE     TRUE
+#&gt; 84  TRUE FALSE     TRUE
+#&gt; 85 FALSE FALSE     TRUE</div><div class='input'><span class='no'>dsn</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"vectors"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"rgdal"</span>)[<span class='fl'>1</span>]
 <span class='fu'>ogrListLayers</span>(<span class='no'>dsn</span>)</div><div class='output co'>#&gt; [1] "trin_inca_pl03"           "scot_BNG"                
 #&gt; [3] "kiritimati_primary_roads" "cities"                  
 #&gt; attr(,"driver")
 #&gt; [1] "ESRI Shapefile"
 #&gt; attr(,"nlayers")
 #&gt; [1] 4</div><div class='input'><span class='fu'>ogrInfo</span>(<span class='no'>dsn</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: First layer trin_inca_pl03 read; multiple layers present in</span>
-#&gt; <span class='warning'>/tmp/RtmpIl4nA7/temp_libpath572574d7eceb/rgdal/vectors, check layers with ogrListLayers()</span></div><div class='output co'>#&gt; Source: "/tmp/RtmpIl4nA7/temp_libpath572574d7eceb/rgdal/vectors", layer: "trin_inca_pl03"
+#&gt; <span class='warning'>/tmp/RtmpW2KVEI/temp_libpath41a795fbb33f8/rgdal/vectors, check layers with ogrListLayers()</span></div><div class='output co'>#&gt; Source: "/tmp/RtmpW2KVEI/temp_libpath41a795fbb33f8/rgdal/vectors", layer: "trin_inca_pl03"
 #&gt; Driver: ESRI Shapefile; number of rows: 3 
 #&gt; Feature type: wkbPolygon with 2 dimensions
 #&gt; Extent: (-87.09465 5.499074) - (-79.01339 10.11906)
@@ -475,7 +478,7 @@ lines or <code>layer="track_points"</code> points.</p>
 #&gt; 9     TAX_COM    4    250   String
 #&gt; 10   DIST_COM    4    250   String
 #&gt; 11 REFERENCES    4    250   String
-#&gt; 12  REVIEWERS    4    250   String</div><div class='input'><span class='fu'>ogrInfo</span>(<span class='kw'>dsn</span><span class='kw'>=</span><span class='no'>dsn</span>, <span class='kw'>layer</span><span class='kw'>=</span><span class='st'>"cities"</span>)</div><div class='output co'>#&gt; Source: "/tmp/RtmpIl4nA7/temp_libpath572574d7eceb/rgdal/vectors", layer: "cities"
+#&gt; 12  REVIEWERS    4    250   String</div><div class='input'><span class='fu'>ogrInfo</span>(<span class='kw'>dsn</span><span class='kw'>=</span><span class='no'>dsn</span>, <span class='kw'>layer</span><span class='kw'>=</span><span class='st'>"cities"</span>)</div><div class='output co'>#&gt; Source: "/tmp/RtmpW2KVEI/temp_libpath41a795fbb33f8/rgdal/vectors", layer: "cities"
 #&gt; Driver: ESRI Shapefile; number of rows: 606 
 #&gt; Feature type: wkbPoint with 2 dimensions
 #&gt; Extent: (-165.27 -53.15) - (177.1302 78.2)
@@ -488,7 +491,7 @@ lines or <code>layer="track_points"</code> points.</p>
 #&gt; 3 POPULATION   12     11 Integer64
 #&gt; 4    CAPITAL    4      1    String</div><div class='input'><span class='no'>owd</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/getwd.html'>getwd</a></span>()
 <span class='fu'><a href='https://rdrr.io/r/base/getwd.html'>setwd</a></span>(<span class='no'>dsn</span>)
-<span class='fu'>ogrInfo</span>(<span class='kw'>dsn</span><span class='kw'>=</span><span class='st'>"cities.shp"</span>)</div><div class='output co'>#&gt; Source: "/tmp/RtmpIl4nA7/temp_libpath572574d7eceb/rgdal/vectors/cities.shp", layer: "cities"
+<span class='fu'>ogrInfo</span>(<span class='kw'>dsn</span><span class='kw'>=</span><span class='st'>"cities.shp"</span>)</div><div class='output co'>#&gt; Source: "/tmp/RtmpW2KVEI/temp_libpath41a795fbb33f8/rgdal/vectors/cities.shp", layer: "cities"
 #&gt; Driver: ESRI Shapefile; number of rows: 606 
 #&gt; Feature type: wkbPoint with 2 dimensions
 #&gt; Extent: (-165.27 -53.15) - (177.1302 78.2)
@@ -499,7 +502,7 @@ lines or <code>layer="track_points"</code> points.</p>
 #&gt; 1       NAME    4     40    String
 #&gt; 2    COUNTRY    4     12    String
 #&gt; 3 POPULATION   12     11 Integer64
-#&gt; 4    CAPITAL    4      1    String</div><div class='input'><span class='fu'>ogrInfo</span>(<span class='kw'>dsn</span><span class='kw'>=</span><span class='st'>"cities.shp"</span>, <span class='kw'>layer</span><span class='kw'>=</span><span class='st'>"cities"</span>)</div><div class='output co'>#&gt; Source: "/tmp/RtmpIl4nA7/temp_libpath572574d7eceb/rgdal/vectors/cities.shp", layer: "cities"
+#&gt; 4    CAPITAL    4      1    String</div><div class='input'><span class='fu'>ogrInfo</span>(<span class='kw'>dsn</span><span class='kw'>=</span><span class='st'>"cities.shp"</span>, <span class='kw'>layer</span><span class='kw'>=</span><span class='st'>"cities"</span>)</div><div class='output co'>#&gt; Source: "/tmp/RtmpW2KVEI/temp_libpath41a795fbb33f8/rgdal/vectors/cities.shp", layer: "cities"
 #&gt; Driver: ESRI Shapefile; number of rows: 606 
 #&gt; Feature type: wkbPoint with 2 dimensions
 #&gt; Extent: (-165.27 -53.15) - (177.1302 78.2)
@@ -514,7 +517,7 @@ lines or <code>layer="track_points"</code> points.</p>
 <span class='no'>ow</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>options</a></span>(<span class='st'>"warn"</span>)$<span class='no'>warn</span>
 <span class='fu'><a href='https://rdrr.io/r/base/options.html'>options</a></span>(<span class='st'>"warn"</span><span class='kw'>=</span><span class='fl'>1</span>)
 <span class='no'>cities</span> <span class='kw'>&lt;-</span> <span class='fu'>readOGR</span>(<span class='kw'>dsn</span><span class='kw'>=</span><span class='no'>dsn</span>, <span class='kw'>layer</span><span class='kw'>=</span><span class='st'>"cities"</span>)</div><div class='output co'>#&gt; OGR data source with driver: ESRI Shapefile 
-#&gt; Source: "/tmp/RtmpIl4nA7/temp_libpath572574d7eceb/rgdal/vectors", layer: "cities"
+#&gt; Source: "/tmp/RtmpW2KVEI/temp_libpath41a795fbb33f8/rgdal/vectors", layer: "cities"
 #&gt; with 606 features
 #&gt; It has 4 fields
 #&gt; Integer64 fields read as strings:  POPULATION </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='fu'>slot</span>(<span class='no'>cities</span>, <span class='st'>"data"</span>))</div><div class='output co'>#&gt; 'data.frame':	606 obs. of  4 variables:
@@ -528,7 +531,7 @@ lines or <code>layer="track_points"</code> points.</p>
 #&gt;  $ COUNTRY   : Factor w/ 165 levels "Afghanistan",..: 124 124 124 124 124 124 124 153 124 124 ...
 #&gt;  $ POPULATION: int  468000 416000 5825000 152000 1160000 1620000 2025000 1800000 1140000 1325000 ...
 #&gt;  $ CAPITAL   : Factor w/ 2 levels "N","Y": 1 1 1 1 1 1 1 1 1 1 ...</div><div class='input'><span class='no'>cities</span> <span class='kw'>&lt;-</span> <span class='fu'>readOGR</span>(<span class='kw'>dsn</span><span class='kw'>=</span><span class='no'>dsn</span>, <span class='kw'>layer</span><span class='kw'>=</span><span class='st'>"cities"</span>, <span class='kw'>GDAL1_integer64_policy</span><span class='kw'>=</span><span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; OGR data source with driver: ESRI Shapefile 
-#&gt; Source: "/tmp/RtmpIl4nA7/temp_libpath572574d7eceb/rgdal/vectors", layer: "cities"
+#&gt; Source: "/tmp/RtmpW2KVEI/temp_libpath41a795fbb33f8/rgdal/vectors", layer: "cities"
 #&gt; with 606 features
 #&gt; It has 4 fields
 #&gt; Integer64 fields read as doubles:  POPULATION </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='fu'>slot</span>(<span class='no'>cities</span>, <span class='st'>"data"</span>))</div><div class='output co'>#&gt; 'data.frame':	606 obs. of  4 variables:
@@ -554,7 +557,7 @@ lines or <code>layer="track_points"</code> points.</p>
 #&gt;  Abu Zaby :  1   Brazil : 19   Max.   :23620000          
 #&gt;  (Other)  :596   (Other):423                             </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/Encoding.html'>Encoding</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span>(<span class='no'>cities</span>$<span class='no'>NAME</span>)))</div><div class='output co'>#&gt; 
 #&gt; unknown 
-#&gt;     606 </div><div class='input'><span class='fu'>ogrInfo</span>(<span class='kw'>dsn</span><span class='kw'>=</span><span class='no'>dsn</span>, <span class='kw'>layer</span><span class='kw'>=</span><span class='st'>"kiritimati_primary_roads"</span>)</div><div class='output co'>#&gt; Source: "/tmp/RtmpIl4nA7/temp_libpath572574d7eceb/rgdal/vectors", layer: "kiritimati_primary_roads"
+#&gt;     606 </div><div class='input'><span class='fu'>ogrInfo</span>(<span class='kw'>dsn</span><span class='kw'>=</span><span class='no'>dsn</span>, <span class='kw'>layer</span><span class='kw'>=</span><span class='st'>"kiritimati_primary_roads"</span>)</div><div class='output co'>#&gt; Source: "/tmp/RtmpW2KVEI/temp_libpath41a795fbb33f8/rgdal/vectors", layer: "kiritimati_primary_roads"
 #&gt; Driver: ESRI Shapefile; number of rows: 35 
 #&gt; Feature type: wkbLineString with 2 dimensions
 #&gt; Extent: (667587.7 187716.6) - (704048 226051.2)
@@ -563,7 +566,7 @@ lines or <code>layer="track_points"</code> points.</p>
 #&gt; Number of fields: 1 
 #&gt;   name type length typeName
 #&gt; 1   Id    0      6  Integer</div><div class='input'><span class='fu'>OGRSpatialRef</span>(<span class='kw'>dsn</span><span class='kw'>=</span><span class='no'>dsn</span>, <span class='kw'>layer</span><span class='kw'>=</span><span class='st'>"kiritimati_primary_roads"</span>)</div><div class='output co'>#&gt; [1] "+proj=utm +zone=4 +datum=WGS84 +units=m +no_defs"</div><div class='input'><span class='no'>kiritimati_primary_roads</span> <span class='kw'>&lt;-</span> <span class='fu'>readOGR</span>(<span class='kw'>dsn</span><span class='kw'>=</span><span class='no'>dsn</span>, <span class='kw'>layer</span><span class='kw'>=</span><span class='st'>"kiritimati_primary_roads"</span>)</div><div class='output co'>#&gt; OGR data source with driver: ESRI Shapefile 
-#&gt; Source: "/tmp/RtmpIl4nA7/temp_libpath572574d7eceb/rgdal/vectors", layer: "kiritimati_primary_roads"
+#&gt; Source: "/tmp/RtmpW2KVEI/temp_libpath41a795fbb33f8/rgdal/vectors", layer: "kiritimati_primary_roads"
 #&gt; with 35 features
 #&gt; It has 1 fields</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>kiritimati_primary_roads</span>)</div><div class='output co'>#&gt; Object of class SpatialLinesDataFrame
 #&gt; Coordinates:
@@ -580,7 +583,7 @@ lines or <code>layer="track_points"</code> points.</p>
 #&gt;  Median :0  
 #&gt;  Mean   :0  
 #&gt;  3rd Qu.:0  
-#&gt;  Max.   :0  </div><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='projInfo.html'>new_proj_and_gdal</a></span>()) <span class='fu'><a href='https://rdrr.io/r/base/comment.html'>comment</a></span>(<span class='fu'>slot</span>(<span class='no'>kiritimati_primary_roads</span>, <span class='st'>"proj4string"</span>))</div><div class='output co'>#&gt; [1] "PROJCRS[\"WGS 84 / UTM zone 4N\",BASEGEOGCRS[\"WGS 84\",DATUM[\"World Geodetic System 1984\",ELLIPSOID[\"WGS 84\",6378137,298.257223563,LENGTHUNIT[\"metre\",1]]],PRIMEM[\"Greenwich\",0,ANGLEUNIT[\"degree\",0.0174532925199433]],ID[\"EPSG\",4326]],CONVERSION[\"UTM zone 4N\",METHOD[\"Transverse Mercator\",ID[\"EPSG\",9807]],PARAMETER[\"Latitude of natural origin\",0,ANGLEUNIT[\"Degree\",0.0174532925199433],ID[\"EPSG\",8801]],PARAMETER[\"Longitude of natural origin\",-159,ANGLEUNIT[\"Degree\",0.0174532925199433],ID[\"EPSG\",8802]],PARAMETER[\"Scale factor at natural origin\",0.9996,SCALEUNIT[\"unity\",1],ID[\"EPSG\",8805]],PARAMETER[\"False easting\",500000,LENGTHUNIT[\"metre\",1],ID[\"EPSG\",8806]],PARAMETER[\"False northing\",0,LENGTHUNIT[\"metre\",1],ID[\"EPSG\",8807]]],CS[Cartesian,2],AXIS[\"(E)\",east,ORDER[1],LENGTHUNIT[\"metre\",1]],AXIS[\"(N)\",north,ORDER[2],LENGTHUNIT[\"metre\",1]],ID[\"EPSG\",32604]]"</div><div class='input'><span class='fu'>ogrInfo</span>(<span class='kw'>dsn</span><span class='kw'>=</span><span class='no'>dsn</span>, <span class='kw'>layer</span><span class='kw'>=</span><span class='st'>"scot_BNG"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum OSGB_1936 in CRS definition: +proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy +units=m +no_defs</span></div><div class='output co'>#&gt; Source: "/tmp/RtmpIl4nA7/temp_libpath572574d7eceb/rgdal/vectors", layer: "scot_BNG"
+#&gt;  Max.   :0  </div><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='projInfo.html'>new_proj_and_gdal</a></span>()) <span class='fu'><a href='https://rdrr.io/r/base/comment.html'>comment</a></span>(<span class='fu'>slot</span>(<span class='no'>kiritimati_primary_roads</span>, <span class='st'>"proj4string"</span>))</div><div class='output co'>#&gt; [1] "PROJCRS[\"WGS 84 / UTM zone 4N\",BASEGEOGCRS[\"WGS 84\",DATUM[\"World Geodetic System 1984\",ELLIPSOID[\"WGS 84\",6378137,298.257223563,LENGTHUNIT[\"metre\",1]]],PRIMEM[\"Greenwich\",0,ANGLEUNIT[\"degree\",0.0174532925199433]],ID[\"EPSG\",4326]],CONVERSION[\"UTM zone 4N\",METHOD[\"Transverse Mercator\",ID[\"EPSG\",9807]],PARAMETER[\"Latitude of natural origin\",0,ANGLEUNIT[\"Degree\",0.0174532925199433],ID[\"EPSG\",8801]],PARAMETER[\"Longitude of natural origin\",-159,ANGLEUNIT[\"Degree\",0.0174532925199433],ID[\"EPSG\",8802]],PARAMETER[\"Scale factor at natural origin\",0.9996,SCALEUNIT[\"unity\",1],ID[\"EPSG\",8805]],PARAMETER[\"False easting\",500000,LENGTHUNIT[\"metre\",1],ID[\"EPSG\",8806]],PARAMETER[\"False northing\",0,LENGTHUNIT[\"metre\",1],ID[\"EPSG\",8807]]],CS[Cartesian,2],AXIS[\"(E)\",east,ORDER[1],LENGTHUNIT[\"metre\",1]],AXIS[\"(N)\",north,ORDER[2],LENGTHUNIT[\"metre\",1]],ID[\"EPSG\",32604]]"</div><div class='input'><span class='fu'>ogrInfo</span>(<span class='kw'>dsn</span><span class='kw'>=</span><span class='no'>dsn</span>, <span class='kw'>layer</span><span class='kw'>=</span><span class='st'>"scot_BNG"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum OSGB_1936 in CRS definition: +proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy +units=m +no_defs</span></div><div class='output co'>#&gt; Source: "/tmp/RtmpW2KVEI/temp_libpath41a795fbb33f8/rgdal/vectors", layer: "scot_BNG"
 #&gt; Driver: ESRI Shapefile; number of rows: 56 
 #&gt; Feature type: wkbPolygon with 2 dimensions
 #&gt; Extent: (7094.552 529495) - (468285.5 1218342)
@@ -601,9 +604,9 @@ lines or <code>layer="track_points"</code> points.</p>
 #&gt; 11 X_COOR    2     19     Real
 #&gt; 12 Y_COOR    2     19     Real
 #&gt; 13   ID_y    2     19     Real</div><div class='input'><span class='fu'>OGRSpatialRef</span>(<span class='kw'>dsn</span><span class='kw'>=</span><span class='no'>dsn</span>, <span class='kw'>layer</span><span class='kw'>=</span><span class='st'>"scot_BNG"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum OSGB_1936 in CRS definition: +proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy +units=m +no_defs</span></div><div class='output co'>#&gt; [1] "+proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy +units=m +no_defs"</div><div class='input'><span class='no'>scot_BNG</span> <span class='kw'>&lt;-</span> <span class='fu'>readOGR</span>(<span class='kw'>dsn</span><span class='kw'>=</span><span class='no'>dsn</span>, <span class='kw'>layer</span><span class='kw'>=</span><span class='st'>"scot_BNG"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum OSGB_1936 in CRS definition: +proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy +units=m +no_defs</span></div><div class='output co'>#&gt; OGR data source with driver: ESRI Shapefile 
-#&gt; Source: "/tmp/RtmpIl4nA7/temp_libpath572574d7eceb/rgdal/vectors", layer: "scot_BNG"
+#&gt; Source: "/tmp/RtmpW2KVEI/temp_libpath41a795fbb33f8/rgdal/vectors", layer: "scot_BNG"
 #&gt; with 56 features
-#&gt; It has 13 fields</div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum OSGB_1936 in CRS definition: +proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy +units=m +no_defs</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum Unknown_based_on_Airy_1830_ellipsoid in CRS definition</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>scot_BNG</span>)</div><div class='output co'>#&gt; Object of class SpatialPolygonsDataFrame
+#&gt; It has 13 fields</div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum OSGB_1936 in CRS definition: +proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy +units=m +no_defs</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>scot_BNG</span>)</div><div class='output co'>#&gt; Object of class SpatialPolygonsDataFrame
 #&gt; Coordinates:
 #&gt;          min       max
 #&gt; x   7094.552  468285.5
@@ -647,16 +650,16 @@ lines or <code>layer="track_points"</code> points.</p>
 #&gt;                 </div><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='projInfo.html'>new_proj_and_gdal</a></span>()) <span class='fu'><a href='https://rdrr.io/r/base/comment.html'>comment</a></span>(<span class='fu'>slot</span>(<span class='no'>scot_BNG</span>, <span class='st'>"proj4string"</span>))</div><div class='output co'>#&gt; [1] "PROJCRS[\"OSGB 1936 / British National Grid\",BASEGEOGCRS[\"OSGB 1936\",DATUM[\"OSGB 1936\",ELLIPSOID[\"Airy 1830\",6377563.396,299.3249646,LENGTHUNIT[\"metre\",1]]],PRIMEM[\"Greenwich\",0,ANGLEUNIT[\"degree\",0.0174532925199433]],ID[\"EPSG\",4277]],CONVERSION[\"British National Grid\",METHOD[\"Transverse Mercator\",ID[\"EPSG\",9807]],PARAMETER[\"Latitude of natural origin\",49,ANGLEUNIT[\"degree\",0.0174532925199433],ID[\"EPSG\",8801]],PARAMETER[\"Longitude of natural origin\",-2,ANGLEUNIT[\"degree\",0.0174532925199433],ID[\"EPSG\",8802]],PARAMETER[\"Scale factor at natural origin\",0.9996012717,SCALEUNIT[\"unity\",1],ID[\"EPSG\",8805]],PARAMETER[\"False easting\",400000,LENGTHUNIT[\"metre\",1],ID[\"EPSG\",8806]],PARAMETER[\"False northing\",-100000,LENGTHUNIT[\"metre\",1],ID[\"EPSG\",8807]]],CS[Cartesian,2],AXIS[\"(E)\",east,ORDER[1],LENGTHUNIT[\"metre\",1]],AXIS[\"(N)\",north,ORDER[2],LENGTHUNIT[\"metre\",1]],USAGE[SCOPE[\"unknown\"],AREA[\"UK - Britain and UKCS 49°46'N to 61°01'N, 7°33'W to 3°33'E\"],BBOX[49.75,-9.2,61.14,2.88]],ID[\"EPSG\",27700]]"</div><div class='input'><span class='kw'>if</span> (<span class='st'>"GML"</span> <span class='kw'>%in%</span> <span class='fu'>ogrDrivers</span>()$<span class='no'>name</span>) {
   <span class='no'>dsn</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"vectors/airports.gml"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"rgdal"</span>)[<span class='fl'>1</span>]
   <span class='no'>airports</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='fu'>readOGR</span>(<span class='kw'>dsn</span><span class='kw'>=</span><span class='no'>dsn</span>, <span class='kw'>layer</span><span class='kw'>=</span><span class='st'>"airports"</span>))
-  <span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span>(<span class='no'>airports</span>) <span class='kw'>!=</span> <span class='st'>"try-error"</span>) {
+  <span class='kw'>if</span> (!<span class='fu'><a href='https://rdrr.io/r/base/class.html'>inherits</a></span>(<span class='no'>airports</span>, <span class='st'>"try-error"</span>)) {
     <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>airports</span>)
     <span class='kw'>if</span> (<span class='fu'><a href='projInfo.html'>new_proj_and_gdal</a></span>()) <span class='fu'><a href='https://rdrr.io/r/base/comment.html'>comment</a></span>(<span class='fu'>slot</span>(<span class='no'>airports</span>, <span class='st'>"proj4string"</span>))
   }
 }</div><div class='output co'>#&gt; OGR data source with driver: GML 
-#&gt; Source: "/tmp/RtmpIl4nA7/temp_libpath572574d7eceb/rgdal/vectors/airports.gml", layer: "airports"
+#&gt; Source: "/tmp/RtmpW2KVEI/temp_libpath41a795fbb33f8/rgdal/vectors/airports.gml", layer: "airports"
 #&gt; with 13 features
 #&gt; It has 6 fields</div><div class='output co'>#&gt; NULL</div><div class='input'><span class='no'>dsn</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"vectors/ps_cant_31.MIF"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"rgdal"</span>)[<span class='fl'>1</span>]
 <span class='fu'>ogrInfo</span>(<span class='kw'>dsn</span><span class='kw'>=</span><span class='no'>dsn</span>, <span class='kw'>layer</span><span class='kw'>=</span><span class='st'>"ps_cant_31"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum MIF 0 in CRS definition: +proj=longlat +a=6378137.01 +rf=298.257223563 +towgs84=0,0,0,0,0,0,0 +no_defs,</span>
-#&gt; <span class='warning'> but +towgs84= values preserved</span></div><div class='output co'>#&gt; Source: "/tmp/RtmpIl4nA7/temp_libpath572574d7eceb/rgdal/vectors/ps_cant_31.MIF", layer: "ps_cant_31"
+#&gt; <span class='warning'> but +towgs84= values preserved</span></div><div class='output co'>#&gt; Source: "/tmp/RtmpW2KVEI/temp_libpath41a795fbb33f8/rgdal/vectors/ps_cant_31.MIF", layer: "ps_cant_31"
 #&gt; Driver: MapInfo File; number of rows: 44 
 #&gt; Feature type: wkbPolygon with 2 dimensions
 #&gt; Extent: (0.449114 42.69196) - (2.048339 43.91861)
@@ -672,10 +675,9 @@ lines or <code>layer="track_points"</code> points.</p>
 #&gt; 7  Pseudo_c    4      5   String
 #&gt; 8       DEP    4      5   String</div><div class='input'><span class='no'>ps_cant_31</span> <span class='kw'>&lt;-</span> <span class='fu'>readOGR</span>(<span class='kw'>dsn</span><span class='kw'>=</span><span class='no'>dsn</span>, <span class='kw'>layer</span><span class='kw'>=</span><span class='st'>"ps_cant_31"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum MIF 0 in CRS definition: +proj=longlat +a=6378137.01 +rf=298.257223563 +towgs84=0,0,0,0,0,0,0 +no_defs,</span>
 #&gt; <span class='warning'> but +towgs84= values preserved</span></div><div class='output co'>#&gt; OGR data source with driver: MapInfo File 
-#&gt; Source: "/tmp/RtmpIl4nA7/temp_libpath572574d7eceb/rgdal/vectors/ps_cant_31.MIF", layer: "ps_cant_31"
+#&gt; Source: "/tmp/RtmpW2KVEI/temp_libpath41a795fbb33f8/rgdal/vectors/ps_cant_31.MIF", layer: "ps_cant_31"
 #&gt; with 44 features
 #&gt; It has 8 fields</div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum MIF 0 in CRS definition: +proj=longlat +a=6378137.01 +rf=298.257223563 +towgs84=0,0,0,0,0,0,0 +no_defs,</span>
-#&gt; <span class='warning'> but +towgs84= values preserved</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum unknown in CRS definition,</span>
 #&gt; <span class='warning'> but +towgs84= values preserved</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>ps_cant_31</span>)</div><div class='output co'>#&gt; Object of class SpatialPolygonsDataFrame
 #&gt; Coordinates:
 #&gt;         min       max
@@ -704,10 +706,9 @@ lines or <code>layer="track_points"</code> points.</p>
 #&gt;                     (Other):38          </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>sapply</a></span>(<span class='fu'>as</span>(<span class='no'>ps_cant_31</span>, <span class='st'>"data.frame"</span>), <span class='no'>class</span>)</div><div class='output co'>#&gt;      CODE       NOM       POP       SUP Longitude  Latitude  Pseudo_c       DEP 
 #&gt;  "factor"  "factor" "numeric" "numeric" "numeric" "numeric"  "factor"  "factor" </div><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='projInfo.html'>new_proj_and_gdal</a></span>()) <span class='fu'><a href='https://rdrr.io/r/base/comment.html'>comment</a></span>(<span class='fu'>slot</span>(<span class='no'>ps_cant_31</span>, <span class='st'>"proj4string"</span>))</div><div class='output co'>#&gt; [1] "BOUNDCRS[SOURCECRS[GEOGCRS[\"unnamed\",DATUM[\"MIF 0\",ELLIPSOID[\"WGS 84 (MAPINFO Datum 0)\",6378137.01,298.257223563,LENGTHUNIT[\"metre\",1,ID[\"EPSG\",9001]]]],PRIMEM[\"Greenwich\",0,ANGLEUNIT[\"degree\",0.0174532925199433,ID[\"EPSG\",9122]]],CS[ellipsoidal,2],AXIS[\"latitude\",north,ORDER[1],ANGLEUNIT[\"degree\",0.0174532925199433,ID[\"EPSG\",9122]]],AXIS[\"longitude\",east,ORDER[2],ANGLEUNIT[\"degree\",0.0174532925199433,ID[\"EPSG\",9122]]]]],TARGETCRS[GEOGCRS[\"WGS 84\",DATUM[\"World Geodetic System 1984\",ELLIPSOID[\"WGS 84\",6378137,298.257223563,LENGTHUNIT[\"metre\",1]]],PRIMEM[\"Greenwich\",0,ANGLEUNIT[\"degree\",0.0174532925199433]],CS[ellipsoidal,2],AXIS[\"geodetic latitude (Lat)\",north,ORDER[1],ANGLEUNIT[\"degree\",0.0174532925199433]],AXIS[\"geodetic longitude (Lon)\",east,ORDER[2],ANGLEUNIT[\"degree\",0.0174532925199433]],USAGE[SCOPE[\"unknown\"],AREA[\"World\"],BBOX[-90,-180,90,180]],ID[\"EPSG\",4326]]],ABRIDGEDTRANSFORMATION[\"Transformation to WGS84\",METHOD[\"Position Vector transformation (geog2D domain)\",ID[\"EPSG\",9606]],PARAMETER[\"X-axis translation\",0,ID[\"EPSG\",8605]],PARAMETER[\"Y-axis translation\",0,ID[\"EPSG\",8606]],PARAMETER[\"Z-axis translation\",0,ID[\"EPSG\",8607]],PARAMETER[\"X-axis rotation\",0,ID[\"EPSG\",8608]],PARAMETER[\"Y-axis rotation\",0,ID[\"EPSG\",8609]],PARAMETER[\"Z-axis rotation\",0,ID[\"EPSG\",8610]],PARAMETER[\"Scale difference\",1,ID[\"EPSG\",8611]]]]"</div><div class='input'><span class='no'>ps_cant_31</span> <span class='kw'>&lt;-</span> <span class='fu'>readOGR</span>(<span class='kw'>dsn</span><span class='kw'>=</span><span class='no'>dsn</span>, <span class='kw'>layer</span><span class='kw'>=</span><span class='st'>"ps_cant_31"</span>, <span class='kw'>stringsAsFactors</span><span class='kw'>=</span><span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum MIF 0 in CRS definition: +proj=longlat +a=6378137.01 +rf=298.257223563 +towgs84=0,0,0,0,0,0,0 +no_defs,</span>
 #&gt; <span class='warning'> but +towgs84= values preserved</span></div><div class='output co'>#&gt; OGR data source with driver: MapInfo File 
-#&gt; Source: "/tmp/RtmpIl4nA7/temp_libpath572574d7eceb/rgdal/vectors/ps_cant_31.MIF", layer: "ps_cant_31"
+#&gt; Source: "/tmp/RtmpW2KVEI/temp_libpath41a795fbb33f8/rgdal/vectors/ps_cant_31.MIF", layer: "ps_cant_31"
 #&gt; with 44 features
 #&gt; It has 8 fields</div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum MIF 0 in CRS definition: +proj=longlat +a=6378137.01 +rf=298.257223563 +towgs84=0,0,0,0,0,0,0 +no_defs,</span>
-#&gt; <span class='warning'> but +towgs84= values preserved</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum unknown in CRS definition,</span>
 #&gt; <span class='warning'> but +towgs84= values preserved</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>ps_cant_31</span>)</div><div class='output co'>#&gt; Object of class SpatialPolygonsDataFrame
 #&gt; Coordinates:
 #&gt;         min       max
@@ -736,7 +737,7 @@ lines or <code>layer="track_points"</code> points.</p>
 #&gt;    Pseudo_c         DEP 
 #&gt; "character" "character" </div><div class='input'><span class='no'>dsn</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"vectors/Up.tab"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"rgdal"</span>)[<span class='fl'>1</span>]
 <span class='fu'>ogrInfo</span>(<span class='kw'>dsn</span><span class='kw'>=</span><span class='no'>dsn</span>, <span class='kw'>layer</span><span class='kw'>=</span><span class='st'>"Up"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum South_American_Datum_1969 in CRS definition: +proj=utm +zone=23 +south +ellps=aust_SA +towgs84=-57,1,-41,0,0,0,0 +units=m +no_defs,</span>
-#&gt; <span class='warning'> but +towgs84= values preserved</span></div><div class='output co'>#&gt; Source: "/tmp/RtmpIl4nA7/temp_libpath572574d7eceb/rgdal/vectors/Up.tab", layer: "Up"
+#&gt; <span class='warning'> but +towgs84= values preserved</span></div><div class='output co'>#&gt; Source: "/tmp/RtmpW2KVEI/temp_libpath41a795fbb33f8/rgdal/vectors/Up.tab", layer: "Up"
 #&gt; Driver: MapInfo File; number of rows: 81 
 #&gt; Feature type: wkbPolygon with 2 dimensions
 #&gt; Extent: (598047.2 781652.7) - (619791.4 812944.4)
@@ -796,10 +797,9 @@ lines or <code>layer="track_points"</code> points.</p>
 #&gt; 51         Patri9599    2      0     Real
 #&gt; 52          PERAREAC    2      0     Real</div><div class='input'><span class='no'>Up</span> <span class='kw'>&lt;-</span> <span class='fu'>readOGR</span>(<span class='kw'>dsn</span><span class='kw'>=</span><span class='no'>dsn</span>, <span class='kw'>layer</span><span class='kw'>=</span><span class='st'>"Up"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum South_American_Datum_1969 in CRS definition: +proj=utm +zone=23 +south +ellps=aust_SA +towgs84=-57,1,-41,0,0,0,0 +units=m +no_defs,</span>
 #&gt; <span class='warning'> but +towgs84= values preserved</span></div><div class='output co'>#&gt; OGR data source with driver: MapInfo File 
-#&gt; Source: "/tmp/RtmpIl4nA7/temp_libpath572574d7eceb/rgdal/vectors/Up.tab", layer: "Up"
+#&gt; Source: "/tmp/RtmpW2KVEI/temp_libpath41a795fbb33f8/rgdal/vectors/Up.tab", layer: "Up"
 #&gt; with 81 features
 #&gt; It has 52 fields</div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum South_American_Datum_1969 in CRS definition: +proj=utm +zone=23 +south +ellps=aust_SA +towgs84=-57,1,-41,0,0,0,0 +units=m +no_defs,</span>
-#&gt; <span class='warning'> but +towgs84= values preserved</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum Unknown_based_on_Australian_Natl_S_Amer_1969_ellipsoid in CRS definition,</span>
 #&gt; <span class='warning'> but +towgs84= values preserved</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>Up</span>)</div><div class='output co'>#&gt; Object of class SpatialPolygonsDataFrame
 #&gt; Coordinates:
 #&gt;        min      max
@@ -915,19 +915,19 @@ lines or <code>layer="track_points"</code> points.</p>
 #&gt;  Max.   :1708.28   Max.   :317.845   Max.   :7271.53   Max.   :17.5547  
 #&gt;                                                                         </div><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='projInfo.html'>new_proj_and_gdal</a></span>()) <span class='fu'><a href='https://rdrr.io/r/base/comment.html'>comment</a></span>(<span class='fu'>slot</span>(<span class='no'>Up</span>, <span class='st'>"proj4string"</span>))</div><div class='output co'>#&gt; [1] "BOUNDCRS[SOURCECRS[PROJCRS[\"unnamed\",BASEGEOGCRS[\"unnamed\",DATUM[\"South American Datum 1969\",ELLIPSOID[\"South American\",6378160,298.25,LENGTHUNIT[\"metre\",1,ID[\"EPSG\",9001]]]],PRIMEM[\"Greenwich\",0,ANGLEUNIT[\"degree\",0.0174532925199433,ID[\"EPSG\",9122]]]],CONVERSION[\"UTM zone 23S\",METHOD[\"Transverse Mercator\",ID[\"EPSG\",9807]],PARAMETER[\"Latitude of natural origin\",0,ANGLEUNIT[\"degree\",0.0174532925199433],ID[\"EPSG\",8801]],PARAMETER[\"Longitude of natural origin\",-45,ANGLEUNIT[\"degree\",0.0174532925199433],ID[\"EPSG\",8802]],PARAMETER[\"Scale factor at natural origin\",0.9996,SCALEUNIT[\"unity\",1],ID[\"EPSG\",8805]],PARAMETER[\"False easting\",500000,LENGTHUNIT[\"metre\",1],ID[\"EPSG\",8806]],PARAMETER[\"False northing\",10000000,LENGTHUNIT[\"metre\",1],ID[\"EPSG\",8807]],ID[\"EPSG\",17023]],CS[Cartesian,2],AXIS[\"easting\",east,ORDER[1],LENGTHUNIT[\"metre\",1,ID[\"EPSG\",9001]]],AXIS[\"northing\",north,ORDER[2],LENGTHUNIT[\"metre\",1,ID[\"EPSG\",9001]]]]],TARGETCRS[GEOGCRS[\"WGS 84\",DATUM[\"World Geodetic System 1984\",ELLIPSOID[\"WGS 84\",6378137,298.257223563,LENGTHUNIT[\"metre\",1]]],PRIMEM[\"Greenwich\",0,ANGLEUNIT[\"degree\",0.0174532925199433]],CS[ellipsoidal,2],AXIS[\"geodetic latitude (Lat)\",north,ORDER[1],ANGLEUNIT[\"degree\",0.0174532925199433]],AXIS[\"geodetic longitude (Lon)\",east,ORDER[2],ANGLEUNIT[\"degree\",0.0174532925199433]],USAGE[SCOPE[\"unknown\"],AREA[\"World\"],BBOX[-90,-180,90,180]],ID[\"EPSG\",4326]]],ABRIDGEDTRANSFORMATION[\"Transformation to WGS84\",METHOD[\"Position Vector transformation (geog2D domain)\",ID[\"EPSG\",9606]],PARAMETER[\"X-axis translation\",-57,ID[\"EPSG\",8605]],PARAMETER[\"Y-axis translation\",1,ID[\"EPSG\",8606]],PARAMETER[\"Z-axis translation\",-41,ID[\"EPSG\",8607]],PARAMETER[\"X-axis rotation\",0,ID[\"EPSG\",8608]],PARAMETER[\"Y-axis rotation\",0,ID[\"EPSG\",8609]],PARAMETER[\"Z-axis rotation\",0,ID[\"EPSG\",8610]],PARAMETER[\"Scale difference\",1,ID[\"EPSG\",8611]]]]"</div><div class='input'><span class='no'>dsn</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"vectors/test_trk2.gpx"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"rgdal"</span>)[<span class='fl'>1</span>]
 <span class='no'>test_trk2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='fu'>readOGR</span>(<span class='kw'>dsn</span><span class='kw'>=</span><span class='no'>dsn</span>, <span class='kw'>layer</span><span class='kw'>=</span><span class='st'>"tracks"</span>))</div><div class='output co'>#&gt; OGR data source with driver: GPX 
-#&gt; Source: "/tmp/RtmpIl4nA7/temp_libpath572574d7eceb/rgdal/vectors/test_trk2.gpx", layer: "tracks"
+#&gt; Source: "/tmp/RtmpW2KVEI/temp_libpath41a795fbb33f8/rgdal/vectors/test_trk2.gpx", layer: "tracks"
 #&gt; with 2 features
-#&gt; It has 12 fields</div><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span>(<span class='no'>test_trk2</span>) <span class='kw'>!=</span> <span class='st'>"try-error"</span>) {
+#&gt; It has 12 fields</div><div class='input'><span class='kw'>if</span> (!<span class='fu'><a href='https://rdrr.io/r/base/class.html'>inherits</a></span>(<span class='no'>test_trk2</span>, <span class='st'>"try-error"</span>)) {
   <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>test_trk2</span>)
   <span class='kw'>if</span> (<span class='fu'><a href='projInfo.html'>new_proj_and_gdal</a></span>()) <span class='fu'><a href='https://rdrr.io/r/base/comment.html'>comment</a></span>(<span class='fu'>slot</span>(<span class='no'>test_trk2</span>, <span class='st'>"proj4string"</span>))
 }</div><div class='output co'>#&gt; [1] "GEOGCRS[\"WGS 84\",DATUM[\"World Geodetic System 1984\",ELLIPSOID[\"WGS 84\",6378137,298.257223563,LENGTHUNIT[\"metre\",1]]],PRIMEM[\"Greenwich\",0,ANGLEUNIT[\"degree\",0.0174532925199433]],CS[ellipsoidal,2],AXIS[\"geodetic latitude (Lat)\",north,ORDER[1],ANGLEUNIT[\"degree\",0.0174532925199433]],AXIS[\"geodetic longitude (Lon)\",east,ORDER[2],ANGLEUNIT[\"degree\",0.0174532925199433]],ID[\"EPSG\",4326]]"</div><div class='input'><span class='no'>test_trk2pts</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='fu'>readOGR</span>(<span class='kw'>dsn</span><span class='kw'>=</span><span class='no'>dsn</span>, <span class='kw'>layer</span><span class='kw'>=</span><span class='st'>"track_points"</span>))</div><div class='output co'>#&gt; OGR data source with driver: GPX 
-#&gt; Source: "/tmp/RtmpIl4nA7/temp_libpath572574d7eceb/rgdal/vectors/test_trk2.gpx", layer: "track_points"
+#&gt; Source: "/tmp/RtmpW2KVEI/temp_libpath41a795fbb33f8/rgdal/vectors/test_trk2.gpx", layer: "track_points"
 #&gt; with 27 features
-#&gt; It has 28 fields</div><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span>(<span class='no'>test_trk2pts</span>) <span class='kw'>!=</span> <span class='st'>"try-error"</span>) {
+#&gt; It has 28 fields</div><div class='input'><span class='kw'>if</span> (!<span class='fu'><a href='https://rdrr.io/r/base/class.html'>inherits</a></span>(<span class='no'>test_trk2pts</span>, <span class='st'>"try-error"</span>)) {
   <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>test_trk2pts</span>)
   <span class='kw'>if</span> (<span class='fu'><a href='projInfo.html'>new_proj_and_gdal</a></span>()) <span class='fu'><a href='https://rdrr.io/r/base/comment.html'>comment</a></span>(<span class='fu'>slot</span>(<span class='no'>test_trk2pts</span>, <span class='st'>"proj4string"</span>))
 }</div><div class='output co'>#&gt; [1] "GEOGCRS[\"WGS 84\",DATUM[\"World Geodetic System 1984\",ELLIPSOID[\"WGS 84\",6378137,298.257223563,LENGTHUNIT[\"metre\",1]]],PRIMEM[\"Greenwich\",0,ANGLEUNIT[\"degree\",0.0174532925199433]],CS[ellipsoidal,2],AXIS[\"geodetic latitude (Lat)\",north,ORDER[1],ANGLEUNIT[\"degree\",0.0174532925199433]],AXIS[\"geodetic longitude (Lon)\",east,ORDER[2],ANGLEUNIT[\"degree\",0.0174532925199433]],ID[\"EPSG\",4326]]"</div><div class='input'><span class='no'>dsn</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"vectors"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"rgdal"</span>)[<span class='fl'>1</span>]
-<span class='fu'>ogrInfo</span>(<span class='kw'>dsn</span><span class='kw'>=</span><span class='no'>dsn</span>, <span class='kw'>layer</span><span class='kw'>=</span><span class='st'>"trin_inca_pl03"</span>)</div><div class='output co'>#&gt; Source: "/tmp/RtmpIl4nA7/temp_libpath572574d7eceb/rgdal/vectors", layer: "trin_inca_pl03"
+<span class='fu'>ogrInfo</span>(<span class='kw'>dsn</span><span class='kw'>=</span><span class='no'>dsn</span>, <span class='kw'>layer</span><span class='kw'>=</span><span class='st'>"trin_inca_pl03"</span>)</div><div class='output co'>#&gt; Source: "/tmp/RtmpW2KVEI/temp_libpath41a795fbb33f8/rgdal/vectors", layer: "trin_inca_pl03"
 #&gt; Driver: ESRI Shapefile; number of rows: 3 
 #&gt; Feature type: wkbPolygon with 2 dimensions
 #&gt; Extent: (-87.09465 5.499074) - (-79.01339 10.11906)
@@ -947,7 +947,7 @@ lines or <code>layer="track_points"</code> points.</p>
 #&gt; 10   DIST_COM    4    250   String
 #&gt; 11 REFERENCES    4    250   String
 #&gt; 12  REVIEWERS    4    250   String</div><div class='input'><span class='no'>birds</span> <span class='kw'>&lt;-</span> <span class='fu'>readOGR</span>(<span class='kw'>dsn</span><span class='kw'>=</span><span class='no'>dsn</span>, <span class='kw'>layer</span><span class='kw'>=</span><span class='st'>"trin_inca_pl03"</span>)</div><div class='output co'>#&gt; OGR data source with driver: ESRI Shapefile 
-#&gt; Source: "/tmp/RtmpIl4nA7/temp_libpath572574d7eceb/rgdal/vectors", layer: "trin_inca_pl03"
+#&gt; Source: "/tmp/RtmpW2KVEI/temp_libpath41a795fbb33f8/rgdal/vectors", layer: "trin_inca_pl03"
 #&gt; with 3 features
 #&gt; It has 12 fields</div><div class='output co'>#&gt; <span class='warning'>Warning: Dropping null geometries: 3</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>birds</span>)</div><div class='output co'>#&gt; Object of class SpatialPolygonsDataFrame
 #&gt; Coordinates:
@@ -995,7 +995,7 @@ lines or <code>layer="track_points"</code> points.</p>
 <span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='fu'>ogrInfo</span>(<span class='no'>dsn</span>, <span class='st'>"PacoursIKA2"</span>))</div><div class='output co'>#&gt; Error in ogrInfo(dsn, "PacoursIKA2") : 
 #&gt;   Multiple incompatible geometries: wkbPoint: 4; wkbLineString: 1</div><div class='input'><span class='fu'>ogrInfo</span>(<span class='no'>dsn</span>, <span class='st'>"PacoursIKA2"</span>, <span class='kw'>require_geomType</span><span class='kw'>=</span><span class='st'>"wkbPoint"</span>)</div><div class='output co'>#&gt; <span class='message'>NOTE: keeping only 4 wkbPoint of 5 features</span>
 #&gt; <span class='message'>    note that extent applies to all features</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum NTF_Paris_Meridian in CRS definition: +proj=lcc +lat_1=46.8 +lat_0=46.8 +lon_0=0 +k_0=0.999877420000019 +x_0=600000 +y_0=2200000.00000032 +ellps=clrk80ign +pm=paris +towgs84=-168,-60,320,0,0,0,0 +units=m +no_defs,</span>
-#&gt; <span class='warning'> but +towgs84= values preserved</span></div><div class='output co'>#&gt; Source: "/tmp/RtmpIl4nA7/temp_libpath572574d7eceb/rgdal/vectors/PacoursIKA2.TAB", layer: "PacoursIKA2"
+#&gt; <span class='warning'> but +towgs84= values preserved</span></div><div class='output co'>#&gt; Source: "/tmp/RtmpW2KVEI/temp_libpath41a795fbb33f8/rgdal/vectors/PacoursIKA2.TAB", layer: "PacoursIKA2"
 #&gt; Driver: MapInfo File; number of rows: 5 
 #&gt;   selected geometry type: wkbPoint with 4 rows
 #&gt; Feature type: wkbPoint with 2 dimensions
@@ -1006,23 +1006,21 @@ lines or <code>layer="track_points"</code> points.</p>
 #&gt; 1 NomParcours    4     25   String
 #&gt; 2    Longueur    4     25   String</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='fu'>readOGR</span>(<span class='no'>dsn</span>, <span class='st'>"PacoursIKA2"</span>, <span class='kw'>require_geomType</span><span class='kw'>=</span><span class='st'>"wkbLineString"</span>), <span class='kw'>col</span><span class='kw'>=</span><span class='st'>"red"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum NTF_Paris_Meridian in CRS definition: +proj=lcc +lat_1=46.8 +lat_0=46.8 +lon_0=0 +k_0=0.999877420000019 +x_0=600000 +y_0=2200000.00000032 +ellps=clrk80ign +pm=paris +towgs84=-168,-60,320,0,0,0,0 +units=m +no_defs,</span>
 #&gt; <span class='warning'> but +towgs84= values preserved</span></div><div class='output co'>#&gt; OGR data source with driver: MapInfo File 
-#&gt; Source: "/tmp/RtmpIl4nA7/temp_libpath572574d7eceb/rgdal/vectors/PacoursIKA2.TAB", layer: "PacoursIKA2"
+#&gt; Source: "/tmp/RtmpW2KVEI/temp_libpath41a795fbb33f8/rgdal/vectors/PacoursIKA2.TAB", layer: "PacoursIKA2"
 #&gt; with 5 features;
 #&gt; Selected wkbLineString feature type, with 1 rows
 #&gt; It has 2 fields</div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum NTF_Paris_Meridian in CRS definition: +proj=lcc +lat_1=46.8 +lat_0=46.8 +lon_0=0 +k_0=0.999877420000019 +x_0=600000 +y_0=2200000.00000032 +ellps=clrk80ign +pm=paris +towgs84=-168,-60,320,0,0,0,0 +units=m +no_defs,</span>
-#&gt; <span class='warning'> but +towgs84= values preserved</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum Unknown_based_on_Clarke_1880_IGN_ellipsoid in CRS definition,</span>
 #&gt; <span class='warning'> but +towgs84= values preserved</span></div><div class='output co'>#&gt; <span class='message'>NOTE: keeping only 1 wkbLineString of 5 features</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='fu'>readOGR</span>(<span class='no'>dsn</span>, <span class='st'>"PacoursIKA2"</span>, <span class='kw'>require_geomType</span><span class='kw'>=</span><span class='st'>"wkbPoint"</span>), <span class='kw'>add</span><span class='kw'>=</span><span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum NTF_Paris_Meridian in CRS definition: +proj=lcc +lat_1=46.8 +lat_0=46.8 +lon_0=0 +k_0=0.999877420000019 +x_0=600000 +y_0=2200000.00000032 +ellps=clrk80ign +pm=paris +towgs84=-168,-60,320,0,0,0,0 +units=m +no_defs,</span>
 #&gt; <span class='warning'> but +towgs84= values preserved</span></div><div class='output co'>#&gt; OGR data source with driver: MapInfo File 
-#&gt; Source: "/tmp/RtmpIl4nA7/temp_libpath572574d7eceb/rgdal/vectors/PacoursIKA2.TAB", layer: "PacoursIKA2"
+#&gt; Source: "/tmp/RtmpW2KVEI/temp_libpath41a795fbb33f8/rgdal/vectors/PacoursIKA2.TAB", layer: "PacoursIKA2"
 #&gt; with 5 features;
 #&gt; Selected wkbPoint feature type, with 4 rows
 #&gt; It has 2 fields</div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum NTF_Paris_Meridian in CRS definition: +proj=lcc +lat_1=46.8 +lat_0=46.8 +lon_0=0 +k_0=0.999877420000019 +x_0=600000 +y_0=2200000.00000032 +ellps=clrk80ign +pm=paris +towgs84=-168,-60,320,0,0,0,0 +units=m +no_defs,</span>
-#&gt; <span class='warning'> but +towgs84= values preserved</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum Unknown_based_on_Clarke_1880_IGN_ellipsoid in CRS definition,</span>
 #&gt; <span class='warning'> but +towgs84= values preserved</span></div><div class='output co'>#&gt; <span class='message'>NOTE: keeping only 4 wkbPoint of 5 features</span></div><div class='img'><img src='readOGR-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='no'>odir</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/getwd.html'>getwd</a></span>()
 <span class='fu'><a href='https://rdrr.io/r/base/getwd.html'>setwd</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"vectors"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"rgdal"</span>)[<span class='fl'>1</span>])
 <span class='no'>ow</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>options</a></span>(<span class='st'>"warn"</span>)$<span class='no'>warn</span>
 <span class='fu'><a href='https://rdrr.io/r/base/options.html'>options</a></span>(<span class='st'>"warn"</span><span class='kw'>=</span><span class='fl'>1</span>)
-<span class='fu'>ogrInfo</span>(<span class='st'>"test64.vrt"</span>, <span class='st'>"test64"</span>)</div><div class='output co'>#&gt; Source: "/tmp/RtmpIl4nA7/temp_libpath572574d7eceb/rgdal/vectors/test64.vrt", layer: "test64"
+<span class='fu'>ogrInfo</span>(<span class='st'>"test64.vrt"</span>, <span class='st'>"test64"</span>)</div><div class='output co'>#&gt; Source: "/tmp/RtmpW2KVEI/temp_libpath41a795fbb33f8/rgdal/vectors/test64.vrt", layer: "test64"
 #&gt; Driver: OGR_VRT; number of rows: 1 
 #&gt; Feature type: wkbPoint with 2 dimensions
 #&gt; Extent: (0 0) - (0 0)
