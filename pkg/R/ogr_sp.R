@@ -479,6 +479,18 @@ set_thin_PROJ6_warnings <- function(value) {
 }
 
 
+get_enforce_xy <- function() {
+    get("enforce_xy", envir=.RGDAL_CACHE)
+}
+
+set_enforce_xy <- function(value) {
+    stopifnot(is.logical(value))
+    stopifnot(length(value) == 1L)
+    stopifnot(!is.na(value))
+    assign("enforce_xy", value, envir=.RGDAL_CACHE)
+}
+
+
 showSRID <- function(inSRID, format="WKT2", multiline="NO") {
     valid_WKT_formats <- c("SFSQL", "WKT1_SIMPLE", "WKT1", "WKT1_GDAL",
         "WKT1_ESRI", "WKT2_2015", "WKT2_2018", "WKT2")

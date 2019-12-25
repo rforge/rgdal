@@ -29,6 +29,8 @@
 \alias{get_transform_wkt_comment}
 \alias{set_transform_wkt_comment}
 \alias{get_last_coordOp}
+\alias{get_enforce_xy}
+\alias{set_enforce_xy}
 
 \section{Methods}{\describe{
 
@@ -53,6 +55,8 @@
 \usage{
 get_transform_wkt_comment()
 set_transform_wkt_comment(value)
+get_enforce_xy()
+set_enforce_xy(value)
 get_last_coordOp()
 }
 

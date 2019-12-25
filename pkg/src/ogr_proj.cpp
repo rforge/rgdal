@@ -33,9 +33,9 @@ SEXP P6_SRID_show(SEXP inSRID, SEXP format, SEXP multiline, SEXP in_format,
     int i, pc=0;
     const char *datum, *towgs84;
 
-Rprintf("P6_SRID_show input AxisMappingStrategy %d\n", hSRS.GetAxisMappingStrategy());
+/*Rprintf("P6_SRID_show input AxisMappingStrategy %d\n", hSRS.GetAxisMappingStrategy());
     hSRS.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
-Rprintf("P6_SRID_show output AxisMappingStrategy %d\n", hSRS.GetAxisMappingStrategy());
+Rprintf("P6_SRID_show output AxisMappingStrategy %d\n", hSRS.GetAxisMappingStrategy());*/
 
     if (INTEGER_POINTER(in_format)[0] == 1L) {
         installErrorHandler();
@@ -68,6 +68,11 @@ Rprintf("P6_SRID_show output AxisMappingStrategy %d\n", hSRS.GetAxisMappingStrat
     }
 
     if (&hSRS != NULL) {
+
+//Rprintf("P6_SRID_show input2 AxisMappingStrategy %d\n", hSRS.GetAxisMappingStrategy());
+    hSRS.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
+//Rprintf("P6_SRID_show output2 AxisMappingStrategy %d\n", hSRS.GetAxisMappingStrategy());
+
 
         installErrorHandler();
         datum = hSRS.GetAttrValue("DATUM");
@@ -160,11 +165,6 @@ SEXP p4s_to_wkt(SEXP p4s, SEXP esri) {
     OGRSpatialReference hSRS = (OGRSpatialReference) NULL;
     char *pszSRS_WKT = NULL;
     SEXP ans;
-#if GDAL_VERSION_MAJOR >= 3
-Rprintf("p4s_to_wkt input AxisMappingStrategy %d\n", hSRS.GetAxisMappingStrategy());
-    hSRS.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
-Rprintf("p4s_to_wkt output AxisMappingStrategy %d\n", hSRS.GetAxisMappingStrategy());
-#endif
 
     installErrorHandler();
     if (hSRS.importFromProj4(CHAR(STRING_ELT(p4s, 0))) != OGRERR_NONE) {
@@ -172,6 +172,16 @@ Rprintf("p4s_to_wkt output AxisMappingStrategy %d\n", hSRS.GetAxisMappingStrateg
 	error("Can't parse PROJ.4-style parameter string");
     }
     uninstallErrorHandlerAndTriggerError();
+
+#if GDAL_VERSION_MAJOR >= 3
+    installErrorHandler();
+//Rprintf("p4s_to_wkt input AxisMappingStrategy %d\n", hSRS.GetAxisMappingStrategy());
+    hSRS.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
+//Rprintf("p4s_to_wkt output AxisMappingStrategy %d\n", hSRS.GetAxisMappingStrategy());
+    uninstallErrorHandlerAndTriggerError();
+#endif
+
+
     installErrorHandler();
     if (INTEGER_POINTER(esri)[0] == 1) hSRS.morphToESRI();
     hSRS.exportToWkt(&pszSRS_WKT);//FIXME VG
@@ -193,13 +203,6 @@ SEXP wkt_to_p4s(SEXP wkt, SEXP esri) {
     SEXP ans;
     ppszInput = CSLAddString(ppszInput, CHAR(STRING_ELT(wkt, 0)));//FIXME VG
 
-#if GDAL_VERSION_MAJOR >= 3
-Rprintf("wkt_to_p4s input AxisMappingStrategy %d\n", hSRS.GetAxisMappingStrategy());
-    hSRS.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
-Rprintf("wkt_to_p4s output AxisMappingStrategy %d\n", hSRS.GetAxisMappingStrategy());
-#endif
-
-
     installErrorHandler();
 #if GDAL_VERSION_MAJOR == 1 || ( GDAL_VERSION_MAJOR == 2 && GDAL_VERSION_MINOR <= 2 ) // thanks to Even Roualt https://github.com/OSGeo/gdal/issues/681
 //#if GDAL_VERSION_MAJOR <= 2 && GDAL_VERSION_MINOR <= 2
@@ -212,6 +215,15 @@ Rprintf("wkt_to_p4s output AxisMappingStrategy %d\n", hSRS.GetAxisMappingStrateg
 	error("Can't parse WKT-style parameter string");
     }
     uninstallErrorHandlerAndTriggerError();
+
+#if GDAL_VERSION_MAJOR >= 3
+    installErrorHandler();
+//Rprintf("wkt_to_p4s input AxisMappingStrategy %d\n", hSRS.GetAxisMappingStrategy());
+    hSRS.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
+//Rprintf("wkt_to_p4s output AxisMappingStrategy %d\n", hSRS.GetAxisMappingStrategy());
+    uninstallErrorHandlerAndTriggerError();
+#endif
+
 
     installErrorHandler();
     if (INTEGER_POINTER(esri)[0] == 1) hSRS.morphFromESRI();
@@ -231,11 +243,6 @@ SEXP ogrAutoIdentifyEPSG(SEXP p4s) {
     OGRSpatialReference hSRS = (OGRSpatialReference) NULL;
     OGRErr thisOGRErr;
     SEXP ans;
-#if GDAL_VERSION_MAJOR >= 3
-Rprintf("ogrAutoIdentifyEPSG input AxisMappingStrategy %d\n", hSRS.GetAxisMappingStrategy());
-    hSRS.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
-Rprintf("ogrAutoIdentifyEPSG output AxisMappingStrategy %d\n", hSRS.GetAxisMappingStrategy());
-#endif
 
     installErrorHandler();
     if (hSRS.importFromProj4(CHAR(STRING_ELT(p4s, 0))) != OGRERR_NONE) {
@@ -243,6 +250,15 @@ Rprintf("ogrAutoIdentifyEPSG output AxisMappingStrategy %d\n", hSRS.GetAxisMappi
 	error("Can't parse PROJ.4-style parameter string");
     }
     uninstallErrorHandlerAndTriggerError();
+
+#if GDAL_VERSION_MAJOR >= 3
+    installErrorHandler();
+//Rprintf("ogrAutoIdentifyEPSG input AxisMappingStrategy %d\n", hSRS.GetAxisMappingStrategy());
+    hSRS.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
+//Rprintf("ogrAutoIdentifyEPSG output AxisMappingStrategy %d\n", hSRS.GetAxisMappingStrategy());
+    uninstallErrorHandlerAndTriggerError();
+#endif
+
     PROTECT(ans=NEW_CHARACTER(1));
 
     installErrorHandler();
@@ -309,9 +325,9 @@ SEXP ogrP4S(SEXP ogrsourcename, SEXP Layer, SEXP morphFromESRI, SEXP dumpSRS) {
 #if GDAL_VERSION_MAJOR >= 3
     if (hSRS != NULL) {
         installErrorHandler();
-Rprintf("ogrP4S input AxisMappingStrategy %d\n", hSRS->GetAxisMappingStrategy());
+//Rprintf("ogrP4S input AxisMappingStrategy %d\n", hSRS->GetAxisMappingStrategy());
         hSRS->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
-Rprintf("ogrP4S output AxisMappingStrategy %d\n", hSRS->GetAxisMappingStrategy());
+//Rprintf("ogrP4S output AxisMappingStrategy %d\n", hSRS->GetAxisMappingStrategy());
         uninstallErrorHandlerAndTriggerError();
     }
 #endif

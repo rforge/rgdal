@@ -30,6 +30,7 @@ load_stuff <- function() {
   assign(".last_coordOp", "", envir=.RGDAL_CACHE)
   assign("thin_PROJ6_warnings", FALSE, envir=.RGDAL_CACHE)
   assign("PROJ6_warnings_count", 0L, envir=.RGDAL_CACHE)
+  assign("enforce_xy", TRUE, envir=.RGDAL_CACHE)
   local_RGDAL_Init() #.Call('RGDAL_Init', PACKAGE="rgdal")
 }
 

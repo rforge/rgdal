@@ -255,6 +255,14 @@ if (!isGeneric("spTransform"))
         } else {
           use_ob_tran <- 0L
         }
+        if (!is.null(dots$enforce_xy)) {
+          stopifnot(is.logical(dots$enforce_xy))
+          stopifnot(length(dots$enforce_xy) == 1L)
+          stopifnot(!is.na(dots$enforce_xy))
+          enforce_xy <- dots$enforce_xy
+        } else {
+            enforce_xy <- get_enforce_xy()
+        }
         coordOp <- NULL
         if (!is.null(dots$coordOp)) {
             coordOp <- dots$coordOp
@@ -265,6 +273,7 @@ if (!isGeneric("spTransform"))
         attr(n, "ob_tran") <- use_ob_tran
         if (ncol(crds) == 2) {
             if (get_transform_wkt_comment()) {
+                attr(n, "enforce_xy") <- enforce_xy
                 res <- .Call("transform_ng", from_args, to_args, coordOp, n,
 		    as.double(crds[,1]), as.double(crds[,2]), NULL,
 		    PACKAGE="rgdal")
@@ -283,6 +292,7 @@ if (!isGeneric("spTransform"))
 	    crds[,1:2] <- cbind(res[[1]], res[[2]])
         } else {
             if (get_transform_wkt_comment()) {
+                attr(n, "enforce_xy") <- enforce_xy
                 res <- .Call("transform_ng", from_args, to_args, coordOp, n,
 		    as.double(crds[,1]), as.double(crds[,2]),
                     as.double(crds[,3]), PACKAGE="rgdal")
@@ -340,11 +350,12 @@ setMethod("spTransform", signature("SpatialGridDataFrame", "CRS"),
 
 
 ".spTransform_Line" <- function(x, to_args, from_args, ii, jj,
-                use_ob_tran, coordOp) {
+                use_ob_tran, coordOp, enforce_xy) {
 	crds <- slot(x, "coords")
 	n <- nrow(crds)
         attr(n, "ob_tran") <- use_ob_tran
         if (get_transform_wkt_comment()) {
+            attr(n, "enforce_xy") <- enforce_xy
             res <- .Call("transform_ng", from_args, to_args, coordOp, n,
 		as.double(crds[,1]), as.double(crds[,2]), NULL,
 		PACKAGE="rgdal")
@@ -369,7 +380,7 @@ setMethod("spTransform", signature("SpatialGridDataFrame", "CRS"),
 #setMethod("spTransform", signature("Sline", "CRS"), spTransform.Sline)
 
 ".spTransform_Lines" <- function(x, to_args, from_args, ii,
-                use_ob_tran, coordOp) {
+                use_ob_tran, coordOp, enforce_xy) {
 	ID <- slot(x, "ID")
 	input <- slot(x, "Lines")
 	n <- length(input)
@@ -378,7 +389,7 @@ setMethod("spTransform", signature("SpatialGridDataFrame", "CRS"),
 	for (i in 1:n) {
             output[[i]] <- .spTransform_Line(input[[i]], 
 		to_args=to_args, from_args=from_args, ii=ii, jj=i,
-                use_ob_tran=use_ob_tran, coordOp=coordOp)
+                use_ob_tran=use_ob_tran, coordOp=coordOp, enforce_xy=enforce_xy)
             if (is.null(coordOp) && get_transform_wkt_comment() && i == 1) {
                 out_coordOp <- attr(output[[i]], "coordOp")
                 coordOp <-  gsub(" ", " +", paste0("+", out_coordOp))
@@ -453,6 +464,14 @@ setMethod("spTransform", signature("SpatialGridDataFrame", "CRS"),
         } else {
           use_ob_tran <- 0L
         }
+        if (!is.null(dots$enforce_xy)) {
+          stopifnot(is.logical(dots$enforce_xy))
+          stopifnot(length(dots$enforce_xy) == 1L)
+          stopifnot(!is.na(dots$enforce_xy))
+          enforce_xy <- dots$enforce_xy
+        } else {
+            enforce_xy <- get_enforce_xy()
+        }
         coordOp <- NULL
         if (!is.null(dots$coordOp)) {
             coordOp <- dots$coordOp
@@ -463,7 +482,7 @@ setMethod("spTransform", signature("SpatialGridDataFrame", "CRS"),
 	for (i in 1:n) {
             output[[i]] <- .spTransform_Lines(input[[i]], 
 		to_args=to_args, from_args=from_args, ii=i,
-                use_ob_tran=use_ob_tran, coordOp=coordOp)
+                use_ob_tran=use_ob_tran, coordOp=coordOp, enforce_xy=enforce_xy)
             if (is.null(coordOp) && get_transform_wkt_comment() && i == 1) {
                 out_coordOp <- attr(output[[i]], "coordOp")
                 coordOp <-  gsub(" ", " +", paste0("+", out_coordOp))
@@ -489,11 +508,12 @@ setMethod("spTransform", signature("SpatialLinesDataFrame", "CRS"), spTransform.
 
 
 ".spTransform_Polygon" <- function(x, to_args, from_args, ii, jj,
-                use_ob_tran, coordOp) {
+                use_ob_tran, coordOp, enforce_xy) {
 	crds <- slot(x, "coords")
 	n <- nrow(crds)
         attr(n, "ob_tran") <- use_ob_tran
         if (get_transform_wkt_comment()) {
+            attr(n, "enforce_xy") <- enforce_xy
             res <- .Call("transform_ng", from_args, to_args, coordOp, n,
 		as.double(crds[,1]), as.double(crds[,2]), NULL,
 		PACKAGE="rgdal")
@@ -517,7 +537,7 @@ setMethod("spTransform", signature("SpatialLinesDataFrame", "CRS"), spTransform.
 
 
 ".spTransform_Polygons" <- function(x, to_args, from_args, ii,
-                use_ob_tran, coordOp) {
+                use_ob_tran, coordOp, enforce_xy) {
 	ID <- slot(x, "ID")
 	input <- slot(x, "Polygons")
 	n <- length(input)
@@ -526,7 +546,7 @@ setMethod("spTransform", signature("SpatialLinesDataFrame", "CRS"), spTransform.
 	for (i in 1:n) {
             output[[i]] <- .spTransform_Polygon(input[[i]], 
 		to_args=to_args, from_args=from_args, ii=ii, jj=i,
-                use_ob_tran=use_ob_tran, coordOp=coordOp)
+                use_ob_tran=use_ob_tran, coordOp=coordOp, enforce_xy=enforce_xy)
             if (is.null(coordOp) && get_transform_wkt_comment() && i == 1) {
                 out_coordOp <- attr(output[[i]], "coordOp")
                 coordOp <-  gsub(" ", " +", paste0("+", out_coordOp))
@@ -601,6 +621,14 @@ setMethod("spTransform", signature("SpatialLinesDataFrame", "CRS"), spTransform.
         } else {
           use_ob_tran <- 0L
         }
+        if (!is.null(dots$enforce_xy)) {
+          stopifnot(is.logical(dots$enforce_xy))
+          stopifnot(length(dots$enforce_xy) == 1L)
+          stopifnot(!is.na(dots$enforce_xy))
+          enforce_xy <- dots$enforce_xy
+        } else {
+            enforce_xy <- get_enforce_xy()
+        }
         coordOp <- NULL
         if (!is.null(dots$coordOp)) {
             coordOp <- dots$coordOp
@@ -611,7 +639,7 @@ setMethod("spTransform", signature("SpatialLinesDataFrame", "CRS"), spTransform.
 	for (i in 1:n) {
             output[[i]] <- .spTransform_Polygons(input[[i]], 
 		to_args=to_args, from_args=from_args, ii=i,
-                use_ob_tran=use_ob_tran, coordOp=coordOp)
+                use_ob_tran=use_ob_tran, coordOp=coordOp, enforce_xy=enforce_xy)
             if (is.null(coordOp) && get_transform_wkt_comment() && i == 1) {
                 out_coordOp <- attr(output[[i]], "coordOp")
                 coordOp <-  gsub(" ", " +", paste0("+", out_coordOp))
