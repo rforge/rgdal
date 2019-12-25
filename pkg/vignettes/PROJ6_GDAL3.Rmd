@@ -1038,6 +1038,9 @@ all.equal(b2, bbox(scot_LL4), scale=1)
 
 ## Axis swapping
 
+Luigi Ranghetti and Lorenzo Busetto provided [input](http://rpubs.com/ranghetti/sptransform-issue) with regard to axis swapping in **rgdal**. The task is to provide round-trip coordinate identity for four CRS. Here, we use just **sp**/**rgdal** to create the input objects:
+
+
 ```{r}
 library(rgdal)
 ```
@@ -1073,6 +1076,8 @@ coordinates(pt0_wgs32n)
 coordinates(pt0_psmerc)
 ```
 
+We put the input (source) objects into a list:
+
 ```{r}
 from <- list(pt0_lonlat=pt0_lonlat, pt0_psmerc=pt0_psmerc, pt0_wgs32n=pt0_wgs32n, pt0_laea89=pt0_laea89)
 names(from)
@@ -1082,9 +1087,13 @@ names(from)
 sapply(from, proj4string)
 ```
 
+and the target EPSG codes into a vector:
+
 ```{r}
 to <- c("4326", "3857", "32632", "3035")
 ```
+
+From SVN revision 903, a global **rgdal** option can be set to enforce visualization order in `spTransform()` methods (the default value when the package is loaded is `TRUE`) when no `coordOp=` argument is given, and the coordinate operation has to be found automatically:
 
 ```{r}
 get_enforce_xy()
@@ -1092,6 +1101,7 @@ set_enforce_xy(FALSE)
 get_enforce_xy()
 ```
 
+Setting it to false gives failing round-trips for two of the four CRS:
 
 ```{r, warning=FALSE, message=FALSE}
 out_EPSG_non_viz <- matrix(as.logical(NA), nrow=4, ncol=4)
@@ -1106,6 +1116,8 @@ for (j in seq(along=from)) {
 }
 out_EPSG_non_viz
 ```
+
+Resetting to the default (`TRUE`) value gives round-trip success:
 
 ```{r}
 set_enforce_xy(TRUE)
@@ -1126,6 +1138,7 @@ for (j in seq(along=from)) {
 out_EPSG
 ```
 
+If we instantiate the target CRS simply using a PROJ string with `+init=` rather than using the `CRS()` `SRS_string=` argument, it appears that visualization order is chosen anyway, whatever the status of `enforce_xy`:
 
 ```{r}
 get_enforce_xy()
@@ -1139,7 +1152,7 @@ colnames(out_init_non_viz) <- names(from)
 rownames(out_init_non_viz) <- to
 for (j in seq(along=from)) {
   for (i in seq(along=to)) {
-    pt1 <- spTransform(from[[j]], CRS(SRS_string = paste0("+init=epsg:", to[i])))
+    pt1 <- spTransform(from[[j]], CRS(paste0("+init=epsg:", to[i])))
     out_init_non_viz[i, j] <- isTRUE(all.equal(coordinates(from[[i]]),
       coordinates(pt1)))
   }
@@ -1159,13 +1172,15 @@ colnames(out_init) <- names(from)
 rownames(out_init) <- to
 for (j in seq(along=from)) {
   for (i in seq(along=to)) {
-    pt1 <- spTransform(from[[j]], CRS(SRS_string = paste0("+init=epsg:", to[i])))
+    pt1 <- spTransform(from[[j]], CRS(paste0("+init=epsg:", to[i])))
     out_init[i, j] <- isTRUE(all.equal(coordinates(from[[i]]),
       coordinates(pt1)))
   }
 }
 out_init
 ```
+
+Finally, by listing candidate coordinate operations first, and choosing the best one, use can be made of the `list_coordOps()` `visualization_order=` argument, with default value `TRUE`; here it is given explicitly. This gives round trip success:
 
 ```{r, warning=FALSE, message=FALSE}
 out_EPSG <- matrix(as.logical(NA), nrow=4, ncol=4)
@@ -1185,6 +1200,7 @@ for (j in seq(along=from)) {
 out_EPSG
 ```
 
+The setting of the `list_coordOps()` `visualization_order=` argument overrides the global option value (as would setting `enforce_xy=` in calls to `spTransform()`):
 
 ```{r, warning=FALSE, message=FALSE}
 out_EPSG_non_viz1 <- matrix(as.logical(NA), nrow=4, ncol=4)
@@ -1202,4 +1218,20 @@ for (j in seq(along=from)) {
   }
 }
 out_EPSG_non_viz1
+```
+
+
+```{r, warning=FALSE, message=FALSE}
+out_EPSG_non_viz2 <- matrix(as.logical(NA), nrow=4, ncol=4)
+colnames(out_EPSG_non_viz2) <- names(from)
+rownames(out_EPSG_non_viz2) <- to
+for (j in seq(along=from)) {
+  for (i in seq(along=to)) {
+    pt1 <- spTransform(from[[j]], CRS(SRS_string = paste0("EPSG:", to[i])),
+      enforce_xy=FALSE)
+    out_EPSG_non_viz2[i, j] <- isTRUE(all.equal(coordinates(from[[i]]),
+      coordinates(pt1)))
+  }
+}
+out_EPSG_non_viz2
 ```
