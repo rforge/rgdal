@@ -128,7 +128,7 @@
 <span class='fu'>getRasterTable</span>(<span class='no'>dataset</span>, <span class='kw'>band</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>offset</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>0</span>),
   <span class='kw'>region.dim</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/dim.html'>dim</a></span>(<span class='no'>dataset</span>))
 
-<span class='fu'>getProjectionRef</span>(<span class='no'>dataset</span>, <span class='kw'>OVERRIDE_PROJ_DATUM_WITH_TOWGS84</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
+<span class='fu'>getProjectionRef</span>(<span class='no'>dataset</span>, <span class='kw'>OVERRIDE_PROJ_DATUM_WITH_TOWGS84</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>enforce_xy</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
 
 <span class='fu'>getRasterBand</span>(<span class='no'>dataset</span>, <span class='kw'>band</span> <span class='kw'>=</span> <span class='fl'>1</span>)
 
@@ -196,6 +196,10 @@
     <tr>
       <th>OVERRIDE_PROJ_DATUM_WITH_TOWGS84</th>
       <td><p>logical value, default NULL, which case the cached option set by <code>set_OVERRIDE_PROJ_DATUM_WITH_TOWGS84</code> is used. Ignored if the GDAL version is less than &#8220;1.8.0&#8221; or if the CPLConfigOption variable is already set</p></td>
+    </tr>
+    <tr>
+      <th>enforce_xy</th>
+      <td><p>(PROJ6+/GDAL3+) either use global setting (default NULL) or override policy for coordinate ordering easting/x as first axis, northing/y as second axis.</p></td>
     </tr>
     <tr>
       <th>value</th>
