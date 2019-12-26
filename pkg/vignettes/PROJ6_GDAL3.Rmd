@@ -1101,9 +1101,15 @@ set_enforce_xy(FALSE)
 get_enforce_xy()
 ```
 
+```{r}
+run <- TRUE
+if (packageVersion("sp") < "1.3.3") run <- FALSE
+```
+
+
 Setting it to false gives failing round-trips for two of the four CRS:
 
-```{r, warning=FALSE, message=FALSE}
+```{r, warning=FALSE, message=FALSE, eval=run}
 out_EPSG_non_viz <- matrix(as.logical(NA), nrow=4, ncol=4)
 colnames(out_EPSG_non_viz) <- names(from)
 rownames(out_EPSG_non_viz) <- to
@@ -1124,7 +1130,7 @@ set_enforce_xy(TRUE)
 get_enforce_xy()
 ```
 
-```{r, warning=FALSE, message=FALSE}
+```{r, warning=FALSE, message=FALSE, eval=run}
 out_EPSG <- matrix(as.logical(NA), nrow=4, ncol=4)
 colnames(out_EPSG) <- names(from)
 rownames(out_EPSG) <- to
@@ -1182,7 +1188,7 @@ out_init
 
 Finally, by listing candidate coordinate operations first, and choosing the best one, use can be made of the `list_coordOps()` `visualization_order=` argument, with default value `TRUE`; here it is given explicitly. This gives round trip success:
 
-```{r, warning=FALSE, message=FALSE}
+```{r, warning=FALSE, message=FALSE, eval=run}
 out_EPSG <- matrix(as.logical(NA), nrow=4, ncol=4)
 colnames(out_EPSG) <- names(from)
 rownames(out_EPSG) <- to
@@ -1202,7 +1208,7 @@ out_EPSG
 
 The setting of the `list_coordOps()` `visualization_order=` argument overrides the global option value (as would setting `enforce_xy=` in calls to `spTransform()`):
 
-```{r, warning=FALSE, message=FALSE}
+```{r, warning=FALSE, message=FALSE, eval=run}
 out_EPSG_non_viz1 <- matrix(as.logical(NA), nrow=4, ncol=4)
 colnames(out_EPSG_non_viz1) <- names(from)
 rownames(out_EPSG_non_viz1) <- to
@@ -1221,7 +1227,7 @@ out_EPSG_non_viz1
 ```
 
 
-```{r, warning=FALSE, message=FALSE}
+```{r, warning=FALSE, message=FALSE, eval=run}
 out_EPSG_non_viz2 <- matrix(as.logical(NA), nrow=4, ncol=4)
 colnames(out_EPSG_non_viz2) <- names(from)
 rownames(out_EPSG_non_viz2) <- to
