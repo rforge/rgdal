@@ -33,13 +33,14 @@ readOGR(dsn, layer, verbose = TRUE, p4s=NULL,
  useC=TRUE, disambiguateFIDs=FALSE, addCommentsToPolygons=TRUE,
  encoding=NULL, use_iconv=FALSE, swapAxisOrder=FALSE, require_geomType = NULL,
  integer64="no.loss", GDAL1_integer64_policy=FALSE, morphFromESRI = NULL,
- dumpSRS = FALSE)
+ dumpSRS = FALSE, enforce_xy = NULL)
 ogrInfo(dsn, layer, encoding=NULL,
  use_iconv=FALSE, swapAxisOrder=FALSE, require_geomType = NULL,
- morphFromESRI = NULL, dumpSRS = FALSE)
+ morphFromESRI = NULL, dumpSRS = FALSE, enforce_xy = NULL)
 ogrFIDs(dsn, layer)
 ogrDrivers()
-OGRSpatialRef(dsn, layer, morphFromESRI=NULL, dumpSRS = FALSE, driver = NULL)
+OGRSpatialRef(dsn, layer, morphFromESRI=NULL, dumpSRS = FALSE, driver = NULL,
+ enforce_xy = NULL)
 ogrListLayers(dsn)
 \method{print}{ogrinfo}(x, ...)
 }
@@ -64,6 +65,7 @@ ogrListLayers(dsn)
   \item{GDAL1_integer64_policy}{default FALSE, if TRUE, Integer64 fields are read as doubles}
   \item{morphFromESRI}{default NULL, morph from ESRI WKT1 dialect}
   \item{dumpSRS}{dump SRS to stdout from inside GDAL to debug conversion - developer use only}
+  \item{enforce_xy}{(PROJ6+/GDAL3+) either use global setting (default NULL) or override policy for coordinate ordering easting/x as first axis, northing/y as second axis.}
   \item{driver}{default NULL, driver found using \code{ogrListLayers} from the data source; otherwise already known and passed through from a calling function}
   \item{x}{ogrinfo object}
   \item{...}{other arguments to print method}

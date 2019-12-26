@@ -17,21 +17,21 @@ than creation.}
 \usage{ 
 readGDAL(fname, offset, region.dim, output.dim, band, p4s=NULL, ...,
  half.cell=c(0.5, 0.5), silent = FALSE, OVERRIDE_PROJ_DATUM_WITH_TOWGS84=NULL,
- allowedDrivers = NULL, options=NULL)
+ allowedDrivers = NULL, enforce_xy = NULL, options=NULL)
 asSGDF_GROD(x, offset, region.dim, output.dim, p4s=NULL, ...,
- half.cell=c(0.5,0.5), OVERRIDE_PROJ_DATUM_WITH_TOWGS84=NULL)
+ half.cell=c(0.5,0.5), OVERRIDE_PROJ_DATUM_WITH_TOWGS84=NULL, enforce_xy = NULL)
 writeGDAL(dataset, fname, drivername = "GTiff", type = "Float32",
  mvFlag = NA, options=NULL, copy_drivername = "GTiff", setStatistics=FALSE,
- colorTables = NULL, catNames=NULL)
+ colorTables = NULL, catNames=NULL, enforce_xy = NULL)
 create2GDAL(dataset, drivername = "GTiff", type = "Float32", mvFlag = NA,
  options=NULL, fname = NULL, setStatistics=FALSE, colorTables = NULL,
- catNames=NULL)
+ catNames=NULL, enforce_xy = NULL)
 GDALinfo(fname, silent=FALSE, returnRAT=FALSE, returnCategoryNames=FALSE,
  returnStats=TRUE, returnColorTable=FALSE,
  OVERRIDE_PROJ_DATUM_WITH_TOWGS84=NULL, returnScaleOffset=TRUE,
- allowedDrivers = NULL, options=NULL)
+ allowedDrivers = NULL, enforce_xy = NULL, options=NULL)
 GDALSpatialRef(fname, silent=FALSE, OVERRIDE_PROJ_DATUM_WITH_TOWGS84=NULL,
- allowedDrivers = NULL, options=NULL)
+ allowedDrivers = NULL, enforce_xy = NULL, options=NULL)
 }
 
 \arguments{
@@ -73,6 +73,7 @@ value works for \sQuote{Int32}, \sQuote{Float32}, \sQuote{Float64}, but
 suitable in-range value that fits the data type should be used for other 
 data types, for example 255 for \sQuote{Byte}, -32768 for \sQuote{Int16}, 
 and so on; see Details below.}
+\item{enforce_xy}{(PROJ6+/GDAL3+) either use global setting (default NULL) or override policy for coordinate ordering easting/x as first axis, northing/y as second axis.}
 \item{options}{driver-specific options to be passed to the GDAL driver; only available for opening datasets from GDAL 2.0; 
 see copying and creation details below}
 \item{setStatistics}{default FALSE, if TRUE, attempt to set per-band 

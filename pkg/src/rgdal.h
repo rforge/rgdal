@@ -57,14 +57,14 @@ SEXP RGDAL_CloseDataset(SEXP sxpDataset);
 SEXP RGDAL_DeleteFile(SEXP sxpDriver, SEXP sxpFileName);
 
 SEXP RGDAL_GetDescription(SEXP sxpObj);
-SEXP RGDAL_GetProjectionRef(SEXP sDataset);
+SEXP RGDAL_GetProjectionRef(SEXP sDataset, SEXP enforce_xy);
 SEXP RGDAL_GetYSize(SEXP sRasterBand);
 SEXP RGDAL_GetXSize(SEXP sRasterBand);
 SEXP RGDAL_GetGeoTransform(SEXP sxpDataset);
 SEXP RGDAL_SetGeoTransform(SEXP sxpDataset, SEXP GeoTransform);
 SEXP RGDAL_GetMetadata(SEXP sDataset, SEXP tag);
 SEXP RGDAL_SetProject(SEXP sxpDataset, SEXP proj4string);
-SEXP RGDAL_SetProject_WKT2(SEXP sxpDataset, SEXP WKT2string);
+SEXP RGDAL_SetProject_WKT2(SEXP sxpDataset, SEXP WKT2string, SEXP enforce_xy);
 SEXP RGDAL_SetNoDataValue(SEXP sxpRasterBand, SEXP NoDataValue);
 
 SEXP RGDAL_GetRasterYSize(SEXP sDataset);

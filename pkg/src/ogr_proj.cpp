@@ -31,11 +31,14 @@ SEXP P6_SRID_show(SEXP inSRID, SEXP format, SEXP multiline, SEXP in_format,
     char **papszOptions = NULL;
     SEXP Datum, ToWGS84;
     int i, pc=0;
+    int vis_order;
     const char *datum, *towgs84;
+    SEXP enforce_xy = getAttrib(in_format, install("enforce_xy"));
 
-/*Rprintf("P6_SRID_show input AxisMappingStrategy %d\n", hSRS.GetAxisMappingStrategy());
-    hSRS.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
-Rprintf("P6_SRID_show output AxisMappingStrategy %d\n", hSRS.GetAxisMappingStrategy());*/
+    if (enforce_xy == R_NilValue) vis_order = 0;
+    else if (LOGICAL_POINTER(enforce_xy)[0] == 1) vis_order = 1;
+    else if (LOGICAL_POINTER(enforce_xy)[0] == 0) vis_order = 0;
+    else vis_order = 0;
 
     if (INTEGER_POINTER(in_format)[0] == 1L) {
         installErrorHandler();
@@ -70,7 +73,8 @@ Rprintf("P6_SRID_show output AxisMappingStrategy %d\n", hSRS.GetAxisMappingStrat
     if (&hSRS != NULL) {
 
 //Rprintf("P6_SRID_show input2 AxisMappingStrategy %d\n", hSRS.GetAxisMappingStrategy());
-    hSRS.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
+        if (vis_order == 1) 
+            hSRS.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
 //Rprintf("P6_SRID_show output2 AxisMappingStrategy %d\n", hSRS.GetAxisMappingStrategy());
 
 
@@ -165,6 +169,13 @@ SEXP p4s_to_wkt(SEXP p4s, SEXP esri) {
     OGRSpatialReference hSRS = (OGRSpatialReference) NULL;
     char *pszSRS_WKT = NULL;
     SEXP ans;
+    int vis_order;
+    SEXP enforce_xy = getAttrib(esri, install("enforce_xy"));
+
+    if (enforce_xy == R_NilValue) vis_order = 0;
+    else if (LOGICAL_POINTER(enforce_xy)[0] == 1) vis_order = 1;
+    else if (LOGICAL_POINTER(enforce_xy)[0] == 0) vis_order = 0;
+    else vis_order = 0;
 
     installErrorHandler();
     if (hSRS.importFromProj4(CHAR(STRING_ELT(p4s, 0))) != OGRERR_NONE) {
@@ -175,15 +186,14 @@ SEXP p4s_to_wkt(SEXP p4s, SEXP esri) {
 
 #if GDAL_VERSION_MAJOR >= 3
     installErrorHandler();
-//Rprintf("p4s_to_wkt input AxisMappingStrategy %d\n", hSRS.GetAxisMappingStrategy());
-    hSRS.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
-//Rprintf("p4s_to_wkt output AxisMappingStrategy %d\n", hSRS.GetAxisMappingStrategy());
+    if (vis_order == 1) 
+        hSRS.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
     uninstallErrorHandlerAndTriggerError();
 #endif
 
 
     installErrorHandler();
-    if (INTEGER_POINTER(esri)[0] == 1) hSRS.morphToESRI();
+    if (LOGICAL_POINTER(esri)[0] == 1) hSRS.morphToESRI();
     hSRS.exportToWkt(&pszSRS_WKT);//FIXME VG
     uninstallErrorHandlerAndTriggerError();
 
@@ -201,7 +211,14 @@ SEXP wkt_to_p4s(SEXP wkt, SEXP esri) {
     char *pszSRS_P4 = NULL;
     char **ppszInput = NULL;
     SEXP ans;
+    int vis_order;
     ppszInput = CSLAddString(ppszInput, CHAR(STRING_ELT(wkt, 0)));//FIXME VG
+    SEXP enforce_xy = getAttrib(esri, install("enforce_xy"));
+
+    if (enforce_xy == R_NilValue) vis_order = 0;
+    else if (LOGICAL_POINTER(enforce_xy)[0] == 1) vis_order = 1;
+    else if (LOGICAL_POINTER(enforce_xy)[0] == 0) vis_order = 0;
+    else vis_order = 0;
 
     installErrorHandler();
 #if GDAL_VERSION_MAJOR == 1 || ( GDAL_VERSION_MAJOR == 2 && GDAL_VERSION_MINOR <= 2 ) // thanks to Even Roualt https://github.com/OSGeo/gdal/issues/681
@@ -218,15 +235,14 @@ SEXP wkt_to_p4s(SEXP wkt, SEXP esri) {
 
 #if GDAL_VERSION_MAJOR >= 3
     installErrorHandler();
-//Rprintf("wkt_to_p4s input AxisMappingStrategy %d\n", hSRS.GetAxisMappingStrategy());
-    hSRS.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
-//Rprintf("wkt_to_p4s output AxisMappingStrategy %d\n", hSRS.GetAxisMappingStrategy());
+    if (vis_order == 1) 
+        hSRS.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
     uninstallErrorHandlerAndTriggerError();
 #endif
 
 
     installErrorHandler();
-    if (INTEGER_POINTER(esri)[0] == 1) hSRS.morphFromESRI();
+    if (LOGICAL_POINTER(esri)[0] == 1) hSRS.morphFromESRI();
     hSRS.exportToProj4(&pszSRS_P4);//FIXME VG
     uninstallErrorHandlerAndTriggerError();
 
@@ -243,6 +259,13 @@ SEXP ogrAutoIdentifyEPSG(SEXP p4s) {
     OGRSpatialReference hSRS = (OGRSpatialReference) NULL;
     OGRErr thisOGRErr;
     SEXP ans;
+    int vis_order;
+    SEXP enforce_xy = getAttrib(p4s, install("enforce_xy"));
+
+    if (enforce_xy == R_NilValue) vis_order = 0;
+    else if (LOGICAL_POINTER(enforce_xy)[0] == 1) vis_order = 1;
+    else if (LOGICAL_POINTER(enforce_xy)[0] == 0) vis_order = 0;
+    else vis_order = 0;
 
     installErrorHandler();
     if (hSRS.importFromProj4(CHAR(STRING_ELT(p4s, 0))) != OGRERR_NONE) {
@@ -253,9 +276,8 @@ SEXP ogrAutoIdentifyEPSG(SEXP p4s) {
 
 #if GDAL_VERSION_MAJOR >= 3
     installErrorHandler();
-//Rprintf("ogrAutoIdentifyEPSG input AxisMappingStrategy %d\n", hSRS.GetAxisMappingStrategy());
-    hSRS.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
-//Rprintf("ogrAutoIdentifyEPSG output AxisMappingStrategy %d\n", hSRS.GetAxisMappingStrategy());
+    if (vis_order == 1)
+        hSRS.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
     uninstallErrorHandlerAndTriggerError();
 #endif
 
@@ -294,9 +316,14 @@ SEXP ogrP4S(SEXP ogrsourcename, SEXP Layer, SEXP morphFromESRI, SEXP dumpSRS) {
     OGRSpatialReference *hSRS = NULL;
     char *pszProj4 = NULL;
     SEXP ans, Datum, ToWGS84;
-    int i, pc=0;
+    int i, pc=0, vis_order;
     const char *datum, *towgs84;
+    SEXP enforce_xy = getAttrib(dumpSRS, install("enforce_xy"));
 
+    if (enforce_xy == R_NilValue) vis_order = 0;
+    else if (LOGICAL_POINTER(enforce_xy)[0] == 1) vis_order = 1;
+    else if (LOGICAL_POINTER(enforce_xy)[0] == 0) vis_order = 0;
+    else vis_order = 0;
 
     installErrorHandler();
 #ifdef GDALV2
@@ -326,7 +353,8 @@ SEXP ogrP4S(SEXP ogrsourcename, SEXP Layer, SEXP morphFromESRI, SEXP dumpSRS) {
     if (hSRS != NULL) {
         installErrorHandler();
 //Rprintf("ogrP4S input AxisMappingStrategy %d\n", hSRS->GetAxisMappingStrategy());
-        hSRS->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
+        if (vis_order == 1) 
+            hSRS->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
 //Rprintf("ogrP4S output AxisMappingStrategy %d\n", hSRS->GetAxisMappingStrategy());
         uninstallErrorHandlerAndTriggerError();
     }

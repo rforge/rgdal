@@ -9,7 +9,7 @@
 #
 ogrInfo <- function(dsn, layer, encoding=NULL,
   use_iconv=FALSE, swapAxisOrder=FALSE, require_geomType=NULL,
-  morphFromESRI=NULL, dumpSRS=FALSE) {
+  morphFromESRI=NULL, dumpSRS=FALSE, enforce_xy=NULL) {
   if (missing(dsn)) stop("missing dsn")
   stopifnot(is.character(dsn))
   stopifnot(length(dsn) == 1L)
@@ -176,7 +176,7 @@ ogrInfo <- function(dsn, layer, encoding=NULL,
   if (ogrinfo$driver != "ESRI Shapefile" && morphFromESRI)
     morphFromESRI <- FALSE
   p4s0 <- OGRSpatialRef(dsn, layer, morphFromESRI=morphFromESRI,
-    dumpSRS=dumpSRS)
+    dumpSRS=dumpSRS, enforce_xy=enforce_xy)
   if (new_proj_and_gdal()) wkt2 <- comment(p4s0)
   ogrinfo$p4s <- c(p4s0)
   if (new_proj_and_gdal()) ogrinfo$wkt2 <- wkt2
@@ -250,8 +250,8 @@ ogrDrivers <- function() {
   res
 }
 
-"OGRSpatialRef" <- function(dsn, layer, morphFromESRI=NULL, dumpSRS=FALSE,
-  driver=NULL) {
+OGRSpatialRef <- function(dsn, layer, morphFromESRI=NULL, dumpSRS=FALSE,
+  driver=NULL, enforce_xy=NULL) {
   stopifnot(is.character(dsn))
   stopifnot(length(dsn) == 1L)
   if (is.null(driver)) driver <- attr(ogrListLayers(dsn), "driver")
@@ -269,9 +269,18 @@ ogrDrivers <- function() {
   layer <- enc2utf8(layer)
   stopifnot(is.logical(dumpSRS))
   stopifnot(length(dumpSRS) == 1)
+  stopifnot(!is.na(dumpSRS))
+  if (!is.null(enforce_xy)) {
+    stopifnot(is.logical(enforce_xy))
+    stopifnot(length(enforce_xy) == 1L)
+    stopifnot(!is.na(enforce_xy))
+  } else {
+      enforce_xy <- get_enforce_xy()
+  }
+  attr(dumpSRS, "enforce_xy") <- enforce_xy
   wkt2 <- NULL
   res <- .Call("ogrP4S", as.character(dsn), as.character(layer),
-        as.logical(morphFromESRI), as.logical(dumpSRS), PACKAGE="rgdal")
+        as.logical(morphFromESRI), dumpSRS, PACKAGE="rgdal")
   if (!is.na(res) && new_proj_and_gdal()) {
     no_towgs84 <- ((is.null(attr(res, "towgs84"))) || 
       (all(nchar(attr(res, "towgs84")) == 0)))

@@ -854,13 +854,19 @@ RGDAL_GetRasterCount(SEXP sDataset) {
 
 /* changed to return proj4 string 20060212 RSB */
 SEXP
-RGDAL_GetProjectionRef(SEXP sDataset) {
+RGDAL_GetProjectionRef(SEXP sDataset, SEXP enforce_xy) {
 
   OGRSpatialReference oSRS;
   char *pszSRS_WKT = NULL;
   SEXP ans, Datum, ToWGS84;
   int i, pc=0;
   const char *datum, *towgs84;
+  int vis_order;
+
+  if (enforce_xy == R_NilValue) vis_order = 0;
+  else if (LOGICAL_POINTER(enforce_xy)[0] == 1) vis_order = 1;
+  else if (LOGICAL_POINTER(enforce_xy)[0] == 0) vis_order = 0;
+  else vis_order = 0;
 
   GDALDataset *pDataset = getGDALDatasetPtr(sDataset);
   
@@ -903,9 +909,10 @@ RGDAL_GetProjectionRef(SEXP sDataset) {
     uninstallErrorHandlerAndTriggerError();
 
 #if GDAL_VERSION_MAJOR >= 3
-Rprintf("RGDAL_GetProjectionRef input AxisMappingStrategy %d\n", oSRS.GetAxisMappingStrategy());
-    oSRS.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
-Rprintf("RGDAL_GetProjectionRef output AxisMappingStrategy %d\n", oSRS.GetAxisMappingStrategy());
+    installErrorHandler();
+        oSRS.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
+    uninstallErrorHandlerAndTriggerError();
+
     SEXP WKT2_2018;
     char *wkt2=NULL;
     char **papszOptions = NULL;
@@ -1949,13 +1956,15 @@ RGDAL_SetProject(SEXP sxpDataset, SEXP proj4string) {
 
   installErrorHandler();
   oSRS.importFromProj4(CHAR(STRING_ELT(proj4string, 0)));
+  uninstallErrorHandlerAndTriggerError();
 
 #if GDAL_VERSION_MAJOR >= 3
-Rprintf("RGDAL_SetProject input AxisMappingStrategy %d\n", oSRS.GetAxisMappingStrategy());
-  oSRS.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
-Rprintf("RGDAL_SetProject output AxisMappingStrategy %d\n", oSRS.GetAxisMappingStrategy());
+  installErrorHandler();
+    oSRS.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
+  uninstallErrorHandlerAndTriggerError();
 #endif
   
+  installErrorHandler();
   oSRS.exportToWkt( &pszSRS_WKT );
   uninstallErrorHandlerAndTriggerError();
 
@@ -1971,11 +1980,17 @@ Rprintf("RGDAL_SetProject output AxisMappingStrategy %d\n", oSRS.GetAxisMappingS
 }
 /* added RSB 20191103 */
 SEXP
-RGDAL_SetProject_WKT2(SEXP sxpDataset, SEXP WKT2string) {
+RGDAL_SetProject_WKT2(SEXP sxpDataset, SEXP WKT2string, SEXP enforce_xy) {
 
 #if GDAL_VERSION_MAJOR >= 3
 
   OGRSpatialReference oSRS;
+  int vis_order;
+
+  if (enforce_xy == R_NilValue) vis_order = 0;
+  else if (LOGICAL_POINTER(enforce_xy)[0] == 1) vis_order = 1;
+  else if (LOGICAL_POINTER(enforce_xy)[0] == 0) vis_order = 0;
+  else vis_order = 0;
 
   GDALDataset *pDataset = getGDALDatasetPtr(sxpDataset);
 
@@ -1983,11 +1998,11 @@ RGDAL_SetProject_WKT2(SEXP sxpDataset, SEXP WKT2string) {
 
   installErrorHandler();
   oSRS.importFromWkt(CHAR(STRING_ELT(WKT2string, 0)));
+  uninstallErrorHandlerAndTriggerError();
 
-Rprintf("RGDAL_SetProject_WKT2 input AxisMappingStrategy %d\n", oSRS.GetAxisMappingStrategy());
-  oSRS.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
-Rprintf("RGDAL_SetProject_WKT2 output AxisMappingStrategy %d\n", oSRS.GetAxisMappingStrategy());
-
+  installErrorHandler();
+  if (vis_order == 1)
+    oSRS.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
   uninstallErrorHandlerAndTriggerError();
 
   installErrorHandler();
