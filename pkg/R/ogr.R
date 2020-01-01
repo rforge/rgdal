@@ -288,7 +288,7 @@ OGRSpatialRef <- function(dsn, layer, morphFromESRI=NULL, dumpSRS=FALSE,
       warning("TOWGS84 discarded")
     if ((!is.null(attr(res, "ellps"))) 
         && (nchar(attr(res, "ellps")) > 0L)
-        && (length(grep("ellps|ELLIPSOID", c(res))) == 0L))
+        && (length(grep("ellps", c(res))) == 0L))
         warning("Discarded ellps ", attr(res, "ellps"),
             " in CRS definition")
     if ((!is.null(attr(res, "datum"))) && (nchar(attr(res, "datum")) > 0L)

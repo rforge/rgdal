@@ -199,7 +199,9 @@ SEXP p4s_to_wkt(SEXP p4s, SEXP esri) {
 
 
     installErrorHandler();
+#if GDAL_VERSION_MAJOR < 3
     if (LOGICAL_POINTER(esri)[0] == 1) hSRS.morphToESRI();
+#endif
     hSRS.exportToWkt(&pszSRS_WKT);//FIXME VG
     uninstallErrorHandlerAndTriggerError();
 
@@ -248,7 +250,10 @@ SEXP wkt_to_p4s(SEXP wkt, SEXP esri) {
 
 
     installErrorHandler();
-    if (LOGICAL_POINTER(esri)[0] == 1) hSRS.morphFromESRI();
+#if GDAL_VERSION_MAJOR < 3
+    if (LOGICAL_POINTER(esri)[0] == 1) hSRS.morphToESRI();
+#endif
+//    if (LOGICAL_POINTER(esri)[0] == 1) hSRS.morphFromESRI();
     hSRS.exportToProj4(&pszSRS_P4);//FIXME VG
     uninstallErrorHandlerAndTriggerError();
 
@@ -402,9 +407,13 @@ SEXP ogrP4S(SEXP ogrsourcename, SEXP Layer, SEXP morphFromESRI, SEXP dumpSRS) {
 
     if (hSRS != NULL) {
         installErrorHandler();
-	if (LOGICAL_POINTER(morphFromESRI)[0]) hSRS->morphFromESRI();
+#if GDAL_VERSION_MAJOR < 3
+        if (LOGICAL_POINTER(morphFromESRI)[0]) hSRS->morphFromESRI();
+#endif
+//	if (LOGICAL_POINTER(morphFromESRI)[0]) hSRS->morphFromESRI();
         if (hSRS->exportToProj4(&pszProj4) != OGRERR_NONE) {
             SET_STRING_ELT(ans, 0, NA_STRING);
+            CPLFree(pszProj4);
 	} else {
             SET_STRING_ELT(ans, 0, COPY_TO_USER_STRING(pszProj4));
             CPLFree(pszProj4);

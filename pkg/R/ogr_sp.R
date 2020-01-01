@@ -522,7 +522,7 @@ set_enforce_xy <- function(value) {
 }
 
 
-showSRID <- function(inSRID, format="WKT2", multiline="NO", enforce_xy=NULL) {
+showSRID <- function(inSRID, format="WKT2", multiline="NO", enforce_xy=NULL, EPSG_to_init=TRUE) {
     valid_WKT_formats <- c("SFSQL", "WKT1_SIMPLE", "WKT1", "WKT1_GDAL",
         "WKT1_ESRI", "WKT2_2015", "WKT2_2018", "WKT2")
     valid_formats <- c("PROJ", valid_WKT_formats)
@@ -547,7 +547,14 @@ showSRID <- function(inSRID, format="WKT2", multiline="NO", enforce_xy=NULL) {
     if (substring(inSRID, 1, 1) == "S") in_format = 3L
     if (substring(inSRID, 1, 4) == "EPSG") in_format = 4L
     epsg <- as.integer(NA)
-    if (in_format == 4L) epsg <- as.integer(substring(inSRID, 6, nchar(inSRID)))
+    if (in_format == 4L) {
+        if (EPSG_to_init) {
+            in_format = 1L
+            inSRID <- paste0("+init=epsg:", substring(inSRID, 6, nchar(inSRID)))
+        } else {
+            epsg <- as.integer(substring(inSRID, 6, nchar(inSRID)))
+        }
+    }
     format <- paste0("FORMAT=", format)
     multiline <- paste0("MULTILINE=", multiline)
     if (!is.null(enforce_xy)) {
