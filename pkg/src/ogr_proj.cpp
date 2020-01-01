@@ -321,9 +321,9 @@ SEXP ogrP4S(SEXP ogrsourcename, SEXP Layer, SEXP morphFromESRI, SEXP dumpSRS) {
 
     OGRSpatialReference *hSRS = NULL;
     char *pszProj4 = NULL;
-    SEXP ans, Datum, ToWGS84;
+    SEXP ans, Datum, ToWGS84, Ellps;
     int i, pc=0, vis_order;
-    const char *datum, *towgs84;
+    const char *datum, *towgs84, *ellps;
     SEXP enforce_xy = getAttrib(dumpSRS, install("enforce_xy"));
 
     if (enforce_xy == R_NilValue) vis_order = 0;
@@ -419,6 +419,12 @@ SEXP ogrP4S(SEXP ogrsourcename, SEXP Layer, SEXP morphFromESRI, SEXP dumpSRS) {
         PROTECT(Datum = NEW_CHARACTER(1)); pc++;
         if (datum != NULL) SET_STRING_ELT(Datum, 0, COPY_TO_USER_STRING(datum));
 
+        installErrorHandler();
+        ellps = hSRS->GetAttrValue("DATUM|SPHEROID");
+        uninstallErrorHandlerAndTriggerError();
+        PROTECT(Ellps = NEW_CHARACTER(1)); pc++;
+        if (ellps != NULL) SET_STRING_ELT(Ellps, 0, COPY_TO_USER_STRING(ellps));
+
         PROTECT(ToWGS84 = NEW_CHARACTER(7)); pc++;
         installErrorHandler();
         for (i=0; i<7; i++) {
@@ -429,6 +435,7 @@ SEXP ogrP4S(SEXP ogrsourcename, SEXP Layer, SEXP morphFromESRI, SEXP dumpSRS) {
         uninstallErrorHandlerAndTriggerError();
         setAttrib(ans, install("towgs84"), ToWGS84);
         setAttrib(ans, install("datum"), Datum);
+        setAttrib(ans, install("ellps"), Ellps);
     }
 
 

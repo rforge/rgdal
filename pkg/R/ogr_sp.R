@@ -569,6 +569,11 @@ showSRID <- function(inSRID, format="WKT2", multiline="NO", enforce_xy=NULL) {
                 (all(nchar(attr(res, "towgs84")) == 0)))
             if ((length(grep("towgs84|TOWGS84|Position Vector|Geocentric translations", c(res))) == 0L)
                 && !no_towgs84) warning("TOWGS84 discarded")
+            if ((!is.null(attr(res, "ellps"))) 
+                && (nchar(attr(res, "ellps")) > 0L)
+                && (length(grep("ellps|ELLIPSOID", c(res))) == 0L))
+                warning("Discarded ellps ", attr(res, "ellps"),
+                    " in CRS definition")
             if ((!is.null(attr(res, "datum"))) 
                 && (nchar(attr(res, "datum")) > 0L)
                 && (length(grep("datum|DATUM", c(res))) == 0L)) {
