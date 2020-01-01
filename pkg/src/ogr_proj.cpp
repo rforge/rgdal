@@ -25,14 +25,14 @@ SEXP P6_SRID_show(SEXP inSRID, SEXP format, SEXP multiline, SEXP in_format,
 
 #if GDAL_VERSION_MAJOR >= 3
 
-    OGRSpatialReference hSRS = (OGRSpatialReference) NULL;
+    OGRSpatialReference hSRS;
     char *pszSRS = NULL;
     SEXP ans;
     char **papszOptions = NULL;
-    SEXP Datum, ToWGS84;
+    SEXP Datum, ToWGS84, Ellps;
     int i, pc=0;
     int vis_order;
-    const char *datum, *towgs84;
+    const char *datum, *towgs84, *ellps;
     SEXP enforce_xy = getAttrib(in_format, install("enforce_xy"));
 
     if (enforce_xy == R_NilValue) vis_order = 0;
@@ -71,27 +71,8 @@ SEXP P6_SRID_show(SEXP inSRID, SEXP format, SEXP multiline, SEXP in_format,
     }
 
     if (&hSRS != NULL) {
-
-//Rprintf("P6_SRID_show input2 AxisMappingStrategy %d\n", hSRS.GetAxisMappingStrategy());
         if (vis_order == 1) 
             hSRS.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
-//Rprintf("P6_SRID_show output2 AxisMappingStrategy %d\n", hSRS.GetAxisMappingStrategy());
-
-
-        installErrorHandler();
-        datum = hSRS.GetAttrValue("DATUM");
-        uninstallErrorHandlerAndTriggerError();
-        PROTECT(Datum = NEW_CHARACTER(1)); pc++;
-        if (datum != NULL) SET_STRING_ELT(Datum, 0, COPY_TO_USER_STRING(datum));
-
-        PROTECT(ToWGS84 = NEW_CHARACTER(7)); pc++;
-        installErrorHandler();
-        for (i=0; i<7; i++) {
-            towgs84 = hSRS.GetAttrValue("TOWGS84", i);
-            if (towgs84 != NULL) SET_STRING_ELT(ToWGS84, i,
-                COPY_TO_USER_STRING(towgs84));
-        }
-        uninstallErrorHandlerAndTriggerError();
     }
 
 
@@ -104,8 +85,9 @@ SEXP P6_SRID_show(SEXP inSRID, SEXP format, SEXP multiline, SEXP in_format,
         uninstallErrorHandlerAndTriggerError();
 
         installErrorHandler();
-        
         if (hSRS.exportToWkt(&pszSRS, papszOptions) != OGRERR_NONE) {
+            CPLFree(pszSRS);
+            CSLDestroy(papszOptions);
             uninstallErrorHandlerAndTriggerError();
 	    error("Can't express as WKT");
         }
@@ -120,15 +102,39 @@ SEXP P6_SRID_show(SEXP inSRID, SEXP format, SEXP multiline, SEXP in_format,
         }
         uninstallErrorHandlerAndTriggerError();
     } else {
+        CPLFree(pszSRS);
+        CSLDestroy(papszOptions);
         error("unknown output format");
     }
 
-    CPLFree(pszSRS);
-
     if (&hSRS != NULL) {
+        installErrorHandler();
+        datum = hSRS.GetAttrValue("DATUM");
+        uninstallErrorHandlerAndTriggerError();
+        PROTECT(Datum = NEW_CHARACTER(1)); pc++;
+        if (datum != NULL) SET_STRING_ELT(Datum, 0, COPY_TO_USER_STRING(datum));
+
+        installErrorHandler();
+        ellps = hSRS.GetAttrValue("DATUM|SPHEROID");
+        uninstallErrorHandlerAndTriggerError();
+        PROTECT(Ellps = NEW_CHARACTER(1)); pc++;
+        if (ellps != NULL) SET_STRING_ELT(Ellps, 0, COPY_TO_USER_STRING(ellps));
+
+        PROTECT(ToWGS84 = NEW_CHARACTER(7)); pc++;
+        installErrorHandler();
+        for (i=0; i<7; i++) {
+            towgs84 = hSRS.GetAttrValue("TOWGS84", i);
+            if (towgs84 != NULL) SET_STRING_ELT(ToWGS84, i,
+                COPY_TO_USER_STRING(towgs84));
+        }
+        uninstallErrorHandlerAndTriggerError();
         setAttrib(ans, install("towgs84"), ToWGS84);
         setAttrib(ans, install("datum"), Datum);
+        setAttrib(ans, install("ellps"), Ellps);
     }
+
+    CPLFree(pszSRS);
+    CSLDestroy(papszOptions);
 
     UNPROTECT(pc);
 
@@ -166,7 +172,7 @@ SEXP R_GDAL_OSR_PROJ() {
 
 SEXP p4s_to_wkt(SEXP p4s, SEXP esri) {
 
-    OGRSpatialReference hSRS = (OGRSpatialReference) NULL;
+    OGRSpatialReference hSRS;
     char *pszSRS_WKT = NULL;
     SEXP ans;
     int vis_order;
@@ -207,7 +213,7 @@ SEXP p4s_to_wkt(SEXP p4s, SEXP esri) {
 
 SEXP wkt_to_p4s(SEXP wkt, SEXP esri) {
 
-    OGRSpatialReference hSRS = (OGRSpatialReference) NULL;
+    OGRSpatialReference hSRS;
     char *pszSRS_P4 = NULL;
     char **ppszInput = NULL;
     SEXP ans;
@@ -256,7 +262,7 @@ SEXP wkt_to_p4s(SEXP wkt, SEXP esri) {
 
 SEXP ogrAutoIdentifyEPSG(SEXP p4s) {
 
-    OGRSpatialReference hSRS = (OGRSpatialReference) NULL;
+    OGRSpatialReference hSRS;
     OGRErr thisOGRErr;
     SEXP ans;
     int vis_order;
@@ -387,23 +393,10 @@ SEXP ogrP4S(SEXP ogrsourcename, SEXP Layer, SEXP morphFromESRI, SEXP dumpSRS) {
             SET_STRING_ELT(WKT2_2018, 0, NA_STRING);
         }
         SET_STRING_ELT(WKT2_2018, 0, COPY_TO_USER_STRING(wkt2));
+        CSLDestroy(papszOptions);
         uninstallErrorHandlerAndTriggerError();
         setAttrib(ans, install("WKT2_2018"), WKT2_2018);
 #endif
-        installErrorHandler();
-        datum = hSRS->GetAttrValue("DATUM");
-        uninstallErrorHandlerAndTriggerError();
-        PROTECT(Datum = NEW_CHARACTER(1)); pc++;
-        if (datum != NULL) SET_STRING_ELT(Datum, 0, COPY_TO_USER_STRING(datum));
-
-        PROTECT(ToWGS84 = NEW_CHARACTER(7)); pc++;
-        installErrorHandler();
-        for (i=0; i<7; i++) {
-            towgs84 = hSRS->GetAttrValue("TOWGS84", i);
-            if (towgs84 != NULL) SET_STRING_ELT(ToWGS84, i,
-                COPY_TO_USER_STRING(towgs84));
-        }
-        uninstallErrorHandlerAndTriggerError();
     }
 
 
@@ -419,14 +412,30 @@ SEXP ogrP4S(SEXP ogrsourcename, SEXP Layer, SEXP morphFromESRI, SEXP dumpSRS) {
         uninstallErrorHandlerAndTriggerError();
     } else SET_STRING_ELT(ans, 0, NA_STRING);
 
+    if (hSRS != NULL) {
+        installErrorHandler();
+        datum = hSRS->GetAttrValue("DATUM");
+        uninstallErrorHandlerAndTriggerError();
+        PROTECT(Datum = NEW_CHARACTER(1)); pc++;
+        if (datum != NULL) SET_STRING_ELT(Datum, 0, COPY_TO_USER_STRING(datum));
+
+        PROTECT(ToWGS84 = NEW_CHARACTER(7)); pc++;
+        installErrorHandler();
+        for (i=0; i<7; i++) {
+            towgs84 = hSRS->GetAttrValue("TOWGS84", i);
+            if (towgs84 != NULL) SET_STRING_ELT(ToWGS84, i,
+                COPY_TO_USER_STRING(towgs84));
+        }
+        uninstallErrorHandlerAndTriggerError();
+        setAttrib(ans, install("towgs84"), ToWGS84);
+        setAttrib(ans, install("datum"), Datum);
+    }
+
+
     installErrorHandler();
     delete poDS;
     uninstallErrorHandlerAndTriggerError();
 
-    if (hSRS != NULL) {
-        setAttrib(ans, install("towgs84"), ToWGS84);
-        setAttrib(ans, install("datum"), Datum);
-    }
     UNPROTECT(pc);
     return(ans);
 }

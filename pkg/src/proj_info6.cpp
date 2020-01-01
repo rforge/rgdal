@@ -530,6 +530,109 @@ SEXP transform_ng(SEXP fromargs, SEXP toargs, SEXP coordOp, SEXP npts, SEXP x, S
     return(res);
 }
 
+SEXP project_ng(SEXP n, SEXP xlon, SEXP ylat, SEXP projarg, SEXP ob_tran, SEXP coordOp) {
+  int i, nwarn=0, is_ob_tran=LOGICAL_POINTER(ob_tran)[0], 
+      nn=INTEGER_POINTER(n)[0];
+
+/*  projUV p;
+  projPJ pj;*/
+  SEXP res;
+/*  double ixlon, iylat;
+  
+  if (!(pj = pj_init_plus(CHAR(STRING_ELT(projarg, 0))))) //FIXME VG poss
+    error(pj_strerrno(*pj_get_errno_ref()));
+//Rprintf("pj_fwd: %s\n", pj_get_def(pj, 0));*/
+  PROTECT(res = NEW_LIST(2));
+  SET_VECTOR_ELT(res, 0, NEW_NUMERIC(nn));
+  SET_VECTOR_ELT(res, 1, NEW_NUMERIC(nn));
+
+/*//Rprintf("n: %d, is_ob_tran: %d\n", nn, is_ob_tran);
+
+  for (i=0; i<nn; i++) {
+//Rprintf("i: %d ", i);
+    ixlon = NUMERIC_POINTER(xlon)[i];
+//Rprintf("xlon: %f ", ixlon);
+    iylat = NUMERIC_POINTER(ylat)[i];
+//Rprintf("ylat: %f\n", iylat);
+    // preserve NAs and NaNs. Allow Infs, since maybe proj can handle them. 
+    if(ISNAN(ixlon) || ISNAN(iylat)){
+      NUMERIC_POINTER(VECTOR_ELT(res, 0))[i]=ixlon;
+      NUMERIC_POINTER(VECTOR_ELT(res, 1))[i]=iylat;
+    } else {
+      p.u=ixlon;
+      p.v=iylat;
+      p.u *= DEG_TO_RAD;
+      p.v *= DEG_TO_RAD;
+      p = pj_fwd(p, pj);
+      if (p.u == HUGE_VAL || ISNAN(p.u) || p.v == HUGE_VAL || ISNAN(p.v)) {
+              nwarn++;
+//	      Rprintf("projected point not finite\n");
+      }
+       if (is_ob_tran) {
+        p.u *= RAD_TO_DEG;
+        p.v *= RAD_TO_DEG;
+      }
+//Rprintf("i: %d x: %f y: %f\n", i, p.u, p.v);
+      NUMERIC_POINTER(VECTOR_ELT(res, 0))[i]=p.u;
+      NUMERIC_POINTER(VECTOR_ELT(res, 1))[i]=p.v;
+    }
+  }
+  if (nwarn > 0) warning("%d projected point(s) not finite", nwarn);
+
+  pj_free(pj); */
+  UNPROTECT(1);
+  return(res);
+}
+
+
+SEXP project_ng_inv(SEXP n, SEXP x, SEXP y, SEXP projarg, SEXP ob_tran, SEXP coordOp) {
+  int i, nwarn=0, is_ob_tran=LOGICAL_POINTER(ob_tran)[0], 
+      nn=INTEGER_POINTER(n)[0];
+
+/*  projUV p;
+  projPJ pj;*/
+  SEXP res;
+/*  double ix, iy;
+
+  pj = pj_init_plus((const char*) CHAR(STRING_ELT(projarg, 0)));//FIXME VG poss
+  if (!(pj)) {
+    pj_free(pj);
+    error(pj_strerrno(*pj_get_errno_ref()));
+  }
+Rprintf("pj_inv: %s\n", pj_get_def(pj, 0));*/
+  PROTECT(res = NEW_LIST(2));
+  SET_VECTOR_ELT(res, 0, NEW_NUMERIC(nn));
+  SET_VECTOR_ELT(res, 1, NEW_NUMERIC(nn));
+
+/*  for(i=0;i<nn;i++){
+    ix = NUMERIC_POINTER(x)[i];
+    iy = NUMERIC_POINTER(y)[i];
+    if(ISNAN(ix) || ISNAN(iy)){
+      NUMERIC_POINTER(VECTOR_ELT(res, 0))[i]=ix;
+      NUMERIC_POINTER(VECTOR_ELT(res, 1))[i]=iy;
+    } else {
+      p.u=ix;
+      p.v=iy;
+      if (is_ob_tran) {
+        p.u *= DEG_TO_RAD;
+        p.v *= DEG_TO_RAD;
+      }
+      p = pj_inv(p, pj);
+      if (p.u == HUGE_VAL || ISNAN(p.u) || p.v == HUGE_VAL || ISNAN(p.v)) {
+            nwarn++;
+	    Rprintf("inverse projected point not finite\n");
+      }
+      NUMERIC_POINTER(VECTOR_ELT(res, 0))[i]=p.u * RAD_TO_DEG;
+      NUMERIC_POINTER(VECTOR_ELT(res, 1))[i]=p.v * RAD_TO_DEG;
+    }
+  }
+  if (nwarn > 0) warning("%d projected point(s) not finite", nwarn);
+
+  pj_free(pj); */
+  UNPROTECT(1);
+  return(res); 
+}
+
 
 
 // blocks error messages in this context

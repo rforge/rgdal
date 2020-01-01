@@ -76,6 +76,8 @@ static R_CallMethodDef CallEntries[] = {
     {"RGDAL_projInfo", (DL_FUNC) &RGDAL_projInfo, 1},
     {"RGDAL_project", (DL_FUNC) &RGDAL_project, 5},
     {"project_inv", (DL_FUNC) &project_inv, 5},
+    {"project_ng", (DL_FUNC) &project_ng, 6},
+    {"project_ng_inv", (DL_FUNC) &project_ng_inv, 6},
     {"RGDAL_SetGeoTransform", (DL_FUNC) &RGDAL_SetGeoTransform, 2},
     {"RGDAL_GetNoDataValue", (DL_FUNC) &RGDAL_GetNoDataValue, 1},
     {"RGDAL_GetMetadata", (DL_FUNC) &RGDAL_GetMetadata, 2},

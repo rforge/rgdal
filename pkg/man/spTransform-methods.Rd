@@ -118,8 +118,7 @@ print(coordinates(SFpoint_NAD83), digits=12)
 }
 data(meuse)
 coordinates(meuse) <- c("x", "y")
-proj4string(meuse) <- CRS(paste("+init=epsg:28992",
- "+towgs84=565.237,50.0087,465.658,-0.406857,0.350733,-1.87035,4.0812"))
+proj4string(meuse) <- CRS("+init=epsg:28992")
 # see http://trac.osgeo.org/gdal/ticket/1987
 summary(meuse)
 meuse.utm <- spTransform(meuse, CRS("+proj=utm +zone=32 +datum=WGS84"))

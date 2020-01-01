@@ -254,7 +254,7 @@ cat(strwrap(gsub(",", ", ", (comment(crs)))), sep="\n")
 
 An early warning of difficulties with discarded `+datum` values came with the GB datum:
 
-```{r}
+```{r, eval=FALSE}
 (crs <- CRS("+init=epsg:27700"))
 ```
 
@@ -269,7 +269,7 @@ An early warning of difficulties with discarded `+datum` values came with the GB
 
 Here, the comment has all the information that would be needed to carry out coordinate operations, but the PROJ string is defective for GDAL3/PROJ6, giving at best ballpark accuracy.
 
-```{r}
+```{r, eval=FALSE}
 cat(strwrap(gsub(",", ", ", (comment(crs)))), sep="\n")
 ```
 
@@ -303,7 +303,7 @@ In PROJ4/GDAL2, the `+datum` and `+towgs84` values give much better transformati
 
 From **sp** 1.3-3 (my fork), `CRS()` takes a third argument to the legacy two, `projargs=` and `doCheckCRSArgs=TRUE`: `SRS_string=NULL`. This can take any string that `rgdal::showSRID()` can handle. The warning follows use of `exportToProj4()`:
 
-```{r}
+```{r, eval=TRUE}
 if (packageVersion("sp") >= "1.3.3") (crs <- CRS(SRS_string = "EPSG:27700"))
 ```
 
@@ -316,7 +316,7 @@ if (packageVersion("sp") >= "1.3.3") (crs <- CRS(SRS_string = "EPSG:27700"))
 ## +y_0=-100000 +ellps=airy +units=m +no_defs
 ```
 
-```{r}
+```{r, eval=TRUE}
 if (packageVersion("sp") >= "1.3.3") cat(strwrap(gsub(",", ", ", (comment(crs)))), sep="\n")
 ```
 
@@ -340,7 +340,7 @@ if (packageVersion("sp") >= "1.3.3") cat(strwrap(gsub(",", ", ", (comment(crs)))
 
 We can also use a more detailed PROJ string, but without any improvement of the output PROJ representation; the comment is OK:
 
-```{r}
+```{r, eval=FALSE}
 (crs <- CRS("+proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +datum=OSGB36 +units=m +no_defs"))
 ```
 
@@ -354,7 +354,7 @@ We can also use a more detailed PROJ string, but without any improvement of the 
 ```
 
 
-```{r}
+```{r, eval=FALSE}
 cat(strwrap(gsub(",", ", ", (comment(crs)))), sep="\n")
 ```
 
@@ -376,7 +376,7 @@ cat(strwrap(gsub(",", ", ", (comment(crs)))), sep="\n")
 
 `rgdal::showSRID()` is quite versatile, so we can display a multiline WKT string as well:
 
-```{r}
+```{r, eval=FALSE}
 if (packageVersion("rgdal") >= "1.5.1") cat(rgdal::showSRID("+init=epsg:27700", format="WKT2_2018", multiline="YES"), "\n")
 ```
 
@@ -451,7 +451,7 @@ run <- new_proj_and_gdal()
 We can first show what happens when searching for instantiable coordinate operations. These are coordinate operations that can be created by look-up in the PROJ database given the information in the input description. Here the datum has been discarded.
 
 ```{r, eval=run}
-discarded_datum <- showSRID("EPSG:27700", "PROJ")
+(discarded_datum <- showSRID("EPSG:27700", "PROJ"))
 ```
 
 ```{r}
