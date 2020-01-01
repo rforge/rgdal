@@ -140,12 +140,7 @@ plot(scot_LL, axes=TRUE)
 grdtxt_LL <- gridat(scot_LL)
 grd_LL <- gridlines(scot_LL, ndiscr=100)
 summary(grd_LL)
-if (strsplit(strsplit(getPROJ4VersionInfo(), ",")[[1]][1],  " ")[[1]][2]
-    < "6.3.0") {
-  target <- CRS(proj4string(scot_BNG))
-} else {
-  target <- CRS(SRS_string=comment(slot(scot_BNG, "proj4string")))
-}
+target <- CRS(proj4string(scot_BNG))
 grd_BNG <- spTransform(grd_LL, target)
 grdtxt_BNG <- spTransform(grdtxt_LL, target)
 plot(scot_BNG, axes=TRUE, las=1)

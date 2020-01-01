@@ -279,6 +279,7 @@ OGRSpatialRef <- function(dsn, layer, morphFromESRI=NULL, dumpSRS=FALSE,
   }
   attr(dumpSRS, "enforce_xy") <- enforce_xy
   wkt2 <- NULL
+  no_ellps <- FALSE
   res <- .Call("ogrP4S", as.character(dsn), as.character(layer),
         as.logical(morphFromESRI), dumpSRS, PACKAGE="rgdal")
   if (!is.na(res) && new_proj_and_gdal()) {
@@ -286,11 +287,11 @@ OGRSpatialRef <- function(dsn, layer, morphFromESRI=NULL, dumpSRS=FALSE,
       (all(nchar(attr(res, "towgs84")) == 0)))
     if ((length(grep("towgs84", c(res))) == 0L) && !no_towgs84)
       warning("TOWGS84 discarded")
-    if ((!is.null(attr(res, "ellps"))) 
-        && (nchar(attr(res, "ellps")) > 0L)
-        && (length(grep("ellps", c(res))) == 0L))
-        warning("Discarded ellps ", attr(res, "ellps"),
-            " in CRS definition")
+    no_ellps <- (!is.null(attr(res, "ellps"))) &&
+        (nchar(attr(res, "ellps")) > 0L) &&
+        (length(grep("ellps", c(res))) == 0L)
+    if (no_ellps) warning("Discarded ellps ", attr(res, "ellps"),
+            " in CRS definition: ", c(res))
     if ((!is.null(attr(res, "datum"))) && (nchar(attr(res, "datum")) > 0L)
       && (length(grep("datum", c(res))) == 0L)) {
       msg <- paste0("Discarded datum ", attr(res, "datum"),
@@ -303,7 +304,10 @@ OGRSpatialRef <- function(dsn, layer, morphFromESRI=NULL, dumpSRS=FALSE,
     if (new_proj_and_gdal()) wkt2 <- attr(res, "WKT2_2018")
   }
   res <- c(res)
-  if (new_proj_and_gdal()) comment(res) <- wkt2
+  if (new_proj_and_gdal()) {
+    if (no_ellps) res <- showSRID(wkt2, "PROJ")
+    comment(res) <- wkt2
+  }
   res
 }
 

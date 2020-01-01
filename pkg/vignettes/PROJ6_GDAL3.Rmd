@@ -809,7 +809,7 @@ best_instantiable_coordOp(x)
 
 ## Transformations
 
-The problem raised by the modernisation of PROJ can be encapsulated in this example of Scotland (once again the commented out runs are from a PROJ6/GDAL3 platform, the live runs from the platform building the vignette):
+The problem raised by the modernisation of PROJ can be encapsulated in this example of Scotland (once again the commented out runs are from a PROJ62/GDAL30 platform, the live runs from the platform building the vignette):
 
 ```{r}
 scot_BNG <- readOGR(system.file("vectors", package="rgdal"), "scot_BNG")
@@ -841,11 +841,10 @@ On reading with PROJ6/GDAL3, we discard the `+datum` tag, so losing information 
 ## [1] TRUE
 ```
 
-(Again, commented output blocks are run on a PROJ6/GDAL3 platform). Demonstatration impacted by PROJ 6.3.0 fragility.
+(Again, commented output blocks are run on a PROJ6/GDAL3 platform). This demonstration was impacted by PROJ 6.3.0 fragility, with the `+ellps=` tag vanishing (with the `+units=` tag) apparently arbitrarily. A tentative diagnosis is that the datum node of the OGRSpatialReference object becomes unavailable, although why some change in PROJ leads to this aberation is unknown.
 
 ```{r}
-if (strsplit(strsplit(getPROJ4VersionInfo(), ",")[[1]][1],  " ")[[1]][2]
-    < "6.3.0") set_transform_wkt_comment(FALSE)
+set_transform_wkt_comment(FALSE)
 scot_LL <- spTransform(scot_BNG, CRS("+proj=longlat +datum=WGS84"))
 (b0 <- bbox(scot_LL))
 ```
