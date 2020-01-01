@@ -214,8 +214,10 @@ readOGR <- function(dsn, layer, verbose=TRUE, p4s=NULL,
 #        stopifnot(length(dumpSRS) == 1)
 #	prj <- .Call("ogrP4S", as.character(dsn), enc2utf8(as.character(layer)),		as.logical(morphFromESRI), as.logical(dumpSRS), PACKAGE="rgdal")
 
-        prj <- OGRSpatialRef(dsn=dsn, layer=layer, morphFromESRI=morphFromESRI,
-          dumpSRS=dumpSRS, driver=ogr_info$driver, enforce_xy=enforce_xy)
+#        prj <- OGRSpatialRef(dsn=dsn, layer=layer, morphFromESRI=morphFromESRI,
+#          dumpSRS=dumpSRS, driver=ogr_info$driver, enforce_xy=enforce_xy)
+
+        prj <- ogr_info$p4s
 
 	if (!is.null(p4s)) {
           if (!is.na(prj)) {
@@ -227,9 +229,9 @@ readOGR <- function(dsn, layer, verbose=TRUE, p4s=NULL,
         }
 
 	if (!is.na(p4s) && nchar(p4s) == 0) p4s <- as.character(NA)
-        if (new_proj_and_gdal()) wkt2 <- comment(p4s)
+#        if (new_proj_and_gdal()) wkt2 <- ogr_info$wkt2
         oCRS <- CRS(c(p4s))
-        if (new_proj_and_gdal()) comment(oCRS) <- wkt2
+        if (new_proj_and_gdal()) comment(oCRS) <- ogr_info$wkt2
 
 	geometry <- .Call("R_OGR_CAPI_features", as.character(dsn), 
 		enc2utf8(as.character(layer)), comments=addCommentsToPolygons,
