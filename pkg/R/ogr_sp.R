@@ -230,7 +230,7 @@ readOGR <- function(dsn, layer, verbose=TRUE, p4s=NULL,
 
 	if (!is.na(p4s) && nchar(p4s) == 0) p4s <- as.character(NA)
 #        if (new_proj_and_gdal()) wkt2 <- ogr_info$wkt2
-        oCRS <- CRS(c(p4s))
+        oCRS <- new("CRS", projargs=p4s)
         if (new_proj_and_gdal()) comment(oCRS) <- ogr_info$wkt2
 
 	geometry <- .Call("R_OGR_CAPI_features", as.character(dsn), 

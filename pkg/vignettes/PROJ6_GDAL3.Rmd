@@ -841,10 +841,11 @@ On reading with PROJ6/GDAL3, we discard the `+datum` tag, so losing information 
 ## [1] TRUE
 ```
 
-(Again, commented output blocks are run on a PROJ6/GDAL3 platform).
+(Again, commented output blocks are run on a PROJ6/GDAL3 platform). Demonstatration impacted by PROJ 6.3.0 fragility.
 
 ```{r}
-set_transform_wkt_comment(FALSE)
+if (strsplit(strsplit(getPROJ4VersionInfo(), ",")[[1]][1],  " ")[[1]][2]
+    < "6.3.0") set_transform_wkt_comment(FALSE)
 scot_LL <- spTransform(scot_BNG, CRS("+proj=longlat +datum=WGS84"))
 (b0 <- bbox(scot_LL))
 ```
