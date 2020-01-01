@@ -237,10 +237,10 @@ SEXP OGR_write(SEXP inp)
 
 #if GDAL_VERSION_MAJOR >= 3
         installErrorHandler();
-Rprintf("OGR_write input AxisMappingStrategy %d\n", poSRS->GetAxisMappingStrategy());
+//Rprintf("OGR_write input AxisMappingStrategy %d\n", poSRS->GetAxisMappingStrategy());
         poSRS->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
         uninstallErrorHandlerAndTriggerError();
-Rprintf("OGR_write output AxisMappingStrategy %d\n", poSRS->GetAxisMappingStrategy());
+//Rprintf("OGR_write output AxisMappingStrategy %d\n", poSRS->GetAxisMappingStrategy());
 #endif
 
         installErrorHandler();
