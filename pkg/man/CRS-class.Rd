@@ -42,6 +42,7 @@ The 4.9.1 release of PROJ.4 omitted a small file of defaults, leading to reports
 
 
 \examples{
+set_thin_PROJ6_warnings(TRUE)
 CRSargs(CRS("+proj=longlat"))
 try(CRS("+proj=longlat"))
 CRSargs(CRS("+proj=longlat +datum=NAD27"))
