@@ -430,10 +430,31 @@ getProjectionRef <- function(dataset, OVERRIDE_PROJ_DATUM_WITH_TOWGS84=NULL, enf
   } else {
     res <- .Call('RGDAL_GetProjectionRef', dataset, enforce_xy, PACKAGE="rgdal")
   }
+  no_ellps <- FALSE
   if (!(nchar(res) == 0L) && new_proj_and_gdal()) {
     no_towgs84 <- all(nchar(attr(res, "towgs84")) == 0)
     if ((length(grep("towgs84", c(res))) == 0L) && !no_towgs84)
       warning("TOWGS84 discarded")
+    no_ellps <- (!is.null(attr(res, "ellps"))) &&
+        (nchar(attr(res, "ellps")) > 0L) &&
+        (length(grep("ellps", c(res))) == 0L)
+    if (no_ellps) {
+      msg <- paste0("Discarded ellps ", attr(res, "ellps"),
+            " in CRS definition: ", c(res))
+      if (!get_thin_PROJ6_warnings()) {
+        warning(msg)
+        } else {
+          if (get("PROJ6_warnings_count",
+            envir=.RGDAL_CACHE) == 0L) {
+            warning(paste0("PROJ6/GDAL3 PROJ string degradation in workflow\n repeated warnings suppressed\n ", msg))
+            assign("PROJ6_warnings_count",
+              get("PROJ6_warnings_count",
+              envir=.RGDAL_CACHE) + 1L, envir=.RGDAL_CACHE)
+            }
+          }
+    }
+# warning("Discarded ellps ", attr(res, "ellps"),
+#            " in CRS definition: ", c(res))
     if ((!is.null(attr(res, "datum"))) && (nchar(attr(res, "datum")) > 0L)
       && (length(grep("datum", c(res))) == 0L)) {
       msg <- paste0("Discarded datum ", attr(res, "datum"),
@@ -441,12 +462,28 @@ getProjectionRef <- function(dataset, OVERRIDE_PROJ_DATUM_WITH_TOWGS84=NULL, enf
       if (!no_towgs84 && (length(grep("towgs84", c(res))) > 0L))
         msg <- paste0(msg, ",\n but +towgs84= values preserved")
       if (get_P6_datum_hard_fail()) stop(msg)
-      else warning(msg)
+      else {
+        if (!get_thin_PROJ6_warnings()) {
+          warning(msg)
+        } else {
+          if (get("PROJ6_warnings_count",
+            envir=.RGDAL_CACHE) == 0L) {
+            warning(paste0("PROJ6/GDAL3 PROJ string degradation in workflow\n repeated warnings suppressed\n ", msg))
+            assign("PROJ6_warnings_count",
+              get("PROJ6_warnings_count",
+              envir=.RGDAL_CACHE) + 1L, envir=.RGDAL_CACHE)
+            }
+          }
+        }
+#warning(msg)
     }
     if (new_proj_and_gdal()) wkt2 <- attr(res, "WKT2_2018")
   }
   res <- c(res)
-  if (new_proj_and_gdal()) comment(res) <- wkt2
+  if (new_proj_and_gdal()) {
+    if (no_ellps) res <- showSRID(wkt2, "PROJ")
+    comment(res) <- wkt2
+  }
   res
 }
 

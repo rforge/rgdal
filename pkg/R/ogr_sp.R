@@ -580,9 +580,23 @@ showSRID <- function(inSRID, format="WKT2", multiline="NO", enforce_xy=NULL, EPS
                 && !no_towgs84) warning("TOWGS84 discarded")
             if ((!is.null(attr(res, "ellps"))) 
                 && (nchar(attr(res, "ellps")) > 0L)
-                && (length(grep("ellps|ELLIPSOID", c(res))) == 0L))
-                warning("Discarded ellps ", attr(res, "ellps"),
-                    " in CRS definition")
+                && (length(grep("ellps|ELLIPSOID", c(res))) == 0L)) {
+                msg <- paste0("Discarded ellps ", attr(res, "ellps"),
+                    " in CRS definition: ", c(res))
+                if (!get_thin_PROJ6_warnings()) {
+                    warning(msg)
+                } else {
+                    if (get("PROJ6_warnings_count",
+                        envir=.RGDAL_CACHE) == 0L) {
+                        warning(paste0("PROJ6/GDAL3 PROJ string degradation in workflow\n repeated warnings suppressed\n ", msg))
+                        assign("PROJ6_warnings_count",
+                            get("PROJ6_warnings_count",
+                            envir=.RGDAL_CACHE) + 1L, envir=.RGDAL_CACHE)
+                    }
+                }
+            }
+#warning("Discarded ellps ", attr(res, "ellps"),
+#                    " in CRS definition")
             if ((!is.null(attr(res, "datum"))) 
                 && (nchar(attr(res, "datum")) > 0L)
                 && (length(grep("datum|DATUM", c(res))) == 0L)) {

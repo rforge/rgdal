@@ -41,6 +41,8 @@ SEXP OGR_write(SEXP inp)
         install("verbose")))[0];
     int pc=0, i, j, k, is_shpfile, //shp_edge_case_fix,
         dumpSRS;
+    OGRSpatialReference *poSRS = new OGRSpatialReference;//FIXME VG
+
 
     PROTECT(ans = NEW_CHARACTER(1)); pc++;
     PROTECT(wkbtype_attr = NEW_INTEGER(1)); pc++;
@@ -217,7 +219,6 @@ SEXP OGR_write(SEXP inp)
 
     if (!isNull(comment)) {
 //        Rprintf("CRS comment: %s\n", CHAR(STRING_ELT(comment, 0)));
-        OGRSpatialReference *poSRS = new OGRSpatialReference;//FIXME VG
         ppszInput = CSLAddString(ppszInput, CHAR(STRING_ELT(comment, 0)));//FIXME VG
 
 
@@ -257,11 +258,9 @@ SEXP OGR_write(SEXP inp)
         const char *PROJ4 = CHAR(STRING_ELT(GET_SLOT(p4s, install("projargs")), 0));
 
         if (strcmp(PROJ4, "NA")) {
-//            OGRSpatialReference hSRS = NULL;
-//            OGRSpatialReference* poSRS = new OGRSpatialReference();
             OGRSpatialReference* poSRS = new OGRSpatialReference;//FIXME VG
             installErrorHandler();
-//            if (hSRS.importFromProj4(PROJ4) != OGRERR_NONE) {
+
             if (poSRS->importFromProj4(PROJ4) != OGRERR_NONE) { //FIXME VG
 #ifdef GDALV2
                 GDALClose( poDS );
@@ -298,6 +297,7 @@ SEXP OGR_write(SEXP inp)
     if( poLayer == NULL )
     {
         installErrorHandler();
+        delete poSRS;
 #ifdef GDALV2
         GDALClose( poDS );
 #else
@@ -341,6 +341,7 @@ SEXP OGR_write(SEXP inp)
 // RSB 081009 FIXME - not working yet, integer flips to real in shapefile
         if (OGR_type == 0) oField.SetPrecision(0);
         if( poLayer->CreateField( &oField ) != OGRERR_NONE ) {
+            delete poSRS;
 #ifdef GDALV2
             GDALClose( poDS );
 #else
@@ -384,6 +385,7 @@ SEXP OGR_write(SEXP inp)
         int z=INTEGER_POINTER(dim)[1];
         if (INTEGER_POINTER(dim)[0] != nobs) {
             installErrorHandler();
+            delete poSRS;
 #ifdef GDALV2
             GDALClose( poDS );
 #else
@@ -422,6 +424,7 @@ SEXP OGR_write(SEXP inp)
             if(poFeature->SetFID((long) INTEGER_POINTER(VECTOR_ELT(inp, 12))[i])  != OGRERR_NONE ) {
                 OGRDataSource::DestroyDataSource( poDS );
 #endif
+                delete poSRS;
                 uninstallErrorHandlerAndTriggerError();
                 error( "Failed to set FID" );
             } 
@@ -432,6 +435,7 @@ SEXP OGR_write(SEXP inp)
 #else
                 OGRDataSource::DestroyDataSource( poDS );
 #endif
+                delete poSRS;
                 uninstallErrorHandlerAndTriggerError();
                 error( "Failed to create feature" );
             } 
@@ -442,6 +446,7 @@ SEXP OGR_write(SEXP inp)
 #ifdef GDALV2
         if (start_trans && poDS->CommitTransaction() != OGRERR_NONE) {
           GDALClose( poDS );
+          delete poSRS;
           uninstallErrorHandlerAndTriggerError();
           error("commit transaction failure");
         }
@@ -461,6 +466,7 @@ SEXP OGR_write(SEXP inp)
 #else
             OGRDataSource::DestroyDataSource( poDS );
 #endif
+            delete poSRS;
             uninstallErrorHandlerAndTriggerError();
             error("number of objects mismatch");
         }
@@ -496,6 +502,7 @@ SEXP OGR_write(SEXP inp)
 #else
                 OGRDataSource::DestroyDataSource( poDS );
 #endif
+                delete poSRS;
                 uninstallErrorHandlerAndTriggerError();
                 error( "Failed to set geometry" );
             } 
@@ -509,6 +516,7 @@ SEXP OGR_write(SEXP inp)
                installErrorHandler();
                 OGRDataSource::DestroyDataSource( poDS );
 #endif
+                delete poSRS;
                 uninstallErrorHandlerAndTriggerError();
                 error( "Failed to set FID" );
             } 
@@ -520,6 +528,7 @@ SEXP OGR_write(SEXP inp)
 #else
                 OGRDataSource::DestroyDataSource( poDS );
 #endif
+                delete poSRS;
                 uninstallErrorHandlerAndTriggerError();
                 error( "Failed to create feature" );
             } 
@@ -529,6 +538,7 @@ SEXP OGR_write(SEXP inp)
 #ifdef GDALV2
         if (start_trans && poDS->CommitTransaction() != OGRERR_NONE) {
           GDALClose( poDS );
+          delete poSRS;
           uninstallErrorHandlerAndTriggerError();
           error("commit transaction failure");
         }
@@ -548,6 +558,7 @@ SEXP OGR_write(SEXP inp)
 #else
             OGRDataSource::DestroyDataSource( poDS );
 #endif
+            delete poSRS;
             uninstallErrorHandlerAndTriggerError();
             error("number of objects mismatch");
         }
@@ -592,6 +603,7 @@ SEXP OGR_write(SEXP inp)
 #else
                     OGRDataSource::DestroyDataSource( poDS );
 #endif
+                    delete poSRS;
                     uninstallErrorHandlerAndTriggerError();
                     error( "Failed to add line" );
                 } 
@@ -618,6 +630,7 @@ SEXP OGR_write(SEXP inp)
                 OGRDataSource::DestroyDataSource( poDS );
 #endif
                 uninstallErrorHandlerAndTriggerError();
+                delete poSRS;
                 error( "Failed to set FID" );
             } 
 
@@ -628,6 +641,7 @@ SEXP OGR_write(SEXP inp)
 #else
                 OGRDataSource::DestroyDataSource( poDS );
 #endif
+                delete poSRS;
                 uninstallErrorHandlerAndTriggerError();
                 error( "Failed to create feature" );
             } 
@@ -637,6 +651,7 @@ SEXP OGR_write(SEXP inp)
 #ifdef GDALV2
         if (start_trans && poDS->CommitTransaction() != OGRERR_NONE) {
           GDALClose( poDS );
+          delete poSRS;
           uninstallErrorHandlerAndTriggerError();
           error("commit transaction failure");
         }
@@ -656,6 +671,7 @@ SEXP OGR_write(SEXP inp)
 #else
             OGRDataSource::DestroyDataSource( poDS );
 #endif
+            delete poSRS;
             uninstallErrorHandlerAndTriggerError();
             error("number of objects mismatch");
         }
@@ -711,6 +727,7 @@ SEXP OGR_write(SEXP inp)
 #else
                 OGRDataSource::DestroyDataSource( poDS );
 #endif
+                delete poSRS;
                 uninstallErrorHandlerAndTriggerError();
                 error( "Failed to set geometry" );
             } 
@@ -725,6 +742,7 @@ SEXP OGR_write(SEXP inp)
                 OGRDataSource::DestroyDataSource( poDS );
 #endif
                 uninstallErrorHandlerAndTriggerError();
+                delete poSRS;
                 error( "Failed to set FID" );
             } 
 
@@ -735,6 +753,7 @@ SEXP OGR_write(SEXP inp)
 #else
                 OGRDataSource::DestroyDataSource( poDS );
 #endif
+               delete poSRS;
                uninstallErrorHandlerAndTriggerError();
                error( "Failed to create feature" );
             } 
@@ -744,6 +763,7 @@ SEXP OGR_write(SEXP inp)
 #ifdef GDALV2
         if (start_trans && poDS->CommitTransaction() != OGRERR_NONE) {
           GDALClose( poDS );
+          delete poSRS;
           uninstallErrorHandlerAndTriggerError();
           error("commit transaction failure");
         }
@@ -763,6 +783,7 @@ SEXP OGR_write(SEXP inp)
 #else
             OGRDataSource::DestroyDataSource( poDS );
 #endif
+            delete poSRS;
             uninstallErrorHandlerAndTriggerError();
             error("number of objects mismatch");
         }
@@ -819,6 +840,7 @@ SEXP OGR_write(SEXP inp)
 #else
                     OGRDataSource::DestroyDataSource( poDS );
 #endif
+                    delete poSRS;
                     uninstallErrorHandlerAndTriggerError();
                     error( "Failed to set geometry" );
                 } 
@@ -860,6 +882,7 @@ SEXP OGR_write(SEXP inp)
 #else
                     OGRDataSource::DestroyDataSource( poDS );
 #endif
+                    delete poSRS;
                     uninstallErrorHandlerAndTriggerError();
                     error( "Failed to set geometry" );
                 } 
@@ -876,6 +899,7 @@ SEXP OGR_write(SEXP inp)
             if(poFeature->SetFID((long) INTEGER_POINTER(VECTOR_ELT(inp, 12))[i])  != OGRERR_NONE ) {
                 OGRDataSource::DestroyDataSource( poDS );
 #endif
+               delete poSRS;
                uninstallErrorHandlerAndTriggerError();
                error( "Failed to set FID" );
             } 
@@ -887,6 +911,7 @@ SEXP OGR_write(SEXP inp)
 #else
                 OGRDataSource::DestroyDataSource( poDS );
 #endif
+               delete poSRS;
                uninstallErrorHandlerAndTriggerError();
                error( "Failed to create feature" );
             } 
@@ -897,6 +922,7 @@ SEXP OGR_write(SEXP inp)
 #ifdef GDALV2
         if (start_trans && poDS->CommitTransaction() != OGRERR_NONE) {
           GDALClose( poDS );
+          delete poSRS;
           uninstallErrorHandlerAndTriggerError();
           error("commit transaction failure");
         }
@@ -911,6 +937,7 @@ SEXP OGR_write(SEXP inp)
 #else
     OGRDataSource::DestroyDataSource( poDS );
 #endif
+    delete poSRS;
     uninstallErrorHandlerAndTriggerError();
 
     UNPROTECT(pc);

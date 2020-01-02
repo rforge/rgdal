@@ -856,11 +856,11 @@ RGDAL_GetRasterCount(SEXP sDataset) {
 SEXP
 RGDAL_GetProjectionRef(SEXP sDataset, SEXP enforce_xy) {
 
-  OGRSpatialReference oSRS;
+  OGRSpatialReference *oSRS = new OGRSpatialReference;
   char *pszSRS_WKT = NULL;
-  SEXP ans, Datum, ToWGS84;
+  SEXP ans, Datum, ToWGS84, Ellps;
   int i, pc=0;
-  const char *datum, *towgs84;
+  const char *datum, *towgs84, *ellps;
   int vis_order;
 
   if (enforce_xy == R_NilValue) vis_order = 0;
@@ -885,24 +885,30 @@ RGDAL_GetProjectionRef(SEXP sDataset, SEXP enforce_xy) {
   installErrorHandler();
 #if GDAL_VERSION_MAJOR == 1 || ( GDAL_VERSION_MAJOR == 2 && GDAL_VERSION_MINOR <= 2 ) // https://github.com/OSGeo/gdal/issues/681
 //#if GDAL_VERSION_MAJOR <= 2 && GDAL_VERSION_MINOR <= 2 
-  oSRS.importFromWkt( &pszSRS_WKT );
+  oSRS->importFromWkt( &pszSRS_WKT );
 #else
-  oSRS.importFromWkt( (const char*) pszSRS_WKT );
+  oSRS->importFromWkt( (const char*) pszSRS_WKT );
 #endif
   uninstallErrorHandlerAndTriggerError();
 
-  if (&oSRS != NULL) {
+  if (oSRS != NULL) {
 
     installErrorHandler();
-    datum = oSRS.GetAttrValue("DATUM");
+    datum = oSRS->GetAttrValue("DATUM");
     uninstallErrorHandlerAndTriggerError();
     PROTECT(Datum = NEW_CHARACTER(1)); pc++;
     if (datum != NULL) SET_STRING_ELT(Datum, 0, COPY_TO_USER_STRING(datum));
 
+    installErrorHandler();
+    ellps = oSRS->GetAttrValue("DATUM|SPHEROID");
+    uninstallErrorHandlerAndTriggerError();
+    PROTECT(Ellps = NEW_CHARACTER(1)); pc++;
+    if (ellps != NULL) SET_STRING_ELT(Ellps, 0, COPY_TO_USER_STRING(ellps));
+
     PROTECT(ToWGS84 = NEW_CHARACTER(7)); pc++;
     installErrorHandler();
     for (i=0; i<7; i++) {
-      towgs84 = oSRS.GetAttrValue("TOWGS84", i);
+      towgs84 = oSRS->GetAttrValue("TOWGS84", i);
       if (towgs84 != NULL) SET_STRING_ELT(ToWGS84, i,
         COPY_TO_USER_STRING(towgs84));
     }
@@ -910,7 +916,7 @@ RGDAL_GetProjectionRef(SEXP sDataset, SEXP enforce_xy) {
 
 #if GDAL_VERSION_MAJOR >= 3
     installErrorHandler();
-        oSRS.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
+        oSRS->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
     uninstallErrorHandlerAndTriggerError();
 
     SEXP WKT2_2018;
@@ -925,18 +931,20 @@ RGDAL_GetProjectionRef(SEXP sDataset, SEXP enforce_xy) {
     uninstallErrorHandlerAndTriggerError();
 
     installErrorHandler();
-    if (oSRS.exportToWkt(&wkt2, papszOptions) != OGRERR_NONE) {
+    if (oSRS->exportToWkt(&wkt2, papszOptions) != OGRERR_NONE) {
       SET_STRING_ELT(WKT2_2018, 0, NA_STRING);
+    } else {
+      SET_STRING_ELT(WKT2_2018, 0, COPY_TO_USER_STRING(wkt2));
+      CPLFree( wkt2 );
     }
-    SET_STRING_ELT(WKT2_2018, 0, COPY_TO_USER_STRING(wkt2));
     uninstallErrorHandlerAndTriggerError();
     setAttrib(ans, install("WKT2_2018"), WKT2_2018);
 #endif
   }
 
-  if (&oSRS != NULL) {
+  if (oSRS != NULL) {
     installErrorHandler();
-    if (oSRS.exportToProj4( &pszSRS_WKT ) != OGRERR_NONE) {
+    if (oSRS->exportToProj4( &pszSRS_WKT ) != OGRERR_NONE) {
       SET_STRING_ELT(ans, 0, COPY_TO_USER_STRING(""));
     } else {
       SET_STRING_ELT(ans, 0, COPY_TO_USER_STRING(pszSRS_WKT));
@@ -946,10 +954,12 @@ RGDAL_GetProjectionRef(SEXP sDataset, SEXP enforce_xy) {
   } else SET_STRING_ELT(ans, 0, COPY_TO_USER_STRING(""));
 
 
-  if (&oSRS != NULL) {
+  if (oSRS != NULL) {
     setAttrib(ans, install("towgs84"), ToWGS84);
     setAttrib(ans, install("datum"), Datum);
+    setAttrib(ans, install("ellps"), Ellps);
   }
+  delete oSRS;
 
   UNPROTECT(pc);
   return(ans);
@@ -1949,23 +1959,23 @@ RGDAL_SetGeoTransform(SEXP sxpDataset, SEXP GeoTransform) {
 SEXP
 RGDAL_SetProject(SEXP sxpDataset, SEXP proj4string) {
 
-  OGRSpatialReference oSRS;
+  OGRSpatialReference *oSRS = new OGRSpatialReference;
   char *pszSRS_WKT = NULL;
 
   GDALDataset *pDataset = getGDALDatasetPtr(sxpDataset);
 
   installErrorHandler();
-  oSRS.importFromProj4(CHAR(STRING_ELT(proj4string, 0)));
+  oSRS->importFromProj4(CHAR(STRING_ELT(proj4string, 0)));
   uninstallErrorHandlerAndTriggerError();
 
 #if GDAL_VERSION_MAJOR >= 3
   installErrorHandler();
-    oSRS.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
+    oSRS->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
   uninstallErrorHandlerAndTriggerError();
 #endif
   
   installErrorHandler();
-  oSRS.exportToWkt( &pszSRS_WKT );
+  oSRS->exportToWkt( &pszSRS_WKT );
   uninstallErrorHandlerAndTriggerError();
 
   installErrorHandler();
@@ -1974,6 +1984,7 @@ RGDAL_SetProject(SEXP sxpDataset, SEXP proj4string) {
 
   if (err == CE_Failure) 
 	warning("Failed to set projection\n");
+        delete oSRS;
   uninstallErrorHandlerAndTriggerError();
 
   return(sxpDataset);
@@ -1984,7 +1995,7 @@ RGDAL_SetProject_WKT2(SEXP sxpDataset, SEXP WKT2string, SEXP enforce_xy) {
 
 #if GDAL_VERSION_MAJOR >= 3
 
-  OGRSpatialReference oSRS;
+  OGRSpatialReference *oSRS = new OGRSpatialReference;
   int vis_order;
 
   if (enforce_xy == R_NilValue) vis_order = 0;
@@ -1997,19 +2008,21 @@ RGDAL_SetProject_WKT2(SEXP sxpDataset, SEXP WKT2string, SEXP enforce_xy) {
 //Rprintf("%s\n", CHAR(STRING_ELT(WKT2string, 0)));
 
   installErrorHandler();
-  oSRS.importFromWkt(CHAR(STRING_ELT(WKT2string, 0)));
+  oSRS->importFromWkt(CHAR(STRING_ELT(WKT2string, 0)));
   uninstallErrorHandlerAndTriggerError();
 
   installErrorHandler();
   if (vis_order == 1)
-    oSRS.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
+    oSRS->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
   uninstallErrorHandlerAndTriggerError();
 
   installErrorHandler();
-  OGRErr err = pDataset->SetSpatialRef(&oSRS);
+  OGRErr err = pDataset->SetSpatialRef(oSRS);
 
-  if (err == CE_Failure) 
+  if (err == CE_Failure) {
 	warning("Failed to set projection\n");
+        delete oSRS;
+  }
   uninstallErrorHandlerAndTriggerError();
 
   return(sxpDataset);

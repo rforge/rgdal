@@ -290,8 +290,21 @@ OGRSpatialRef <- function(dsn, layer, morphFromESRI=NULL, dumpSRS=FALSE,
     no_ellps <- (!is.null(attr(res, "ellps"))) &&
         (nchar(attr(res, "ellps")) > 0L) &&
         (length(grep("ellps", c(res))) == 0L)
-    if (no_ellps) warning("Discarded ellps ", attr(res, "ellps"),
+    if (no_ellps) {
+      msg <- paste0("Discarded ellps ", attr(res, "ellps"),
             " in CRS definition: ", c(res))
+      if (!get_thin_PROJ6_warnings()) {
+        warning(msg)
+        } else {
+          if (get("PROJ6_warnings_count",
+            envir=.RGDAL_CACHE) == 0L) {
+            warning(paste0("PROJ6/GDAL3 PROJ string degradation in workflow\n repeated warnings suppressed\n ", msg))
+            assign("PROJ6_warnings_count",
+              get("PROJ6_warnings_count",
+              envir=.RGDAL_CACHE) + 1L, envir=.RGDAL_CACHE)
+          }
+      }
+    }
     if ((!is.null(attr(res, "datum"))) && (nchar(attr(res, "datum")) > 0L)
       && (length(grep("datum", c(res))) == 0L)) {
       msg <- paste0("Discarded datum ", attr(res, "datum"),
@@ -299,7 +312,20 @@ OGRSpatialRef <- function(dsn, layer, morphFromESRI=NULL, dumpSRS=FALSE,
       if (!no_towgs84 && (length(grep("towgs84", c(res))) > 0L))
         msg <- paste0(msg, ",\n but +towgs84= values preserved")
       if (get_P6_datum_hard_fail()) stop(msg)
-      else warning(msg)
+      else {
+        if (!get_thin_PROJ6_warnings()) {
+          warning(msg)
+        } else {
+          if (get("PROJ6_warnings_count",
+            envir=.RGDAL_CACHE) == 0L) {
+            warning(paste0("PROJ6/GDAL3 PROJ string degradation in workflow\n repeated warnings suppressed\n ", msg))
+            assign("PROJ6_warnings_count",
+              get("PROJ6_warnings_count",
+              envir=.RGDAL_CACHE) + 1L, envir=.RGDAL_CACHE)
+            }
+          }
+        }
+#warning(msg)
     }
     if (new_proj_and_gdal()) wkt2 <- attr(res, "WKT2_2018")
   }

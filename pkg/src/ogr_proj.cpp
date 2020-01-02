@@ -25,7 +25,7 @@ SEXP P6_SRID_show(SEXP inSRID, SEXP format, SEXP multiline, SEXP in_format,
 
 #if GDAL_VERSION_MAJOR >= 3
 
-    OGRSpatialReference hSRS;
+    OGRSpatialReference *hSRS = new OGRSpatialReference;
     char *pszSRS = NULL;
     SEXP ans;
     char **papszOptions = NULL;
@@ -42,37 +42,41 @@ SEXP P6_SRID_show(SEXP inSRID, SEXP format, SEXP multiline, SEXP in_format,
 
     if (INTEGER_POINTER(in_format)[0] == 1L) {
         installErrorHandler();
-        if (hSRS.importFromProj4((const char *) CHAR(STRING_ELT(inSRID, 0))) != OGRERR_NONE) {
+        if (hSRS->importFromProj4((const char *) CHAR(STRING_ELT(inSRID, 0))) != OGRERR_NONE) {
+            delete hSRS;
             uninstallErrorHandlerAndTriggerError();
 	    error("Can't parse PROJ.4-style parameter string");
         }
         uninstallErrorHandlerAndTriggerError();
     } else if (INTEGER_POINTER(in_format)[0] == 2L) {
         installErrorHandler();
-        if (hSRS.importFromURN((const char *) CHAR(STRING_ELT(inSRID, 0))) != OGRERR_NONE) {
+        if (hSRS->importFromURN((const char *) CHAR(STRING_ELT(inSRID, 0))) != OGRERR_NONE) {
+            delete hSRS;
             uninstallErrorHandlerAndTriggerError();
 	    error("Can't parse URN-style parameter string");
         }
         uninstallErrorHandlerAndTriggerError();
     } else if (INTEGER_POINTER(in_format)[0] == 3L) {
         installErrorHandler();
-        if (hSRS.importFromWkt((const char *) CHAR(STRING_ELT(inSRID, 0))) != OGRERR_NONE) {
+        if (hSRS->importFromWkt((const char *) CHAR(STRING_ELT(inSRID, 0))) != OGRERR_NONE) {
+            delete hSRS;
             uninstallErrorHandlerAndTriggerError();
 	    error("Can't parse WKT-style parameter string");
         }
         uninstallErrorHandlerAndTriggerError();
     } else if (INTEGER_POINTER(in_format)[0] == 4L) {
         installErrorHandler();
-        if (hSRS.importFromEPSG(INTEGER_POINTER(epsg)[0]) != OGRERR_NONE) {
+        if (hSRS->importFromEPSG(INTEGER_POINTER(epsg)[0]) != OGRERR_NONE) {
+            delete hSRS;
             uninstallErrorHandlerAndTriggerError();
 	    error("Can't parse EPSG-style code");
         }
         uninstallErrorHandlerAndTriggerError();
     }
 
-    if (&hSRS != NULL) {
+    if (hSRS != NULL) {
         if (vis_order == 1) 
-            hSRS.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
+            hSRS->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
     }
 
 
@@ -85,9 +89,10 @@ SEXP P6_SRID_show(SEXP inSRID, SEXP format, SEXP multiline, SEXP in_format,
         uninstallErrorHandlerAndTriggerError();
 
         installErrorHandler();
-        if (hSRS.exportToWkt(&pszSRS, papszOptions) != OGRERR_NONE) {
+        if (hSRS->exportToWkt(&pszSRS, papszOptions) != OGRERR_NONE) {
             CPLFree(pszSRS);
             CSLDestroy(papszOptions);
+            delete hSRS;
             uninstallErrorHandlerAndTriggerError();
 	    error("Can't express as WKT");
         }
@@ -95,7 +100,7 @@ SEXP P6_SRID_show(SEXP inSRID, SEXP format, SEXP multiline, SEXP in_format,
         SET_STRING_ELT(ans, 0, COPY_TO_USER_STRING(pszSRS));
     } else if (INTEGER_POINTER(out_format)[0] == 2L) {
         installErrorHandler();
-        if (hSRS.exportToProj4(&pszSRS) != OGRERR_NONE) {
+        if (hSRS->exportToProj4(&pszSRS) != OGRERR_NONE) {
             SET_STRING_ELT(ans, 0, NA_STRING);
 	} else {
             SET_STRING_ELT(ans, 0, COPY_TO_USER_STRING(pszSRS));
@@ -104,18 +109,19 @@ SEXP P6_SRID_show(SEXP inSRID, SEXP format, SEXP multiline, SEXP in_format,
     } else {
         CPLFree(pszSRS);
         CSLDestroy(papszOptions);
+        delete hSRS;
         error("unknown output format");
     }
 
-    if (&hSRS != NULL) {
+    if (hSRS != NULL) {
         installErrorHandler();
-        datum = hSRS.GetAttrValue("DATUM");
+        datum = hSRS->GetAttrValue("DATUM");
         uninstallErrorHandlerAndTriggerError();
         PROTECT(Datum = NEW_CHARACTER(1)); pc++;
         if (datum != NULL) SET_STRING_ELT(Datum, 0, COPY_TO_USER_STRING(datum));
 
         installErrorHandler();
-        ellps = hSRS.GetAttrValue("DATUM|SPHEROID");
+        ellps = hSRS->GetAttrValue("DATUM|SPHEROID");
         uninstallErrorHandlerAndTriggerError();
         PROTECT(Ellps = NEW_CHARACTER(1)); pc++;
         if (ellps != NULL) SET_STRING_ELT(Ellps, 0, COPY_TO_USER_STRING(ellps));
@@ -123,7 +129,7 @@ SEXP P6_SRID_show(SEXP inSRID, SEXP format, SEXP multiline, SEXP in_format,
         PROTECT(ToWGS84 = NEW_CHARACTER(7)); pc++;
         installErrorHandler();
         for (i=0; i<7; i++) {
-            towgs84 = hSRS.GetAttrValue("TOWGS84", i);
+            towgs84 = hSRS->GetAttrValue("TOWGS84", i);
             if (towgs84 != NULL) SET_STRING_ELT(ToWGS84, i,
                 COPY_TO_USER_STRING(towgs84));
         }
@@ -135,6 +141,7 @@ SEXP P6_SRID_show(SEXP inSRID, SEXP format, SEXP multiline, SEXP in_format,
 
     CPLFree(pszSRS);
     CSLDestroy(papszOptions);
+    delete hSRS;
 
     UNPROTECT(pc);
 
@@ -172,7 +179,7 @@ SEXP R_GDAL_OSR_PROJ() {
 
 SEXP p4s_to_wkt(SEXP p4s, SEXP esri) {
 
-    OGRSpatialReference hSRS;
+    OGRSpatialReference *hSRS = new OGRSpatialReference;
     char *pszSRS_WKT = NULL;
     SEXP ans;
     int vis_order;
@@ -184,7 +191,8 @@ SEXP p4s_to_wkt(SEXP p4s, SEXP esri) {
     else vis_order = 0;
 
     installErrorHandler();
-    if (hSRS.importFromProj4(CHAR(STRING_ELT(p4s, 0))) != OGRERR_NONE) {
+    if (hSRS->importFromProj4(CHAR(STRING_ELT(p4s, 0))) != OGRERR_NONE) {
+        delete hSRS;
         uninstallErrorHandlerAndTriggerError();
 	error("Can't parse PROJ.4-style parameter string");
     }
@@ -193,20 +201,21 @@ SEXP p4s_to_wkt(SEXP p4s, SEXP esri) {
 #if GDAL_VERSION_MAJOR >= 3
     installErrorHandler();
     if (vis_order == 1) 
-        hSRS.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
+        hSRS->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
     uninstallErrorHandlerAndTriggerError();
 #endif
 
 
     installErrorHandler();
 #if GDAL_VERSION_MAJOR < 3
-    if (LOGICAL_POINTER(esri)[0] == 1) hSRS.morphToESRI();
+    if (LOGICAL_POINTER(esri)[0] == 1) hSRS->morphToESRI();
 #endif
-    hSRS.exportToWkt(&pszSRS_WKT);//FIXME VG
+    hSRS->exportToWkt(&pszSRS_WKT);//FIXME VG
     uninstallErrorHandlerAndTriggerError();
 
     PROTECT(ans=NEW_CHARACTER(1));
     SET_STRING_ELT(ans, 0, COPY_TO_USER_STRING(pszSRS_WKT));
+    delete hSRS;
 
     UNPROTECT(1);
 
@@ -215,7 +224,7 @@ SEXP p4s_to_wkt(SEXP p4s, SEXP esri) {
 
 SEXP wkt_to_p4s(SEXP wkt, SEXP esri) {
 
-    OGRSpatialReference hSRS;
+    OGRSpatialReference *hSRS = new OGRSpatialReference;
     char *pszSRS_P4 = NULL;
     char **ppszInput = NULL;
     SEXP ans;
@@ -231,11 +240,12 @@ SEXP wkt_to_p4s(SEXP wkt, SEXP esri) {
     installErrorHandler();
 #if GDAL_VERSION_MAJOR == 1 || ( GDAL_VERSION_MAJOR == 2 && GDAL_VERSION_MINOR <= 2 ) // thanks to Even Roualt https://github.com/OSGeo/gdal/issues/681
 //#if GDAL_VERSION_MAJOR <= 2 && GDAL_VERSION_MINOR <= 2
-    if (hSRS.importFromWkt(ppszInput) != OGRERR_NONE) 
+    if (hSRS->importFromWkt(ppszInput) != OGRERR_NONE) 
 #else
-    if (hSRS.importFromWkt((const char **) ppszInput) != OGRERR_NONE) 
+    if (hSRS->importFromWkt((const char **) ppszInput) != OGRERR_NONE) 
 #endif 
     {
+        delete hSRS;
         uninstallErrorHandlerAndTriggerError();
 	error("Can't parse WKT-style parameter string");
     }
@@ -244,7 +254,7 @@ SEXP wkt_to_p4s(SEXP wkt, SEXP esri) {
 #if GDAL_VERSION_MAJOR >= 3
     installErrorHandler();
     if (vis_order == 1) 
-        hSRS.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
+        hSRS->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
     uninstallErrorHandlerAndTriggerError();
 #endif
 
@@ -254,8 +264,9 @@ SEXP wkt_to_p4s(SEXP wkt, SEXP esri) {
     if (LOGICAL_POINTER(esri)[0] == 1) hSRS.morphToESRI();
 #endif
 //    if (LOGICAL_POINTER(esri)[0] == 1) hSRS.morphFromESRI();
-    hSRS.exportToProj4(&pszSRS_P4);//FIXME VG
+    hSRS->exportToProj4(&pszSRS_P4);//FIXME VG
     uninstallErrorHandlerAndTriggerError();
+    delete hSRS;
 
     PROTECT(ans=NEW_CHARACTER(1));
     SET_STRING_ELT(ans, 0, COPY_TO_USER_STRING(pszSRS_P4));
@@ -267,7 +278,7 @@ SEXP wkt_to_p4s(SEXP wkt, SEXP esri) {
 
 SEXP ogrAutoIdentifyEPSG(SEXP p4s) {
 
-    OGRSpatialReference hSRS;
+    OGRSpatialReference *hSRS = new OGRSpatialReference;
     OGRErr thisOGRErr;
     SEXP ans;
     int vis_order;
@@ -279,7 +290,8 @@ SEXP ogrAutoIdentifyEPSG(SEXP p4s) {
     else vis_order = 0;
 
     installErrorHandler();
-    if (hSRS.importFromProj4(CHAR(STRING_ELT(p4s, 0))) != OGRERR_NONE) {
+    if (hSRS->importFromProj4(CHAR(STRING_ELT(p4s, 0))) != OGRERR_NONE) {
+        delete hSRS;
         uninstallErrorHandlerAndTriggerError();
 	error("Can't parse PROJ.4-style parameter string");
     }
@@ -288,26 +300,26 @@ SEXP ogrAutoIdentifyEPSG(SEXP p4s) {
 #if GDAL_VERSION_MAJOR >= 3
     installErrorHandler();
     if (vis_order == 1)
-        hSRS.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
+        hSRS->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
     uninstallErrorHandlerAndTriggerError();
 #endif
 
     PROTECT(ans=NEW_CHARACTER(1));
 
     installErrorHandler();
-    thisOGRErr = hSRS.AutoIdentifyEPSG();
+    thisOGRErr = hSRS->AutoIdentifyEPSG();
     uninstallErrorHandlerAndTriggerError();
 
     if (thisOGRErr == OGRERR_NONE) {
         installErrorHandler();
         SET_STRING_ELT(ans, 0,
-            COPY_TO_USER_STRING(hSRS.GetAuthorityCode(NULL)));
+            COPY_TO_USER_STRING(hSRS->GetAuthorityCode(NULL)));
         uninstallErrorHandlerAndTriggerError();
     } else if (thisOGRErr == OGRERR_UNSUPPORTED_SRS) {
         SET_STRING_ELT(ans, 0,
             COPY_TO_USER_STRING("OGRERR_UNSUPPORTED_SRS"));
     }
-
+    delete hSRS;
     UNPROTECT(1);
 
     return(ans);
@@ -324,7 +336,7 @@ SEXP ogrP4S(SEXP ogrsourcename, SEXP Layer, SEXP morphFromESRI, SEXP dumpSRS) {
 #endif
     OGRLayer *poLayer;
 
-    OGRSpatialReference *hSRS = NULL;
+    OGRSpatialReference *hSRS = new OGRSpatialReference;
     char *pszProj4 = NULL;
     SEXP ans, Datum, ToWGS84, Ellps;
     int i, pc=0, vis_order;
