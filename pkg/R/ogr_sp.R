@@ -578,15 +578,19 @@ showSRID <- function(inSRID, format="WKT2", multiline="NO", enforce_xy=NULL, EPS
                 (all(nchar(attr(res, "towgs84")) == 0)))
             if ((length(grep("towgs84|TOWGS84|Position Vector|Geocentric translations", c(res))) == 0L)
                 && !no_towgs84) warning("TOWGS84 discarded")
-            if ((!is.null(attr(res, "ellps"))) 
-                && (nchar(attr(res, "ellps")) > 0L)
-                && (length(grep("ellps|ELLIPSOID", c(res))) == 0L)) {
-                msg <- paste0("Discarded ellps ", attr(res, "ellps"),
-                    " in CRS definition: ", c(res))
-                if (!get_thin_PROJ6_warnings()) {
-                    warning(msg)
+            if ((!is.null(attr(res, "ellps"))) && 
+                (nchar(attr(res, "ellps")) > 0L) && 
+                (length(grep("ellps|ELLIPSOID", c(res))) == 0L)) {
+                if (length(grep("datum|DATUM", c(res))) == 0L) {
+                    msg <- paste0("Discarded ellps ", attr(res, "ellps"),
+                        " in CRS definition: ", c(res))
                 } else {
-                    if (get("PROJ6_warnings_count",
+                    msg <- ""
+                }
+                if (!get_thin_PROJ6_warnings()) {
+                    if (nchar(msg) > 0) warning(msg)
+                } else {
+                    if (nchar(msg) > 0 && get("PROJ6_warnings_count",
                         envir=.RGDAL_CACHE) == 0L) {
                         warning(paste0("PROJ6/GDAL3 PROJ string degradation in workflow\n repeated warnings suppressed\n ", msg))
                         assign("PROJ6_warnings_count",
