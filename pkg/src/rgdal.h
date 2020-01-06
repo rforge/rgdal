@@ -130,8 +130,8 @@ SEXP RGDAL_projInfo(SEXP type);
 SEXP R_GDAL_OSR_PROJ();
 SEXP RGDAL_project(SEXP n, SEXP xlon, SEXP ylat, SEXP projarg, SEXP ob_tran);
 SEXP project_inv(SEXP n, SEXP x, SEXP y, SEXP projarg, SEXP ob_tran);
-SEXP project_ng(SEXP n, SEXP xlon, SEXP ylat, SEXP projarg, SEXP ob_tran, SEXP coordOp);
-SEXP project_ng_inv(SEXP n, SEXP x, SEXP y, SEXP projarg, SEXP ob_tran, SEXP coordOp);
+SEXP project_ng(SEXP n, SEXP xlon, SEXP ylat, SEXP inv, SEXP ob_tran, SEXP coordOp);
+SEXP project_ng_coordOp(SEXP proj, SEXP inv, SEXP ob_tran);
 
 #ifdef __cplusplus
 }

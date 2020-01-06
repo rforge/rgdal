@@ -1,4 +1,4 @@
-# Copyright (c) 2003-12 by Barry Rowlingson, Roger Bivand, and Edzer Pebesma
+# Copyright (c) 2003-20 by Barry Rowlingson, Roger Bivand, and Edzer Pebesma
 
 getPROJ4VersionInfo <- function() {
     res0 <- .Call("PROJ4VersionInfo", PACKAGE="rgdal")
@@ -68,10 +68,10 @@ get_last_coordOp <- function() {
     get(".last_coordOp", envir=.RGDAL_CACHE)
 }
 
-"project" <- function(xy, proj, inv=FALSE, use_ob_tran=FALSE, legacy=TRUE, allowNAs_if_not_legacy=FALSE) {
+"project" <- function(xy, proj, inv=FALSE, use_ob_tran=FALSE, legacy=TRUE, allowNAs_if_not_legacy=FALSE, coordOp=NULL, verbose=FALSE) {
 
-    if (new_proj_and_gdal()) 
-        warning("project() will not be adapted for PROJ 6 and is deprecated")
+#    if (new_proj_and_gdal()) 
+#        warning("project() will not be adapted for PROJ 6 and is deprecated")
 
     if (!is.numeric(xy)) stop("xy not numeric")
     if (is.matrix(xy)) nc <- dim(xy)[1]
@@ -91,11 +91,12 @@ get_last_coordOp <- function() {
 # 120820 RSB
         } else inv <- !inv
     }
-    if (.Platform$OS.type == "windows" && .Platform$r_arch == "i386") 
+    if (.Platform$OS.type == "windows" && .Platform$r_arch == "i386" &&
+        !new_proj_and_gdal()) 
         legacy <- FALSE
     if (!legacy) {
       if (allowNAs_if_not_legacy) {
-       nas <- is.na(xy[,1]) | is.na(xy[,1])
+       nas <- is.na(xy[,1]) | is.na(xy[,2])
       }
       if (!inv) {
         attr(nc, "ob_tran") <- as.integer(use_ob_tran)
@@ -143,24 +144,46 @@ get_last_coordOp <- function() {
         }
      }
     } else {
-     if(!inv) {
+        if (new_proj_and_gdal()) {
+            if (is.null(coordOp)) {
+                if (substring(proj, 1, 1) == "+") {
+                    if (length(grep("\\+init", proj)) > 0L)
+                        proj <- comment(CRS(proj))
+                    if (length(grep(" \\+type=crs", proj)) == 0L)
+                        proj <- paste0(proj, " +type=crs")
+                }
+                coordOp <- .Call("project_ng_coordOp", proj, as.logical(inv),
+                    as.logical(use_ob_tran), PACKAGE="rgdal")
+            }
+            if (verbose) cat(strwrap(coordOp), sep="\n")
+            res <- .Call("project_ng",
+                as.integer(nc),
+                as.double(xy[,1]),
+                as.double(xy[,2]),
+                as.logical(inv),
+                as.logical(use_ob_tran),
+                coordOp,
+                PACKAGE="rgdal")
+        } else {
+            if(!inv) {
 # 160404 RSB convert to .Call()
-      res <- .Call("RGDAL_project",
+            res <- .Call("RGDAL_project",
                 as.integer(nc),
                 as.double(xy[,1]),
                 as.double(xy[,2]),
                 proj,
                 as.logical(use_ob_tran),
                 PACKAGE="rgdal")
-     } else {
-      res <- .Call("project_inv",
+            } else {
+                res <- .Call("project_inv",
                 as.integer(nc),
                 as.double(xy[,1]),
                 as.double(xy[,2]),
                 proj,
                 as.logical(use_ob_tran),
                 PACKAGE="rgdal")
-     }
+            }
+        }
     }
     out <- cbind(res[[1]], res[[2]])
     if (!is.null(colnames(xy))) colnames(out) <- colnames(xy)

@@ -7,7 +7,7 @@
 }
 \usage{
 project(xy, proj, inv = FALSE, use_ob_tran=FALSE, legacy=TRUE,
- allowNAs_if_not_legacy=FALSE)
+ allowNAs_if_not_legacy=FALSE, coordOp = NULL, verbose = FALSE)
 }
 
 \arguments{
@@ -17,6 +17,8 @@ project(xy, proj, inv = FALSE, use_ob_tran=FALSE, legacy=TRUE,
   \item{use_ob_tran}{default FALSE, if TRUE and \dQuote{+proj=ob_tran}, use General Oblique Transformation with internalised from/to projection reversal; the user oblique transforms forward rather than inverse.}
   \item{legacy}{default TRUE, if FALSE, use transform C functions (enforced internally for Windows 32-bit platforms)}
   \item{allowNAs_if_not_legacy}{used if legacy is FALSE, default FALSE; introduced to handle use of NAs as object separators in \pkg{oce}}
+  \item{coordOp}{default NULL, for PROJ >= 6 used to pass through a pre-defined coordinate operation}
+  \item{verbose}{default FALSE, for PROJ >=6 used to show the coordinate operation used}
 }
 \details{
   Full details of projection arguments available from website below, and examples in file "epsg" in the data directory installed with PROJ.4.
