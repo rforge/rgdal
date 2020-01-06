@@ -147,7 +147,7 @@ SEXP transform_ng(SEXP fromargs, SEXP toargs, SEXP coordOp, SEXP npts, SEXP x, S
     return(R_NilValue);
 }
 
-SEXP project_ng(SEXP n, SEXP xlon, SEXP ylat, SEXP ob_tran, SEXP coordOp) {
+SEXP project_ng(SEXP n, SEXP xlon, SEXP ylat, SEXP inv, SEXP ob_tran, SEXP coordOp) {
     Rprintf("Not available for PROJ version < 6");
     return(R_NilValue);
 }
