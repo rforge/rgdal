@@ -152,6 +152,7 @@ SEXP P6_SRID_show(SEXP inSRID, SEXP format, SEXP multiline, SEXP in_format,
 
 }
 
+
 SEXP R_GDAL_OSR_PROJ() {
 
 #if GDAL_VERSION_MAJOR >= 3

@@ -524,7 +524,7 @@ set_enforce_xy <- function(value) {
 }
 
 
-showSRID <- function(inSRID, format="WKT2", multiline="NO", enforce_xy=NULL, EPSG_to_init=TRUE) {
+showSRID <- function(inSRID, format="WKT2", multiline="NO", enforce_xy=NULL, EPSG_to_init=TRUE, prefer_proj=FALSE) {
     valid_WKT_formats <- c("SFSQL", "WKT1_SIMPLE", "WKT1", "WKT1_GDAL",
         "WKT1_ESRI", "WKT2_2015", "WKT2_2018", "WKT2")
     valid_formats <- c("PROJ", valid_WKT_formats)

@@ -636,6 +636,44 @@ SEXP project_ng(SEXP n, SEXP xlon, SEXP ylat, SEXP inv, SEXP ob_tran, SEXP coord
     return(res);
 }
 
+SEXP P6_SRID_proj(SEXP inSRID, SEXP format, SEXP multiline, SEXP in_format,
+    SEXP epsg, SEXP out_format) {
+
+    SEXP ans;
+    SEXP Datum, ToWGS84, Ellps;
+    int i, pc=0;
+    int vis_order;
+    SEXP enforce_xy = getAttrib(in_format, install("enforce_xy"));
+
+    if (enforce_xy == R_NilValue) vis_order = 0;
+    else if (LOGICAL_POINTER(enforce_xy)[0] == 1) vis_order = 1;
+    else if (LOGICAL_POINTER(enforce_xy)[0] == 0) vis_order = 0;
+    else vis_order = 0;
+
+    PJ_CONTEXT *ctx = proj_context_create();
+    PJ *source_crs;
+
+    if ((source_crs = proj_create(ctx, CHAR(STRING_ELT(inSRID, 0)))) == NULL) {
+        const char *errstr = proj_errno_string(proj_context_errno(ctx));
+        proj_context_destroy(ctx);
+	error("source crs creation failed: %s", errstr);
+    }
+
+    PROTECT(ans=NEW_CHARACTER(1)); pc++;
+
+    if (INTEGER_POINTER(out_format)[0] == 1L) {
+    } else if (INTEGER_POINTER(out_format)[0] == 2L) {
+    } else {
+        error("unknown output format");
+    }
+    
+
+    UNPROTECT(pc);
+
+    return(ans);
+
+}
+
 
 
 // blocks error messages in this context

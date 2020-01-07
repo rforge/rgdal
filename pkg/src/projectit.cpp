@@ -157,6 +157,14 @@ SEXP project_ng_coordOp(SEXP proj, SEXP inv, SEXP ob_tran) {
     return(R_NilValue);
 }
 
+SEXP P6_SRID_proj(SEXP inSRID, SEXP format, SEXP multiline, SEXP in_format,
+    SEXP epsg, SEXP out_format) {
+
+    return(R_NilValue);
+
+}
+
+
 SEXP
 PROJcopyEPSG(SEXP tf) {
 
