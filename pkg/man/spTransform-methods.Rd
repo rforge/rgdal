@@ -174,7 +174,7 @@ crds3 <- matrix(data=c(6, 47, 6, 55, 15, 55, 15, 47, 6, 47), ncol=2,
 byrow=TRUE, dimnames=list(NULL, c("lon", "lat")));
 spLines <- SpatialLines(list(Lines(list(Line(crds1), Line(crds2),
 Line(crds3)), ID="a")));
-spLines@proj4string <- CRS("+proj=longlat +ellps=sphere +no_defs");
+slot(spLines, "proj4string") <- CRS("+proj=longlat +ellps=sphere +no_defs");
 bbox(spLines);
 spLines_tr <- spTransform(spLines, CRS(paste0("+proj=ob_tran +o_proj=longlat",
 " +o_lon_p=-162 +o_lat_p=39.25 +lon_0=180 +ellps=sphere +no_defs")),
@@ -184,7 +184,7 @@ bbox(spTransform(spLines_tr, CRS("+proj=longlat +ellps=sphere"),
  use_ob_tran=TRUE))
 spPolygons <- SpatialPolygons(list(Polygons(list(Polygon(crds1),
 Polygon(crds2), Polygon(crds3)), ID="a")));
-spPolygons@proj4string <- CRS("+proj=longlat +ellps=sphere +no_defs");
+slot(spPolygons, "proj4string") <- CRS("+proj=longlat +ellps=sphere +no_defs");
 bbox(spPolygons);
 spPolygons_tr <- spTransform(spPolygons, CRS(paste0("+proj=ob_tran",
 " +o_proj=longlat +o_lon_p=-162 +o_lat_p=39.25 +lon_0=180 +ellps=sphere +no_defs")),
