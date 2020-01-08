@@ -524,9 +524,10 @@ set_enforce_xy <- function(value) {
 }
 
 
-showSRID <- function(inSRID, format="WKT2", multiline="NO", enforce_xy=NULL, EPSG_to_init=TRUE, prefer_proj=FALSE) {
+showSRID <- function(inSRID, format="WKT2", multiline="NO", enforce_xy=NULL, EPSG_to_init=TRUE#, prefer_proj=FALSE
+) {
     valid_WKT_formats <- c("SFSQL", "WKT1_SIMPLE", "WKT1", "WKT1_GDAL",
-        "WKT1_ESRI", "WKT2_2015", "WKT2_2018", "WKT2")
+        "WKT1_ESRI", "WKT2_2015", "WKT2_2018", "WKT2") # add WKT2_2019 ??
     valid_formats <- c("PROJ", valid_WKT_formats)
     stopifnot(is.character(inSRID))
     stopifnot(length(inSRID) == 1L)
@@ -570,10 +571,17 @@ showSRID <- function(inSRID, format="WKT2", multiline="NO", enforce_xy=NULL, EPS
     if (new_proj_and_gdal()) {
         if (!is.na(in_format)) {
             attr(in_format, "enforce_xy") <- enforce_xy
-            res <- .Call("P6_SRID_show", as.character(inSRID),
-                as.character(format), as.character(multiline), 
-                in_format, as.integer(epsg),
-                as.integer(out_format), PACKAGE="rgdal")
+#            if (prefer_proj) {
+#                res <- .Call("P6_SRID_proj", as.character(inSRID),
+#                    as.character(format), as.character(multiline), 
+#                    in_format, as.integer(epsg),
+#                    as.integer(out_format), PACKAGE="rgdal")
+#            } else {
+                res <- .Call("P6_SRID_show", as.character(inSRID),
+                    as.character(format), as.character(multiline), 
+                    in_format, as.integer(epsg),
+                    as.integer(out_format), PACKAGE="rgdal")
+#            }
             no_towgs84 <- ((is.null(attr(res, "towgs84"))) || 
                 (all(nchar(attr(res, "towgs84")) == 0)))
             if ((length(grep("towgs84|TOWGS84|Position Vector|Geocentric translations", c(res))) == 0L)

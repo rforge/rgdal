@@ -114,7 +114,7 @@ SEXP R_OGR_CAPI_features(SEXP dsn, SEXP layer, SEXP comments);
 SEXP p4s_to_wkt(SEXP p4s, SEXP esri);
 SEXP wkt_to_p4s(SEXP wkt, SEXP esri);
 SEXP P6_SRID_show(SEXP inSRID, SEXP format, SEXP multiline, SEXP in_format, SEXP epsg, SEXP out_format);
-SEXP P6_SRID_proj(SEXP inSRID, SEXP format, SEXP multiline, SEXP in_format, SEXP epsg, SEXP out_format);
+//SEXP P6_SRID_proj(SEXP inSRID, SEXP format, SEXP multiline, SEXP in_format, SEXP epsg, SEXP out_format);
 SEXP list_coordinate_ops(SEXP source, SEXP target, SEXP area_of_interest, SEXP strict_containment, SEXP vis_order);
 SEXP ogrAutoIdentifyEPSG(SEXP p4s);
 SEXP OGR_write(SEXP inp);

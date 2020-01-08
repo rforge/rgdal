@@ -60,7 +60,7 @@ static R_CallMethodDef CallEntries[] = {
     {"p4s_to_wkt", (DL_FUNC) &p4s_to_wkt, 2},
     {"wkt_to_p4s", (DL_FUNC) &wkt_to_p4s, 2},
     {"P6_SRID_show", (DL_FUNC) &P6_SRID_show, 6},
-    {"P6_SRID_proj", (DL_FUNC) &P6_SRID_proj, 6},
+//    {"P6_SRID_proj", (DL_FUNC) &P6_SRID_proj, 6},
     {"list_coordinate_ops", (DL_FUNC) &list_coordinate_ops, 5},
     {"ogrAutoIdentifyEPSG", (DL_FUNC) &ogrAutoIdentifyEPSG, 1},
     {"OGR_write", (DL_FUNC) &OGR_write, 1},

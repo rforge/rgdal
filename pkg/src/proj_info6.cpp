@@ -636,14 +636,16 @@ SEXP project_ng(SEXP n, SEXP xlon, SEXP ylat, SEXP inv, SEXP ob_tran, SEXP coord
     return(res);
 }
 
-SEXP P6_SRID_proj(SEXP inSRID, SEXP format, SEXP multiline, SEXP in_format,
+/*SEXP P6_SRID_proj(SEXP inSRID, SEXP format, SEXP multiline, SEXP in_format,
     SEXP epsg, SEXP out_format) {
 
     SEXP ans;
     SEXP Datum, ToWGS84, Ellps;
-    int i, pc=0;
+    int pc=0;
     int vis_order;
     SEXP enforce_xy = getAttrib(in_format, install("enforce_xy"));
+    const char *pszSRS = NULL;
+    char **papszOptions = NULL;
 
     if (enforce_xy == R_NilValue) vis_order = 0;
     else if (LOGICAL_POINTER(enforce_xy)[0] == 1) vis_order = 1;
@@ -662,17 +664,38 @@ SEXP P6_SRID_proj(SEXP inSRID, SEXP format, SEXP multiline, SEXP in_format,
     PROTECT(ans=NEW_CHARACTER(1)); pc++;
 
     if (INTEGER_POINTER(out_format)[0] == 1L) {
+        
+        if ((pszSRS = proj_as_wkt(ctx, source_crs, PJ_WKT2_2019, NULL))
+            == NULL) {
+            const char *errstr = proj_errno_string(proj_context_errno(ctx));
+            warning("export to WKT2 failed: %s", errstr);
+            SET_STRING_ELT(ans, 0, NA_STRING);
+	} else {
+            SET_STRING_ELT(ans, 0, COPY_TO_USER_STRING(pszSRS));
+        }
     } else if (INTEGER_POINTER(out_format)[0] == 2L) {
+        
+        if ((pszSRS = proj_as_proj_string(ctx, source_crs, PJ_PROJ_5, NULL)) 
+            == NULL) {
+            const char *errstr = proj_errno_string(proj_context_errno(ctx));
+            warning("export to PROJ failed: %s", errstr);
+            SET_STRING_ELT(ans, 0, NA_STRING);
+	} else {
+            SET_STRING_ELT(ans, 0, COPY_TO_USER_STRING(pszSRS));
+        }
     } else {
+        proj_destroy(source_crs);
+        proj_context_destroy(ctx);
         error("unknown output format");
     }
-    
 
+    proj_destroy(source_crs);
+    proj_context_destroy(ctx);
     UNPROTECT(pc);
 
     return(ans);
 
-}
+}*/
 
 
 

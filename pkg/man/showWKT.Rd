@@ -16,7 +16,7 @@
 showWKT(p4s, file = NULL, morphToESRI = TRUE, enforce_xy = NULL)
 showP4(wkt, morphFromESRI=TRUE, enforce_xy = NULL)
 showEPSG(p4s, enforce_xy = NULL)
-showSRID(inSRID, format="WKT2", multiline="NO", enforce_xy = NULL, EPSG_to_init=TRUE, prefer_proj=FALSE)
+showSRID(inSRID, format="WKT2", multiline="NO", enforce_xy = NULL, EPSG_to_init=TRUE)
 get_P6_datum_hard_fail()
 set_P6_datum_hard_fail(value)
 get_thin_PROJ6_warnings()
@@ -34,7 +34,7 @@ set_thin_PROJ6_warnings(value)
   \item{format}{Output format, default WKT2}
   \item{multiline}{Multiline output, either \code{"NO"} or \code{"YES"}}
   \item{EPSG_to_init}{default TRUE, workaround for PROJ 6.3.0 frailty leading to the dropping of +ellps= and +units=; DATUM seems to disappear in the internal definition}
-  \item{prefer_proj}{default FALSE, if TRUE, use the PROJ library directly rather than through GDAL}
+%  \item{prefer_proj}{default FALSE, if TRUE, use the PROJ library directly rather than through GDAL}
   \item{value}{By default, a deprecated/ignored input DATUM key/value pair on reading a file with PROJ6 will give a warning (default FALSE); if TRUE, an error is triggered, which may be trapped using \code{try}}
 }
 
