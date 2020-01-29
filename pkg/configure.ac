@@ -514,8 +514,15 @@ if test [ -n "$proj_share_path" ] ; then
 fi
 
 if test ${PROJ6} = "yes"; then
-  AC_CHECK_HEADER([sqlite3.h])
-  AC_CHECK_LIB([sqlite3], [sqlite3_version])
+  sqlok=yes
+  AC_CHECK_HEADER([sqlite3.h],,sqlok=no)
+  if test "${sqlok}" = no; then
+    AC_MSG_ERROR([sqlite3.h not found in given locations.])
+  fi
+  AC_CHECK_LIB([sqlite3], [sqlite3_libversion],,sqlok=no)
+  if test "${sqlok}" = no; then
+    AC_MSG_ERROR([sqlite3_libversion not found in libsqlite3.])
+  fi
 fi
 
 if test ${PROJ6} = "no"; then
@@ -739,6 +746,9 @@ if test [ -n "$PROJ_LIB_PATH" ] ; then
 AC_SUBST([PKG_LIBS], ["${PKG_LIBS} ${PROJ_LIB_PATH}"])
 else
 AC_SUBST([PKG_LIBS], ["${PKG_LIBS} -lproj"])
+fi
+if test ${PROJ6} = "yes" ; then
+AC_SUBST([PKG_LIBS], ["${PKG_LIBS} -lsqlite3"])
 fi
 
 AC_MSG_NOTICE([Package CPP flags: ${PKG_CPPFLAGS}])
