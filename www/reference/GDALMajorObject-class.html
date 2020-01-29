@@ -69,7 +69,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgdal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.3</span>
       </span>
     </div>
 
@@ -92,7 +92,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/PROJ6_GDAL3.html">RFC: Migration to PROJ6/GDAL3</a>
+      <a href="../articles/PROJ6_GDAL3.html">Migration to PROJ6/GDAL3</a>
     </li>
   </ul>
 </li>
@@ -169,14 +169,14 @@
     <pre class="examples"><div class='input'><span class='no'>driver</span> <span class='kw'>&lt;-</span> <span class='fu'>new</span>(<span class='st'>'GDALDriver'</span>, <span class='fu'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span>(<span class='fu'><a href='GDALDriver-class.html'>getGDALDriverNames</a></span>()[<span class='fl'>1</span>,<span class='fl'>1</span>]))
 <span class='no'>driver</span></div><div class='output co'>#&gt; An object of class "GDALDriver"
 #&gt; Slot "handle":
-#&gt; &lt;pointer: 0x6dda690&gt;
+#&gt; &lt;pointer: 0x72ab560&gt;
 #&gt; </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/rm.html'>rm</a></span>(<span class='no'>driver</span>)
 <span class='no'>logo</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"pictures/logo.jpg"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"rgdal"</span>)[<span class='fl'>1</span>]
 <span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>new</span>(<span class='st'>"GDALReadOnlyDataset"</span>, <span class='no'>logo</span>)
 <span class='no'>x</span></div><div class='output co'>#&gt; An object of class "GDALReadOnlyDataset"
 #&gt; Slot "handle":
-#&gt; &lt;pointer: 0x6bb1810&gt;
-#&gt; </div><div class='input'><span class='fu'>getDescription</span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; [1] "/tmp/Rtmp69B5vH/temp_libpath5ff54d7ef427/rgdal/pictures/logo.jpg"</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/dim.html'>dim</a></span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; [1] 175 200</div><div class='input'><span class='fu'><a href='GDALReadOnlyDataset-class.html'>GDAL.close</a></span>(<span class='no'>x</span>)</div></pre>
+#&gt; &lt;pointer: 0x57fc600&gt;
+#&gt; </div><div class='input'><span class='fu'>getDescription</span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; [1] "/tmp/RtmpKX7V7q/temp_libpathbee5e280a0c/rgdal/pictures/logo.jpg"</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/dim.html'>dim</a></span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; [1] 175 200</div><div class='input'><span class='fu'><a href='GDALReadOnlyDataset-class.html'>GDAL.close</a></span>(<span class='no'>x</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

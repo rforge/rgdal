@@ -69,7 +69,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgdal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.3</span>
       </span>
     </div>
 
@@ -92,7 +92,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/PROJ6_GDAL3.html">RFC: Migration to PROJ6/GDAL3</a>
+      <a href="../articles/PROJ6_GDAL3.html">Migration to PROJ6/GDAL3</a>
     </li>
   </ul>
 </li>
@@ -124,7 +124,7 @@
     <pre class="usage"><span class='fu'>showWKT</span>(<span class='no'>p4s</span>, <span class='kw'>file</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>morphToESRI</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>enforce_xy</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
 <span class='fu'>showP4</span>(<span class='no'>wkt</span>, <span class='kw'>morphFromESRI</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>enforce_xy</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
 <span class='fu'>showEPSG</span>(<span class='no'>p4s</span>, <span class='kw'>enforce_xy</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
-<span class='fu'>showSRID</span>(<span class='no'>inSRID</span>, <span class='kw'>format</span><span class='kw'>=</span><span class='st'>"WKT2"</span>, <span class='kw'>multiline</span><span class='kw'>=</span><span class='st'>"NO"</span>, <span class='kw'>enforce_xy</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
+<span class='fu'>showSRID</span>(<span class='no'>inSRID</span>, <span class='kw'>format</span><span class='kw'>=</span><span class='st'>"WKT2"</span>, <span class='kw'>multiline</span><span class='kw'>=</span><span class='st'>"NO"</span>, <span class='kw'>enforce_xy</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>EPSG_to_init</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
 <span class='fu'>get_P6_datum_hard_fail</span>()
 <span class='fu'>set_P6_datum_hard_fail</span>(<span class='no'>value</span>)
 <span class='fu'>get_thin_PROJ6_warnings</span>()
@@ -170,6 +170,10 @@
       <td><p>Multiline output, either <code>"NO"</code> or <code>"YES"</code></p></td>
     </tr>
     <tr>
+      <th>EPSG_to_init</th>
+      <td><p>default TRUE, workaround for PROJ 6.3.0 frailty leading to the dropping of +ellps= and +units=; DATUM seems to disappear in the internal definition</p></td>
+    </tr>
+    <tr>
       <th>value</th>
       <td><p>By default, a deprecated/ignored input DATUM key/value pair on reading a file with PROJ6 will give a warning (default FALSE); if TRUE, an error is triggered, which may be trapped using <code>try</code></p></td>
     </tr>
@@ -188,10 +192,10 @@
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'>set_thin_PROJ6_warnings</span>(<span class='fl'>TRUE</span>)
 <span class='no'>cities</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='readOGR.html'>readOGR</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"vectors"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"rgdal"</span>)[<span class='fl'>1</span>], <span class='st'>"cities"</span>)</div><div class='output co'>#&gt; OGR data source with driver: ESRI Shapefile 
-#&gt; Source: "/tmp/Rtmp69B5vH/temp_libpath5ff54d7ef427/rgdal/vectors", layer: "cities"
+#&gt; Source: "/tmp/RtmpKX7V7q/temp_libpathbee5e280a0c/rgdal/vectors", layer: "cities"
 #&gt; with 606 features
 #&gt; It has 4 fields
-#&gt; Integer64 fields read as strings:  POPULATION </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/readLines.html'>readLines</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"vectors/cities.prj"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"rgdal"</span>)[<span class='fl'>1</span>])</div><div class='output co'>#&gt; [1] "GEOGCS[\"GCS_WGS_1984\",DATUM[\"D_WGS_1984\",SPHEROID[\"WGS_1984\",6378137,298.257223563]],PRIMEM[\"Greenwich\",0],UNIT[\"Degree\",0.0174532925199433]]"</div><div class='input'><span class='fu'>showWKT</span>(<span class='fu'>proj4string</span>(<span class='no'>cities</span>))</div><div class='output co'>#&gt; [1] "GEOGCS[\"GCS_unknown\",DATUM[\"D_WGS_1984\",SPHEROID[\"WGS_1984\",6378137.0,298.257223563]],PRIMEM[\"Greenwich\",0.0],UNIT[\"Degree\",0.0174532925199433]]"</div><div class='input'><span class='fu'>showWKT</span>(<span class='st'>"+init=epsg:28992"</span>)</div><div class='output co'>#&gt; [1] "PROJCS[\"RD_New\",GEOGCS[\"GCS_Amersfoort\",DATUM[\"D_Amersfoort\",SPHEROID[\"Bessel_1841\",6377397.155,299.1528128]],PRIMEM[\"Greenwich\",0.0],UNIT[\"Degree\",0.0174532925199433]],PROJECTION[\"Double_Stereographic\"],PARAMETER[\"False_Easting\",155000.0],PARAMETER[\"False_Northing\",463000.0],PARAMETER[\"Central_Meridian\",5.38763888888889],PARAMETER[\"Scale_Factor\",0.9999079],PARAMETER[\"Latitude_Of_Origin\",52.1561605555556],UNIT[\"Meter\",1.0]]"</div><div class='input'><span class='fu'>showP4</span>(<span class='fu'>showWKT</span>(<span class='st'>"+init=epsg:28992"</span>))</div><div class='output co'>#&gt; [1] "+proj=sterea +lat_0=52.1561605555556 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +units=m +no_defs"</div><div class='input'><span class='fu'>showEPSG</span>(<span class='st'>"+proj=utm +zone=30"</span>)</div><div class='output co'>#&gt; [1] "32630"</div><div class='input'><span class='fu'>showEPSG</span>(<span class='st'>"+proj=longlat +ellps=WGS84"</span>)</div><div class='output co'>#&gt; [1] "4326"</div><div class='input'><span class='no'>exts</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='GDALDriver-class.html'>rgdal_extSoftVersion</a></span>()
+#&gt; Integer64 fields read as strings:  POPULATION </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/readLines.html'>readLines</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"vectors/cities.prj"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"rgdal"</span>)[<span class='fl'>1</span>])</div><div class='output co'>#&gt; [1] "GEOGCS[\"GCS_WGS_1984\",DATUM[\"D_WGS_1984\",SPHEROID[\"WGS_1984\",6378137,298.257223563]],PRIMEM[\"Greenwich\",0],UNIT[\"Degree\",0.0174532925199433]]"</div><div class='input'><span class='fu'>showWKT</span>(<span class='fu'>proj4string</span>(<span class='no'>cities</span>))</div><div class='output co'>#&gt; [1] "GEOGCS[\"unknown\",DATUM[\"WGS_1984\",SPHEROID[\"WGS 84\",6378137,298.257223563,AUTHORITY[\"EPSG\",\"7030\"]],AUTHORITY[\"EPSG\",\"6326\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AXIS[\"Longitude\",EAST],AXIS[\"Latitude\",NORTH]]"</div><div class='input'><span class='fu'>showWKT</span>(<span class='st'>"+init=epsg:28992"</span>)</div><div class='output co'>#&gt; [1] "PROJCS[\"Amersfoort / RD New\",GEOGCS[\"Amersfoort\",DATUM[\"Amersfoort\",SPHEROID[\"Bessel 1841\",6377397.155,299.1528128,AUTHORITY[\"EPSG\",\"7004\"]],AUTHORITY[\"EPSG\",\"6289\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"4289\"]],PROJECTION[\"Oblique_Stereographic\"],PARAMETER[\"latitude_of_origin\",52.1561605555556],PARAMETER[\"central_meridian\",5.38763888888889],PARAMETER[\"scale_factor\",0.9999079],PARAMETER[\"false_easting\",155000],PARAMETER[\"false_northing\",463000],UNIT[\"metre\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Easting\",EAST],AXIS[\"Northing\",NORTH]]"</div><div class='input'><span class='fu'>showP4</span>(<span class='fu'>showWKT</span>(<span class='st'>"+init=epsg:28992"</span>))</div><div class='output co'>#&gt; [1] "+proj=sterea +lat_0=52.1561605555556 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +units=m +no_defs"</div><div class='input'><span class='fu'>showEPSG</span>(<span class='st'>"+proj=utm +zone=30"</span>)</div><div class='output co'>#&gt; [1] "32630"</div><div class='input'><span class='fu'>showEPSG</span>(<span class='st'>"+proj=longlat +ellps=WGS84"</span>)</div><div class='output co'>#&gt; [1] "4326"</div><div class='input'><span class='no'>exts</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='GDALDriver-class.html'>rgdal_extSoftVersion</a></span>()
 <span class='no'>run</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='projInfo.html'>new_proj_and_gdal</a></span>()
 <span class='kw'>if</span> (<span class='no'>run</span>) {
   <span class='fu'><a href='https://rdrr.io/r/base/cat.html'>cat</a></span>(<span class='fu'>showSRID</span>(<span class='st'>"EPSG:27700"</span>, <span class='kw'>multiline</span><span class='kw'>=</span><span class='st'>"YES"</span>), <span class='st'>"\n"</span>)
@@ -220,27 +224,29 @@
 #&gt;             ID["EPSG",8806]],
 #&gt;         PARAMETER["False northing",-100000,
 #&gt;             LENGTHUNIT["metre",1],
-#&gt;             ID["EPSG",8807]]],
+#&gt;             ID["EPSG",8807]],
+#&gt;         ID["EPSG",19916]],
 #&gt;     CS[Cartesian,2],
 #&gt;         AXIS["(E)",east,
 #&gt;             ORDER[1],
-#&gt;             LENGTHUNIT["metre",1]],
+#&gt;             LENGTHUNIT["metre",1,
+#&gt;                 ID["EPSG",9001]]],
 #&gt;         AXIS["(N)",north,
 #&gt;             ORDER[2],
-#&gt;             LENGTHUNIT["metre",1]],
+#&gt;             LENGTHUNIT["metre",1,
+#&gt;                 ID["EPSG",9001]]],
 #&gt;     USAGE[
 #&gt;         SCOPE["unknown"],
 #&gt;         AREA["UK - Britain and UKCS 49°46'N to 61°01'N, 7°33'W to 3°33'E"],
-#&gt;         BBOX[49.75,-9.2,61.14,2.88]],
-#&gt;     ID["EPSG",27700]] </div><div class='input'><span class='kw'>if</span> (<span class='no'>run</span>) {
+#&gt;         BBOX[49.75,-9.2,61.14,2.88]]] </div><div class='input'><span class='kw'>if</span> (<span class='no'>run</span>) {
 (<span class='no'>prj</span> <span class='kw'>&lt;-</span> <span class='fu'>showSRID</span>(<span class='st'>"EPSG:27700"</span>, <span class='st'>"PROJ"</span>))
 }</div><div class='output co'>#&gt; [1] "+proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy +units=m +no_defs"</div><div class='input'><span class='kw'>if</span> (<span class='no'>run</span>) {
 <span class='fu'>showSRID</span>(<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='no'>prj</span>, <span class='st'>" +datum=OSGB36"</span>), <span class='st'>"WKT1"</span>)
 }</div><div class='output co'>#&gt; [1] "PROJCS[\"unknown\",GEOGCS[\"unknown\",DATUM[\"OSGB_1936\",SPHEROID[\"Airy 1830\",6377563.396,299.3249646,AUTHORITY[\"EPSG\",\"7001\"]],AUTHORITY[\"EPSG\",\"6277\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"latitude_of_origin\",49],PARAMETER[\"central_meridian\",-2],PARAMETER[\"scale_factor\",0.9996012717],PARAMETER[\"false_easting\",400000],PARAMETER[\"false_northing\",-100000],UNIT[\"metre\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Easting\",EAST],AXIS[\"Northing\",NORTH]]"</div><div class='input'><span class='kw'>if</span> (<span class='no'>run</span>) {
 <span class='fu'>showSRID</span>(<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='no'>prj</span>, <span class='st'>" +towgs84=370.936,-108.938,435.682"</span>), <span class='st'>"WKT1"</span>)
-}</div><div class='output co'>#&gt; [1] "PROJCS[\"unknown\",GEOGCS[\"unknown\",DATUM[\"Unknown_based_on_Airy_1830_ellipsoid\",SPHEROID[\"Airy 1830\",6377563.396,299.3249646],TOWGS84[370.936,-108.938,435.682,0,0,0,0]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"latitude_of_origin\",49],PARAMETER[\"central_meridian\",-2],PARAMETER[\"scale_factor\",0.9996012717],PARAMETER[\"false_easting\",400000],PARAMETER[\"false_northing\",-100000],UNIT[\"metre\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Easting\",EAST],AXIS[\"Northing\",NORTH]]"</div><div class='input'><span class='kw'>if</span> (<span class='no'>run</span>) {
+}</div><div class='output co'>#&gt; [1] "PROJCS[\"unknown\",GEOGCS[\"unknown\",DATUM[\"Unknown based on Airy 1830 ellipsoid\",SPHEROID[\"Airy 1830\",6377563.396,299.3249646],TOWGS84[370.936,-108.938,435.682,0,0,0,0]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"latitude_of_origin\",49],PARAMETER[\"central_meridian\",-2],PARAMETER[\"scale_factor\",0.9996012717],PARAMETER[\"false_easting\",400000],PARAMETER[\"false_northing\",-100000],UNIT[\"metre\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Easting\",EAST],AXIS[\"Northing\",NORTH]]"</div><div class='input'><span class='kw'>if</span> (<span class='no'>run</span>) {
 <span class='fu'>showSRID</span>(<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='no'>prj</span>, <span class='st'>" +nadgrids=OSTN15_NTv2_OSGBtoETRS.gsb"</span>), <span class='st'>"WKT1"</span>)
-}</div><div class='output co'>#&gt; [1] "PROJCS[\"unknown\",GEOGCS[\"unknown\",DATUM[\"Unknown_based_on_Airy_1830_ellipsoid\",SPHEROID[\"Airy 1830\",6377563.396,299.3249646],EXTENSION[\"PROJ4_GRIDS\",\"OSTN15_NTv2_OSGBtoETRS.gsb\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"latitude_of_origin\",49],PARAMETER[\"central_meridian\",-2],PARAMETER[\"scale_factor\",0.9996012717],PARAMETER[\"false_easting\",400000],PARAMETER[\"false_northing\",-100000],UNIT[\"metre\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Easting\",EAST],AXIS[\"Northing\",NORTH]]"</div><div class='input'><span class='kw'>if</span> (<span class='no'>run</span>) {
+}</div><div class='output co'>#&gt; [1] "PROJCS[\"unknown\",GEOGCS[\"unknown\",DATUM[\"Unknown based on Airy 1830 ellipsoid\",SPHEROID[\"Airy 1830\",6377563.396,299.3249646],EXTENSION[\"PROJ4_GRIDS\",\"OSTN15_NTv2_OSGBtoETRS.gsb\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"latitude_of_origin\",49],PARAMETER[\"central_meridian\",-2],PARAMETER[\"scale_factor\",0.9996012717],PARAMETER[\"false_easting\",400000],PARAMETER[\"false_northing\",-100000],UNIT[\"metre\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Easting\",EAST],AXIS[\"Northing\",NORTH]]"</div><div class='input'><span class='kw'>if</span> (<span class='no'>run</span>) {
 <span class='fu'>showSRID</span>(<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='no'>prj</span>, <span class='st'>" +datum=OSGB36"</span>), <span class='st'>"WKT2"</span>)
 }</div><div class='output co'>#&gt; [1] "PROJCRS[\"unknown\",BASEGEOGCRS[\"unknown\",DATUM[\"OSGB 1936\",ELLIPSOID[\"Airy 1830\",6377563.396,299.3249646,LENGTHUNIT[\"metre\",1]],ID[\"EPSG\",6277]],PRIMEM[\"Greenwich\",0,ANGLEUNIT[\"degree\",0.0174532925199433],ID[\"EPSG\",8901]]],CONVERSION[\"unknown\",METHOD[\"Transverse Mercator\",ID[\"EPSG\",9807]],PARAMETER[\"Latitude of natural origin\",49,ANGLEUNIT[\"degree\",0.0174532925199433],ID[\"EPSG\",8801]],PARAMETER[\"Longitude of natural origin\",-2,ANGLEUNIT[\"degree\",0.0174532925199433],ID[\"EPSG\",8802]],PARAMETER[\"Scale factor at natural origin\",0.9996012717,SCALEUNIT[\"unity\",1],ID[\"EPSG\",8805]],PARAMETER[\"False easting\",400000,LENGTHUNIT[\"metre\",1],ID[\"EPSG\",8806]],PARAMETER[\"False northing\",-100000,LENGTHUNIT[\"metre\",1],ID[\"EPSG\",8807]]],CS[Cartesian,2],AXIS[\"(E)\",east,ORDER[1],LENGTHUNIT[\"metre\",1,ID[\"EPSG\",9001]]],AXIS[\"(N)\",north,ORDER[2],LENGTHUNIT[\"metre\",1,ID[\"EPSG\",9001]]]]"</div><div class='input'><span class='kw'>if</span> (<span class='no'>run</span>) {
 <span class='fu'>showSRID</span>(<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='no'>prj</span>, <span class='st'>" +towgs84=370.936,-108.938,435.682"</span>), <span class='st'>"WKT2"</span>)

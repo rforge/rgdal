@@ -69,7 +69,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgdal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.3</span>
       </span>
     </div>
 
@@ -92,7 +92,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/PROJ6_GDAL3.html">RFC: Migration to PROJ6/GDAL3</a>
+      <a href="../articles/PROJ6_GDAL3.html">Migration to PROJ6/GDAL3</a>
     </li>
   </ul>
 </li>
@@ -186,7 +186,7 @@ The object has a "grids" attribute containing a nested list of grids for each co
 <span class='kw'>if</span> (<span class='no'>run</span>) {
   <span class='no'>discarded_datum</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='showWKT.html'>showSRID</a></span>(<span class='st'>"EPSG:27700"</span>, <span class='st'>"PROJ"</span>)
   (<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>list_coordOps</span>(<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='no'>discarded_datum</span>, <span class='st'>" +type=crs"</span>), <span class='st'>"EPSG:4326"</span>))
-}</div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum OSGB_1936 in CRS definition</span></div><div class='output co'>#&gt; Candidate coordinate operations found:  1 
+}</div><div class='output co'>#&gt; Candidate coordinate operations found:  1 
 #&gt; Strict containment:  FALSE 
 #&gt; Visualization order:  TRUE 
 #&gt; Source: +proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000
@@ -205,7 +205,7 @@ The object has a "grids" attribute containing a nested list of grids for each co
 #&gt; [1] "Inverse of unknown + Ballpark geographic offset from unknown to WGS 84 + axis order change (2D)"</div><div class='input'><span class='kw'>if</span> (<span class='no'>run</span>) {
   <span class='no'>restored_datum</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='showWKT.html'>showSRID</a></span>(<span class='st'>"EPSG:27700"</span>, <span class='st'>"PROJ"</span>)
   <span class='fu'>list_coordOps</span>(<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='no'>restored_datum</span>, <span class='st'>" +datum=OSGB36 +type=crs"</span>), <span class='st'>"EPSG:4326"</span>)
-}</div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum OSGB_1936 in CRS definition</span></div><div class='output co'>#&gt; Candidate coordinate operations found:  7 
+}</div><div class='output co'>#&gt; Candidate coordinate operations found:  8 
 #&gt; Strict containment:  FALSE 
 #&gt; Visualization order:  TRUE 
 #&gt; Source: +proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000
@@ -223,12 +223,12 @@ The object has a "grids" attribute containing a nested list of grids for each co
 #&gt;              +s=-20.489 +convention=position_vector +step +inv
 #&gt;              +proj=cart +ellps=WGS84 +step +proj=pop +v_3 +step
 #&gt;              +proj=unitconvert +xy_in=rad +xy_out=deg
-#&gt; Operation 6 is lacking 1 grid with accuracy 1 m
+#&gt; Operation 7 is lacking 1 grid with accuracy 1 m
 #&gt; Missing grid: OSTN15_NTv2_OSGBtoETRS.gsb 
-#&gt; URL: https://download.osgeo.org/proj/proj-datumgrid-europe-latest.zip </div><div class='input'><span class='kw'>if</span> (<span class='no'>run</span>) {
+#&gt; URL: https://download.osgeo.org/proj/proj-datumgrid-europe-1.5.zip </div><div class='input'><span class='kw'>if</span> (<span class='no'>run</span>) {
   <span class='no'>wkt_datum</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='showWKT.html'>showSRID</a></span>(<span class='st'>"EPSG:27700"</span>, <span class='st'>"WKT2"</span>)
   (<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>list_coordOps</span>(<span class='no'>wkt_datum</span>, <span class='st'>"EPSG:4326"</span>))
-}</div><div class='output co'>#&gt; Candidate coordinate operations found:  6 
+}</div><div class='output co'>#&gt; Candidate coordinate operations found:  7 
 #&gt; Strict containment:  FALSE 
 #&gt; Visualization order:  TRUE 
 #&gt; Source: PROJCRS["OSGB 1936 / British National Grid", BASEGEOGCRS["OSGB
@@ -246,13 +246,13 @@ The object has a "grids" attribute containing a nested list of grids for each co
 #&gt;         0.9996012717, SCALEUNIT["unity", 1], ID["EPSG", 8805]],
 #&gt;         PARAMETER["False easting", 400000, LENGTHUNIT["metre",
 #&gt;         1], ID["EPSG", 8806]], PARAMETER["False northing",
-#&gt;         -100000, LENGTHUNIT["metre", 1], ID["EPSG", 8807]]],
-#&gt;         CS[Cartesian, 2], AXIS["(E)", east, ORDER[1],
-#&gt;         LENGTHUNIT["metre", 1]], AXIS["(N)", north, ORDER[2],
-#&gt;         LENGTHUNIT["metre", 1]], USAGE[SCOPE["unknown"],
-#&gt;         AREA["UK - Britain and UKCS 49°46'N to 61°01'N, 7°33'W
-#&gt;         to 3°33'E"], BBOX[49.75, -9.2, 61.14, 2.88]],
-#&gt;         ID["EPSG", 27700]]
+#&gt;         -100000, LENGTHUNIT["metre", 1], ID["EPSG", 8807]],
+#&gt;         ID["EPSG", 19916]], CS[Cartesian, 2], AXIS["(E)", east,
+#&gt;         ORDER[1], LENGTHUNIT["metre", 1, ID["EPSG", 9001]]],
+#&gt;         AXIS["(N)", north, ORDER[2], LENGTHUNIT["metre", 1,
+#&gt;         ID["EPSG", 9001]]], USAGE[SCOPE["unknown"], AREA["UK -
+#&gt;         Britain and UKCS 49°46'N to 61°01'N, 7°33'W to
+#&gt;         3°33'E"], BBOX[49.75, -9.2, 61.14, 2.88]]]
 #&gt; Target: EPSG:4326 
 #&gt; Best instantiable operation has accuracy: 2 m
 #&gt; Description: Inverse of British National Grid + OSGB 1936 to WGS 84 (6) +
@@ -265,15 +265,15 @@ The object has a "grids" attribute containing a nested list of grids for each co
 #&gt;              +s=-20.489 +convention=position_vector +step +inv
 #&gt;              +proj=cart +ellps=WGS84 +step +proj=pop +v_3 +step
 #&gt;              +proj=unitconvert +xy_in=rad +xy_out=deg
-#&gt; Operation 6 is lacking 1 grid with accuracy 1 m
+#&gt; Operation 7 is lacking 1 grid with accuracy 1 m
 #&gt; Missing grid: OSTN15_NTv2_OSGBtoETRS.gsb 
-#&gt; URL: https://download.osgeo.org/proj/proj-datumgrid-europe-latest.zip </div><div class='input'><span class='kw'>if</span> (<span class='no'>run</span>) {
+#&gt; URL: https://download.osgeo.org/proj/proj-datumgrid-europe-1.5.zip </div><div class='input'><span class='kw'>if</span> (<span class='no'>run</span>) {
   <span class='fu'>best_instantiable_coordOp</span>(<span class='no'>x</span>)
 }</div><div class='output co'>#&gt; [1] "+proj=pipeline +step +inv +proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy +step +proj=push +v_3 +step +proj=cart +ellps=airy +step +proj=helmert +x=446.448 +y=-125.157 +z=542.06 +rx=0.15 +ry=0.247 +rz=0.842 +s=-20.489 +convention=position_vector +step +inv +proj=cart +ellps=WGS84 +step +proj=pop +v_3 +step +proj=unitconvert +xy_in=rad +xy_out=deg"
 #&gt; attr(,"description")
 #&gt; [1] "Inverse of British National Grid + OSGB 1936 to WGS 84 (6) + axis order change (2D)"</div><div class='input'><span class='kw'>if</span> (<span class='no'>run</span>) {
   <span class='fu'>list_coordOps</span>(<span class='st'>"EPSG:27700"</span>, <span class='st'>"EPSG:4326"</span>)
-}</div><div class='output co'>#&gt; Candidate coordinate operations found:  6 
+}</div><div class='output co'>#&gt; Candidate coordinate operations found:  7 
 #&gt; Strict containment:  FALSE 
 #&gt; Visualization order:  TRUE 
 #&gt; Source: EPSG:27700 
@@ -289,43 +289,36 @@ The object has a "grids" attribute containing a nested list of grids for each co
 #&gt;              +s=-20.489 +convention=position_vector +step +inv
 #&gt;              +proj=cart +ellps=WGS84 +step +proj=pop +v_3 +step
 #&gt;              +proj=unitconvert +xy_in=rad +xy_out=deg
-#&gt; Operation 6 is lacking 1 grid with accuracy 1 m
+#&gt; Operation 7 is lacking 1 grid with accuracy 1 m
 #&gt; Missing grid: OSTN15_NTv2_OSGBtoETRS.gsb 
-#&gt; URL: https://download.osgeo.org/proj/proj-datumgrid-europe-latest.zip </div><div class='input'><span class='kw'>if</span> (<span class='no'>run</span>) {
+#&gt; URL: https://download.osgeo.org/proj/proj-datumgrid-europe-1.5.zip </div><div class='input'><span class='kw'>if</span> (<span class='no'>run</span>) {
 }</div><div class='output co'>#&gt; NULL</div><div class='input'><span class='kw'>if</span> (<span class='no'>run</span>) {
   <span class='no'>discarded_datum</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='showWKT.html'>showSRID</a></span>(<span class='st'>"EPSG:22525"</span>, <span class='st'>"PROJ"</span>)
   <span class='fu'>list_coordOps</span>(<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='no'>discarded_datum</span>, <span class='st'>" +type=crs"</span>), <span class='st'>"EPSG:31985"</span>)
-}</div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum Corrego_Alegre_1970-72 in CRS definition,</span>
-#&gt; <span class='warning'> but +towgs84= values preserved</span></div><div class='output co'>#&gt; Candidate coordinate operations found:  1 
-#&gt; Strict containment:  FALSE 
-#&gt; Visualization order:  TRUE 
-#&gt; Source: +proj=utm +zone=25 +south +ellps=intl
-#&gt;         +towgs84=-205.57,168.77,-4.12,0,0,0,0 +units=m +no_defs
-#&gt;         +type=crs
-#&gt; Target: EPSG:31985 
-#&gt; Best instantiable operation has only ballpark accuracy 
-#&gt; Description: Inverse of UTM zone 25S + Transformation from unknown to WGS84
-#&gt;              + Inverse of SIRGAS 2000 to WGS 84 (1) + UTM zone
-#&gt;              25S
-#&gt; Definition:  +proj=pipeline +step +inv +proj=utm +zone=25 +south +ellps=intl
-#&gt;              +step +proj=push +v_3 +step +proj=cart +ellps=intl
-#&gt;              +step +proj=helmert +x=-205.57 +y=168.77 +z=-4.12
-#&gt;              +rx=0 +ry=0 +rz=0 +s=0 +convention=position_vector
-#&gt;              +step +inv +proj=cart +ellps=GRS80 +step +proj=pop
-#&gt;              +v_3 +step +proj=utm +zone=25 +south +ellps=GRS80</div><div class='input'><span class='kw'>if</span> (<span class='no'>run</span>) {
-}</div><div class='output co'>#&gt; NULL</div><div class='input'><span class='kw'>if</span> (<span class='no'>run</span>) {
-  <span class='no'>wkt_datum</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='showWKT.html'>showSRID</a></span>(<span class='st'>"EPSG:22525"</span>, <span class='st'>"WKT2"</span>)
-  <span class='fu'>list_coordOps</span>(<span class='no'>wkt_datum</span>, <span class='st'>"EPSG:31985"</span>)
 }</div><div class='output co'>#&gt; Candidate coordinate operations found:  1 
 #&gt; Strict containment:  FALSE 
 #&gt; Visualization order:  TRUE 
-#&gt; Source: BOUNDCRS[SOURCECRS[PROJCRS["Corrego Alegre 1970-72 / UTM zone
-#&gt;         25S", BASEGEOGCRS["Corrego Alegre 1970-72",
-#&gt;         DATUM["Corrego Alegre 1970-72",
-#&gt;         ELLIPSOID["International 1924", 6378388, 297,
-#&gt;         LENGTHUNIT["metre", 1]]], PRIMEM["Greenwich", 0,
-#&gt;         ANGLEUNIT["degree", 0.0174532925199433]], ID["EPSG",
-#&gt;         4225]], CONVERSION["UTM zone 25S", METHOD["Transverse
+#&gt; Source: +proj=utm +zone=25 +south +ellps=intl +units=m +no_defs
+#&gt;         +type=crs
+#&gt; Target: EPSG:31985 
+#&gt; Best instantiable operation has only ballpark accuracy 
+#&gt; Description: Inverse of UTM zone 25S + Ballpark geographic offset from
+#&gt;              unknown to SIRGAS 2000 + UTM zone 25S
+#&gt; Definition:  +proj=pipeline +step +inv +proj=utm +zone=25 +south +ellps=intl
+#&gt;              +step +proj=utm +zone=25 +south +ellps=GRS80</div><div class='input'><span class='kw'>if</span> (<span class='no'>run</span>) {
+}</div><div class='output co'>#&gt; NULL</div><div class='input'><span class='kw'>if</span> (<span class='no'>run</span>) {
+  <span class='no'>wkt_datum</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='showWKT.html'>showSRID</a></span>(<span class='st'>"EPSG:22525"</span>, <span class='st'>"WKT2"</span>)
+  <span class='fu'>list_coordOps</span>(<span class='no'>wkt_datum</span>, <span class='st'>"EPSG:31985"</span>)
+}</div><div class='output co'>#&gt; Candidate coordinate operations found:  2 
+#&gt; Strict containment:  FALSE 
+#&gt; Visualization order:  TRUE 
+#&gt; Source: PROJCRS["Corrego Alegre 1970-72 / UTM zone 25S",
+#&gt;         BASEGEOGCRS["Corrego Alegre 1970-72", DATUM["Corrego
+#&gt;         Alegre 1970-72", ELLIPSOID["International 1924",
+#&gt;         6378388, 297, LENGTHUNIT["metre", 1]]],
+#&gt;         PRIMEM["Greenwich", 0, ANGLEUNIT["degree",
+#&gt;         0.0174532925199433]], ID["EPSG", 4225]],
+#&gt;         CONVERSION["UTM zone 25S", METHOD["Transverse
 #&gt;         Mercator", ID["EPSG", 9807]], PARAMETER["Latitude of
 #&gt;         natural origin", 0, ANGLEUNIT["degree",
 #&gt;         0.0174532925199433], ID["EPSG", 8801]],
@@ -335,44 +328,24 @@ The object has a "grids" attribute containing a nested list of grids for each co
 #&gt;         0.9996, SCALEUNIT["unity", 1], ID["EPSG", 8805]],
 #&gt;         PARAMETER["False easting", 500000, LENGTHUNIT["metre",
 #&gt;         1], ID["EPSG", 8806]], PARAMETER["False northing",
-#&gt;         10000000, LENGTHUNIT["metre", 1], ID["EPSG", 8807]]],
-#&gt;         CS[Cartesian, 2], AXIS["(E)", east, ORDER[1],
-#&gt;         LENGTHUNIT["metre", 1]], AXIS["(N)", north, ORDER[2],
-#&gt;         LENGTHUNIT["metre", 1]], USAGE[SCOPE["unknown"],
+#&gt;         10000000, LENGTHUNIT["metre", 1], ID["EPSG", 8807]],
+#&gt;         ID["EPSG", 16125]], CS[Cartesian, 2], AXIS["(E)", east,
+#&gt;         ORDER[1], LENGTHUNIT["metre", 1, ID["EPSG", 9001]]],
+#&gt;         AXIS["(N)", north, ORDER[2], LENGTHUNIT["metre", 1,
+#&gt;         ID["EPSG", 9001]]], USAGE[SCOPE["unknown"],
 #&gt;         AREA["Brazil - east of 36°W onshore"], BBOX[-10.1, -36,
-#&gt;         -4.99, -34.74]], ID["EPSG", 22525]]],
-#&gt;         TARGETCRS[GEOGCRS["WGS 84", DATUM["World Geodetic
-#&gt;         System 1984", ELLIPSOID["WGS 84", 6378137,
-#&gt;         298.257223563, LENGTHUNIT["metre", 1]]],
-#&gt;         PRIMEM["Greenwich", 0, ANGLEUNIT["degree",
-#&gt;         0.0174532925199433]], CS[ellipsoidal, 2],
-#&gt;         AXIS["latitude", north, ORDER[1], ANGLEUNIT["degree",
-#&gt;         0.0174532925199433]], AXIS["longitude", east, ORDER[2],
-#&gt;         ANGLEUNIT["degree", 0.0174532925199433]], ID["EPSG",
-#&gt;         4326]]], ABRIDGEDTRANSFORMATION["Corrego Alegre 1970-72
-#&gt;         to WGS 84 (3)", VERSION["PBS-Bra 1983"],
-#&gt;         METHOD["Geocentric translations (geog2D domain)",
-#&gt;         ID["EPSG", 9603]], PARAMETER["X-axis translation",
-#&gt;         -205.57, ID["EPSG", 8605]], PARAMETER["Y-axis
-#&gt;         translation", 168.77, ID["EPSG", 8606]],
-#&gt;         PARAMETER["Z-axis translation", -4.12, ID["EPSG",
-#&gt;         8607]], USAGE[SCOPE["Medium and small scale mapping."],
-#&gt;         AREA["Brazil - Corrego Alegre 1970-1972"], BBOX[-33.78,
-#&gt;         -58.16, -2.68, -34.74]], ID["EPSG", 6192],
-#&gt;         REMARK["Formed by concatenation of tfms codes 6191 and
-#&gt;         1877. Used by Petrobras and ANP until February 2005
-#&gt;         when replaced by Corrego Alegre 1970-72 to WGS 84 (4)
-#&gt;         (tfm code 6194)."]]]
+#&gt;         -4.99, -34.74]]]
 #&gt; Target: EPSG:31985 
-#&gt; Best instantiable operation has only ballpark accuracy 
-#&gt; Description: Inverse of UTM zone 25S + Corrego Alegre 1970-72 to WGS 84 (3)
-#&gt;              + Inverse of SIRGAS 2000 to WGS 84 (1) + UTM zone
-#&gt;              25S
+#&gt; Best instantiable operation has accuracy: 5 m
+#&gt; Description: Inverse of UTM zone 25S + Corrego Alegre 1970-72 to SIRGAS 2000
+#&gt;              (2) + UTM zone 25S
 #&gt; Definition:  +proj=pipeline +step +inv +proj=utm +zone=25 +south +ellps=intl
 #&gt;              +step +proj=push +v_3 +step +proj=cart +ellps=intl
-#&gt;              +step +proj=helmert +x=-205.57 +y=168.77 +z=-4.12
+#&gt;              +step +proj=helmert +x=-206.05 +y=168.28 +z=-3.82
 #&gt;              +step +inv +proj=cart +ellps=GRS80 +step +proj=pop
-#&gt;              +v_3 +step +proj=utm +zone=25 +south +ellps=GRS80</div><div class='input'><span class='kw'>if</span> (<span class='no'>run</span>) {
+#&gt;              +v_3 +step +proj=utm +zone=25 +south +ellps=GRS80
+#&gt; Operation 2 is lacking 1 grid with accuracy 2 m
+#&gt; Missing grid: CA7072_003.gsb </div><div class='input'><span class='kw'>if</span> (<span class='no'>run</span>) {
   (<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>list_coordOps</span>(<span class='st'>"EPSG:22525"</span>, <span class='st'>"EPSG:31985"</span>))
 }</div><div class='output co'>#&gt; Candidate coordinate operations found:  2 
 #&gt; Strict containment:  FALSE 
