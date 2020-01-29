@@ -513,6 +513,10 @@ if test [ -n "$proj_share_path" ] ; then
     AC_MSG_NOTICE([PROJ_LIB: ${proj_share_path}])
 fi
 
+if test ${PROJ6} = "yes"; then
+  AC_CHECK_HEADER([sqlite3.h])
+  AC_CHECK_LIB([sqlite3], [sqlite3_version])
+fi
 
 if test ${PROJ6} = "no"; then
 
