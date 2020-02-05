@@ -97,7 +97,7 @@ checkCRSArgs_ng <- function(uprojargs=NA_character_, SRS_string=NULL) {
       res[[1]] <- TRUE
       res[[2]] <- uprojargs1
     }
-    wkt2 <- try(showSRID(SRS_string, format="WKT2", multiline="NO"))
+    wkt2 <- try(showSRID(SRS_string, format="WKT2", multiline="YES"))
     if (!inherits(wkt2, "try-error")) res[[3]] <- wkt2
   } else if (!no_PROJ) {
     uprojargs <- sub("^\\s+", "", uprojargs)
@@ -109,7 +109,7 @@ checkCRSArgs_ng <- function(uprojargs=NA_character_, SRS_string=NULL) {
       res[[1]] <- TRUE
       res[[2]] <- uprojargs1
     }
-    wkt2 <- try(showSRID(uprojargs, format="WKT2", multiline="NO"))
+    wkt2 <- try(showSRID(uprojargs, format="WKT2", multiline="YES"))
     if (!inherits(wkt2, "try-error")) res[[3]] <- wkt2
   }
   res
