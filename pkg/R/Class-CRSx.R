@@ -150,8 +150,10 @@ compare_CRS <- function(CRS1, CRS2) {
         type2 <- TRUE
         to_args <- comment(CRS2)
     }
-    res <- .Call("CRS_compare", as.character(from_args), as.character(to_args),
+    res0 <- .Call("CRS_compare", as.character(from_args), as.character(to_args),
         as.logical(type1), as.logical(type2), PACKAGE="rgdal")
+    res <- as.logical(res0)
+    names(res) <- c("strict", "equivalent", "equivalent_except_axis_order")
     res
 }
 

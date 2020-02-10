@@ -65,6 +65,16 @@ data(meuse)
 coordinates(meuse) <- c("x", "y")
 proj4string(meuse) <- CRS("+init=epsg:28992")
 CRSargs(CRS(proj4string(meuse)))
+run <- attr(getPROJ4VersionInfo(), "short") >= 630
+if (run) {
+c1 <- CRS("+init=epsg:4326")
+c2 <- CRS("+proj=longlat")
+compare_CRS(c1, c2)
+}
+if (run) {
+comment(c2) <- NULL
+compare_CRS(c1, c2)
+}
 }
 \keyword{classes}
 \keyword{spatial}

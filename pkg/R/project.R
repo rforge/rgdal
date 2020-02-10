@@ -3,6 +3,7 @@
 getPROJ4VersionInfo <- function() {
     res0 <- .Call("PROJ4VersionInfo", PACKAGE="rgdal")
     res <- paste(res0[[1]], ", [PJ_VERSION: ", res0[[2]], "]", sep="")
+    attr(res, "short") <- res0[[2]]
     res
 }
 

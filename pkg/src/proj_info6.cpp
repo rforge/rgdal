@@ -300,11 +300,12 @@ SEXP list_coordinate_ops(SEXP source, SEXP target, SEXP area_of_interest, SEXP s
     return(ans);
 
 }
-
-#if PJ_VERSION < 630
+#if PROJ_VERSION_MAJOR == 6 && PROJ_VERSION_MINOR < 3
 
 SEXP CRS_compare(SEXP fromargs, SEXP toargs, SEXP type1, SEXP type2) {
-    Rprintf("Not available for PROJ version < 6.3.0");
+Rprintf("PJ_VERSION %d\n", PJ_VERSION);
+
+    Rprintf("Not available for PROJ version < 6.3.0\n");
     return(R_NilValue);
 }
 
