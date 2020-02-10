@@ -28,8 +28,9 @@ Objects can be created by calls of the form \code{CRS("projargs")}, where "proja
 
 \usage{
 checkCRSArgs(uprojargs)
-checkCRSArgs_ng(uprojargs=NA_character_, SRS_string=NULL)}
+checkCRSArgs_ng(uprojargs=NA_character_, SRS_string=NULL)
 compare_CRS(CRS1, CRS2)
+}
 \arguments{
   \item{uprojargs}{character string PROJ.4 projection arguments}
   \item{SRS_string}{default NULL, experimental in connection with adaptation to GDAL>=3/PROJ>=6; a valid WKT string or SRS definition such as \code{"EPSG:4326"}}

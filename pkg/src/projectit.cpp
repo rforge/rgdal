@@ -142,7 +142,7 @@ SEXP list_coordinate_ops(SEXP source, SEXP target, SEXP area_of_interest, SEXP s
     return(R_NilValue);
 }
 
-SEXP transform_ng(SEXP fromargs, SEXP toargs, SEXP type1, SEXP type2) {
+SEXP CRS_compare(SEXP fromargs, SEXP toargs, SEXP type1, SEXP type2) {
     Rprintf("Not available for PROJ version < 6");
     return(R_NilValue);
 }

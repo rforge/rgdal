@@ -301,6 +301,15 @@ SEXP list_coordinate_ops(SEXP source, SEXP target, SEXP area_of_interest, SEXP s
 
 }
 
+#if PJ_VERSION < 630
+
+SEXP CRS_compare(SEXP fromargs, SEXP toargs, SEXP type1, SEXP type2) {
+    Rprintf("Not available for PROJ version < 6.3.0");
+    return(R_NilValue);
+}
+
+#else
+
 SEXP CRS_compare(SEXP fromargs, SEXP toargs, SEXP type1, SEXP type2) {
 
     PJ_CONTEXT *ctx = proj_context_create();
@@ -340,6 +349,8 @@ SEXP CRS_compare(SEXP fromargs, SEXP toargs, SEXP type1, SEXP type2) {
     UNPROTECT(1);
     return(res);
 }
+
+#endif
 
 SEXP transform_ng(SEXP fromargs, SEXP toargs, SEXP coordOp, SEXP npts, SEXP x, SEXP y, SEXP z) {
 
