@@ -861,12 +861,12 @@ RGDAL_GetProjectionRef(SEXP sDataset, SEXP enforce_xy) {
   SEXP ans, Datum, ToWGS84, Ellps;
   int i, pc=0;
   const char *datum, *towgs84, *ellps;
-  int vis_order;
+/*  int vis_order;
 
   if (enforce_xy == R_NilValue) vis_order = 0;
   else if (LOGICAL_POINTER(enforce_xy)[0] == 1) vis_order = 1;
   else if (LOGICAL_POINTER(enforce_xy)[0] == 0) vis_order = 0;
-  else vis_order = 0;
+  else vis_order = 0;*/
 
   GDALDataset *pDataset = getGDALDatasetPtr(sDataset);
   

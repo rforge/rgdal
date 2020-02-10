@@ -183,6 +183,7 @@ SEXP p4s_to_wkt(SEXP p4s, SEXP esri) {
     OGRSpatialReference *hSRS = new OGRSpatialReference;
     char *pszSRS_WKT = NULL;
     SEXP ans;
+#if GDAL_VERSION_MAJOR >= 3
     int vis_order;
     SEXP enforce_xy = getAttrib(esri, install("enforce_xy"));
 
@@ -190,6 +191,7 @@ SEXP p4s_to_wkt(SEXP p4s, SEXP esri) {
     else if (LOGICAL_POINTER(enforce_xy)[0] == 1) vis_order = 1;
     else if (LOGICAL_POINTER(enforce_xy)[0] == 0) vis_order = 0;
     else vis_order = 0;
+#endif
 
     installErrorHandler();
     if (hSRS->importFromProj4(CHAR(STRING_ELT(p4s, 0))) != OGRERR_NONE) {
@@ -229,14 +231,17 @@ SEXP wkt_to_p4s(SEXP wkt, SEXP esri) {
     char *pszSRS_P4 = NULL;
     char **ppszInput = NULL;
     SEXP ans;
-    int vis_order;
     ppszInput = CSLAddString(ppszInput, CHAR(STRING_ELT(wkt, 0)));//FIXME VG
+
+#if GDAL_VERSION_MAJOR >= 3
+    int vis_order;
     SEXP enforce_xy = getAttrib(esri, install("enforce_xy"));
 
     if (enforce_xy == R_NilValue) vis_order = 0;
     else if (LOGICAL_POINTER(enforce_xy)[0] == 1) vis_order = 1;
     else if (LOGICAL_POINTER(enforce_xy)[0] == 0) vis_order = 0;
     else vis_order = 0;
+#endif
 
     installErrorHandler();
 #if GDAL_VERSION_MAJOR == 1 || ( GDAL_VERSION_MAJOR == 2 && GDAL_VERSION_MINOR <= 2 ) // thanks to Even Roualt https://github.com/OSGeo/gdal/issues/681
@@ -282,6 +287,7 @@ SEXP ogrAutoIdentifyEPSG(SEXP p4s) {
     OGRSpatialReference *hSRS = new OGRSpatialReference;
     OGRErr thisOGRErr;
     SEXP ans;
+#if GDAL_VERSION_MAJOR >= 3
     int vis_order;
     SEXP enforce_xy = getAttrib(p4s, install("enforce_xy"));
 
@@ -289,6 +295,7 @@ SEXP ogrAutoIdentifyEPSG(SEXP p4s) {
     else if (LOGICAL_POINTER(enforce_xy)[0] == 1) vis_order = 1;
     else if (LOGICAL_POINTER(enforce_xy)[0] == 0) vis_order = 0;
     else vis_order = 0;
+#endif
 
     installErrorHandler();
     if (hSRS->importFromProj4(CHAR(STRING_ELT(p4s, 0))) != OGRERR_NONE) {
@@ -340,14 +347,17 @@ SEXP ogrP4S(SEXP ogrsourcename, SEXP Layer, SEXP morphFromESRI, SEXP dumpSRS) {
     OGRSpatialReference *hSRS = new OGRSpatialReference;
     char *pszProj4 = NULL;
     SEXP ans, Datum, ToWGS84, Ellps;
-    int i, pc=0, vis_order;
+    int i, pc=0;
     const char *datum, *towgs84, *ellps;
+#if GDAL_VERSION_MAJOR >= 3
+    int vis_order;
     SEXP enforce_xy = getAttrib(dumpSRS, install("enforce_xy"));
 
     if (enforce_xy == R_NilValue) vis_order = 0;
     else if (LOGICAL_POINTER(enforce_xy)[0] == 1) vis_order = 1;
     else if (LOGICAL_POINTER(enforce_xy)[0] == 0) vis_order = 0;
     else vis_order = 0;
+#endif
 
     installErrorHandler();
 #ifdef GDALV2
