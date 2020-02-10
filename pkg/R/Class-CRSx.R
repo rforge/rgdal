@@ -115,6 +115,46 @@ checkCRSArgs_ng <- function(uprojargs=NA_character_, SRS_string=NULL) {
   res
 }
 
+compare_CRS <- function(CRS1, CRS2) {
+    stopifnot(new_proj_and_gdal())
+    stopifnot(inherits(CRS1, "CRS"))
+    stopifnot(inherits(CRS2, "CRS"))
+    type1 <- FALSE
+    if (is.null(comment(CRS1))) {
+        from_args <- paste0(slot(CRS1, "projargs"), " +type=crs")
+        warning("NULL source CRS comment, falling back to PROJ string")
+        if (is.na(from_args)) 
+	    stop("No transformation possible from NA source CRS")
+        if (length(grep("\\+init\\=", from_args)) > 0) {
+            warning("+init dropped in PROJ string")
+            strres <- unlist(strsplit(from_args, " "))
+            from_args <- paste(strres[-grep("\\+init\\=", strres)],
+                collapse=" ")
+        }
+    } else {
+       type1 <- TRUE
+       from_args <- comment(CRS1)
+    }
+    type2 <- FALSE
+    if (is.null(comment(CRS2))) {
+        warning("NULL target CRS comment, falling back to PROJ string")
+        to_args <- paste0(slot(CRS2, "projargs"), " +type=crs")
+        if (is.na(to_args)) 
+	    stop("No transformation possible to NA target CRS")
+        if (length(grep("\\+init\\=", to_args)) > 0) {
+            warning("+init dropped in PROJ string")
+            strres <- unlist(strsplit(to_args, " "))
+            to_args <- paste(strres[-grep("\\+init\\=", strres)], collapse=" ")
+        }
+    } else {
+        type2 <- TRUE
+        to_args <- comment(CRS2)
+    }
+    res <- .Call("CRS_compare", as.character(from_args), as.character(to_args),
+        as.logical(type1), as.logical(type2), PACKAGE="rgdal")
+    res
+}
+
 proj_def_bug_fix <- function(uprojargs) {
     if (length(grep("no_defs", uprojargs)) == 0L && 
 # corrected 20150904

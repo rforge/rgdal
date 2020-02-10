@@ -8,6 +8,7 @@
 \alias{print.CRS}
 \alias{show,CRS-method}
 \alias{RGDAL_checkCRSArgs}
+\alias{compare_CRS}
 \title{Class "CRS" of coordinate reference system arguments}
 \description{Interface class to the PROJ.4 projection system. The class is defined as an empty stub accepting value NA in the sp package. If the rgdal package is available, then the class will permit spatial data to be associated with coordinate reference systems}
 \section{Objects from the Class}{
@@ -28,9 +29,11 @@ Objects can be created by calls of the form \code{CRS("projargs")}, where "proja
 \usage{
 checkCRSArgs(uprojargs)
 checkCRSArgs_ng(uprojargs=NA_character_, SRS_string=NULL)}
+compare_CRS(CRS1, CRS2)
 \arguments{
   \item{uprojargs}{character string PROJ.4 projection arguments}
   \item{SRS_string}{default NULL, experimental in connection with adaptation to GDAL>=3/PROJ>=6; a valid WKT string or SRS definition such as \code{"EPSG:4326"}}
+  \item{CRS1, CRS2}{objects of class \code{"CRS"}}
 }
 \references{\url{http://proj.org/}}
 \author{Roger Bivand \email{Roger.Bivand@nhh.no}}

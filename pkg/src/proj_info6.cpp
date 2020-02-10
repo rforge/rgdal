@@ -301,6 +301,46 @@ SEXP list_coordinate_ops(SEXP source, SEXP target, SEXP area_of_interest, SEXP s
 
 }
 
+SEXP CRS_compare(SEXP fromargs, SEXP toargs, SEXP type1, SEXP type2) {
+
+    PJ_CONTEXT *ctx = proj_context_create();
+    PJ *source_crs, *target_crs;
+    SEXP res;
+    int ires_strict, ires_equiv, ires_equiv_ao;
+//Rprintf("source crs input: %s\n", CHAR(STRING_ELT(fromargs, 0)));
+    if ((source_crs = proj_create(ctx, CHAR(STRING_ELT(fromargs, 0)))) == NULL) {
+        const char *errstr = proj_errno_string(proj_context_errno(ctx));
+        proj_context_destroy(ctx);
+	error("source crs creation failed: %s", errstr);
+    }
+	
+//Rprintf("source crs: %s\n", proj_pj_info(source_crs).description); not filled for WKT
+//Rprintf("target crs input:  %s\n", CHAR(STRING_ELT(toargs, 0)));
+    if ((target_crs = proj_create(ctx, CHAR(STRING_ELT(toargs, 0)))) == NULL) {
+        proj_destroy(source_crs);
+        const char *errstr = proj_errno_string(proj_context_errno(ctx));
+        proj_context_destroy(ctx);
+        error("target crs creation failed: %s", errstr);
+    }
+//Rprintf("target crs: %s\n", proj_pj_info(target_crs).description); not filled for WKT
+    ires_strict = proj_is_equivalent_to_with_ctx(ctx, source_crs, target_crs,
+        PJ_COMP_STRICT);
+    ires_equiv = proj_is_equivalent_to_with_ctx(ctx, source_crs, target_crs,
+        PJ_COMP_EQUIVALENT);
+    ires_equiv_ao = proj_is_equivalent_to_with_ctx(ctx, source_crs, target_crs,
+        PJ_COMP_EQUIVALENT_EXCEPT_AXIS_ORDER_GEOGCRS);
+//Rprintf("ires: %d, iresao\n", ires);
+    PROTECT(res = NEW_INTEGER(3));
+    INTEGER_POINTER(res)[0] = ires_strict;
+    INTEGER_POINTER(res)[1] = ires_equiv;
+    INTEGER_POINTER(res)[2] = ires_equiv_ao;
+    proj_destroy(target_crs);
+    proj_destroy(source_crs);
+    proj_context_destroy(ctx);
+    UNPROTECT(1);
+    return(res);
+}
+
 SEXP transform_ng(SEXP fromargs, SEXP toargs, SEXP coordOp, SEXP npts, SEXP x, SEXP y, SEXP z) {
 
     PJ_CONTEXT *ctx = proj_context_create();
