@@ -1,3 +1,12 @@
+2020-02-11 09:37  rsbivand
+
+	* src/gdal-bindings.cpp, src/ogr_proj.cpp: all multiline WKT2 from
+	  file
+
+2020-02-11 07:52  rsbivand
+
+	* ChangeLog, configure, inst/ChangeLog: tidy
+
 2020-02-10 20:48  rsbivand
 
 	* src/gdal-bindings.cpp, src/ogr_proj.cpp: fix PROJ < 6 unused
