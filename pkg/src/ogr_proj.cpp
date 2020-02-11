@@ -413,7 +413,7 @@ SEXP ogrP4S(SEXP ogrsourcename, SEXP Layer, SEXP morphFromESRI, SEXP dumpSRS) {
 
         installErrorHandler();
         papszOptions = CSLAddString(papszOptions, "FORMAT=WKT2_2018");
-        papszOptions = CSLAddString(papszOptions, "MULTILINE=NO");
+        papszOptions = CSLAddString(papszOptions, "MULTILINE=YES");
         uninstallErrorHandlerAndTriggerError();
 
         installErrorHandler();
