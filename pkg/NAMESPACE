@@ -60,6 +60,9 @@ export(get_OVERRIDE_PROJ_DATUM_WITH_TOWGS84,
 
 export(getCPLConfigOption, setCPLConfigOption)
 
+export(get_cached_orig_PROJ_LIB, get_cached_orig_GDAL_DATA,
+ get_cached_set_PROJ_LIB, get_cached_set_GDAL_DATA)
+
 #S3method(spTransform, SpatialPoints)
 #S3method(spTransform, SpatialPointsDataFrame)
 #S3method(spTransform, SpatialLines)

@@ -71,6 +71,23 @@ version_sp_linkingTo <- function() {
 }
 
 
+get_cached_orig_PROJ_LIB <- function() {
+  get(".rgdal_old.PROJ_LIB", envir=.RGDAL_CACHE)
+}
+
+get_cached_orig_GDAL_DATA <- function() {
+  get(".rgdal_old.GDAL_DATA", envir=.RGDAL_CACHE)
+}
+
+get_cached_set_PROJ_LIB <- function() {
+  get(".rgdal_set.PROJ_LIB", envir=.RGDAL_CACHE)
+}
+
+get_cached_set_GDAL_DATA <- function() {
+  get(".rgdal_set.GDAL_DATA", envir=.RGDAL_CACHE)
+}
+
+
 
 
 setClass('GDALDriver', 'GDALMajorObject')

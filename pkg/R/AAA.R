@@ -5,6 +5,8 @@ if(!exists("Sys.setenv", envir = baseenv()))
 .RGDAL_CACHE <- new.env(FALSE, parent=globalenv())
 assign(".rgdal_old.PROJ_LIB", "", envir=.RGDAL_CACHE)
 assign(".rgdal_old.GDAL_DATA", "", envir=.RGDAL_CACHE)
+assign(".rgdal_set.PROJ_LIB", "", envir=.RGDAL_CACHE)
+assign(".rgdal_set.GDAL_DATA", "", envir=.RGDAL_CACHE)
 
 #.First.lib <- function(lib, pkg) {
 .onLoad <- function(lib, pkg) {
@@ -18,6 +20,8 @@ load_stuff <- function() {
   if (file.exists(system.file("proj/nad.lst", package = "rgdal")[1])) {
     Sys.setenv("PROJ_LIB"=system.file("proj", package = "rgdal")[1])
     Sys.setenv("GDAL_DATA"=system.file("gdal", package = "rgdal")[1])
+    assign(".rgdal_set.PROJ_LIB", Sys.getenv("PROJ_LIB"), envir=.RGDAL_CACHE)
+    assign(".rgdal_set.GDAL_DATA", Sys.getenv("GDAL_DATA"), envir=.RGDAL_CACHE)
     assign(".rgdal_old.NEEDED", TRUE, envir=.RGDAL_CACHE)
   } else if (.Platform$OS.type == "windows") {
     assign(".rgdal_OSGeo4W", Sys.getenv("OSGEO4W_ROOT"), envir=.RGDAL_CACHE)
