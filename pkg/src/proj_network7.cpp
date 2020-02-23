@@ -16,7 +16,7 @@ SEXP proj_network_enabled() {
     SEXP res;
     PJ_CONTEXT *ctx = proj_context_create();
 //    int rs;
-//    rs = pj_context_is_network_enabled(ctx);
+//    rs = proj_context_is_network_enabled(ctx);
     PROTECT(res = NEW_LOGICAL(1));
 //    LOGICAL_POINTER(res)[0] = rs;
     UNPROTECT(1);
