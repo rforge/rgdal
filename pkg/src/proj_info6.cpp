@@ -300,16 +300,6 @@ SEXP list_coordinate_ops(SEXP source, SEXP target, SEXP area_of_interest, SEXP s
     return(ans);
 
 }
-#if PROJ_VERSION_MAJOR == 6 && PROJ_VERSION_MINOR < 3
-
-SEXP CRS_compare(SEXP fromargs, SEXP toargs, SEXP type1, SEXP type2) {
-	Rprintf("PJ_VERSION %s\n", proj_info().version);
-
-    Rprintf("Not available for PROJ version < 6.3.0\n");
-    return(R_NilValue);
-}
-
-#else
 
 SEXP CRS_compare(SEXP fromargs, SEXP toargs, SEXP type1, SEXP type2) {
 
@@ -333,12 +323,21 @@ SEXP CRS_compare(SEXP fromargs, SEXP toargs, SEXP type1, SEXP type2) {
         error("target crs creation failed: %s", errstr);
     }
 //Rprintf("target crs: %s\n", proj_pj_info(target_crs).description); not filled for WKT
+#if PROJ_VERSION_MAJOR == 6  && PROJ_VERSION_MINOR < 3
+    ires_strict = proj_is_equivalent_to(source_crs, target_crs,
+        PJ_COMP_STRICT);
+    ires_equiv = proj_is_equivalent_to(source_crs, target_crs,
+        PJ_COMP_EQUIVALENT);
+    ires_equiv_ao = proj_is_equivalent_to(source_crs, target_crs,
+        PJ_COMP_EQUIVALENT_EXCEPT_AXIS_ORDER_GEOGCRS);
+#else
     ires_strict = proj_is_equivalent_to_with_ctx(ctx, source_crs, target_crs,
         PJ_COMP_STRICT);
     ires_equiv = proj_is_equivalent_to_with_ctx(ctx, source_crs, target_crs,
         PJ_COMP_EQUIVALENT);
     ires_equiv_ao = proj_is_equivalent_to_with_ctx(ctx, source_crs, target_crs,
         PJ_COMP_EQUIVALENT_EXCEPT_AXIS_ORDER_GEOGCRS);
+#endif
 //Rprintf("ires: %d, iresao\n", ires);
     PROTECT(res = NEW_INTEGER(3));
     INTEGER_POINTER(res)[0] = ires_strict;
@@ -350,8 +349,6 @@ SEXP CRS_compare(SEXP fromargs, SEXP toargs, SEXP type1, SEXP type2) {
     UNPROTECT(1);
     return(res);
 }
-
-#endif
 
 SEXP transform_ng(SEXP fromargs, SEXP toargs, SEXP coordOp, SEXP npts, SEXP x, SEXP y, SEXP z) {
 
