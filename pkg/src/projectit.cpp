@@ -162,6 +162,11 @@ SEXP project_ng_coordOp(SEXP proj, SEXP inv, SEXP ob_tran) {
     return(R_NilValue);
 }
 
+SEXP proj_network_enabled() {
+//    Rprintf("Not available for PROJ version < 7");
+    return(R_NilValue);
+}
+
 
 /*SEXP P6_SRID_proj(SEXP inSRID, SEXP format, SEXP multiline, SEXP in_format,
     SEXP epsg, SEXP out_format) {

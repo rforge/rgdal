@@ -80,6 +80,7 @@ static R_CallMethodDef CallEntries[] = {
     {"project_ng", (DL_FUNC) &project_ng, 6},
     {"project_ng_coordOp", (DL_FUNC) &project_ng_coordOp, 3},
     {"CRS_compare", (DL_FUNC) &CRS_compare, 4},
+    {"proj_network_enabled", (DL_FUNC) &proj_network_enabled, 0},
     {"RGDAL_SetGeoTransform", (DL_FUNC) &RGDAL_SetGeoTransform, 2},
     {"RGDAL_GetNoDataValue", (DL_FUNC) &RGDAL_GetNoDataValue, 1},
     {"RGDAL_GetMetadata", (DL_FUNC) &RGDAL_GetMetadata, 2},

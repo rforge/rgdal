@@ -128,6 +128,7 @@ SEXP get_proj_search_path(void);
 SEXP transform(SEXP fromargs, SEXP toargs, SEXP npts, SEXP x, SEXP y, SEXP z);
 SEXP transform_ng(SEXP fromargs, SEXP toargs, SEXP coordOp, SEXP npts, SEXP x, SEXP y, SEXP z);
 SEXP CRS_compare(SEXP fromargs, SEXP toargs, SEXP type1, SEXP type2);
+SEXP proj_network_enabled();
 SEXP RGDAL_projInfo(SEXP type);
 SEXP R_GDAL_OSR_PROJ();
 SEXP RGDAL_project(SEXP n, SEXP xlon, SEXP ylat, SEXP projarg, SEXP ob_tran);
