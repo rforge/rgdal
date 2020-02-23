@@ -303,7 +303,7 @@ SEXP list_coordinate_ops(SEXP source, SEXP target, SEXP area_of_interest, SEXP s
 #if PROJ_VERSION_MAJOR == 6 && PROJ_VERSION_MINOR < 3
 
 SEXP CRS_compare(SEXP fromargs, SEXP toargs, SEXP type1, SEXP type2) {
-Rprintf("PJ_VERSION %d\n", PJ_VERSION);
+	Rprintf("PJ_VERSION %s\n", proj_info().version);
 
     Rprintf("Not available for PROJ version < 6.3.0\n");
     return(R_NilValue);
@@ -421,6 +421,8 @@ SEXP transform_ng(SEXP fromargs, SEXP toargs, SEXP coordOp, SEXP npts, SEXP x, S
             pj_transform = proj_normalize_for_visualization(ctx, pj_transform);
 
     }
+	if (proj_normalize_for_visualization(ctx, pj_transform) != NULL) // EJP
+		pj_transform = proj_normalize_for_visualization(ctx, pj_transform); // EJP
 //Rprintf("%s\n", proj_pj_info(pj_transform).definition);
 
     n = INTEGER_POINTER(npts)[0];
