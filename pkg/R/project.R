@@ -20,6 +20,10 @@ new_proj_and_gdal <- function() {
     PROJis6ormore() && GDALis3ormore()
 }
 
+is_proj_network_enabled <- function() {
+    .Call("proj_network_enabled", PACKAGE="rgdal")
+}
+
 GDAL_OSR_PROJ <- function() {
     res <- .Call("R_GDAL_OSR_PROJ", PACKAGE="rgdal")
     if (is.null(res)) return(res)
