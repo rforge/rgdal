@@ -267,7 +267,7 @@ SEXP wkt_to_p4s(SEXP wkt, SEXP esri) {
 
     installErrorHandler();
 #if GDAL_VERSION_MAJOR < 3
-    if (LOGICAL_POINTER(esri)[0] == 1) hSRS->morphToESRI();
+    if (LOGICAL_POINTER(esri)[0] == 1) hSRS->morphFromESRI();
 #endif
 //    if (LOGICAL_POINTER(esri)[0] == 1) hSRS.morphFromESRI();
     hSRS->exportToProj4(&pszSRS_P4);//FIXME VG

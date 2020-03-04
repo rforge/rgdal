@@ -13,8 +13,8 @@
   Use GDAL/OGR spatial reference objects to convert a PROJ.4 representation to a Well-Known Text representation, and report an EPSG code if it can be determined by OGR SRS services.
 }
 \usage{
-showWKT(p4s, file = NULL, morphToESRI = TRUE, enforce_xy = NULL)
-showP4(wkt, morphFromESRI=TRUE, enforce_xy = NULL)
+showWKT(p4s, file = NULL, morphToESRI = FALSE, enforce_xy = NULL)
+showP4(wkt, morphFromESRI=FALSE, enforce_xy = NULL)
 showEPSG(p4s, enforce_xy = NULL)
 showSRID(inSRID, format="WKT2", multiline="NO", enforce_xy = NULL, EPSG_to_init=TRUE)
 get_P6_datum_hard_fail()
@@ -26,7 +26,7 @@ set_thin_PROJ6_warnings(value)
 \arguments{
   \item{p4s}{A valid PROJ.4 string representing a spatial reference system}
   \item{file}{if not NULL, a file name to which the output Well-Known Text representation should be written}
-  \item{morphToESRI}{default TRUE, morph the WKT string to the representation used by ESRI}
+  \item{morphToESRI}{default FALSE, morph the WKT string to the representation used by ESRI; set FALSE by default 2020-03-04 to avoid occasional Windows crashes seen when passing a very modern WKT string to an old version of PROJ: \url{https://github.com/edzer/sp/issues/75}}
   \item{enforce_xy}{(PROJ6+/GDAL3+) either use global setting (default NULL) or override policy for coordinate ordering easting/x as first axis, northing/y as second axis.}
   \item{wkt}{A valid WKT character string representing a spatial reference system}
   \item{morphFromESRI}{default TRUE, morph the WKT string from the representation used by ESRI}

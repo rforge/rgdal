@@ -440,7 +440,7 @@ readOGR <- function(dsn, layer, verbose=TRUE, p4s=NULL,
 	res
 }
 
-showWKT <- function(p4s, file=NULL, morphToESRI=TRUE, enforce_xy=NULL) {
+showWKT <- function(p4s, file=NULL, morphToESRI=FALSE, enforce_xy=NULL) {
 
 	if (!is.character(p4s)) stop("invalid p4s object")
         stopifnot(length(p4s) == 1)
@@ -461,7 +461,7 @@ showWKT <- function(p4s, file=NULL, morphToESRI=TRUE, enforce_xy=NULL) {
 	res
 }
 
-showP4 <- function(wkt, morphFromESRI=TRUE, enforce_xy=NULL) {
+showP4 <- function(wkt, morphFromESRI=FALSE, enforce_xy=NULL) {
 
 	if (!is.character(wkt)) stop("invalid wkt object")
         stopifnot(length(wkt) == 1)
