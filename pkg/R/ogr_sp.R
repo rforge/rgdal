@@ -537,6 +537,10 @@ showSRID <- function(inSRID, format="WKT2", multiline="NO", enforce_xy=NULL, EPS
     out_format <- as.integer(NA)
     if (format %in% valid_WKT_formats) out_format <- 1L
     if (format == "PROJ") out_format <- 2L
+    if (!is.na(multiline) && is.logical(multiline)) {
+      multiline <- ifelse(multiline, "YES", "NO")
+    }
+    stopifnot(!is.na(multiline))
     stopifnot(is.character(multiline))
     stopifnot(length(multiline) == 1L)
     if (!(multiline %in% c("YES", "NO"))) stop("invalid multiline value")
