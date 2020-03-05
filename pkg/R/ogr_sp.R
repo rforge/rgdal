@@ -544,10 +544,11 @@ showSRID <- function(inSRID, format="WKT2", multiline="NO", enforce_xy=NULL, EPS
     if (substring(inSRID, 1, 1) == " ") stop("string starts with space")
     if (substring(inSRID, 1, 1) == "+") in_format = 1L
     if (substring(inSRID, 1, 3) == "urn") in_format = 2L
-    if (substring(inSRID, 1, 1) == "P") in_format = 3L
-    if (substring(inSRID, 1, 1) == "G") in_format = 3L
-    if (substring(inSRID, 1, 1) == "B") in_format = 3L
+    if (substring(inSRID, 1, 2) == "PR") in_format = 3L
+    if (substring(inSRID, 1, 2) == "GE") in_format = 3L
+    if (substring(inSRID, 1, 2) == "BA") in_format = 3L
     if (substring(inSRID, 1, 1) == "S") in_format = 3L
+    if (substring(inSRID, 1, 2) == "CO") in_format = 3L
     if (substring(inSRID, 1, 4) == "EPSG") in_format = 4L
     epsg <- as.integer(NA)
     if (in_format == 4L) {
