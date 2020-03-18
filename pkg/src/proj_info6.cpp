@@ -418,8 +418,8 @@ SEXP transform_ng(SEXP fromargs, SEXP toargs, SEXP coordOp, SEXP npts, SEXP x, S
             pj_transform = proj_normalize_for_visualization(ctx, pj_transform);
 
     }
-	if (proj_normalize_for_visualization(ctx, pj_transform) != NULL) // EJP
-		pj_transform = proj_normalize_for_visualization(ctx, pj_transform); // EJP
+//	if (proj_normalize_for_visualization(ctx, pj_transform) != NULL) // EJP
+//		pj_transform = proj_normalize_for_visualization(ctx, pj_transform); // EJP
 //Rprintf("%s\n", proj_pj_info(pj_transform).definition);
 
     n = INTEGER_POINTER(npts)[0];
