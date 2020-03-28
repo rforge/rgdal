@@ -101,3 +101,13 @@ rgdal_extSoftVersion <- function() {
   res <- c("GDAL"=strsplit(strsplit(getGDALVersionInfo(), ",")[[1]][1], " ")[[1]][2], "GDAL_with_GEOS"=as.character(getGDALwithGEOS()), "PROJ"=strsplit(strsplit(getPROJ4VersionInfo(), ",")[[1]][1], " ")[[1]][2], "sp"=version_sp_linkingTo())
   res
 }
+
+check_sp_version <- function() {
+  splVersion <- version_sp_linkingTo()
+  spVcheck <- NULL
+  if("sp" %in% .packages()) 
+    spVcheck <- utils::packageVersion("sp") == splVersion
+  if (!is.null(spVcheck) && !spVcheck)
+    warning("sp version used to install rgdal and loaded sp version differ")
+}
+

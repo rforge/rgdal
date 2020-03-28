@@ -1,3 +1,56 @@
+2020-03-18 14:46  rsbivand
+
+	* src/proj_info6.cpp: resolve many proj_normalize_for_visualization
+	  messages for multiple geometries
+
+2020-03-05 14:36  rsbivand
+
+	* R/ogr_sp.R: LAS WKT attempts
+
+2020-03-05 12:22  rsbivand
+
+	* R/ogr_sp.R: add CO for COMP WKT
+
+2020-03-04 12:28  rsbivand
+
+	* R/ogr_sp.R, man/showWKT.Rd, src/ogr_proj.cpp: address PROJ 4.9.3
+	  crash when passed modern WKT
+
+2020-02-24 12:06  rsbivand
+
+	* DESCRIPTION, R/AAA.R, R/project.R, src/proj_network7.cpp: PROJ7
+	  CDN status report
+
+2020-02-23 19:03  rsbivand
+
+	* src/proj_network7.cpp: start network code for 7
+
+2020-02-23 19:01  rsbivand
+
+	* src/init.c, src/proj_network7.cpp, src/projectit.cpp,
+	  src/rgdal.h: start network code for 7
+
+2020-02-23 18:05  rsbivand
+
+	* src/projectit.cpp: remove duplicate dummy function
+
+2020-02-23 17:34  rsbivand
+
+	* src/proj_info6.cpp, src/projectit.cpp: complete SRS compare
+
+2020-02-23 16:12  edzer
+
+	* src/proj_info6.cpp: compile for 6.0.0 < PROJ < 6.3.0
+
+2020-02-16 19:47  rsbivand
+
+	* NAMESPACE, R/AAA.R, R/gdal.R, man/GDALDriver-class.Rd: handles
+	  https://github.com/r-spatial/discuss/issues/31
+
+2020-02-11 09:38  rsbivand
+
+	* ChangeLog, inst/ChangeLog: tidy
+
 2020-02-11 09:37  rsbivand
 
 	* src/gdal-bindings.cpp, src/ogr_proj.cpp: all multiline WKT2 from
