@@ -582,10 +582,12 @@ showSRID <- function(inSRID, format="WKT2", multiline="NO", enforce_xy=NULL, EPS
 #                    in_format, as.integer(epsg),
 #                    as.integer(out_format), PACKAGE="rgdal")
 #            } else {
-                res <- .Call("P6_SRID_show", as.character(inSRID),
+                res <- try(.Call("P6_SRID_show", as.character(inSRID),
                     as.character(format), as.character(multiline), 
                     in_format, as.integer(epsg),
-                    as.integer(out_format), PACKAGE="rgdal")
+                    as.integer(out_format), PACKAGE="rgdal"), silent=TRUE)
+                if (inherits(res, "try-error"))
+                    stop(unclass(attr(res, "condition"))$message, "\n", inSRID) 
 #            }
             no_towgs84 <- ((is.null(attr(res, "towgs84"))) || 
                 (all(nchar(attr(res, "towgs84")) == 0)))

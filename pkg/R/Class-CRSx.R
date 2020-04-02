@@ -89,7 +89,8 @@ checkCRSArgs_ng <- function(uprojargs=NA_character_, SRS_string=NULL) {
     stopifnot(length(uprojargs) == 1L)
   }
   if (!no_SRS) {
-    uprojargs1 <- try(showSRID(SRS_string, format="PROJ", multiline="NO"))
+    uprojargs1 <- try(showSRID(SRS_string, format="PROJ", multiline="NO"),
+        silent=TRUE)
     if (inherits(uprojargs1, "try-error")) {
       res[[1]] <- FALSE
       res[[2]] <- NA_character_
@@ -97,11 +98,11 @@ checkCRSArgs_ng <- function(uprojargs=NA_character_, SRS_string=NULL) {
       res[[1]] <- TRUE
       res[[2]] <- uprojargs1
     }
-    wkt2 <- try(showSRID(SRS_string, format="WKT2", multiline="YES"))
+    wkt2 <- showSRID(SRS_string, format="WKT2", multiline="YES")
     if (!inherits(wkt2, "try-error")) res[[3]] <- wkt2
   } else if (!no_PROJ) {
     uprojargs <- sub("^\\s+", "", uprojargs)
-    uprojargs1 <- try(showSRID(uprojargs, format="PROJ", multiline="NO"))
+    uprojargs1 <- showSRID(uprojargs, format="PROJ", multiline="NO")
     if (inherits(uprojargs1, "try-error")) {
       res[[1]] <- FALSE
       res[[2]] <- NA_character_
@@ -109,7 +110,7 @@ checkCRSArgs_ng <- function(uprojargs=NA_character_, SRS_string=NULL) {
       res[[1]] <- TRUE
       res[[2]] <- uprojargs1
     }
-    wkt2 <- try(showSRID(uprojargs, format="WKT2", multiline="YES"))
+    wkt2 <- showSRID(uprojargs, format="WKT2", multiline="YES")
     if (!inherits(wkt2, "try-error")) res[[3]] <- wkt2
   }
   res
