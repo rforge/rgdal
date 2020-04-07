@@ -356,8 +356,13 @@ setMethod("spTransform", signature("SpatialPoints", "CRS"), spTransform.SpatialP
 	resSP <- spTransform(xSP, CRSobj, ...)
 	# xDF <- as(x, "data.frame")
 	xDF <- x@data # little need to add unique row.names here!
-	res <- SpatialPointsDataFrame(coords=coordinates(resSP), data=xDF,
-		coords.nrs = numeric(0), proj4string = CRS(proj4string(resSP)))
+        if (packageVersion("sp") > "1.4.1") {
+            crs <- rebuild_CRS(slot(resSP, "proj4string"))
+        } else {
+            crs <- CRS(proj4string(resSP))
+        }
+        res <- SpatialPointsDataFrame(coords=coordinates(resSP), data=xDF,
+		coords.nrs = numeric(0), proj4string = crs)
 	res
 }
 setMethod("spTransform", signature("SpatialPointsDataFrame", "CRS"), 
