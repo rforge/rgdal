@@ -4,7 +4,8 @@
 #include <R.h>
 #include <Rdefines.h>
 #include "rgdal.h"
-#ifdef ACCEPT_USE_OF_DEPRECATED_PROJ_API_H // kludge for 6 only
+//#ifdef ACCEPT_USE_OF_DEPRECATED_PROJ_API_H // kludge for 6 only
+#ifdef PROJ_H_API
 #include <proj.h>
 
 #ifdef __cplusplus

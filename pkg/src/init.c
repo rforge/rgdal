@@ -77,7 +77,7 @@ static R_CallMethodDef CallEntries[] = {
     {"RGDAL_projInfo", (DL_FUNC) &RGDAL_projInfo, 1},
     {"RGDAL_project", (DL_FUNC) &RGDAL_project, 5},
     {"project_inv", (DL_FUNC) &project_inv, 5},
-    {"project_ng", (DL_FUNC) &project_ng, 6},
+    {"project_ng", (DL_FUNC) &project_ng, 7},
     {"project_ng_coordOp", (DL_FUNC) &project_ng_coordOp, 3},
     {"CRS_compare", (DL_FUNC) &CRS_compare, 4},
     {"proj_network_enabled", (DL_FUNC) &proj_network_enabled, 0},

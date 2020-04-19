@@ -56,9 +56,10 @@ local_RGDAL_Init <- function() .Call('RGDAL_Init', PACKAGE="rgdal")
   } else {
     svn_version <- "(unknown)"
   }
+  pdd <- .Call("PROJ4_proj_def_dat_Installed", PACKAGE="rgdal")
+  if (is.null(pdd) && PROJis6ormore()) pdd <- TRUE
   if (is.na(get("has_proj_def.dat", envir=.RGDAL_CACHE))) {
-    assign("has_proj_def.dat", .Call("PROJ4_proj_def_dat_Installed",
-      PACKAGE="rgdal"), envir=.RGDAL_CACHE)
+    assign("has_proj_def.dat", pdd, envir=.RGDAL_CACHE)
   }
 
   Smess <- paste('rgdal: version: ',

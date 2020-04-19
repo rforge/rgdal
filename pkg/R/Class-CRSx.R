@@ -33,6 +33,9 @@
 }
 
 checkCRSArgs <- function(uprojargs=NA_character_) {
+  if (packageVersion("rgdal") >= "1.5.1" && length(grep("ob_tran", uprojargs)) > 0L) {
+    return(list(TRUE, uprojargs))
+  }
 # pkgdown work-around
   if (is.na(get("has_proj_def.dat", envir=.RGDAL_CACHE))) {
     assign("has_proj_def.dat", .Call("PROJ4_proj_def_dat_Installed",

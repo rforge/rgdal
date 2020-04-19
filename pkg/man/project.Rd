@@ -122,9 +122,11 @@ ll <- structure(c(12.1823368669203, 11.9149630062421, 12.3186076188739,
 -5.24836150474498, -5.68430388755925, NA, NA), .Dim = c(10L, 
 2L), .Dimnames = list(NULL, c("longitude", "latitude")))
 try(xy0 <- project(ll, "+proj=moll", legacy=TRUE))
+if (!PROJis6ormore()) { # legacy=TRUE PROJ >= 6
 try(xy1 <- project(ll, "+proj=moll", legacy=FALSE, allowNAs_if_not_legacy=FALSE))
 try(xy2 <- project(ll, "+proj=moll", legacy=FALSE, allowNAs_if_not_legacy=TRUE))
 if (exists("xy0")) all.equal(xy0, xy2)
+}
 if (!exists("xy0")) xy0 <- structure(c(1217100.8468177, 1191302.229156,
 1232143.28841193, 1262546.27733232, 1299648.82357849, 1263011.18154638,
 1246343.17808186, 1242654.33986052, NA, NA, -715428.207551599,
@@ -132,8 +134,11 @@ if (!exists("xy0")) xy0 <- structure(c(1217100.8468177, 1191302.229156,
 -616845.926397351, -648585.161643274, -702393.1160979, NA, NA), 
 .Dim = c(10L, 2L), .Dimnames = list(NULL, c("longitude", "latitude")))
 try(ll0 <- project(xy0, "+proj=moll", inv=TRUE, legacy=TRUE))
+if (!PROJis6ormore()) { # legacy=TRUE PROJ >= 6
 try(ll1 <- project(xy0, "+proj=moll", inv=TRUE, legacy=FALSE, allowNAs_if_not_legacy=FALSE))
 try(ll2 <- project(xy0, "+proj=moll", inv=TRUE, legacy=FALSE, allowNAs_if_not_legacy=TRUE))
 if (exists("ll0")) all.equal(ll0, ll2)
+}
+if (exists("ll0")) all.equal(ll0, ll)
 }
 \keyword{spatial}

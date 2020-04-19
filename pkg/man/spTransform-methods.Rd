@@ -99,7 +99,7 @@ summary(state.merc)
 state.merc <- spTransform(states,
  CRS=CRS("+proj=merc +ellps=GRS80 +units=us-mi"))
 summary(state.merc)
-if (projNAD()) {
+if (PROJis6ormore() || (!PROJis6ormore() && projNAD())) {
 states <- data.frame(state.x77, state.center)
 states <- states[states$x > -121,]
 coordinates(states) <- c("x", "y")

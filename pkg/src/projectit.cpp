@@ -14,6 +14,7 @@
 extern "C" {
 #endif
 /* #include <projects.h> */
+#ifndef PROJ_H_API
 #include <proj_api.h>
 /* BDR 131123 */
 #ifndef P4CTX
@@ -152,7 +153,7 @@ SEXP transform_ng(SEXP fromargs, SEXP toargs, SEXP coordOp, SEXP npts, SEXP x, S
     return(R_NilValue);
 }
 
-SEXP project_ng(SEXP n, SEXP xlon, SEXP ylat, SEXP inv, SEXP ob_tran, SEXP coordOp) {
+SEXP project_ng(SEXP n, SEXP xlon, SEXP ylat, SEXP zz, SEXP inv, SEXP ob_tran, SEXP coordOp) {
     Rprintf("Not available for PROJ version < 6");
     return(R_NilValue);
 }
@@ -727,6 +728,7 @@ SEXP RGDAL_projInfo(SEXP type) {
 }
 #endif
 
+#endif // not PROJ_H_API 
 
 #ifdef __cplusplus
 }
