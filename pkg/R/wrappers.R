@@ -83,8 +83,19 @@ if (new_proj_and_gdal()) warning("NOT UPDATED FOR PROJ >= 6")
 # exported version
 rawTransform <- function(projfrom, projto, n, x, y, z=NULL) {
 # pkgdown work-around
-# NOT UPDATED FOR PROJ >= 6
-if (new_proj_and_gdal()) warning("NOT UPDATED FOR PROJ >= 6")
+        if (new_proj_and_gdal()) {
+          warning("Using PROJ not WKT2 strings")
+          if (length(grep("+init", projfrom)) > 0)
+              projfrom <- slot(CRS(projfrom),  "projargs")
+          if (length(grep("+init", projto)) > 0)
+              projto <- slot(CRS(projto),  "projargs")
+          if (is.null(z)) res <- .Call("transform_ng", 
+              paste0(projfrom, " +type=crs"), paste0(projto, " +type=crs"),
+              NULL, n, x, y, NULL, PACKAGE="rgdal")
+          else res <- .Call("transform_ng", paste0(projfrom, " +type=crs"),
+              paste0(projto, " +type=crs"), NULL, n, x, y, z, PACKAGE="rgdal")
+          return(res)
+        }
         if (is.na(get("has_proj_def.dat", envir=.RGDAL_CACHE))) {
           assign("has_proj_def.dat", .Call("PROJ4_proj_def_dat_Installed",
           PACKAGE="rgdal"), envir=.RGDAL_CACHE)

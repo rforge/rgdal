@@ -25,10 +25,12 @@
 	if (!is(object, "CRS")) stop("not a CRS object")
 
 	if (!is.na(object@projargs)) {
-		res <- (checkCRSArgs(object@projargs)[[2]])
-                res <- paste(unique(unlist(strsplit(res, " "))), 
-			collapse=" ")
-                return(sub("^\\s+", "", res))
+            if (new_proj_and_gdal()) 
+                res <- (checkCRSArgs_ng(object@projargs)[[2]])
+            else res <- (checkCRSArgs(object@projargs)[[2]])
+            res <- paste(unique(unlist(strsplit(res, " "))), 
+		collapse=" ")
+            return(sub("^\\s+", "", res))
 	} else return(as.character(NA))
 }
 
