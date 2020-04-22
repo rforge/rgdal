@@ -83,6 +83,14 @@
 
     
     
+<div id="status-22-april-2020" class="section level1">
+<h1 class="hasAnchor">
+<a href="#status-22-april-2020" class="anchor"></a>Status 22 April 2020</h1>
+<p><a href="https://www.r-spatial.org/r/2020/03/17/wkt.html">R spatial follows GDAL and PROJ development</a> describes the main points of the status now. <strong>sp</strong> uses WKT2 CRS with PROJ6+/GDAL3+. <strong>sp</strong> and <strong>rgdal</strong> read, write, and project and transform objects using PROJ strings before PROJ6/GDAL3 and when <strong>raster</strong> calls <code><a href="../reference/wrappers.html">rgdal::rawTransform()</a></code> with PROJ6+/GDAL3+. <strong>sp</strong> and <strong>rgdal</strong> read, write, and project and transform objects using WKT2_2019 strings from PROJ6/GDAL3. The mechanism used is described in the R-spatial blog.</p>
+<p>This rolling RFC (not many comments) depicts the state of play from October 2019 to April 2020, involving a lot of reverse dependency testing of almost 1000 CRAN packages. When the development versions of <strong>sp</strong> (&gt;= 1.4-2) and <strong>rgdal</strong> (&gt;= 1.5-8) are submitted to CRAN, a fair number of reverse dependencies will be broken (as with recent <strong>sf</strong> releases). Some maintainers sensibly find that fixing the PROJ6/GDAL3 transition is sufficiently invasive to make it sensible to re-base to <strong>sf</strong> from <strong>sp</strong>. Others are regretably unresponsive so far, many find it hard to check on PROJ6+/GDAL3.</p>
+<p>For further links (in addition to the blog post), see (<a href="https://github.com/r-spatial/discuss/issues/28" class="uri">https://github.com/r-spatial/discuss/issues/28</a>), and <strong>sf</strong> github issues: <a href="https://github.com/r-spatial/sf/issues/1146" class="uri">https://github.com/r-spatial/sf/issues/1146</a>, <a href="https://github.com/r-spatial/sf/issues/1187" class="uri">https://github.com/r-spatial/sf/issues/1187</a>, <a href="https://github.com/r-spatial/sf/issues/1231" class="uri">https://github.com/r-spatial/sf/issues/1231</a>, <a href="https://github.com/r-spatial/sf/issues/1328" class="uri">https://github.com/r-spatial/sf/issues/1328</a> and many others.</p>
+<p>We’ve established that we should have preferred WKT over PROJ strings starting eight years ago: <a href="https://lists.osgeo.org/pipermail/gdal-dev/2012-November/034558.html" class="uri">https://lists.osgeo.org/pipermail/gdal-dev/2012-November/034558.html</a> (read the last paragraph), and possibly even earlier.</p>
+</div>
 <div id="migration-to-proj6gdal3" class="section level1">
 <h1 class="hasAnchor">
 <a href="#migration-to-proj6gdal3" class="anchor"></a>Migration to PROJ6/GDAL3</h1>
@@ -487,7 +495,7 @@
 <h2 class="hasAnchor">
 <a href="#coordinate-operations" class="anchor"></a>Coordinate operations</h2>
 <div class="sourceCode" id="cb68"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">rgdal</span>)</pre></body></html></div>
-<pre><code>## rgdal: version: 1.5-8, (SVN revision 955)
+<pre><code>## rgdal: version: 1.5-8, (SVN revision 956M)
 ##  Geospatial Data Abstraction Library extensions to R successfully loaded
 ##  Loaded GDAL runtime: GDAL 3.1.0dev-bc1aa43f1d, released 2020/03/28
 ##  Path to GDAL shared files: /usr/local/share/gdal
@@ -979,7 +987,7 @@
 ## dumpSRS, : Discarded datum OSGB_1936 in CRS definition: +proj=tmerc +lat_0=49
 ## +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy +units=m +no_defs</code></pre>
 <pre><code>## OGR data source with driver: ESRI Shapefile 
-## Source: "/tmp/RtmpxxwPB0/temp_libpath59a0f120a1efc/rgdal/vectors", layer: "scot_BNG"
+## Source: "/tmp/Rtmp7kRmAj/temp_libpath5d8047564f865/rgdal/vectors", layer: "scot_BNG"
 ## with 56 features
 ## It has 13 fields</code></pre>
 <div class="sourceCode" id="cb114"><html><body><pre class="r">## Warning in OGRSpatialRef(dsn, layer, morphFromESRI = morphFromESRI, dumpSRS =
@@ -1047,7 +1055,7 @@
 ## dumpSRS, : Discarded datum OSGB_1936 in CRS definition: +proj=tmerc +lat_0=49
 ## +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy +units=m +no_defs</code></pre>
 <pre><code>## OGR data source with driver: ESRI Shapefile 
-## Source: "/tmp/RtmpxxwPB0/temp_libpath59a0f120a1efc/rgdal/vectors", layer: "scot_BNG"
+## Source: "/tmp/Rtmp7kRmAj/temp_libpath5d8047564f865/rgdal/vectors", layer: "scot_BNG"
 ## with 56 features
 ## It has 13 fields</code></pre>
 <div class="sourceCode" id="cb140"><html><body><pre class="r">## Warning in OGRSpatialRef(dsn, layer, morphFromESRI = morphFromESRI, dumpSRS =
@@ -1066,7 +1074,7 @@
 <p>In <strong>rgdal</strong> 1.5-2, the coordinate operation lookup is done once for the first matrix of coordinates, and passed then on to subsequent transformations:</p>
 <div class="sourceCode" id="cb141"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span>(<span class="no">scot_LL2</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/spTransform-methods.html">spTransform</a></span>(<span class="no">scot_BNG</span>, <span class="fu"><a href="../reference/CRS-class.html">CRS</a></span>(<span class="st">"+proj=longlat +datum=WGS84"</span>)))</pre></body></html></div>
 <pre><code>##    user  system elapsed 
-##   0.101   0.005   0.108</code></pre>
+##   0.116   0.004   0.135</code></pre>
 <div class="sourceCode" id="cb143"><html><body><pre class="r">##    user  system elapsed 
 ##   0.095   0.000   0.096</pre></body></html></div>
 <p>Timings for <strong>rgdal</strong> 1.5-1, when look-up was repeated for each matrix of coordinates:</p>
@@ -1094,7 +1102,7 @@
 <div class="sourceCode" id="cb154"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span>(<span class="no">scot_LL3</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/spTransform-methods.html">spTransform</a></span>(<span class="no">scot_BNG</span>, <span class="fu"><a href="../reference/CRS-class.html">CRS</a></span>(<span class="st">"+proj=longlat +datum=WGS84"</span>),
                                     <span class="kw">coordOp</span><span class="kw">=</span><span class="fu"><a href="../reference/spTransform-methods.html">get_last_coordOp</a></span>()))</pre></body></html></div>
 <pre><code>##    user  system elapsed 
-##   0.066   0.003   0.069</code></pre>
+##   0.078   0.005   0.093</code></pre>
 <div class="sourceCode" id="cb156"><html><body><pre class="r">##    user  system elapsed 
 ##   0.066   0.002   0.070</pre></body></html></div>
 <div class="sourceCode" id="cb157"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/all.equal.html">all.equal</a></span>(<span class="no">b2</span>, <span class="fu"><a href="https://rdrr.io/pkg/sp/man/bbox.html">bbox</a></span>(<span class="no">scot_LL3</span>), <span class="kw">scale</span><span class="kw">=</span><span class="fl">1</span>)</pre></body></html></div>
@@ -1107,7 +1115,7 @@
 <span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span>(<span class="no">scot_LL4</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/spTransform-methods.html">spTransform</a></span>(<span class="no">scot_BNG</span>, <span class="fu"><a href="../reference/CRS-class.html">CRS</a></span>(<span class="st">"+proj=longlat +datum=WGS84"</span>),
                                     <span class="kw">coordOp</span><span class="kw">=</span><span class="fu"><a href="../reference/list_coordOps.html">best_instantiable_coordOp</a></span>(<span class="no">x</span>)))</pre></body></html></div>
 <pre><code>##    user  system elapsed 
-##   0.075   0.007   0.118</code></pre>
+##   0.082   0.003   0.095</code></pre>
 <div class="sourceCode" id="cb162"><html><body><pre class="r">##    user  system elapsed 
 ##   0.066   0.002   0.069</pre></body></html></div>
 <div class="sourceCode" id="cb163"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/all.equal.html">all.equal</a></span>(<span class="no">b2</span>, <span class="fu"><a href="https://rdrr.io/pkg/sp/man/bbox.html">bbox</a></span>(<span class="no">scot_LL4</span>), <span class="kw">scale</span><span class="kw">=</span><span class="fl">1</span>)</pre></body></html></div>
