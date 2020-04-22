@@ -39,7 +39,7 @@ SEXP P6_SRID_show(SEXP inSRID, SEXP format, SEXP multiline, SEXP in_format,
     else if (LOGICAL_POINTER(enforce_xy)[0] == 1) vis_order = 1;
     else if (LOGICAL_POINTER(enforce_xy)[0] == 0) vis_order = 0;
     else vis_order = 0;
-
+//srs.SetFromUserInput("ESRI:102008")
     if (INTEGER_POINTER(in_format)[0] == 1L) {
         installErrorHandler();
         if (hSRS->importFromProj4((const char *) CHAR(STRING_ELT(inSRID, 0))) != OGRERR_NONE) {
