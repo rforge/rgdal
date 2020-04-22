@@ -10,23 +10,27 @@
 
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -48,7 +52,6 @@ As noted below, for other file type drivers, the dsn= argument is
 interpreted differently, and may be the file name itself, as for example 
 with the GPX driver for reading GPS data as layer=&quot;tracks&quot; 
 lines or layer=&quot;track_points&quot; points." />
-<meta name="twitter:card" content="summary" />
 
 
 
@@ -66,7 +69,7 @@ lines or layer=&quot;track_points&quot; points." />
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -80,7 +83,7 @@ lines or layer=&quot;track_points&quot; points." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgdal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5-8</span>
       </span>
     </div>
 
@@ -303,7 +306,7 @@ lines or <code>layer="track_points"</code> points.</p>
 #&gt; 14            DXF                                                   AutoCAD DXF
 #&gt; 15         EDIGEO                                 French EDIGEO exchange format
 #&gt; 16           EEDA                                         Earth Engine Data API
-#&gt; 17  ElasticSearch                                                Elastic Search
+#&gt; 17  Elasticsearch                                                Elastic Search
 #&gt; 18 ESRI Shapefile                                                ESRI Shapefile
 #&gt; 19       ESRIJSON                                                      ESRIJSON
 #&gt; 20     FlatGeobuf                                                    FlatGeobuf
@@ -464,7 +467,7 @@ lines or <code>layer="track_points"</code> points.</p>
 #&gt; [1] "ESRI Shapefile"
 #&gt; attr(,"nlayers")
 #&gt; [1] 4</div><div class='input'><span class='fu'>ogrInfo</span>(<span class='no'>dsn</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: First layer trin_inca_pl03 read; multiple layers present in</span>
-#&gt; <span class='warning'>/tmp/RtmpKX7V7q/temp_libpathbee5e280a0c/rgdal/vectors, check layers with ogrListLayers()</span></div><div class='output co'>#&gt; Source: "/tmp/RtmpKX7V7q/temp_libpathbee5e280a0c/rgdal/vectors", layer: "trin_inca_pl03"
+#&gt; <span class='warning'>/tmp/RtmpxxwPB0/temp_libpath59a0f120a1efc/rgdal/vectors, check layers with ogrListLayers()</span></div><div class='output co'>#&gt; Source: "/tmp/RtmpxxwPB0/temp_libpath59a0f120a1efc/rgdal/vectors", layer: "trin_inca_pl03"
 #&gt; Driver: ESRI Shapefile; number of rows: 3 
 #&gt; Feature type: wkbPolygon with 2 dimensions
 #&gt; Extent: (-87.09465 5.499074) - (-79.01339 10.11906)
@@ -483,7 +486,7 @@ lines or <code>layer="track_points"</code> points.</p>
 #&gt; 9     TAX_COM    4    250   String
 #&gt; 10   DIST_COM    4    250   String
 #&gt; 11 REFERENCES    4    250   String
-#&gt; 12  REVIEWERS    4    250   String</div><div class='input'><span class='fu'>ogrInfo</span>(<span class='kw'>dsn</span><span class='kw'>=</span><span class='no'>dsn</span>, <span class='kw'>layer</span><span class='kw'>=</span><span class='st'>"cities"</span>)</div><div class='output co'>#&gt; Source: "/tmp/RtmpKX7V7q/temp_libpathbee5e280a0c/rgdal/vectors", layer: "cities"
+#&gt; 12  REVIEWERS    4    250   String</div><div class='input'><span class='fu'>ogrInfo</span>(<span class='kw'>dsn</span><span class='kw'>=</span><span class='no'>dsn</span>, <span class='kw'>layer</span><span class='kw'>=</span><span class='st'>"cities"</span>)</div><div class='output co'>#&gt; Source: "/tmp/RtmpxxwPB0/temp_libpath59a0f120a1efc/rgdal/vectors", layer: "cities"
 #&gt; Driver: ESRI Shapefile; number of rows: 606 
 #&gt; Feature type: wkbPoint with 2 dimensions
 #&gt; Extent: (-165.27 -53.15) - (177.1302 78.2)
@@ -496,7 +499,7 @@ lines or <code>layer="track_points"</code> points.</p>
 #&gt; 3 POPULATION   12     11 Integer64
 #&gt; 4    CAPITAL    4      1    String</div><div class='input'><span class='no'>owd</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/getwd.html'>getwd</a></span>()
 <span class='fu'><a href='https://rdrr.io/r/base/getwd.html'>setwd</a></span>(<span class='no'>dsn</span>)
-<span class='fu'>ogrInfo</span>(<span class='kw'>dsn</span><span class='kw'>=</span><span class='st'>"cities.shp"</span>)</div><div class='output co'>#&gt; Source: "/tmp/RtmpKX7V7q/temp_libpathbee5e280a0c/rgdal/vectors/cities.shp", layer: "cities"
+<span class='fu'>ogrInfo</span>(<span class='kw'>dsn</span><span class='kw'>=</span><span class='st'>"cities.shp"</span>)</div><div class='output co'>#&gt; Source: "/tmp/RtmpxxwPB0/temp_libpath59a0f120a1efc/rgdal/vectors/cities.shp", layer: "cities"
 #&gt; Driver: ESRI Shapefile; number of rows: 606 
 #&gt; Feature type: wkbPoint with 2 dimensions
 #&gt; Extent: (-165.27 -53.15) - (177.1302 78.2)
@@ -507,7 +510,7 @@ lines or <code>layer="track_points"</code> points.</p>
 #&gt; 1       NAME    4     40    String
 #&gt; 2    COUNTRY    4     12    String
 #&gt; 3 POPULATION   12     11 Integer64
-#&gt; 4    CAPITAL    4      1    String</div><div class='input'><span class='fu'>ogrInfo</span>(<span class='kw'>dsn</span><span class='kw'>=</span><span class='st'>"cities.shp"</span>, <span class='kw'>layer</span><span class='kw'>=</span><span class='st'>"cities"</span>)</div><div class='output co'>#&gt; Source: "/tmp/RtmpKX7V7q/temp_libpathbee5e280a0c/rgdal/vectors/cities.shp", layer: "cities"
+#&gt; 4    CAPITAL    4      1    String</div><div class='input'><span class='fu'>ogrInfo</span>(<span class='kw'>dsn</span><span class='kw'>=</span><span class='st'>"cities.shp"</span>, <span class='kw'>layer</span><span class='kw'>=</span><span class='st'>"cities"</span>)</div><div class='output co'>#&gt; Source: "/tmp/RtmpxxwPB0/temp_libpath59a0f120a1efc/rgdal/vectors/cities.shp", layer: "cities"
 #&gt; Driver: ESRI Shapefile; number of rows: 606 
 #&gt; Feature type: wkbPoint with 2 dimensions
 #&gt; Extent: (-165.27 -53.15) - (177.1302 78.2)
@@ -522,28 +525,28 @@ lines or <code>layer="track_points"</code> points.</p>
 <span class='no'>ow</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>options</a></span>(<span class='st'>"warn"</span>)$<span class='no'>warn</span>
 <span class='fu'><a href='https://rdrr.io/r/base/options.html'>options</a></span>(<span class='st'>"warn"</span><span class='kw'>=</span><span class='fl'>1</span>)
 <span class='no'>cities</span> <span class='kw'>&lt;-</span> <span class='fu'>readOGR</span>(<span class='kw'>dsn</span><span class='kw'>=</span><span class='no'>dsn</span>, <span class='kw'>layer</span><span class='kw'>=</span><span class='st'>"cities"</span>)</div><div class='output co'>#&gt; OGR data source with driver: ESRI Shapefile 
-#&gt; Source: "/tmp/RtmpKX7V7q/temp_libpathbee5e280a0c/rgdal/vectors", layer: "cities"
+#&gt; Source: "/tmp/RtmpxxwPB0/temp_libpath59a0f120a1efc/rgdal/vectors", layer: "cities"
 #&gt; with 606 features
 #&gt; It has 4 fields
 #&gt; Integer64 fields read as strings:  POPULATION </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='fu'>slot</span>(<span class='no'>cities</span>, <span class='st'>"data"</span>))</div><div class='output co'>#&gt; 'data.frame':	606 obs. of  4 variables:
-#&gt;  $ NAME      : Factor w/ 602 levels "Abidjan","Abu Zaby",..: 368 34 472 322 419 593 390 194 263 115 ...
-#&gt;  $ COUNTRY   : Factor w/ 165 levels "Afghanistan",..: 124 124 124 124 124 124 124 153 124 124 ...
-#&gt;  $ POPULATION: Factor w/ 514 levels "-99","100000",..: 351 328 393 107 41 122 179 143 35 73 ...
-#&gt;  $ CAPITAL   : Factor w/ 2 levels "N","Y": 1 1 1 1 1 1 1 1 1 1 ...</div><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='projInfo.html'>new_proj_and_gdal</a></span>()) <span class='fu'><a href='https://rdrr.io/r/base/comment.html'>comment</a></span>(<span class='fu'>slot</span>(<span class='no'>cities</span>, <span class='st'>"proj4string"</span>))</div><div class='output co'>#&gt; [1] "GEOGCRS[\"WGS 84\",DATUM[\"World Geodetic System 1984\",ELLIPSOID[\"WGS 84\",6378137,298.257223563,LENGTHUNIT[\"metre\",1]]],PRIMEM[\"Greenwich\",0,ANGLEUNIT[\"degree\",0.0174532925199433]],CS[ellipsoidal,2],AXIS[\"latitude\",north,ORDER[1],ANGLEUNIT[\"degree\",0.0174532925199433]],AXIS[\"longitude\",east,ORDER[2],ANGLEUNIT[\"degree\",0.0174532925199433]],ID[\"EPSG\",4326]]"</div><div class='input'><span class='no'>cities</span>$<span class='no'>POPULATION</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/utils/type.convert.html'>type.convert</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span>(<span class='no'>cities</span>$<span class='no'>POPULATION</span>),
+#&gt;  $ NAME      : chr  "Murmansk" "Arkhangelsk" "Saint Petersburg" "Magadan" ...
+#&gt;  $ COUNTRY   : chr  "Russia" "Russia" "Russia" "Russia" ...
+#&gt;  $ POPULATION: chr  "468000" "416000" "5825000" "152000" ...
+#&gt;  $ CAPITAL   : chr  "N" "N" "N" "N" ...</div><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='projInfo.html'>new_proj_and_gdal</a></span>()) <span class='fu'><a href='https://rdrr.io/r/base/comment.html'>comment</a></span>(<span class='fu'>slot</span>(<span class='no'>cities</span>, <span class='st'>"proj4string"</span>))</div><div class='output co'>#&gt; [1] "GEOGCRS[\"WGS 84\",\n    DATUM[\"World Geodetic System 1984\",\n        ELLIPSOID[\"WGS 84\",6378137,298.257223563,\n            LENGTHUNIT[\"metre\",1]]],\n    PRIMEM[\"Greenwich\",0,\n        ANGLEUNIT[\"degree\",0.0174532925199433]],\n    CS[ellipsoidal,2],\n        AXIS[\"latitude\",north,\n            ORDER[1],\n            ANGLEUNIT[\"degree\",0.0174532925199433]],\n        AXIS[\"longitude\",east,\n            ORDER[2],\n            ANGLEUNIT[\"degree\",0.0174532925199433]],\n    ID[\"EPSG\",4326]]"</div><div class='input'><span class='no'>cities</span>$<span class='no'>POPULATION</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/utils/type.convert.html'>type.convert</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span>(<span class='no'>cities</span>$<span class='no'>POPULATION</span>),
   <span class='kw'>na.strings</span><span class='kw'>=</span><span class='st'>"-99"</span>, <span class='kw'>numerals</span><span class='kw'>=</span><span class='st'>"no.loss"</span>)
 <span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='fu'>slot</span>(<span class='no'>cities</span>, <span class='st'>"data"</span>))</div><div class='output co'>#&gt; 'data.frame':	606 obs. of  4 variables:
-#&gt;  $ NAME      : Factor w/ 602 levels "Abidjan","Abu Zaby",..: 368 34 472 322 419 593 390 194 263 115 ...
-#&gt;  $ COUNTRY   : Factor w/ 165 levels "Afghanistan",..: 124 124 124 124 124 124 124 153 124 124 ...
+#&gt;  $ NAME      : chr  "Murmansk" "Arkhangelsk" "Saint Petersburg" "Magadan" ...
+#&gt;  $ COUNTRY   : chr  "Russia" "Russia" "Russia" "Russia" ...
 #&gt;  $ POPULATION: int  468000 416000 5825000 152000 1160000 1620000 2025000 1800000 1140000 1325000 ...
-#&gt;  $ CAPITAL   : Factor w/ 2 levels "N","Y": 1 1 1 1 1 1 1 1 1 1 ...</div><div class='input'><span class='no'>cities</span> <span class='kw'>&lt;-</span> <span class='fu'>readOGR</span>(<span class='kw'>dsn</span><span class='kw'>=</span><span class='no'>dsn</span>, <span class='kw'>layer</span><span class='kw'>=</span><span class='st'>"cities"</span>, <span class='kw'>GDAL1_integer64_policy</span><span class='kw'>=</span><span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; OGR data source with driver: ESRI Shapefile 
-#&gt; Source: "/tmp/RtmpKX7V7q/temp_libpathbee5e280a0c/rgdal/vectors", layer: "cities"
+#&gt;  $ CAPITAL   : chr  "N" "N" "N" "N" ...</div><div class='input'><span class='no'>cities</span> <span class='kw'>&lt;-</span> <span class='fu'>readOGR</span>(<span class='kw'>dsn</span><span class='kw'>=</span><span class='no'>dsn</span>, <span class='kw'>layer</span><span class='kw'>=</span><span class='st'>"cities"</span>, <span class='kw'>GDAL1_integer64_policy</span><span class='kw'>=</span><span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; OGR data source with driver: ESRI Shapefile 
+#&gt; Source: "/tmp/RtmpxxwPB0/temp_libpath59a0f120a1efc/rgdal/vectors", layer: "cities"
 #&gt; with 606 features
 #&gt; It has 4 fields
 #&gt; Integer64 fields read as doubles:  POPULATION </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='fu'>slot</span>(<span class='no'>cities</span>, <span class='st'>"data"</span>))</div><div class='output co'>#&gt; 'data.frame':	606 obs. of  4 variables:
-#&gt;  $ NAME      : Factor w/ 602 levels "Abidjan","Abu Zaby",..: 368 34 472 322 419 593 390 194 263 115 ...
-#&gt;  $ COUNTRY   : Factor w/ 165 levels "Afghanistan",..: 124 124 124 124 124 124 124 153 124 124 ...
+#&gt;  $ NAME      : chr  "Murmansk" "Arkhangelsk" "Saint Petersburg" "Magadan" ...
+#&gt;  $ COUNTRY   : chr  "Russia" "Russia" "Russia" "Russia" ...
 #&gt;  $ POPULATION: num  468000 416000 5825000 152000 1160000 ...
-#&gt;  $ CAPITAL   : Factor w/ 2 levels "N","Y": 1 1 1 1 1 1 1 1 1 1 ...</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/options.html'>options</a></span>(<span class='st'>"warn"</span><span class='kw'>=</span><span class='no'>ow</span>)
+#&gt;  $ CAPITAL   : chr  "N" "N" "N" "N" ...</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/options.html'>options</a></span>(<span class='st'>"warn"</span><span class='kw'>=</span><span class='no'>ow</span>)
 <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>cities</span>)</div><div class='output co'>#&gt; Object of class SpatialPointsDataFrame
 #&gt; Coordinates:
 #&gt;               min      max
@@ -553,16 +556,15 @@ lines or <code>layer="track_points"</code> points.</p>
 #&gt; proj4string : [+proj=longlat +datum=WGS84 +no_defs]
 #&gt; Number of points: 606
 #&gt; Data attributes:
-#&gt;         NAME        COUNTRY      POPULATION       CAPITAL
-#&gt;  Hyderabad:  2   US     : 49   Min.   :     -99   N:442  
-#&gt;  San Jose :  2   Russia : 37   1st Qu.:  243744   Y:164  
-#&gt;  Tripoli  :  2   China  : 36   Median :  710447          
-#&gt;  Valencia :  2   Canada : 22   Mean   : 1411999          
-#&gt;  Abidjan  :  1   India  : 20   3rd Qu.: 1536250          
-#&gt;  Abu Zaby :  1   Brazil : 19   Max.   :23620000          
-#&gt;  (Other)  :596   (Other):423                             </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/Encoding.html'>Encoding</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span>(<span class='no'>cities</span>$<span class='no'>NAME</span>)))</div><div class='output co'>#&gt; 
+#&gt;      NAME             COUNTRY            POPULATION         CAPITAL         
+#&gt;  Length:606         Length:606         Min.   :     -99   Length:606        
+#&gt;  Class :character   Class :character   1st Qu.:  243744   Class :character  
+#&gt;  Mode  :character   Mode  :character   Median :  710447   Mode  :character  
+#&gt;                                        Mean   : 1411999                     
+#&gt;                                        3rd Qu.: 1536250                     
+#&gt;                                        Max.   :23620000                     </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/Encoding.html'>Encoding</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span>(<span class='no'>cities</span>$<span class='no'>NAME</span>)))</div><div class='output co'>#&gt; 
 #&gt; unknown 
-#&gt;     606 </div><div class='input'><span class='fu'>ogrInfo</span>(<span class='kw'>dsn</span><span class='kw'>=</span><span class='no'>dsn</span>, <span class='kw'>layer</span><span class='kw'>=</span><span class='st'>"kiritimati_primary_roads"</span>)</div><div class='output co'>#&gt; Source: "/tmp/RtmpKX7V7q/temp_libpathbee5e280a0c/rgdal/vectors", layer: "kiritimati_primary_roads"
+#&gt;     606 </div><div class='input'><span class='fu'>ogrInfo</span>(<span class='kw'>dsn</span><span class='kw'>=</span><span class='no'>dsn</span>, <span class='kw'>layer</span><span class='kw'>=</span><span class='st'>"kiritimati_primary_roads"</span>)</div><div class='output co'>#&gt; Source: "/tmp/RtmpxxwPB0/temp_libpath59a0f120a1efc/rgdal/vectors", layer: "kiritimati_primary_roads"
 #&gt; Driver: ESRI Shapefile; number of rows: 35 
 #&gt; Feature type: wkbLineString with 2 dimensions
 #&gt; Extent: (667587.7 187716.6) - (704048 226051.2)
@@ -571,7 +573,7 @@ lines or <code>layer="track_points"</code> points.</p>
 #&gt; Number of fields: 1 
 #&gt;   name type length typeName
 #&gt; 1   Id    0      6  Integer</div><div class='input'><span class='fu'>OGRSpatialRef</span>(<span class='kw'>dsn</span><span class='kw'>=</span><span class='no'>dsn</span>, <span class='kw'>layer</span><span class='kw'>=</span><span class='st'>"kiritimati_primary_roads"</span>)</div><div class='output co'>#&gt; [1] "+proj=utm +zone=4 +datum=WGS84 +units=m +no_defs"</div><div class='input'><span class='no'>kiritimati_primary_roads</span> <span class='kw'>&lt;-</span> <span class='fu'>readOGR</span>(<span class='kw'>dsn</span><span class='kw'>=</span><span class='no'>dsn</span>, <span class='kw'>layer</span><span class='kw'>=</span><span class='st'>"kiritimati_primary_roads"</span>)</div><div class='output co'>#&gt; OGR data source with driver: ESRI Shapefile 
-#&gt; Source: "/tmp/RtmpKX7V7q/temp_libpathbee5e280a0c/rgdal/vectors", layer: "kiritimati_primary_roads"
+#&gt; Source: "/tmp/RtmpxxwPB0/temp_libpath59a0f120a1efc/rgdal/vectors", layer: "kiritimati_primary_roads"
 #&gt; with 35 features
 #&gt; It has 1 fields</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>kiritimati_primary_roads</span>)</div><div class='output co'>#&gt; Object of class SpatialLinesDataFrame
 #&gt; Coordinates:
@@ -588,7 +590,7 @@ lines or <code>layer="track_points"</code> points.</p>
 #&gt;  Median :0  
 #&gt;  Mean   :0  
 #&gt;  3rd Qu.:0  
-#&gt;  Max.   :0  </div><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='projInfo.html'>new_proj_and_gdal</a></span>()) <span class='fu'><a href='https://rdrr.io/r/base/comment.html'>comment</a></span>(<span class='fu'>slot</span>(<span class='no'>kiritimati_primary_roads</span>, <span class='st'>"proj4string"</span>))</div><div class='output co'>#&gt; [1] "PROJCRS[\"WGS 84 / UTM zone 4N\",BASEGEOGCRS[\"WGS 84\",DATUM[\"World Geodetic System 1984\",ELLIPSOID[\"WGS 84\",6378137,298.257223563,LENGTHUNIT[\"metre\",1]]],PRIMEM[\"Greenwich\",0,ANGLEUNIT[\"degree\",0.0174532925199433]],ID[\"EPSG\",4326]],CONVERSION[\"UTM zone 4N\",METHOD[\"Transverse Mercator\",ID[\"EPSG\",9807]],PARAMETER[\"Latitude of natural origin\",0,ANGLEUNIT[\"Degree\",0.0174532925199433],ID[\"EPSG\",8801]],PARAMETER[\"Longitude of natural origin\",-159,ANGLEUNIT[\"Degree\",0.0174532925199433],ID[\"EPSG\",8802]],PARAMETER[\"Scale factor at natural origin\",0.9996,SCALEUNIT[\"unity\",1],ID[\"EPSG\",8805]],PARAMETER[\"False easting\",500000,LENGTHUNIT[\"metre\",1],ID[\"EPSG\",8806]],PARAMETER[\"False northing\",0,LENGTHUNIT[\"metre\",1],ID[\"EPSG\",8807]]],CS[Cartesian,2],AXIS[\"(E)\",east,ORDER[1],LENGTHUNIT[\"metre\",1]],AXIS[\"(N)\",north,ORDER[2],LENGTHUNIT[\"metre\",1]],ID[\"EPSG\",32604]]"</div><div class='input'><span class='fu'>ogrInfo</span>(<span class='kw'>dsn</span><span class='kw'>=</span><span class='no'>dsn</span>, <span class='kw'>layer</span><span class='kw'>=</span><span class='st'>"scot_BNG"</span>)</div><div class='output co'>#&gt; Source: "/tmp/RtmpKX7V7q/temp_libpathbee5e280a0c/rgdal/vectors", layer: "scot_BNG"
+#&gt;  Max.   :0  </div><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='projInfo.html'>new_proj_and_gdal</a></span>()) <span class='fu'><a href='https://rdrr.io/r/base/comment.html'>comment</a></span>(<span class='fu'>slot</span>(<span class='no'>kiritimati_primary_roads</span>, <span class='st'>"proj4string"</span>))</div><div class='output co'>#&gt; [1] "PROJCRS[\"WGS 84 / UTM zone 4N\",\n    BASEGEOGCRS[\"WGS 84\",\n        DATUM[\"World Geodetic System 1984\",\n            ELLIPSOID[\"WGS 84\",6378137,298.257223563,\n                LENGTHUNIT[\"metre\",1]]],\n        PRIMEM[\"Greenwich\",0,\n            ANGLEUNIT[\"degree\",0.0174532925199433]],\n        ID[\"EPSG\",4326]],\n    CONVERSION[\"UTM zone 4N\",\n        METHOD[\"Transverse Mercator\",\n            ID[\"EPSG\",9807]],\n        PARAMETER[\"Latitude of natural origin\",0,\n            ANGLEUNIT[\"Degree\",0.0174532925199433],\n            ID[\"EPSG\",8801]],\n        PARAMETER[\"Longitude of natural origin\",-159,\n            ANGLEUNIT[\"Degree\",0.0174532925199433],\n            ID[\"EPSG\",8802]],\n        PARAMETER[\"Scale factor at natural origin\",0.9996,\n            SCALEUNIT[\"unity\",1],\n            ID[\"EPSG\",8805]],\n        PARAMETER[\"False easting\",500000,\n            LENGTHUNIT[\"metre\",1],\n            ID[\"EPSG\",8806]],\n        PARAMETER[\"False northing\",0,\n            LENGTHUNIT[\"metre\",1],\n            ID[\"EPSG\",8807]]],\n    CS[Cartesian,2],\n        AXIS[\"(E)\",east,\n            ORDER[1],\n            LENGTHUNIT[\"metre\",1]],\n        AXIS[\"(N)\",north,\n            ORDER[2],\n            LENGTHUNIT[\"metre\",1]],\n    ID[\"EPSG\",32604]]"</div><div class='input'><span class='fu'>ogrInfo</span>(<span class='kw'>dsn</span><span class='kw'>=</span><span class='no'>dsn</span>, <span class='kw'>layer</span><span class='kw'>=</span><span class='st'>"scot_BNG"</span>)</div><div class='output co'>#&gt; Source: "/tmp/RtmpxxwPB0/temp_libpath59a0f120a1efc/rgdal/vectors", layer: "scot_BNG"
 #&gt; Driver: ESRI Shapefile; number of rows: 56 
 #&gt; Feature type: wkbPolygon with 2 dimensions
 #&gt; Extent: (7094.552 529495) - (468285.5 1218342)
@@ -609,7 +611,7 @@ lines or <code>layer="track_points"</code> points.</p>
 #&gt; 11 X_COOR    2     19     Real
 #&gt; 12 Y_COOR    2     19     Real
 #&gt; 13   ID_y    2     19     Real</div><div class='input'><span class='fu'>OGRSpatialRef</span>(<span class='kw'>dsn</span><span class='kw'>=</span><span class='no'>dsn</span>, <span class='kw'>layer</span><span class='kw'>=</span><span class='st'>"scot_BNG"</span>)</div><div class='output co'>#&gt; [1] "+proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy +units=m +no_defs"</div><div class='input'><span class='no'>scot_BNG</span> <span class='kw'>&lt;-</span> <span class='fu'>readOGR</span>(<span class='kw'>dsn</span><span class='kw'>=</span><span class='no'>dsn</span>, <span class='kw'>layer</span><span class='kw'>=</span><span class='st'>"scot_BNG"</span>)</div><div class='output co'>#&gt; OGR data source with driver: ESRI Shapefile 
-#&gt; Source: "/tmp/RtmpKX7V7q/temp_libpathbee5e280a0c/rgdal/vectors", layer: "scot_BNG"
+#&gt; Source: "/tmp/RtmpxxwPB0/temp_libpath59a0f120a1efc/rgdal/vectors", layer: "scot_BNG"
 #&gt; with 56 features
 #&gt; It has 13 fields</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>scot_BNG</span>)</div><div class='output co'>#&gt; Object of class SpatialPolygonsDataFrame
 #&gt; Coordinates:
@@ -621,14 +623,13 @@ lines or <code>layer="track_points"</code> points.</p>
 #&gt; [+proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000
 #&gt; +y_0=-100000 +ellps=airy +units=m +no_defs]
 #&gt; Data attributes:
-#&gt;      SP_ID              NAME         ID_x           COUNT       
-#&gt;  0      : 1   Aberdeen    : 1   Min.   : 1.00   Min.   : 0.000  
-#&gt;  1      : 1   Angus       : 1   1st Qu.:14.75   1st Qu.: 4.750  
-#&gt;  10     : 1   Annandale   : 1   Median :28.50   Median : 8.000  
-#&gt;  11     : 1   Argyll-Bute : 1   Mean   :28.50   Mean   : 9.571  
-#&gt;  12     : 1   Banff-Buchan: 1   3rd Qu.:42.25   3rd Qu.:11.000  
-#&gt;  13     : 1   Bearsden    : 1   Max.   :56.00   Max.   :39.000  
-#&gt;  (Other):50   (Other)     :50                                   
+#&gt;     SP_ID               NAME                ID_x           COUNT       
+#&gt;  Length:56          Length:56          Min.   : 1.00   Min.   : 0.000  
+#&gt;  Class :character   Class :character   1st Qu.:14.75   1st Qu.: 4.750  
+#&gt;  Mode  :character   Mode  :character   Median :28.50   Median : 8.000  
+#&gt;                                        Mean   :28.50   Mean   : 9.571  
+#&gt;                                        3rd Qu.:42.25   3rd Qu.:11.000  
+#&gt;                                        Max.   :56.00   Max.   :39.000  
 #&gt;       SMR             LONG            LAT              PY         
 #&gt;  Min.   :  0.0   Min.   :54.94   Min.   :1.430   Min.   :  27075  
 #&gt;  1st Qu.: 49.6   1st Qu.:55.78   1st Qu.:3.288   1st Qu.: 100559  
@@ -636,7 +637,6 @@ lines or <code>layer="track_points"</code> points.</p>
 #&gt;  Mean   :152.6   Mean   :56.40   Mean   :4.012   Mean   : 267498  
 #&gt;  3rd Qu.:223.0   3rd Qu.:57.02   3rd Qu.:4.730   3rd Qu.: 313845  
 #&gt;  Max.   :652.2   Max.   :60.24   Max.   :6.800   Max.   :2316353  
-#&gt;                                                                   
 #&gt;       EXP_             AFF             X_COOR           Y_COOR       
 #&gt;  Min.   : 1.100   Min.   : 0.000   Min.   :112892   Min.   : 561163  
 #&gt;  1st Qu.: 4.050   1st Qu.: 1.000   1st Qu.:256624   1st Qu.: 649520  
@@ -644,15 +644,13 @@ lines or <code>layer="track_points"</code> points.</p>
 #&gt;  Mean   : 9.575   Mean   : 8.661   Mean   :288524   Mean   : 723127  
 #&gt;  3rd Qu.:10.125   3rd Qu.:11.500   3rd Qu.:333948   3rd Qu.: 794380  
 #&gt;  Max.   :88.700   Max.   :24.000   Max.   :442244   Max.   :1168904  
-#&gt;                                                                      
 #&gt;       ID_y      
 #&gt;  Min.   : 1.00  
 #&gt;  1st Qu.:14.75  
 #&gt;  Median :28.50  
 #&gt;  Mean   :28.50  
 #&gt;  3rd Qu.:42.25  
-#&gt;  Max.   :56.00  
-#&gt;                 </div><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='projInfo.html'>new_proj_and_gdal</a></span>()) <span class='fu'><a href='https://rdrr.io/r/base/comment.html'>comment</a></span>(<span class='fu'>slot</span>(<span class='no'>scot_BNG</span>, <span class='st'>"proj4string"</span>))</div><div class='output co'>#&gt; [1] "PROJCRS[\"OSGB 1936 / British National Grid\",BASEGEOGCRS[\"OSGB 1936\",DATUM[\"OSGB 1936\",ELLIPSOID[\"Airy 1830\",6377563.396,299.3249646,LENGTHUNIT[\"metre\",1]]],PRIMEM[\"Greenwich\",0,ANGLEUNIT[\"degree\",0.0174532925199433]],ID[\"EPSG\",4277]],CONVERSION[\"British National Grid\",METHOD[\"Transverse Mercator\",ID[\"EPSG\",9807]],PARAMETER[\"Latitude of natural origin\",49,ANGLEUNIT[\"degree\",0.0174532925199433],ID[\"EPSG\",8801]],PARAMETER[\"Longitude of natural origin\",-2,ANGLEUNIT[\"degree\",0.0174532925199433],ID[\"EPSG\",8802]],PARAMETER[\"Scale factor at natural origin\",0.9996012717,SCALEUNIT[\"unity\",1],ID[\"EPSG\",8805]],PARAMETER[\"False easting\",400000,LENGTHUNIT[\"metre\",1],ID[\"EPSG\",8806]],PARAMETER[\"False northing\",-100000,LENGTHUNIT[\"metre\",1],ID[\"EPSG\",8807]]],CS[Cartesian,2],AXIS[\"(E)\",east,ORDER[1],LENGTHUNIT[\"metre\",1]],AXIS[\"(N)\",north,ORDER[2],LENGTHUNIT[\"metre\",1]],USAGE[SCOPE[\"unknown\"],AREA[\"UK - Britain and UKCS 49°46'N to 61°01'N, 7°33'W to 3°33'E\"],BBOX[49.75,-9.2,61.14,2.88]],ID[\"EPSG\",27700]]"</div><div class='input'><span class='kw'>if</span> (<span class='st'>"GML"</span> <span class='kw'>%in%</span> <span class='fu'>ogrDrivers</span>()$<span class='no'>name</span>) {
+#&gt;  Max.   :56.00  </div><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='projInfo.html'>new_proj_and_gdal</a></span>()) <span class='fu'><a href='https://rdrr.io/r/base/comment.html'>comment</a></span>(<span class='fu'>slot</span>(<span class='no'>scot_BNG</span>, <span class='st'>"proj4string"</span>))</div><div class='output co'>#&gt; [1] "PROJCRS[\"OSGB 1936 / British National Grid\",\n    BASEGEOGCRS[\"OSGB 1936\",\n        DATUM[\"OSGB 1936\",\n            ELLIPSOID[\"Airy 1830\",6377563.396,299.3249646,\n                LENGTHUNIT[\"metre\",1]]],\n        PRIMEM[\"Greenwich\",0,\n            ANGLEUNIT[\"degree\",0.0174532925199433]],\n        ID[\"EPSG\",4277]],\n    CONVERSION[\"British National Grid\",\n        METHOD[\"Transverse Mercator\",\n            ID[\"EPSG\",9807]],\n        PARAMETER[\"Latitude of natural origin\",49,\n            ANGLEUNIT[\"degree\",0.0174532925199433],\n            ID[\"EPSG\",8801]],\n        PARAMETER[\"Longitude of natural origin\",-2,\n            ANGLEUNIT[\"degree\",0.0174532925199433],\n            ID[\"EPSG\",8802]],\n        PARAMETER[\"Scale factor at natural origin\",0.9996012717,\n            SCALEUNIT[\"unity\",1],\n            ID[\"EPSG\",8805]],\n        PARAMETER[\"False easting\",400000,\n            LENGTHUNIT[\"metre\",1],\n            ID[\"EPSG\",8806]],\n        PARAMETER[\"False northing\",-100000,\n            LENGTHUNIT[\"metre\",1],\n            ID[\"EPSG\",8807]]],\n    CS[Cartesian,2],\n        AXIS[\"(E)\",east,\n            ORDER[1],\n            LENGTHUNIT[\"metre\",1]],\n        AXIS[\"(N)\",north,\n            ORDER[2],\n            LENGTHUNIT[\"metre\",1]],\n    USAGE[\n        SCOPE[\"unknown\"],\n        AREA[\"UK - Britain and UKCS 49°46'N to 61°01'N, 7°33'W to 3°33'E\"],\n        BBOX[49.75,-9.2,61.14,2.88]],\n    ID[\"EPSG\",27700]]"</div><div class='input'><span class='kw'>if</span> (<span class='st'>"GML"</span> <span class='kw'>%in%</span> <span class='fu'>ogrDrivers</span>()$<span class='no'>name</span>) {
   <span class='no'>dsn</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"vectors/airports.gml"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"rgdal"</span>)[<span class='fl'>1</span>]
   <span class='no'>airports</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='fu'>readOGR</span>(<span class='kw'>dsn</span><span class='kw'>=</span><span class='no'>dsn</span>, <span class='kw'>layer</span><span class='kw'>=</span><span class='st'>"airports"</span>))
   <span class='kw'>if</span> (!<span class='fu'><a href='https://rdrr.io/r/base/class.html'>inherits</a></span>(<span class='no'>airports</span>, <span class='st'>"try-error"</span>)) {
@@ -660,10 +658,10 @@ lines or <code>layer="track_points"</code> points.</p>
     <span class='kw'>if</span> (<span class='fu'><a href='projInfo.html'>new_proj_and_gdal</a></span>()) <span class='fu'><a href='https://rdrr.io/r/base/comment.html'>comment</a></span>(<span class='fu'>slot</span>(<span class='no'>airports</span>, <span class='st'>"proj4string"</span>))
   }
 }</div><div class='output co'>#&gt; OGR data source with driver: GML 
-#&gt; Source: "/tmp/RtmpKX7V7q/temp_libpathbee5e280a0c/rgdal/vectors/airports.gml", layer: "airports"
+#&gt; Source: "/tmp/RtmpxxwPB0/temp_libpath59a0f120a1efc/rgdal/vectors/airports.gml", layer: "airports"
 #&gt; with 13 features
 #&gt; It has 6 fields</div><div class='output co'>#&gt; NULL</div><div class='input'><span class='no'>dsn</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"vectors/ps_cant_31.MIF"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"rgdal"</span>)[<span class='fl'>1</span>]
-<span class='fu'>ogrInfo</span>(<span class='kw'>dsn</span><span class='kw'>=</span><span class='no'>dsn</span>, <span class='kw'>layer</span><span class='kw'>=</span><span class='st'>"ps_cant_31"</span>)</div><div class='output co'>#&gt; Source: "/tmp/RtmpKX7V7q/temp_libpathbee5e280a0c/rgdal/vectors/ps_cant_31.MIF", layer: "ps_cant_31"
+<span class='fu'>ogrInfo</span>(<span class='kw'>dsn</span><span class='kw'>=</span><span class='no'>dsn</span>, <span class='kw'>layer</span><span class='kw'>=</span><span class='st'>"ps_cant_31"</span>)</div><div class='output co'>#&gt; Source: "/tmp/RtmpxxwPB0/temp_libpath59a0f120a1efc/rgdal/vectors/ps_cant_31.MIF", layer: "ps_cant_31"
 #&gt; Driver: MapInfo File; number of rows: 44 
 #&gt; Feature type: wkbPolygon with 2 dimensions
 #&gt; Extent: (0.449114 42.69196) - (2.048339 43.91861)
@@ -678,7 +676,7 @@ lines or <code>layer="track_points"</code> points.</p>
 #&gt; 6  Latitude    2      0     Real
 #&gt; 7  Pseudo_c    4      5   String
 #&gt; 8       DEP    4      5   String</div><div class='input'><span class='no'>ps_cant_31</span> <span class='kw'>&lt;-</span> <span class='fu'>readOGR</span>(<span class='kw'>dsn</span><span class='kw'>=</span><span class='no'>dsn</span>, <span class='kw'>layer</span><span class='kw'>=</span><span class='st'>"ps_cant_31"</span>)</div><div class='output co'>#&gt; OGR data source with driver: MapInfo File 
-#&gt; Source: "/tmp/RtmpKX7V7q/temp_libpathbee5e280a0c/rgdal/vectors/ps_cant_31.MIF", layer: "ps_cant_31"
+#&gt; Source: "/tmp/RtmpxxwPB0/temp_libpath59a0f120a1efc/rgdal/vectors/ps_cant_31.MIF", layer: "ps_cant_31"
 #&gt; with 44 features
 #&gt; It has 8 fields</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>ps_cant_31</span>)</div><div class='output co'>#&gt; Object of class SpatialPolygonsDataFrame
 #&gt; Coordinates:
@@ -689,24 +687,24 @@ lines or <code>layer="track_points"</code> points.</p>
 #&gt; proj4string :
 #&gt; [+proj=longlat +a=6378137.01 +rf=298.257223563 +no_defs]
 #&gt; Data attributes:
-#&gt;       CODE         NOM          POP              SUP          Longitude       
-#&gt;  31007  : 1   AMBAX  : 1   Min.   :  3188   Min.   :  635   Min.   :  518350  
-#&gt;  31012  : 1   ARBON  : 1   1st Qu.:  4748   1st Qu.:10234   1st Qu.: 4777200  
-#&gt;  31013  : 1   ARDIEGE: 1   Median :  9205   Median :15826   Median : 6403225  
-#&gt;  31017  : 1   ARLOS  : 1   Mean   : 21043   Mean   :14478   Mean   : 6717604  
-#&gt;  31019  : 1   ARTIGUE: 1   3rd Qu.: 22392   3rd Qu.:19007   3rd Qu.: 9209718  
-#&gt;  31023  : 1   AULON  : 1   Max.   :358598   Max.   :31161   Max.   :14086469  
-#&gt;  (Other):38   (Other):38                                                      
-#&gt;     Latitude           Pseudo_c  DEP    
-#&gt;  Min.   : 1838600   3101   : 1   31:44  
-#&gt;  1st Qu.:16575363   3102   : 1          
-#&gt;  Median :22660600   3103   : 1          
-#&gt;  Mean   :24264069   3104   : 1          
-#&gt;  3rd Qu.:34440138   3105   : 1          
-#&gt;  Max.   :54508151   3106   : 1          
-#&gt;                     (Other):38          </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>sapply</a></span>(<span class='fu'>as</span>(<span class='no'>ps_cant_31</span>, <span class='st'>"data.frame"</span>), <span class='no'>class</span>)</div><div class='output co'>#&gt;      CODE       NOM       POP       SUP Longitude  Latitude  Pseudo_c       DEP 
-#&gt;  "factor"  "factor" "numeric" "numeric" "numeric" "numeric"  "factor"  "factor" </div><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='projInfo.html'>new_proj_and_gdal</a></span>()) <span class='fu'><a href='https://rdrr.io/r/base/comment.html'>comment</a></span>(<span class='fu'>slot</span>(<span class='no'>ps_cant_31</span>, <span class='st'>"proj4string"</span>))</div><div class='output co'>#&gt; [1] "GEOGCRS[\"unnamed\",DATUM[\"MIF 0\",ELLIPSOID[\"WGS 84 (MAPINFO Datum 0)\",6378137.01,298.257223563,LENGTHUNIT[\"metre\",1,ID[\"EPSG\",9001]]]],PRIMEM[\"Greenwich\",0,ANGLEUNIT[\"degree\",0.0174532925199433,ID[\"EPSG\",9122]]],CS[ellipsoidal,2],AXIS[\"latitude\",north,ORDER[1],ANGLEUNIT[\"degree\",0.0174532925199433,ID[\"EPSG\",9122]]],AXIS[\"longitude\",east,ORDER[2],ANGLEUNIT[\"degree\",0.0174532925199433,ID[\"EPSG\",9122]]]]"</div><div class='input'><span class='no'>ps_cant_31</span> <span class='kw'>&lt;-</span> <span class='fu'>readOGR</span>(<span class='kw'>dsn</span><span class='kw'>=</span><span class='no'>dsn</span>, <span class='kw'>layer</span><span class='kw'>=</span><span class='st'>"ps_cant_31"</span>, <span class='kw'>stringsAsFactors</span><span class='kw'>=</span><span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; OGR data source with driver: MapInfo File 
-#&gt; Source: "/tmp/RtmpKX7V7q/temp_libpathbee5e280a0c/rgdal/vectors/ps_cant_31.MIF", layer: "ps_cant_31"
+#&gt;      CODE               NOM                 POP              SUP       
+#&gt;  Length:44          Length:44          Min.   :  3188   Min.   :  635  
+#&gt;  Class :character   Class :character   1st Qu.:  4748   1st Qu.:10234  
+#&gt;  Mode  :character   Mode  :character   Median :  9205   Median :15826  
+#&gt;                                        Mean   : 21043   Mean   :14478  
+#&gt;                                        3rd Qu.: 22392   3rd Qu.:19007  
+#&gt;                                        Max.   :358598   Max.   :31161  
+#&gt;    Longitude           Latitude          Pseudo_c             DEP           
+#&gt;  Min.   :  518350   Min.   : 1838600   Length:44          Length:44         
+#&gt;  1st Qu.: 4777200   1st Qu.:16575363   Class :character   Class :character  
+#&gt;  Median : 6403225   Median :22660600   Mode  :character   Mode  :character  
+#&gt;  Mean   : 6717604   Mean   :24264069                                        
+#&gt;  3rd Qu.: 9209718   3rd Qu.:34440138                                        
+#&gt;  Max.   :14086469   Max.   :54508151                                        </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>sapply</a></span>(<span class='fu'>as</span>(<span class='no'>ps_cant_31</span>, <span class='st'>"data.frame"</span>), <span class='no'>class</span>)</div><div class='output co'>#&gt;        CODE         NOM         POP         SUP   Longitude    Latitude 
+#&gt; "character" "character"   "numeric"   "numeric"   "numeric"   "numeric" 
+#&gt;    Pseudo_c         DEP 
+#&gt; "character" "character" </div><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='projInfo.html'>new_proj_and_gdal</a></span>()) <span class='fu'><a href='https://rdrr.io/r/base/comment.html'>comment</a></span>(<span class='fu'>slot</span>(<span class='no'>ps_cant_31</span>, <span class='st'>"proj4string"</span>))</div><div class='output co'>#&gt; [1] "GEOGCRS[\"unnamed\",\n    DATUM[\"MIF 0\",\n        ELLIPSOID[\"WGS 84 (MAPINFO Datum 0)\",6378137.01,298.257223563,\n            LENGTHUNIT[\"metre\",1,\n                ID[\"EPSG\",9001]]]],\n    PRIMEM[\"Greenwich\",0,\n        ANGLEUNIT[\"degree\",0.0174532925199433,\n            ID[\"EPSG\",9122]]],\n    CS[ellipsoidal,2],\n        AXIS[\"latitude\",north,\n            ORDER[1],\n            ANGLEUNIT[\"degree\",0.0174532925199433,\n                ID[\"EPSG\",9122]]],\n        AXIS[\"longitude\",east,\n            ORDER[2],\n            ANGLEUNIT[\"degree\",0.0174532925199433,\n                ID[\"EPSG\",9122]]]]"</div><div class='input'><span class='no'>ps_cant_31</span> <span class='kw'>&lt;-</span> <span class='fu'>readOGR</span>(<span class='kw'>dsn</span><span class='kw'>=</span><span class='no'>dsn</span>, <span class='kw'>layer</span><span class='kw'>=</span><span class='st'>"ps_cant_31"</span>, <span class='kw'>stringsAsFactors</span><span class='kw'>=</span><span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; OGR data source with driver: MapInfo File 
+#&gt; Source: "/tmp/RtmpxxwPB0/temp_libpath59a0f120a1efc/rgdal/vectors/ps_cant_31.MIF", layer: "ps_cant_31"
 #&gt; with 44 features
 #&gt; It has 8 fields</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>ps_cant_31</span>)</div><div class='output co'>#&gt; Object of class SpatialPolygonsDataFrame
 #&gt; Coordinates:
@@ -734,7 +732,7 @@ lines or <code>layer="track_points"</code> points.</p>
 #&gt; "character" "character"   "numeric"   "numeric"   "numeric"   "numeric" 
 #&gt;    Pseudo_c         DEP 
 #&gt; "character" "character" </div><div class='input'><span class='no'>dsn</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"vectors/Up.tab"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"rgdal"</span>)[<span class='fl'>1</span>]
-<span class='fu'>ogrInfo</span>(<span class='kw'>dsn</span><span class='kw'>=</span><span class='no'>dsn</span>, <span class='kw'>layer</span><span class='kw'>=</span><span class='st'>"Up"</span>)</div><div class='output co'>#&gt; Source: "/tmp/RtmpKX7V7q/temp_libpathbee5e280a0c/rgdal/vectors/Up.tab", layer: "Up"
+<span class='fu'>ogrInfo</span>(<span class='kw'>dsn</span><span class='kw'>=</span><span class='no'>dsn</span>, <span class='kw'>layer</span><span class='kw'>=</span><span class='st'>"Up"</span>)</div><div class='output co'>#&gt; Source: "/tmp/RtmpxxwPB0/temp_libpath59a0f120a1efc/rgdal/vectors/Up.tab", layer: "Up"
 #&gt; Driver: MapInfo File; number of rows: 81 
 #&gt; Feature type: wkbPolygon with 2 dimensions
 #&gt; Extent: (598047.2 781652.7) - (619791.4 812944.4)
@@ -793,7 +791,7 @@ lines or <code>layer="track_points"</code> points.</p>
 #&gt; 50         CRpes9599    2      0     Real
 #&gt; 51         Patri9599    2      0     Real
 #&gt; 52          PERAREAC    2      0     Real</div><div class='input'><span class='no'>Up</span> <span class='kw'>&lt;-</span> <span class='fu'>readOGR</span>(<span class='kw'>dsn</span><span class='kw'>=</span><span class='no'>dsn</span>, <span class='kw'>layer</span><span class='kw'>=</span><span class='st'>"Up"</span>)</div><div class='output co'>#&gt; OGR data source with driver: MapInfo File 
-#&gt; Source: "/tmp/RtmpKX7V7q/temp_libpathbee5e280a0c/rgdal/vectors/Up.tab", layer: "Up"
+#&gt; Source: "/tmp/RtmpxxwPB0/temp_libpath59a0f120a1efc/rgdal/vectors/Up.tab", layer: "Up"
 #&gt; with 81 features
 #&gt; It has 52 fields</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>Up</span>)</div><div class='output co'>#&gt; Object of class SpatialPolygonsDataFrame
 #&gt; Coordinates:
@@ -804,14 +802,13 @@ lines or <code>layer="track_points"</code> points.</p>
 #&gt; proj4string :
 #&gt; [+proj=utm +zone=23 +south +ellps=aust_SA +units=m +no_defs]
 #&gt; Data attributes:
-#&gt;        ID     unid_planejamento    codigo2                   descricao 
-#&gt;  Min.   : 1   BA01   : 1        1801   : 1   ABILIO MACHADO       : 1  
-#&gt;  1st Qu.:21   ba02   : 1        1802   : 1   ANCHIETA/SION        : 1  
-#&gt;  Median :41   BA03   : 1        1803   : 1   ANTONIO CARLOS       : 1  
-#&gt;  Mean   :41   BA04   : 1        1804   : 1   BAIRRO DAS INDUSTRIAS: 1  
-#&gt;  3rd Qu.:61   BA05   : 1        1805   : 1   BALEIA               : 1  
-#&gt;  Max.   :81   BA06   : 1        1806   : 1   BARRAGEM             : 1  
-#&gt;               (Other):75        (Other):75   (Other)              :75  
+#&gt;        ID     unid_planejamento    codigo2           descricao        
+#&gt;  Min.   : 1   Length:81          Length:81          Length:81         
+#&gt;  1st Qu.:21   Class :character   Class :character   Class :character  
+#&gt;  Median :41   Mode  :character   Mode  :character   Mode  :character  
+#&gt;  Mean   :41                                                           
+#&gt;  3rd Qu.:61                                                           
+#&gt;  Max.   :81                                                           
 #&gt;       Area       densidade_pop     POPULACAO        Idademed    
 #&gt;  Min.   :0.078   Min.   :    0   Min.   :    0   Min.   : 0.00  
 #&gt;  1st Qu.:0.827   1st Qu.:10075   1st Qu.:10194   1st Qu.:26.03  
@@ -819,7 +816,6 @@ lines or <code>layer="track_points"</code> points.</p>
 #&gt;  Mean   :1.566   Mean   :21522   Mean   :25819   Mean   :28.30  
 #&gt;  3rd Qu.:2.161   3rd Qu.:26710   3rd Qu.:39991   3rd Qu.:30.92  
 #&gt;  Max.   :5.912   Max.   :84872   Max.   :69631   Max.   :39.81  
-#&gt;                                                                 
 #&gt;     Med_estu         Idosoper         Crianca        THomCor_95    
 #&gt;  Min.   : 0.000   Min.   : 0.000   Min.   : 0.00   Min.   : 10.76  
 #&gt;  1st Qu.: 6.240   1st Qu.: 3.280   1st Qu.:19.22   1st Qu.: 30.67  
@@ -827,7 +823,6 @@ lines or <code>layer="track_points"</code> points.</p>
 #&gt;  Mean   : 8.191   Mean   : 5.204   Mean   :22.44   Mean   : 56.20  
 #&gt;  3rd Qu.:10.180   3rd Qu.: 6.580   3rd Qu.:25.67   3rd Qu.: 61.41  
 #&gt;  Max.   :14.390   Max.   :17.060   Max.   :35.87   Max.   :302.07  
-#&gt;                                                                    
 #&gt;    THomCor_96        THomCor_97        THomCor_98        THomCor_99     
 #&gt;  Min.   :  6.666   Min.   :  8.014   Min.   :  7.664   Min.   :  4.718  
 #&gt;  1st Qu.: 17.531   1st Qu.: 21.695   1st Qu.: 36.839   1st Qu.: 21.568  
@@ -835,7 +830,6 @@ lines or <code>layer="track_points"</code> points.</p>
 #&gt;  Mean   : 35.833   Mean   : 43.619   Mean   : 66.024   Mean   : 43.566  
 #&gt;  3rd Qu.: 40.434   3rd Qu.: 52.297   3rd Qu.: 76.805   3rd Qu.: 48.819  
 #&gt;  Max.   :204.495   Max.   :203.096   Max.   :270.214   Max.   :303.179  
-#&gt;                                                                         
 #&gt;    HomCor_95        HomCor_96        HomCor_97        HomCor_98     
 #&gt;  Min.   : 2.661   Min.   : 1.325   Min.   : 1.830   Min.   : 3.516  
 #&gt;  1st Qu.: 4.388   1st Qu.: 3.667   1st Qu.: 4.183   1st Qu.: 8.403  
@@ -843,7 +837,6 @@ lines or <code>layer="track_points"</code> points.</p>
 #&gt;  Mean   : 6.183   Mean   : 6.868   Mean   : 6.861   Mean   :13.718  
 #&gt;  3rd Qu.: 6.961   3rd Qu.: 8.363   3rd Qu.: 7.559   3rd Qu.:15.192  
 #&gt;  Max.   :14.883   Max.   :24.932   Max.   :28.544   Max.   :50.005  
-#&gt;                                                                     
 #&gt;    HomCor_99       RouboCor_95        RouboCor_96        RouboCor_97      
 #&gt;  Min.   : 1.573   Min.   :   0.448   Min.   :   0.419   Min.   :   0.421  
 #&gt;  1st Qu.: 4.735   1st Qu.:  17.262   1st Qu.:  16.796   1st Qu.:  21.774  
@@ -851,7 +844,6 @@ lines or <code>layer="track_points"</code> points.</p>
 #&gt;  Mean   :10.923   Mean   : 109.019   Mean   : 116.590   Mean   : 149.269  
 #&gt;  3rd Qu.:13.558   3rd Qu.:  64.300   3rd Qu.:  70.542   3rd Qu.: 128.858  
 #&gt;  Max.   :48.515   Max.   :3522.697   Max.   :3750.638   Max.   :4018.214  
-#&gt;                                                                           
 #&gt;   RouboCor_98         RouboCor_99         RMACor_95         RMACor_96      
 #&gt;  Min.   :    0.135   Min.   :   1.304   Min.   :  12.19   Min.   :  13.10  
 #&gt;  1st Qu.:   25.430   1st Qu.:  34.056   1st Qu.:  44.62   1st Qu.:  66.37  
@@ -859,7 +851,6 @@ lines or <code>layer="track_points"</code> points.</p>
 #&gt;  Mean   :  797.151   Mean   : 192.016   Mean   : 118.86   Mean   : 140.81  
 #&gt;  3rd Qu.:  276.336   3rd Qu.: 135.308   3rd Qu.: 145.88   3rd Qu.: 173.36  
 #&gt;  Max.   :23590.153   Max.   :6039.410   Max.   :1163.74   Max.   :1025.96  
-#&gt;                                                                            
 #&gt;    RMACor_97         RMACor_98         RMACor_99        CRpesCor_95    
 #&gt;  Min.   :  29.87   Min.   :  46.06   Min.   :  37.27   Min.   : 11.08  
 #&gt;  1st Qu.: 102.07   1st Qu.: 149.83   1st Qu.: 170.47   1st Qu.: 32.13  
@@ -867,7 +858,6 @@ lines or <code>layer="track_points"</code> points.</p>
 #&gt;  Mean   : 207.57   Mean   : 277.97   Mean   : 346.77   Mean   : 62.63  
 #&gt;  3rd Qu.: 242.06   3rd Qu.: 328.98   3rd Qu.: 399.75   3rd Qu.: 68.42  
 #&gt;  Max.   :1390.62   Max.   :1746.30   Max.   :3116.97   Max.   :320.40  
-#&gt;                                                                        
 #&gt;   CRpesCor_96       CRpesCor_97       CRpesCor_98       CRpesCor_99     
 #&gt;  Min.   :  7.327   Min.   :  8.834   Min.   :  7.939   Min.   :  5.102  
 #&gt;  1st Qu.: 20.669   1st Qu.: 25.715   1st Qu.: 42.795   1st Qu.: 26.299  
@@ -875,7 +865,6 @@ lines or <code>layer="track_points"</code> points.</p>
 #&gt;  Mean   : 43.303   Mean   : 51.280   Mean   : 80.662   Mean   : 54.977  
 #&gt;  3rd Qu.: 51.315   3rd Qu.: 58.731   3rd Qu.: 87.589   3rd Qu.: 64.697  
 #&gt;  Max.   :234.966   Max.   :246.821   Max.   :323.035   Max.   :322.595  
-#&gt;                                                                         
 #&gt;   PatriCor_95        PatriCor_96        PatriCor_97       PatriCor_98      
 #&gt;  Min.   :   4.388   Min.   :   4.903   Min.   :  14.04   Min.   :   61.46  
 #&gt;  1st Qu.:  58.596   1st Qu.:  71.210   1st Qu.: 130.01   1st Qu.:  214.91  
@@ -883,7 +872,6 @@ lines or <code>layer="track_points"</code> points.</p>
 #&gt;  Mean   : 227.274   Mean   : 256.954   Mean   : 361.39   Mean   :  939.99  
 #&gt;  3rd Qu.: 204.408   3rd Qu.: 249.147   3rd Qu.: 367.02   3rd Qu.:  680.89  
 #&gt;  Max.   :4722.555   Max.   :4809.846   Max.   :5449.27   Max.   :14505.94  
-#&gt;                                                                            
 #&gt;   PatriCor_99          RENDA            IndIFU             IndASU        
 #&gt;  Min.   :  12.28   Min.   : 104.7   Min.   :-2.61604   Min.   :-0.12455  
 #&gt;  1st Qu.: 205.34   1st Qu.: 206.5   1st Qu.:-0.75862   1st Qu.:-0.07015  
@@ -891,7 +879,6 @@ lines or <code>layer="track_points"</code> points.</p>
 #&gt;  Mean   : 554.31   Mean   : 516.7   Mean   :-0.30299   Mean   : 0.33239  
 #&gt;  3rd Qu.: 552.92   3rd Qu.: 591.3   3rd Qu.: 0.19614   3rd Qu.: 0.35495  
 #&gt;  Max.   :9205.57   Max.   :3994.5   Max.   : 0.61122   Max.   : 5.29971  
-#&gt;                                                                          
 #&gt;   HomTent9599         Hom9599          Roub9599           RMA9599       
 #&gt;  Min.   :  9.842   Min.   : 1.332   Min.   :   1.327   Min.   :  14.35  
 #&gt;  1st Qu.: 23.818   1st Qu.: 5.014   1st Qu.:  33.661   1st Qu.: 112.86  
@@ -899,29 +886,27 @@ lines or <code>layer="track_points"</code> points.</p>
 #&gt;  Mean   : 49.598   Mean   : 9.348   Mean   : 306.451   Mean   : 223.02  
 #&gt;  3rd Qu.: 58.499   3rd Qu.:11.752   3rd Qu.: 169.146   3rd Qu.: 272.95  
 #&gt;  Max.   :285.429   Max.   :37.327   Max.   :6819.439   Max.   :1708.28  
-#&gt;                                                                         
 #&gt;    RMA9599_2         CRpes9599         Patri9599          PERAREAC      
 #&gt;  Min.   :  14.35   Min.   :  9.933   Min.   :  46.16   Min.   : 0.0000  
 #&gt;  1st Qu.: 112.86   1st Qu.: 28.946   1st Qu.: 165.24   1st Qu.: 0.1419  
 #&gt;  Median : 176.85   Median : 44.519   Median : 243.87   Median : 0.5484  
 #&gt;  Mean   : 223.02   Mean   : 59.188   Mean   : 528.77   Mean   : 1.1358  
 #&gt;  3rd Qu.: 272.95   3rd Qu.: 66.983   3rd Qu.: 413.41   3rd Qu.: 1.3150  
-#&gt;  Max.   :1708.28   Max.   :317.845   Max.   :7271.53   Max.   :17.5547  
-#&gt;                                                                         </div><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='projInfo.html'>new_proj_and_gdal</a></span>()) <span class='fu'><a href='https://rdrr.io/r/base/comment.html'>comment</a></span>(<span class='fu'>slot</span>(<span class='no'>Up</span>, <span class='st'>"proj4string"</span>))</div><div class='output co'>#&gt; [1] "PROJCRS[\"unnamed\",BASEGEOGCRS[\"unnamed\",DATUM[\"South American Datum 1969\",ELLIPSOID[\"South American\",6378160,298.25,LENGTHUNIT[\"metre\",1,ID[\"EPSG\",9001]]]],PRIMEM[\"Greenwich\",0,ANGLEUNIT[\"degree\",0.0174532925199433,ID[\"EPSG\",9122]]]],CONVERSION[\"UTM zone 23S\",METHOD[\"Transverse Mercator\",ID[\"EPSG\",9807]],PARAMETER[\"Latitude of natural origin\",0,ANGLEUNIT[\"degree\",0.0174532925199433],ID[\"EPSG\",8801]],PARAMETER[\"Longitude of natural origin\",-45,ANGLEUNIT[\"degree\",0.0174532925199433],ID[\"EPSG\",8802]],PARAMETER[\"Scale factor at natural origin\",0.9996,SCALEUNIT[\"unity\",1],ID[\"EPSG\",8805]],PARAMETER[\"False easting\",500000,LENGTHUNIT[\"metre\",1],ID[\"EPSG\",8806]],PARAMETER[\"False northing\",10000000,LENGTHUNIT[\"metre\",1],ID[\"EPSG\",8807]],ID[\"EPSG\",17023]],CS[Cartesian,2],AXIS[\"easting\",east,ORDER[1],LENGTHUNIT[\"metre\",1,ID[\"EPSG\",9001]]],AXIS[\"northing\",north,ORDER[2],LENGTHUNIT[\"metre\",1,ID[\"EPSG\",9001]]]]"</div><div class='input'><span class='no'>dsn</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"vectors/test_trk2.gpx"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"rgdal"</span>)[<span class='fl'>1</span>]
+#&gt;  Max.   :1708.28   Max.   :317.845   Max.   :7271.53   Max.   :17.5547  </div><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='projInfo.html'>new_proj_and_gdal</a></span>()) <span class='fu'><a href='https://rdrr.io/r/base/comment.html'>comment</a></span>(<span class='fu'>slot</span>(<span class='no'>Up</span>, <span class='st'>"proj4string"</span>))</div><div class='output co'>#&gt; [1] "PROJCRS[\"unnamed\",\n    BASEGEOGCRS[\"unnamed\",\n        DATUM[\"South American Datum 1969\",\n            ELLIPSOID[\"South American\",6378160,298.25,\n                LENGTHUNIT[\"metre\",1,\n                    ID[\"EPSG\",9001]]]],\n        PRIMEM[\"Greenwich\",0,\n            ANGLEUNIT[\"degree\",0.0174532925199433,\n                ID[\"EPSG\",9122]]]],\n    CONVERSION[\"UTM zone 23S\",\n        METHOD[\"Transverse Mercator\",\n            ID[\"EPSG\",9807]],\n        PARAMETER[\"Latitude of natural origin\",0,\n            ANGLEUNIT[\"degree\",0.0174532925199433],\n            ID[\"EPSG\",8801]],\n        PARAMETER[\"Longitude of natural origin\",-45,\n            ANGLEUNIT[\"degree\",0.0174532925199433],\n            ID[\"EPSG\",8802]],\n        PARAMETER[\"Scale factor at natural origin\",0.9996,\n            SCALEUNIT[\"unity\",1],\n            ID[\"EPSG\",8805]],\n        PARAMETER[\"False easting\",500000,\n            LENGTHUNIT[\"metre\",1],\n            ID[\"EPSG\",8806]],\n        PARAMETER[\"False northing\",10000000,\n            LENGTHUNIT[\"metre\",1],\n            ID[\"EPSG\",8807]],\n        ID[\"EPSG\",17023]],\n    CS[Cartesian,2],\n        AXIS[\"easting\",east,\n            ORDER[1],\n            LENGTHUNIT[\"metre\",1,\n                ID[\"EPSG\",9001]]],\n        AXIS[\"northing\",north,\n            ORDER[2],\n            LENGTHUNIT[\"metre\",1,\n                ID[\"EPSG\",9001]]]]"</div><div class='input'><span class='no'>dsn</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"vectors/test_trk2.gpx"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"rgdal"</span>)[<span class='fl'>1</span>]
 <span class='no'>test_trk2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='fu'>readOGR</span>(<span class='kw'>dsn</span><span class='kw'>=</span><span class='no'>dsn</span>, <span class='kw'>layer</span><span class='kw'>=</span><span class='st'>"tracks"</span>))</div><div class='output co'>#&gt; OGR data source with driver: GPX 
-#&gt; Source: "/tmp/RtmpKX7V7q/temp_libpathbee5e280a0c/rgdal/vectors/test_trk2.gpx", layer: "tracks"
+#&gt; Source: "/tmp/RtmpxxwPB0/temp_libpath59a0f120a1efc/rgdal/vectors/test_trk2.gpx", layer: "tracks"
 #&gt; with 2 features
 #&gt; It has 12 fields</div><div class='input'><span class='kw'>if</span> (!<span class='fu'><a href='https://rdrr.io/r/base/class.html'>inherits</a></span>(<span class='no'>test_trk2</span>, <span class='st'>"try-error"</span>)) {
   <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>test_trk2</span>)
   <span class='kw'>if</span> (<span class='fu'><a href='projInfo.html'>new_proj_and_gdal</a></span>()) <span class='fu'><a href='https://rdrr.io/r/base/comment.html'>comment</a></span>(<span class='fu'>slot</span>(<span class='no'>test_trk2</span>, <span class='st'>"proj4string"</span>))
-}</div><div class='output co'>#&gt; [1] "GEOGCRS[\"WGS 84\",DATUM[\"World Geodetic System 1984\",ELLIPSOID[\"WGS 84\",6378137,298.257223563,LENGTHUNIT[\"metre\",1]]],PRIMEM[\"Greenwich\",0,ANGLEUNIT[\"degree\",0.0174532925199433]],CS[ellipsoidal,2],AXIS[\"geodetic latitude (Lat)\",north,ORDER[1],ANGLEUNIT[\"degree\",0.0174532925199433]],AXIS[\"geodetic longitude (Lon)\",east,ORDER[2],ANGLEUNIT[\"degree\",0.0174532925199433]],ID[\"EPSG\",4326]]"</div><div class='input'><span class='no'>test_trk2pts</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='fu'>readOGR</span>(<span class='kw'>dsn</span><span class='kw'>=</span><span class='no'>dsn</span>, <span class='kw'>layer</span><span class='kw'>=</span><span class='st'>"track_points"</span>))</div><div class='output co'>#&gt; OGR data source with driver: GPX 
-#&gt; Source: "/tmp/RtmpKX7V7q/temp_libpathbee5e280a0c/rgdal/vectors/test_trk2.gpx", layer: "track_points"
+}</div><div class='output co'>#&gt; [1] "GEOGCRS[\"WGS 84\",\n    DATUM[\"World Geodetic System 1984\",\n        ELLIPSOID[\"WGS 84\",6378137,298.257223563,\n            LENGTHUNIT[\"metre\",1]]],\n    PRIMEM[\"Greenwich\",0,\n        ANGLEUNIT[\"degree\",0.0174532925199433]],\n    CS[ellipsoidal,2],\n        AXIS[\"geodetic latitude (Lat)\",north,\n            ORDER[1],\n            ANGLEUNIT[\"degree\",0.0174532925199433]],\n        AXIS[\"geodetic longitude (Lon)\",east,\n            ORDER[2],\n            ANGLEUNIT[\"degree\",0.0174532925199433]],\n    ID[\"EPSG\",4326]]"</div><div class='input'><span class='no'>test_trk2pts</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='fu'>readOGR</span>(<span class='kw'>dsn</span><span class='kw'>=</span><span class='no'>dsn</span>, <span class='kw'>layer</span><span class='kw'>=</span><span class='st'>"track_points"</span>))</div><div class='output co'>#&gt; OGR data source with driver: GPX 
+#&gt; Source: "/tmp/RtmpxxwPB0/temp_libpath59a0f120a1efc/rgdal/vectors/test_trk2.gpx", layer: "track_points"
 #&gt; with 27 features
 #&gt; It has 28 fields</div><div class='input'><span class='kw'>if</span> (!<span class='fu'><a href='https://rdrr.io/r/base/class.html'>inherits</a></span>(<span class='no'>test_trk2pts</span>, <span class='st'>"try-error"</span>)) {
   <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>test_trk2pts</span>)
   <span class='kw'>if</span> (<span class='fu'><a href='projInfo.html'>new_proj_and_gdal</a></span>()) <span class='fu'><a href='https://rdrr.io/r/base/comment.html'>comment</a></span>(<span class='fu'>slot</span>(<span class='no'>test_trk2pts</span>, <span class='st'>"proj4string"</span>))
-}</div><div class='output co'>#&gt; [1] "GEOGCRS[\"WGS 84\",DATUM[\"World Geodetic System 1984\",ELLIPSOID[\"WGS 84\",6378137,298.257223563,LENGTHUNIT[\"metre\",1]]],PRIMEM[\"Greenwich\",0,ANGLEUNIT[\"degree\",0.0174532925199433]],CS[ellipsoidal,2],AXIS[\"geodetic latitude (Lat)\",north,ORDER[1],ANGLEUNIT[\"degree\",0.0174532925199433]],AXIS[\"geodetic longitude (Lon)\",east,ORDER[2],ANGLEUNIT[\"degree\",0.0174532925199433]],ID[\"EPSG\",4326]]"</div><div class='input'><span class='no'>dsn</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"vectors"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"rgdal"</span>)[<span class='fl'>1</span>]
-<span class='fu'>ogrInfo</span>(<span class='kw'>dsn</span><span class='kw'>=</span><span class='no'>dsn</span>, <span class='kw'>layer</span><span class='kw'>=</span><span class='st'>"trin_inca_pl03"</span>)</div><div class='output co'>#&gt; Source: "/tmp/RtmpKX7V7q/temp_libpathbee5e280a0c/rgdal/vectors", layer: "trin_inca_pl03"
+}</div><div class='output co'>#&gt; [1] "GEOGCRS[\"WGS 84\",\n    DATUM[\"World Geodetic System 1984\",\n        ELLIPSOID[\"WGS 84\",6378137,298.257223563,\n            LENGTHUNIT[\"metre\",1]]],\n    PRIMEM[\"Greenwich\",0,\n        ANGLEUNIT[\"degree\",0.0174532925199433]],\n    CS[ellipsoidal,2],\n        AXIS[\"geodetic latitude (Lat)\",north,\n            ORDER[1],\n            ANGLEUNIT[\"degree\",0.0174532925199433]],\n        AXIS[\"geodetic longitude (Lon)\",east,\n            ORDER[2],\n            ANGLEUNIT[\"degree\",0.0174532925199433]],\n    ID[\"EPSG\",4326]]"</div><div class='input'><span class='no'>dsn</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"vectors"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"rgdal"</span>)[<span class='fl'>1</span>]
+<span class='fu'>ogrInfo</span>(<span class='kw'>dsn</span><span class='kw'>=</span><span class='no'>dsn</span>, <span class='kw'>layer</span><span class='kw'>=</span><span class='st'>"trin_inca_pl03"</span>)</div><div class='output co'>#&gt; Source: "/tmp/RtmpxxwPB0/temp_libpath59a0f120a1efc/rgdal/vectors", layer: "trin_inca_pl03"
 #&gt; Driver: ESRI Shapefile; number of rows: 3 
 #&gt; Feature type: wkbPolygon with 2 dimensions
 #&gt; Extent: (-87.09465 5.499074) - (-79.01339 10.11906)
@@ -941,7 +926,7 @@ lines or <code>layer="track_points"</code> points.</p>
 #&gt; 10   DIST_COM    4    250   String
 #&gt; 11 REFERENCES    4    250   String
 #&gt; 12  REVIEWERS    4    250   String</div><div class='input'><span class='no'>birds</span> <span class='kw'>&lt;-</span> <span class='fu'>readOGR</span>(<span class='kw'>dsn</span><span class='kw'>=</span><span class='no'>dsn</span>, <span class='kw'>layer</span><span class='kw'>=</span><span class='st'>"trin_inca_pl03"</span>)</div><div class='output co'>#&gt; OGR data source with driver: ESRI Shapefile 
-#&gt; Source: "/tmp/RtmpKX7V7q/temp_libpathbee5e280a0c/rgdal/vectors", layer: "trin_inca_pl03"
+#&gt; Source: "/tmp/RtmpxxwPB0/temp_libpath59a0f120a1efc/rgdal/vectors", layer: "trin_inca_pl03"
 #&gt; with 3 features
 #&gt; It has 12 fields</div><div class='output co'>#&gt; <span class='warning'>Warning: Dropping null geometries: 3</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>birds</span>)</div><div class='output co'>#&gt; Object of class SpatialPolygonsDataFrame
 #&gt; Coordinates:
@@ -951,44 +936,30 @@ lines or <code>layer="track_points"</code> points.</p>
 #&gt; Is projected: NA 
 #&gt; proj4string : [NA]
 #&gt; Data attributes:
-#&gt;              ENGL_NAME          SCI_NAME          AUTHORITY          FAMILY 
-#&gt;  Wandering Tattler:2   Tringa incana:2   (Gmelin, 1789):2   Scolopacidae:2  
+#&gt;   ENGL_NAME           SCI_NAME          AUTHORITY            FAMILY         
+#&gt;  Length:2           Length:2           Length:2           Length:2          
+#&gt;  Class :character   Class :character   Class :character   Class :character  
+#&gt;  Mode  :character   Mode  :character   Mode  :character   Mode  :character  
 #&gt;                                                                             
 #&gt;                                                                             
 #&gt;                                                                             
+#&gt;     PRESENCE     ORIGIN    COMPILER            SCALE          
+#&gt;  Min.   :1   Min.   :3   Length:2           Length:2          
+#&gt;  1st Qu.:1   1st Qu.:3   Class :character   Class :character  
+#&gt;  Median :1   Median :3   Mode  :character   Mode  :character  
+#&gt;  Mean   :1   Mean   :3                                        
+#&gt;  3rd Qu.:1   3rd Qu.:3                                        
+#&gt;  Max.   :1   Max.   :3                                        
+#&gt;    TAX_COM            DIST_COM          REFERENCES         REVIEWERS        
+#&gt;  Length:2           Length:2           Length:2           Length:2          
+#&gt;  Class :character   Class :character   Class :character   Class :character  
+#&gt;  Mode  :character   Mode  :character   Mode  :character   Mode  :character  
 #&gt;                                                                             
 #&gt;                                                                             
-#&gt;     PRESENCE     ORIGIN               COMPILER  SCALE  
-#&gt;  Min.   :1   Min.   :3   NatureServe, 2002:2   NA's:2  
-#&gt;  1st Qu.:1   1st Qu.:3                                 
-#&gt;  Median :1   Median :3                                 
-#&gt;  Mean   :1   Mean   :3                                 
-#&gt;  3rd Qu.:1   3rd Qu.:3                                 
-#&gt;  Max.   :1   Max.   :3                                 
-#&gt;                                        TAX_COM          DIST_COM
-#&gt;  Formerly placed in the genus Heteroscelus.:2   Cocos Island:1  
-#&gt;                                                 NA's        :1  
-#&gt;                                                                 
-#&gt;                                                                 
-#&gt;                                                                 
-#&gt;                                                                 
-#&gt;                                                          REFERENCES
-#&gt;  Sibley, 2000                                                 :0   
-#&gt;  Stiles and Skutch, 1989; Ridgely and Gwynne, 1989; Zook, 2002:1   
-#&gt;  Stiles and Skutch, 1989; Zook, 2002                          :1   
-#&gt;                                                                    
-#&gt;                                                                    
-#&gt;                                                                    
-#&gt;           REVIEWERS
-#&gt;  B. Young, 2002:2  
-#&gt;                    
-#&gt;                    
-#&gt;                    
-#&gt;                    
-#&gt;                    </div><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='projInfo.html'>new_proj_and_gdal</a></span>()) <span class='fu'><a href='https://rdrr.io/r/base/comment.html'>comment</a></span>(<span class='fu'>slot</span>(<span class='no'>birds</span>, <span class='st'>"proj4string"</span>))</div><div class='output co'>#&gt; NULL</div><div class='input'><span class='no'>dsn</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"vectors/PacoursIKA2.TAB"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"rgdal"</span>)[<span class='fl'>1</span>]
+#&gt;                                                                             </div><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='projInfo.html'>new_proj_and_gdal</a></span>()) <span class='fu'><a href='https://rdrr.io/r/base/comment.html'>comment</a></span>(<span class='fu'>slot</span>(<span class='no'>birds</span>, <span class='st'>"proj4string"</span>))</div><div class='output co'>#&gt; NULL</div><div class='input'><span class='no'>dsn</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"vectors/PacoursIKA2.TAB"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"rgdal"</span>)[<span class='fl'>1</span>]
 <span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='fu'>ogrInfo</span>(<span class='no'>dsn</span>, <span class='st'>"PacoursIKA2"</span>))</div><div class='output co'>#&gt; Error in ogrInfo(dsn, "PacoursIKA2") : 
 #&gt;   Multiple incompatible geometries: wkbPoint: 4; wkbLineString: 1</div><div class='input'><span class='fu'>ogrInfo</span>(<span class='no'>dsn</span>, <span class='st'>"PacoursIKA2"</span>, <span class='kw'>require_geomType</span><span class='kw'>=</span><span class='st'>"wkbPoint"</span>)</div><div class='output co'>#&gt; <span class='message'>NOTE: keeping only 4 wkbPoint of 5 features</span>
-#&gt; <span class='message'>    note that extent applies to all features</span></div><div class='output co'>#&gt; Source: "/tmp/RtmpKX7V7q/temp_libpathbee5e280a0c/rgdal/vectors/PacoursIKA2.TAB", layer: "PacoursIKA2"
+#&gt; <span class='message'>    note that extent applies to all features</span></div><div class='output co'>#&gt; Source: "/tmp/RtmpxxwPB0/temp_libpath59a0f120a1efc/rgdal/vectors/PacoursIKA2.TAB", layer: "PacoursIKA2"
 #&gt; Driver: MapInfo File; number of rows: 5 
 #&gt;   selected geometry type: wkbPoint with 4 rows
 #&gt; Feature type: wkbPoint with 2 dimensions
@@ -997,19 +968,19 @@ lines or <code>layer="track_points"</code> points.</p>
 #&gt; Number of fields: 2 
 #&gt;          name type length typeName
 #&gt; 1 NomParcours    4     25   String
-#&gt; 2    Longueur    4     25   String</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='fu'>readOGR</span>(<span class='no'>dsn</span>, <span class='st'>"PacoursIKA2"</span>, <span class='kw'>require_geomType</span><span class='kw'>=</span><span class='st'>"wkbLineString"</span>), <span class='kw'>col</span><span class='kw'>=</span><span class='st'>"red"</span>)</div><div class='output co'>#&gt; OGR data source with driver: MapInfo File 
-#&gt; Source: "/tmp/RtmpKX7V7q/temp_libpathbee5e280a0c/rgdal/vectors/PacoursIKA2.TAB", layer: "PacoursIKA2"
+#&gt; 2    Longueur    4     25   String</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='fu'>readOGR</span>(<span class='no'>dsn</span>, <span class='st'>"PacoursIKA2"</span>, <span class='kw'>require_geomType</span><span class='kw'>=</span><span class='st'>"wkbLineString"</span>), <span class='kw'>col</span><span class='kw'>=</span><span class='st'>"red"</span>)</div><div class='output co'>#&gt; OGR data source with driver: MapInfo File 
+#&gt; Source: "/tmp/RtmpxxwPB0/temp_libpath59a0f120a1efc/rgdal/vectors/PacoursIKA2.TAB", layer: "PacoursIKA2"
 #&gt; with 5 features;
 #&gt; Selected wkbLineString feature type, with 1 rows
-#&gt; It has 2 fields</div><div class='output co'>#&gt; <span class='message'>NOTE: keeping only 1 wkbLineString of 5 features</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='fu'>readOGR</span>(<span class='no'>dsn</span>, <span class='st'>"PacoursIKA2"</span>, <span class='kw'>require_geomType</span><span class='kw'>=</span><span class='st'>"wkbPoint"</span>), <span class='kw'>add</span><span class='kw'>=</span><span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; OGR data source with driver: MapInfo File 
-#&gt; Source: "/tmp/RtmpKX7V7q/temp_libpathbee5e280a0c/rgdal/vectors/PacoursIKA2.TAB", layer: "PacoursIKA2"
+#&gt; It has 2 fields</div><div class='output co'>#&gt; <span class='message'>NOTE: keeping only 1 wkbLineString of 5 features</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='fu'>readOGR</span>(<span class='no'>dsn</span>, <span class='st'>"PacoursIKA2"</span>, <span class='kw'>require_geomType</span><span class='kw'>=</span><span class='st'>"wkbPoint"</span>), <span class='kw'>add</span><span class='kw'>=</span><span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; OGR data source with driver: MapInfo File 
+#&gt; Source: "/tmp/RtmpxxwPB0/temp_libpath59a0f120a1efc/rgdal/vectors/PacoursIKA2.TAB", layer: "PacoursIKA2"
 #&gt; with 5 features;
 #&gt; Selected wkbPoint feature type, with 4 rows
 #&gt; It has 2 fields</div><div class='output co'>#&gt; <span class='message'>NOTE: keeping only 4 wkbPoint of 5 features</span></div><div class='img'><img src='readOGR-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='no'>odir</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/getwd.html'>getwd</a></span>()
 <span class='fu'><a href='https://rdrr.io/r/base/getwd.html'>setwd</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"vectors"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"rgdal"</span>)[<span class='fl'>1</span>])
 <span class='no'>ow</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>options</a></span>(<span class='st'>"warn"</span>)$<span class='no'>warn</span>
 <span class='fu'><a href='https://rdrr.io/r/base/options.html'>options</a></span>(<span class='st'>"warn"</span><span class='kw'>=</span><span class='fl'>1</span>)
-<span class='fu'>ogrInfo</span>(<span class='st'>"test64.vrt"</span>, <span class='st'>"test64"</span>)</div><div class='output co'>#&gt; Source: "/tmp/RtmpKX7V7q/temp_libpathbee5e280a0c/rgdal/vectors/test64.vrt", layer: "test64"
+<span class='fu'>ogrInfo</span>(<span class='st'>"test64.vrt"</span>, <span class='st'>"test64"</span>)</div><div class='output co'>#&gt; Source: "/tmp/RtmpxxwPB0/temp_libpath59a0f120a1efc/rgdal/vectors/test64.vrt", layer: "test64"
 #&gt; Driver: OGR_VRT; number of rows: 1 
 #&gt; Feature type: wkbPoint with 2 dimensions
 #&gt; Extent: (0 0) - (0 0)
@@ -1019,24 +990,14 @@ lines or <code>layer="track_points"</code> points.</p>
 #&gt; 1 Longitude    0      0   Integer
 #&gt; 2  Latitude    0      0   Integer
 #&gt; 3        id    0      0   Integer
-#&gt; 4       val   12      0 Integer64</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='fu'>readOGR</span>(<span class='st'>"test64.vrt"</span>, <span class='st'>"test64"</span>, <span class='kw'>verbose</span><span class='kw'>=</span><span class='fl'>FALSE</span>, <span class='kw'>integer64</span><span class='kw'>=</span><span class='st'>"allow.loss"</span>)$<span class='no'>val</span>)</div><div class='output co'>#&gt;  int 2147483647</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='fu'>readOGR</span>(<span class='st'>"test64.vrt"</span>, <span class='st'>"test64"</span>, <span class='kw'>verbose</span><span class='kw'>=</span><span class='fl'>FALSE</span>, <span class='kw'>integer64</span><span class='kw'>=</span><span class='st'>"warn.loss"</span>)$<span class='no'>val</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Integer64 value clamped: feature 0</span></div><div class='output co'>#&gt;  int 2147483647</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='fu'>readOGR</span>(<span class='st'>"test64.vrt"</span>, <span class='st'>"test64"</span>, <span class='kw'>verbose</span><span class='kw'>=</span><span class='fl'>FALSE</span>, <span class='kw'>integer64</span><span class='kw'>=</span><span class='st'>"no.loss"</span>)$<span class='no'>val</span>)</div><div class='output co'>#&gt;  Factor w/ 1 level "987654321000": 1</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='fu'>readOGR</span>(<span class='st'>"test64.vrt"</span>, <span class='st'>"test64"</span>, <span class='kw'>verbose</span><span class='kw'>=</span><span class='fl'>FALSE</span>, <span class='kw'>stringsAsFactors</span><span class='kw'>=</span><span class='fl'>FALSE</span>,
+#&gt; 4       val   12      0 Integer64</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='fu'>readOGR</span>(<span class='st'>"test64.vrt"</span>, <span class='st'>"test64"</span>, <span class='kw'>verbose</span><span class='kw'>=</span><span class='fl'>FALSE</span>, <span class='kw'>integer64</span><span class='kw'>=</span><span class='st'>"allow.loss"</span>)$<span class='no'>val</span>)</div><div class='output co'>#&gt;  int 2147483647</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='fu'>readOGR</span>(<span class='st'>"test64.vrt"</span>, <span class='st'>"test64"</span>, <span class='kw'>verbose</span><span class='kw'>=</span><span class='fl'>FALSE</span>, <span class='kw'>integer64</span><span class='kw'>=</span><span class='st'>"warn.loss"</span>)$<span class='no'>val</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Integer64 value clamped: feature 0</span></div><div class='output co'>#&gt;  int 2147483647</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='fu'>readOGR</span>(<span class='st'>"test64.vrt"</span>, <span class='st'>"test64"</span>, <span class='kw'>verbose</span><span class='kw'>=</span><span class='fl'>FALSE</span>, <span class='kw'>integer64</span><span class='kw'>=</span><span class='st'>"no.loss"</span>)$<span class='no'>val</span>)</div><div class='output co'>#&gt;  chr "987654321000"</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='fu'>readOGR</span>(<span class='st'>"test64.vrt"</span>, <span class='st'>"test64"</span>, <span class='kw'>verbose</span><span class='kw'>=</span><span class='fl'>FALSE</span>, <span class='kw'>stringsAsFactors</span><span class='kw'>=</span><span class='fl'>FALSE</span>,
  <span class='kw'>integer64</span><span class='kw'>=</span><span class='st'>"no.loss"</span>)$<span class='no'>val</span>)</div><div class='output co'>#&gt;  chr "987654321000"</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/getwd.html'>setwd</a></span>(<span class='no'>odir</span>)
 <span class='fu'><a href='https://rdrr.io/r/base/options.html'>options</a></span>(<span class='st'>"warn"</span><span class='kw'>=</span><span class='no'>ow</span>)</div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#details">Details</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#references">References</a></li>
-      <li><a href="#note">Note</a></li>
-      <li><a href="#see-also">See also</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
-    <h2>Author</h2>
-    <p>Roger Bivand</p>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -1047,7 +1008,7 @@ lines or <code>layer="track_points"</code> points.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>

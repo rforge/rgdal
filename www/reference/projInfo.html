@@ -10,23 +10,27 @@
 
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -37,7 +41,6 @@
 
 <meta property="og:title" content="List PROJ.4 tag information — projInfo" />
 <meta property="og:description" content="The projInfo function lists known values and descriptions for PROJ.4 tags for tag in c(&quot;proj&quot;, &quot;ellps&quot;, &quot;datum&quot;, &quot;units&quot;); getPROJ4VersionInfo returns the version of the underlying PROJ.4 release, getPROJ4libPath returns the value of the PROJ\_LIB environment variable, projNAD detects the presence of NAD datum conversion tables (looking for conus)." />
-<meta name="twitter:card" content="summary" />
 
 
 
@@ -55,7 +58,7 @@
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -69,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgdal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5-8</span>
       </span>
     </div>
 
@@ -153,7 +156,9 @@
     <p>Loading the rgdal package changes the <code>PROJ\_LIB</code> environmental variable to the PROJ.4 support files bundles with the package.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>getPROJ4VersionInfo</span>()</div><div class='output co'>#&gt; [1] "Rel. 7.0.0, March 1st, 2020, [PJ_VERSION: 700]"</div><div class='input'><span class='fu'>projInfo</span>()</div><div class='output co'>#&gt;             name
+    <pre class="examples"><div class='input'><span class='fu'>getPROJ4VersionInfo</span>()</div><div class='output co'>#&gt; [1] "Rel. 7.0.0, March 1st, 2020, [PJ_VERSION: 700]"
+#&gt; attr(,"short")
+#&gt; [1] 700</div><div class='input'><span class='fu'>projInfo</span>()</div><div class='output co'>#&gt;             name
 #&gt; 1            aea
 #&gt; 2           aeqd
 #&gt; 3         affine
@@ -280,43 +285,44 @@
 #&gt; 124        rouss
 #&gt; 125        rpoly
 #&gt; 126          sch
-#&gt; 127         sinu
-#&gt; 128       somerc
-#&gt; 129        stere
-#&gt; 130       sterea
-#&gt; 131      gstmerc
-#&gt; 132          tcc
-#&gt; 133         tcea
-#&gt; 134        times
-#&gt; 135       tissot
-#&gt; 136        tmerc
-#&gt; 137      tobmerc
-#&gt; 138        tpeqd
-#&gt; 139        tpers
-#&gt; 140  unitconvert
-#&gt; 141          ups
-#&gt; 142         urm5
-#&gt; 143       urmfps
-#&gt; 144          utm
-#&gt; 145        vandg
-#&gt; 146       vandg2
-#&gt; 147       vandg3
-#&gt; 148       vandg4
-#&gt; 149        vitk1
-#&gt; 150   vgridshift
-#&gt; 151         wag1
-#&gt; 152         wag2
-#&gt; 153         wag3
-#&gt; 154         wag4
-#&gt; 155         wag5
-#&gt; 156         wag6
-#&gt; 157         wag7
-#&gt; 158      webmerc
-#&gt; 159        weren
-#&gt; 160        wink1
-#&gt; 161        wink2
-#&gt; 162       wintri
-#&gt; 163 xyzgridshift
+#&gt; 127          set
+#&gt; 128         sinu
+#&gt; 129       somerc
+#&gt; 130        stere
+#&gt; 131       sterea
+#&gt; 132      gstmerc
+#&gt; 133          tcc
+#&gt; 134         tcea
+#&gt; 135        times
+#&gt; 136       tissot
+#&gt; 137        tmerc
+#&gt; 138      tobmerc
+#&gt; 139        tpeqd
+#&gt; 140        tpers
+#&gt; 141  unitconvert
+#&gt; 142          ups
+#&gt; 143         urm5
+#&gt; 144       urmfps
+#&gt; 145          utm
+#&gt; 146        vandg
+#&gt; 147       vandg2
+#&gt; 148       vandg3
+#&gt; 149       vandg4
+#&gt; 150        vitk1
+#&gt; 151   vgridshift
+#&gt; 152         wag1
+#&gt; 153         wag2
+#&gt; 154         wag3
+#&gt; 155         wag4
+#&gt; 156         wag5
+#&gt; 157         wag6
+#&gt; 158         wag7
+#&gt; 159      webmerc
+#&gt; 160        weren
+#&gt; 161        wink1
+#&gt; 162        wink2
+#&gt; 163       wintri
+#&gt; 164 xyzgridshift
 #&gt;                                                         description
 #&gt; 1                                                 Albers Equal Area
 #&gt; 2                                             Azimuthal Equidistant
@@ -444,57 +450,49 @@
 #&gt; 124                                         Roussilhe Stereographic
 #&gt; 125                                           Rectangular Polyconic
 #&gt; 126                                    Spherical Cross-track Height
-#&gt; 127                                   Sinusoidal (Sanson-Flamsteed)
-#&gt; 128                                            Swiss. Obl. Mercator
-#&gt; 129                                                   Stereographic
-#&gt; 130                               Oblique Stereographic Alternative
-#&gt; 131 Gauss-Schreiber Transverse Mercator (aka Gauss-Laborde Reunion)
-#&gt; 132                                  Transverse Central Cylindrical
-#&gt; 133                               Transverse Cylindrical Equal Area
-#&gt; 134                                                           Times
-#&gt; 135                                                          Tissot
-#&gt; 136                                             Transverse Mercator
-#&gt; 137                                                 Tobler-Mercator
-#&gt; 138                                           Two Point Equidistant
-#&gt; 139                                              Tilted perspective
-#&gt; 140                                                 Unit conversion
-#&gt; 141                                   Universal Polar Stereographic
-#&gt; 142                                                        Urmaev V
-#&gt; 143                                    Urmaev Flat-Polar Sinusoidal
-#&gt; 144                             Universal Transverse Mercator (UTM)
-#&gt; 145                                             van der Grinten (I)
-#&gt; 146                                              van der Grinten II
-#&gt; 147                                             van der Grinten III
-#&gt; 148                                              van der Grinten IV
-#&gt; 149                                                     Vitkovsky I
-#&gt; 150                                             Vertical grid shift
-#&gt; 151                                         Wagner I (Kavraisky VI)
-#&gt; 152                                                       Wagner II
-#&gt; 153                                                      Wagner III
-#&gt; 154                                                       Wagner IV
-#&gt; 155                                                        Wagner V
-#&gt; 156                                                       Wagner VI
-#&gt; 157                                                      Wagner VII
-#&gt; 158                                  Web Mercator / Pseudo Mercator
-#&gt; 159                                                   Werenskiold I
-#&gt; 160                                                        Winkel I
-#&gt; 161                                                       Winkel II
-#&gt; 162                                                   Winkel Tripel
-#&gt; 163                                           Geocentric grid shift</div></pre>
+#&gt; 127                                            Set coordinate value
+#&gt; 128                                   Sinusoidal (Sanson-Flamsteed)
+#&gt; 129                                            Swiss. Obl. Mercator
+#&gt; 130                                                   Stereographic
+#&gt; 131                               Oblique Stereographic Alternative
+#&gt; 132 Gauss-Schreiber Transverse Mercator (aka Gauss-Laborde Reunion)
+#&gt; 133                                  Transverse Central Cylindrical
+#&gt; 134                               Transverse Cylindrical Equal Area
+#&gt; 135                                                           Times
+#&gt; 136                                                          Tissot
+#&gt; 137                                             Transverse Mercator
+#&gt; 138                                                 Tobler-Mercator
+#&gt; 139                                           Two Point Equidistant
+#&gt; 140                                              Tilted perspective
+#&gt; 141                                                 Unit conversion
+#&gt; 142                                   Universal Polar Stereographic
+#&gt; 143                                                        Urmaev V
+#&gt; 144                                    Urmaev Flat-Polar Sinusoidal
+#&gt; 145                             Universal Transverse Mercator (UTM)
+#&gt; 146                                             van der Grinten (I)
+#&gt; 147                                              van der Grinten II
+#&gt; 148                                             van der Grinten III
+#&gt; 149                                              van der Grinten IV
+#&gt; 150                                                     Vitkovsky I
+#&gt; 151                                             Vertical grid shift
+#&gt; 152                                         Wagner I (Kavraisky VI)
+#&gt; 153                                                       Wagner II
+#&gt; 154                                                      Wagner III
+#&gt; 155                                                       Wagner IV
+#&gt; 156                                                        Wagner V
+#&gt; 157                                                       Wagner VI
+#&gt; 158                                                      Wagner VII
+#&gt; 159                                  Web Mercator / Pseudo Mercator
+#&gt; 160                                                   Werenskiold I
+#&gt; 161                                                        Winkel I
+#&gt; 162                                                       Winkel II
+#&gt; 163                                                   Winkel Tripel
+#&gt; 164                                           Geocentric grid shift</div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#details">Details</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#references">References</a></li>
-      <li><a href="#note">Note</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
-    <h2>Author</h2>
-    <p>Roger Bivand <a href='mailto:Roger.Bivand@nhh.no'>Roger.Bivand@nhh.no</a></p>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -505,7 +503,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>

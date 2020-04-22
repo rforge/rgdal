@@ -10,23 +10,27 @@
 
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -37,7 +41,6 @@
 
 <meta property="og:title" content="Projection of coordinate matrices — project" />
 <meta property="og:description" content="Interface to the PROJ.4 library of projection functions for geographical position data, no datum transformation possible. Use spTransform() for extended support." />
-<meta name="twitter:card" content="summary" />
 
 
 
@@ -55,7 +58,7 @@
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -69,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgdal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5-8</span>
       </span>
     </div>
 
@@ -190,7 +193,7 @@
 #&gt;  Median : 0.000e+00   Median :-2.132e-13  
 #&gt;  Mean   :-1.705e-15   Mean   :-1.171e-12  
 #&gt;  3rd Qu.: 0.000e+00   3rd Qu.:-1.243e-13  
-#&gt;  Max.   : 0.000e+00   Max.   :-4.974e-14  </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span>(<span class='no'>state.center</span>$<span class='no'>x</span>, <span class='no'>state.center</span>$<span class='no'>y</span>), <span class='kw'>asp</span><span class='kw'>=</span><span class='fl'>1</span>, <span class='kw'>type</span><span class='kw'>=</span><span class='st'>"n"</span>)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/text.html'>text</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span>(<span class='no'>state.center</span>$<span class='no'>x</span>, <span class='no'>state.center</span>$<span class='no'>y</span>), <span class='no'>state.abb</span>)</div><div class='img'><img src='project-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>res</span>, <span class='kw'>asp</span><span class='kw'>=</span><span class='fl'>1</span>, <span class='kw'>type</span><span class='kw'>=</span><span class='st'>"n"</span>)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/text.html'>text</a></span>(<span class='no'>res</span>, <span class='no'>state.abb</span>)</div><div class='img'><img src='project-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='no'>crds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='kw'>data</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>9.05</span>, <span class='fl'>48.52</span>), <span class='kw'>ncol</span><span class='kw'>=</span><span class='fl'>2</span>)
+#&gt;  Max.   : 0.000e+00   Max.   :-4.974e-14  </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span>(<span class='no'>state.center</span>$<span class='no'>x</span>, <span class='no'>state.center</span>$<span class='no'>y</span>), <span class='kw'>asp</span><span class='kw'>=</span><span class='fl'>1</span>, <span class='kw'>type</span><span class='kw'>=</span><span class='st'>"n"</span>)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/text.html'>text</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span>(<span class='no'>state.center</span>$<span class='no'>x</span>, <span class='no'>state.center</span>$<span class='no'>y</span>), <span class='no'>state.abb</span>)</div><div class='img'><img src='project-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>res</span>, <span class='kw'>asp</span><span class='kw'>=</span><span class='fl'>1</span>, <span class='kw'>type</span><span class='kw'>=</span><span class='st'>"n"</span>)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/text.html'>text</a></span>(<span class='no'>res</span>, <span class='no'>state.abb</span>)</div><div class='img'><img src='project-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='no'>crds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='kw'>data</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>9.05</span>, <span class='fl'>48.52</span>), <span class='kw'>ncol</span><span class='kw'>=</span><span class='fl'>2</span>)
 <span class='no'>a</span> <span class='kw'>&lt;-</span> <span class='fu'>project</span>(<span class='no'>crds</span>, <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='st'>"+proj=ob_tran +o_proj=longlat"</span>,
  <span class='st'>"+o_lon_p=-162 +o_lat_p=39.25 +lon_0=180 +ellps=sphere +no_defs"</span>),
  <span class='kw'>use_ob_tran</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
@@ -201,7 +204,9 @@
  <span class='kw'>inv</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>use_ob_tran</span><span class='kw'>=</span><span class='fl'>TRUE</span>)</div><div class='output co'>#&gt;      [,1]  [,2]
 #&gt; [1,] 9.05 48.52</div><div class='input'><span class='co'>#added after posting by Martin Ivanov</span>
 <span class='co'>#</span>
-<span class='fu'><a href='projInfo.html'>getPROJ4VersionInfo</a></span>()</div><div class='output co'>#&gt; [1] "Rel. 7.0.0, March 1st, 2020, [PJ_VERSION: 700]"</div><div class='input'><span class='co'># Test for UTM == TMERC (&lt;= 4.9.2) or UTM == ETMERC (&gt; 4.9.2)</span>
+<span class='fu'><a href='projInfo.html'>getPROJ4VersionInfo</a></span>()</div><div class='output co'>#&gt; [1] "Rel. 7.0.0, March 1st, 2020, [PJ_VERSION: 700]"
+#&gt; attr(,"short")
+#&gt; [1] 700</div><div class='input'><span class='co'># Test for UTM == TMERC (&lt;= 4.9.2) or UTM == ETMERC (&gt; 4.9.2)</span>
 <span class='no'>nhh</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>5.304234</span>, <span class='fl'>60.422311</span>), <span class='kw'>ncol</span><span class='kw'>=</span><span class='fl'>2</span>)
 <span class='no'>nhh_utm_32N_P4</span> <span class='kw'>&lt;-</span> <span class='fu'>project</span>(<span class='no'>nhh</span>, <span class='st'>"+init=epsg:3044"</span>)
 <span class='no'>nhh_tmerc_P4</span> <span class='kw'>&lt;-</span> <span class='fu'>project</span>(<span class='no'>nhh</span>, <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='st'>"+proj=tmerc +k=0.9996 +lon_0=9"</span>,
@@ -220,7 +225,9 @@
 <span class='fu'><a href='https://rdrr.io/r/base/all.equal.html'>all.equal</a></span>(<span class='no'>unis_utm_33N_P4</span>, <span class='no'>unis_etmerc_P4</span>, <span class='kw'>tolerance</span><span class='kw'>=</span><span class='fl'>1e-9</span>, <span class='kw'>scale</span><span class='kw'>=</span><span class='fl'>1</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='co'># UTM == ETMERC: PROJ4 &gt; 4.9.2</span>
 <span class='co'># available projections and their inverses if provided</span>
 <span class='co'># For &gt;=4.9.3 returns non-finite points rather than needing crash protection</span>
-<span class='fu'><a href='projInfo.html'>getPROJ4VersionInfo</a></span>()</div><div class='output co'>#&gt; [1] "Rel. 7.0.0, March 1st, 2020, [PJ_VERSION: 700]"</div><div class='input'><span class='no'>projs</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span>(<span class='fu'><a href='projInfo.html'>projInfo</a></span>()$<span class='no'>name</span>)
+<span class='fu'><a href='projInfo.html'>getPROJ4VersionInfo</a></span>()</div><div class='output co'>#&gt; [1] "Rel. 7.0.0, March 1st, 2020, [PJ_VERSION: 700]"
+#&gt; attr(,"short")
+#&gt; [1] 700</div><div class='input'><span class='no'>projs</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span>(<span class='fu'><a href='projInfo.html'>projInfo</a></span>()$<span class='no'>name</span>)
 <span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/logical.html'>logical</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span>(<span class='no'>projs</span>))
 <span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span>(<span class='no'>res</span>) <span class='kw'>&lt;-</span> <span class='no'>projs</span>
 <span class='no'>msgs</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span>(<span class='no'>projs</span>))
@@ -395,12 +402,12 @@
 #&gt; [56] "ocea"       "ortho"      "patterson"  "poly"       "pop"       
 #&gt; [61] "push"       "putp1"      "putp2"      "putp3"      "putp3p"    
 #&gt; [66] "putp4p"     "putp5"      "putp5p"     "putp6"      "putp6p"    
-#&gt; [71] "qua_aut"    "qsc"        "robin"      "rouss"      "sinu"      
-#&gt; [76] "somerc"     "stere"      "sterea"     "gstmerc"    "tcea"      
-#&gt; [81] "times"      "tmerc"      "tobmerc"    "ups"        "utm"       
-#&gt; [86] "vandg"      "wag1"       "wag2"       "wag3"       "wag4"      
-#&gt; [91] "wag5"       "wag6"       "webmerc"    "weren"      "wink1"     
-#&gt; [96] "wintri"    </div><div class='input'><span class='co'># oce data representation with NAs</span>
+#&gt; [71] "qua_aut"    "qsc"        "robin"      "rouss"      "set"       
+#&gt; [76] "sinu"       "somerc"     "stere"      "sterea"     "gstmerc"   
+#&gt; [81] "tcea"       "times"      "tmerc"      "tobmerc"    "ups"       
+#&gt; [86] "utm"        "vandg"      "wag1"       "wag2"       "wag3"      
+#&gt; [91] "wag4"       "wag5"       "wag6"       "webmerc"    "weren"     
+#&gt; [96] "wink1"      "wintri"    </div><div class='input'><span class='co'># oce data representation with NAs</span>
 <span class='no'>ll</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/structure.html'>structure</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>12.1823368669203</span>, <span class='fl'>11.9149630062421</span>, <span class='fl'>12.3186076188739</span>,
 <span class='fl'>12.6207597184845</span>, <span class='fl'>12.9955172054652</span>, <span class='fl'>12.6316117692658</span>, <span class='fl'>12.4680041846297</span>,
 <span class='fl'>12.4366882666609</span>, <span class='fl'>NA</span>, <span class='fl'>NA</span>, -<span class='fl'>5.78993051516384</span>, -<span class='fl'>5.03798674888479</span>,
@@ -408,39 +415,29 @@
 -<span class='fl'>5.24836150474498</span>, -<span class='fl'>5.68430388755925</span>, <span class='fl'>NA</span>, <span class='fl'>NA</span>), <span class='kw'>.Dim</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>10L</span>,
 <span class='fl'>2L</span>), <span class='kw'>.Dimnames</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>NULL</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"longitude"</span>, <span class='st'>"latitude"</span>)))
 <span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='no'>xy0</span> <span class='kw'>&lt;-</span> <span class='fu'>project</span>(<span class='no'>ll</span>, <span class='st'>"+proj=moll"</span>, <span class='kw'>legacy</span><span class='kw'>=</span><span class='fl'>TRUE</span>))
-<span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='no'>xy1</span> <span class='kw'>&lt;-</span> <span class='fu'>project</span>(<span class='no'>ll</span>, <span class='st'>"+proj=moll"</span>, <span class='kw'>legacy</span><span class='kw'>=</span><span class='fl'>FALSE</span>, <span class='kw'>allowNAs_if_not_legacy</span><span class='kw'>=</span><span class='fl'>FALSE</span>))</div><div class='output co'>#&gt; <span class='warning'>Warning: 2 projected point(s) not finite</span></div><div class='output co'>#&gt; non finite transformation detected:
-#&gt;      longitude latitude           
-#&gt; [1,]        NA       NA NA 9020048
-#&gt; [2,]        NA       NA NA 9020048
-#&gt; Error in project(ll, "+proj=moll", legacy = FALSE, allowNAs_if_not_legacy = FALSE) : 
-#&gt;   failure in points 9:10</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='no'>xy2</span> <span class='kw'>&lt;-</span> <span class='fu'>project</span>(<span class='no'>ll</span>, <span class='st'>"+proj=moll"</span>, <span class='kw'>legacy</span><span class='kw'>=</span><span class='fl'>FALSE</span>, <span class='kw'>allowNAs_if_not_legacy</span><span class='kw'>=</span><span class='fl'>TRUE</span>))</div><div class='output co'>#&gt; <span class='warning'>Warning: 2 projected point(s) not finite</span></div><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/exists.html'>exists</a></span>(<span class='st'>"xy0"</span>)) <span class='fu'><a href='https://rdrr.io/r/base/all.equal.html'>all.equal</a></span>(<span class='no'>xy0</span>, <span class='no'>xy2</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='kw'>if</span> (!<span class='fu'><a href='https://rdrr.io/r/base/exists.html'>exists</a></span>(<span class='st'>"xy0"</span>)) <span class='no'>xy0</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/structure.html'>structure</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1217100.8468177</span>, <span class='fl'>1191302.229156</span>,
+<span class='kw'>if</span> (!<span class='fu'><a href='projInfo.html'>PROJis6ormore</a></span>()) { <span class='co'># legacy=TRUE PROJ &gt;= 6</span>
+<span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='no'>xy1</span> <span class='kw'>&lt;-</span> <span class='fu'>project</span>(<span class='no'>ll</span>, <span class='st'>"+proj=moll"</span>, <span class='kw'>legacy</span><span class='kw'>=</span><span class='fl'>FALSE</span>, <span class='kw'>allowNAs_if_not_legacy</span><span class='kw'>=</span><span class='fl'>FALSE</span>))
+<span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='no'>xy2</span> <span class='kw'>&lt;-</span> <span class='fu'>project</span>(<span class='no'>ll</span>, <span class='st'>"+proj=moll"</span>, <span class='kw'>legacy</span><span class='kw'>=</span><span class='fl'>FALSE</span>, <span class='kw'>allowNAs_if_not_legacy</span><span class='kw'>=</span><span class='fl'>TRUE</span>))
+<span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/exists.html'>exists</a></span>(<span class='st'>"xy0"</span>)) <span class='fu'><a href='https://rdrr.io/r/base/all.equal.html'>all.equal</a></span>(<span class='no'>xy0</span>, <span class='no'>xy2</span>)
+}
+<span class='kw'>if</span> (!<span class='fu'><a href='https://rdrr.io/r/base/exists.html'>exists</a></span>(<span class='st'>"xy0"</span>)) <span class='no'>xy0</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/structure.html'>structure</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1217100.8468177</span>, <span class='fl'>1191302.229156</span>,
 <span class='fl'>1232143.28841193</span>, <span class='fl'>1262546.27733232</span>, <span class='fl'>1299648.82357849</span>, <span class='fl'>1263011.18154638</span>,
 <span class='fl'>1246343.17808186</span>, <span class='fl'>1242654.33986052</span>, <span class='fl'>NA</span>, <span class='fl'>NA</span>, -<span class='fl'>715428.207551599</span>,
 -<span class='fl'>622613.577983058</span>, -<span class='fl'>569301.605757784</span>, -<span class='fl'>548528.530156422</span>, -<span class='fl'>590895.949857199</span>,
 -<span class='fl'>616845.926397351</span>, -<span class='fl'>648585.161643274</span>, -<span class='fl'>702393.1160979</span>, <span class='fl'>NA</span>, <span class='fl'>NA</span>),
 <span class='kw'>.Dim</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>10L</span>, <span class='fl'>2L</span>), <span class='kw'>.Dimnames</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>NULL</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"longitude"</span>, <span class='st'>"latitude"</span>)))
 <span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='no'>ll0</span> <span class='kw'>&lt;-</span> <span class='fu'>project</span>(<span class='no'>xy0</span>, <span class='st'>"+proj=moll"</span>, <span class='kw'>inv</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>legacy</span><span class='kw'>=</span><span class='fl'>TRUE</span>))
-<span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='no'>ll1</span> <span class='kw'>&lt;-</span> <span class='fu'>project</span>(<span class='no'>xy0</span>, <span class='st'>"+proj=moll"</span>, <span class='kw'>inv</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>legacy</span><span class='kw'>=</span><span class='fl'>FALSE</span>, <span class='kw'>allowNAs_if_not_legacy</span><span class='kw'>=</span><span class='fl'>FALSE</span>))</div><div class='output co'>#&gt; <span class='warning'>Warning: 2 projected point(s) not finite</span></div><div class='output co'>#&gt; non finite transformation detected:
-#&gt;      longitude latitude        
-#&gt; [1,]        NA       NA Inf Inf
-#&gt; [2,]        NA       NA Inf Inf
-#&gt; Error in project(xy0, "+proj=moll", inv = TRUE, legacy = FALSE, allowNAs_if_not_legacy = FALSE) : 
-#&gt;   failure in points 9:10</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='no'>ll2</span> <span class='kw'>&lt;-</span> <span class='fu'>project</span>(<span class='no'>xy0</span>, <span class='st'>"+proj=moll"</span>, <span class='kw'>inv</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>legacy</span><span class='kw'>=</span><span class='fl'>FALSE</span>, <span class='kw'>allowNAs_if_not_legacy</span><span class='kw'>=</span><span class='fl'>TRUE</span>))</div><div class='output co'>#&gt; <span class='warning'>Warning: 2 projected point(s) not finite</span></div><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/exists.html'>exists</a></span>(<span class='st'>"ll0"</span>)) <span class='fu'><a href='https://rdrr.io/r/base/all.equal.html'>all.equal</a></span>(<span class='no'>ll0</span>, <span class='no'>ll2</span>)</div><div class='output co'>#&gt; [1] TRUE</div></pre>
+<span class='kw'>if</span> (!<span class='fu'><a href='projInfo.html'>PROJis6ormore</a></span>()) { <span class='co'># legacy=TRUE PROJ &gt;= 6</span>
+<span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='no'>ll1</span> <span class='kw'>&lt;-</span> <span class='fu'>project</span>(<span class='no'>xy0</span>, <span class='st'>"+proj=moll"</span>, <span class='kw'>inv</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>legacy</span><span class='kw'>=</span><span class='fl'>FALSE</span>, <span class='kw'>allowNAs_if_not_legacy</span><span class='kw'>=</span><span class='fl'>FALSE</span>))
+<span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='no'>ll2</span> <span class='kw'>&lt;-</span> <span class='fu'>project</span>(<span class='no'>xy0</span>, <span class='st'>"+proj=moll"</span>, <span class='kw'>inv</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>legacy</span><span class='kw'>=</span><span class='fl'>FALSE</span>, <span class='kw'>allowNAs_if_not_legacy</span><span class='kw'>=</span><span class='fl'>TRUE</span>))
+<span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/exists.html'>exists</a></span>(<span class='st'>"ll0"</span>)) <span class='fu'><a href='https://rdrr.io/r/base/all.equal.html'>all.equal</a></span>(<span class='no'>ll0</span>, <span class='no'>ll2</span>)
+}
+<span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/exists.html'>exists</a></span>(<span class='st'>"ll0"</span>)) <span class='fu'><a href='https://rdrr.io/r/base/all.equal.html'>all.equal</a></span>(<span class='no'>ll0</span>, <span class='no'>ll</span>)</div><div class='output co'>#&gt; [1] TRUE</div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#details">Details</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#references">References</a></li>
-      <li><a href="#note">Note</a></li>
-      <li><a href="#see-also">See also</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
-    <h2>Author</h2>
-    <p>Barry Rowlingson, Roger Bivand <a href='mailto:Roger.Bivand@nhh.no'>Roger.Bivand@nhh.no</a></p>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -451,7 +448,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>

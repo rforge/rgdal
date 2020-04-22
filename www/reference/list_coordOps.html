@@ -10,23 +10,27 @@
 
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -37,7 +41,6 @@
 
 <meta property="og:title" content="List PROJ 6 coordinate operations — list_coordOps" />
 <meta property="og:description" content="List PROJ 6 coordinate operations for a pair of source/target coordinate reference systems" />
-<meta name="twitter:card" content="summary" />
 
 
 
@@ -55,7 +58,7 @@
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -69,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgdal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5-8</span>
       </span>
     </div>
 
@@ -224,8 +227,8 @@ The object has a "grids" attribute containing a nested list of grids for each co
 #&gt;              +proj=cart +ellps=WGS84 +step +proj=pop +v_3 +step
 #&gt;              +proj=unitconvert +xy_in=rad +xy_out=deg
 #&gt; Operation 7 is lacking 1 grid with accuracy 1 m
-#&gt; Missing grid: OSTN15_NTv2_OSGBtoETRS.gsb 
-#&gt; URL: https://download.osgeo.org/proj/proj-datumgrid-europe-1.5.zip </div><div class='input'><span class='kw'>if</span> (<span class='no'>run</span>) {
+#&gt; Missing grid: uk_os_OSTN15_NTv2_OSGBtoETRS.tif 
+#&gt; URL: https://cdn.proj.org/uk_os_OSTN15_NTv2_OSGBtoETRS.tif </div><div class='input'><span class='kw'>if</span> (<span class='no'>run</span>) {
   <span class='no'>wkt_datum</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='showWKT.html'>showSRID</a></span>(<span class='st'>"EPSG:27700"</span>, <span class='st'>"WKT2"</span>)
   (<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>list_coordOps</span>(<span class='no'>wkt_datum</span>, <span class='st'>"EPSG:4326"</span>))
 }</div><div class='output co'>#&gt; Candidate coordinate operations found:  7 
@@ -266,8 +269,8 @@ The object has a "grids" attribute containing a nested list of grids for each co
 #&gt;              +proj=cart +ellps=WGS84 +step +proj=pop +v_3 +step
 #&gt;              +proj=unitconvert +xy_in=rad +xy_out=deg
 #&gt; Operation 7 is lacking 1 grid with accuracy 1 m
-#&gt; Missing grid: OSTN15_NTv2_OSGBtoETRS.gsb 
-#&gt; URL: https://download.osgeo.org/proj/proj-datumgrid-europe-1.5.zip </div><div class='input'><span class='kw'>if</span> (<span class='no'>run</span>) {
+#&gt; Missing grid: uk_os_OSTN15_NTv2_OSGBtoETRS.tif 
+#&gt; URL: https://cdn.proj.org/uk_os_OSTN15_NTv2_OSGBtoETRS.tif </div><div class='input'><span class='kw'>if</span> (<span class='no'>run</span>) {
   <span class='fu'>best_instantiable_coordOp</span>(<span class='no'>x</span>)
 }</div><div class='output co'>#&gt; [1] "+proj=pipeline +step +inv +proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy +step +proj=push +v_3 +step +proj=cart +ellps=airy +step +proj=helmert +x=446.448 +y=-125.157 +z=542.06 +rx=0.15 +ry=0.247 +rz=0.842 +s=-20.489 +convention=position_vector +step +inv +proj=cart +ellps=WGS84 +step +proj=pop +v_3 +step +proj=unitconvert +xy_in=rad +xy_out=deg"
 #&gt; attr(,"description")
@@ -290,8 +293,8 @@ The object has a "grids" attribute containing a nested list of grids for each co
 #&gt;              +proj=cart +ellps=WGS84 +step +proj=pop +v_3 +step
 #&gt;              +proj=unitconvert +xy_in=rad +xy_out=deg
 #&gt; Operation 7 is lacking 1 grid with accuracy 1 m
-#&gt; Missing grid: OSTN15_NTv2_OSGBtoETRS.gsb 
-#&gt; URL: https://download.osgeo.org/proj/proj-datumgrid-europe-1.5.zip </div><div class='input'><span class='kw'>if</span> (<span class='no'>run</span>) {
+#&gt; Missing grid: uk_os_OSTN15_NTv2_OSGBtoETRS.tif 
+#&gt; URL: https://cdn.proj.org/uk_os_OSTN15_NTv2_OSGBtoETRS.tif </div><div class='input'><span class='kw'>if</span> (<span class='no'>run</span>) {
 }</div><div class='output co'>#&gt; NULL</div><div class='input'><span class='kw'>if</span> (<span class='no'>run</span>) {
   <span class='no'>discarded_datum</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='showWKT.html'>showSRID</a></span>(<span class='st'>"EPSG:22525"</span>, <span class='st'>"PROJ"</span>)
   <span class='fu'>list_coordOps</span>(<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='no'>discarded_datum</span>, <span class='st'>" +type=crs"</span>), <span class='st'>"EPSG:31985"</span>)
@@ -367,19 +370,10 @@ The object has a "grids" attribute containing a nested list of grids for each co
 #&gt; attr(,"description")
 #&gt; [1] "Inverse of UTM zone 25S + Corrego Alegre 1970-72 to SIRGAS 2000 (2) + UTM zone 25S"</div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#details">Details</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#references">References</a></li>
-      <li><a href="#note">Note</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
-    <h2>Author</h2>
-    <p>Roger Bivand <a href='mailto:Roger.Bivand@nhh.no'>Roger.Bivand@nhh.no</a></p>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -390,7 +384,7 @@ The object has a "grids" attribute containing a nested list of grids for each co
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>

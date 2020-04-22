@@ -10,23 +10,27 @@
 
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -37,7 +41,6 @@
 
 <meta property="og:title" content="Write spatial vector data using OGR — writeOGR" />
 <meta property="og:description" content="The function is an interface with the OGR abstraction library for spatial vector data, allowing data to be written out using supported drivers. The drivers supported will depend on the local installation, and the capabilities of those drivers (many are read-only). The objects exported are SpatialPointsDataFrame, SpatialLinesDataFrame, or SpatialPolygonsDataFrame objects as defined in the sp package." />
-<meta name="twitter:card" content="summary" />
 
 
 
@@ -55,7 +58,7 @@
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -69,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgdal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5-8</span>
       </span>
     </div>
 
@@ -214,36 +217,12 @@
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='showWKT.html'>set_thin_PROJ6_warnings</a></span>(<span class='fl'>TRUE</span>)
 <span class='no'>cities</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='readOGR.html'>readOGR</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"vectors"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"rgdal"</span>)[<span class='fl'>1</span>], <span class='st'>"cities"</span>)</div><div class='output co'>#&gt; OGR data source with driver: ESRI Shapefile 
-#&gt; Source: "/tmp/RtmpKX7V7q/temp_libpathbee5e280a0c/rgdal/vectors", layer: "cities"
+#&gt; Source: "/tmp/RtmpxxwPB0/temp_libpath59a0f120a1efc/rgdal/vectors", layer: "cities"
 #&gt; with 606 features
 #&gt; It has 4 fields
 #&gt; Integer64 fields read as strings:  POPULATION </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span>(<span class='no'>cities</span>$<span class='no'>POPULATION</span>) <span class='kw'>&lt;-</span> <span class='no'>cities</span>$<span class='no'>POPULATION</span> <span class='kw'>==</span> -<span class='fl'>99</span>
-<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>cities</span>$<span class='no'>POPULATION</span>)</div><div class='output co'>#&gt;  1270000  1550000  1140000  1190000  1225000  1250000  1300000  1400000 
-#&gt;        5        4        3        3        3        3        3        3 
-#&gt;  1600000  2050000   320000   600000   700000   800000  1025000  1060000 
-#&gt;        3        3        3        3        3        3        2        2 
-#&gt;  1100000 11100000  1170000  1185000  1325000  1460000  1500000  1525000 
-#&gt;        2        2        2        2        2        2        2        2 
-#&gt;  1800000   185000  1875000   203000  2250000  2325000  2400000  2950000 
-#&gt;        2        2        2        2        2        2        2        2 
-#&gt;  3025000   310000  3800000   400000   465000   535000   625000  6450000 
-#&gt;        2        2        2        2        2        2        2        2 
-#&gt;   670000   675000   770000   890000  9300000   960000   100000  1005000 
-#&gt;        2        2        2        2        2        2        1        1 
-#&gt;  1010000     1012 10150000  1020000  1024940  1029731  1030000  1037700 
-#&gt;        1        1        1        1        1        1        1        1 
-#&gt;  1040000  1045000  1050000  1055000  1061000   106416  1065000  1069727 
-#&gt;        1        1        1        1        1        1        1        1 
-#&gt;  1070000 10750000  1088624   109000   109382   109486   110153  1104209 
-#&gt;        1        1        1        1        1        1        1        1 
-#&gt;  1110000   111914  1120000  1144000   114500  1149401  1150000   116000 
-#&gt;        1        1        1        1        1        1        1        1 
-#&gt;  1160000  1165000  1175000    11753  1179000    12000   120000  1200000 
-#&gt;        1        1        1        1        1        1        1        1 
-#&gt;  1205000   121265  1216000  1227200    12426   124400   125263  1255000 
-#&gt;        1        1        1        1        1        1        1        1 
-#&gt;  1272400  1275000  (Other)     NA's 
-#&gt;        1        1      415       30 </div><div class='input'><span class='no'>td</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>(), <span class='st'>"rgdal_examples"</span>); <span class='fu'><a href='https://rdrr.io/r/base/files2.html'>dir.create</a></span>(<span class='no'>td</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>cities</span>$<span class='no'>POPULATION</span>)</div><div class='output co'>#&gt;    Length     Class      Mode 
+#&gt;       606 character character </div><div class='input'><span class='no'>td</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>(), <span class='st'>"rgdal_examples"</span>); <span class='fu'><a href='https://rdrr.io/r/base/files2.html'>dir.create</a></span>(<span class='no'>td</span>)
 <span class='co'># BDR 2016-12-15 (MapInfo driver fails writing to directory with ".")</span>
 <span class='kw'>if</span>(<span class='fu'><a href='https://rdrr.io/r/base/nchar.html'>nchar</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/Sys.getenv.html'>Sys.getenv</a></span>(<span class='st'>"OSGEO4W_ROOT"</span>)) <span class='kw'>&gt;</span> <span class='fl'>0</span>) {
     <span class='no'>OLDPWD</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/getwd.html'>getwd</a></span>()
@@ -254,34 +233,10 @@
 <span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='fu'>writeOGR</span>(<span class='no'>cities</span>, <span class='no'>td</span>, <span class='st'>"cities"</span>, <span class='kw'>driver</span><span class='kw'>=</span><span class='st'>"ESRI Shapefile"</span>))</div><div class='output co'>#&gt; Error in writeOGR(cities, td, "cities", driver = "ESRI Shapefile") : 
 #&gt;   layer exists, use a new layer name</div><div class='input'><span class='fu'>writeOGR</span>(<span class='no'>cities</span>, <span class='no'>td</span>, <span class='st'>"cities"</span>, <span class='kw'>driver</span><span class='kw'>=</span><span class='st'>"ESRI Shapefile"</span>, <span class='kw'>overwrite_layer</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
 <span class='no'>cities2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='readOGR.html'>readOGR</a></span>(<span class='no'>td</span>, <span class='st'>"cities"</span>)</div><div class='output co'>#&gt; OGR data source with driver: ESRI Shapefile 
-#&gt; Source: "/tmp/RtmpfdN0rB/rgdal_examples", layer: "cities"
+#&gt; Source: "/tmp/Rtmplg1ShC/rgdal_examples", layer: "cities"
 #&gt; with 606 features
-#&gt; It has 4 fields</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>cities2</span>$<span class='no'>POPULATION</span>)</div><div class='output co'>#&gt;  1270000  1550000  1140000  1190000  1225000  1250000  1300000  1400000 
-#&gt;        5        4        3        3        3        3        3        3 
-#&gt;  1600000  2050000   320000   600000   700000   800000  1025000  1060000 
-#&gt;        3        3        3        3        3        3        2        2 
-#&gt;  1100000 11100000  1170000  1185000  1325000  1460000  1500000  1525000 
-#&gt;        2        2        2        2        2        2        2        2 
-#&gt;  1800000   185000  1875000   203000  2250000  2325000  2400000  2950000 
-#&gt;        2        2        2        2        2        2        2        2 
-#&gt;  3025000   310000  3800000   400000   465000   535000   625000  6450000 
-#&gt;        2        2        2        2        2        2        2        2 
-#&gt;   670000   675000   770000   890000  9300000   960000   100000  1005000 
-#&gt;        2        2        2        2        2        2        1        1 
-#&gt;  1010000     1012 10150000  1020000  1024940  1029731  1030000  1037700 
-#&gt;        1        1        1        1        1        1        1        1 
-#&gt;  1040000  1045000  1050000  1055000  1061000   106416  1065000  1069727 
-#&gt;        1        1        1        1        1        1        1        1 
-#&gt;  1070000 10750000  1088624   109000   109382   109486   110153  1104209 
-#&gt;        1        1        1        1        1        1        1        1 
-#&gt;  1110000   111914  1120000  1144000   114500  1149401  1150000   116000 
-#&gt;        1        1        1        1        1        1        1        1 
-#&gt;  1160000  1165000  1175000    11753  1179000    12000   120000  1200000 
-#&gt;        1        1        1        1        1        1        1        1 
-#&gt;  1205000   121265  1216000  1227200    12426   124400   125263  1255000 
-#&gt;        1        1        1        1        1        1        1        1 
-#&gt;  1272400  1275000  (Other)     NA's 
-#&gt;        1        1      415       30 </div><div class='input'><span class='kw'>if</span> (<span class='st'>"SQLite"</span> <span class='kw'>%in%</span> <span class='fu'><a href='readOGR.html'>ogrDrivers</a></span>()$<span class='no'>name</span>) {
+#&gt; It has 4 fields</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>cities2</span>$<span class='no'>POPULATION</span>)</div><div class='output co'>#&gt;    Length     Class      Mode 
+#&gt;       606 character character </div><div class='input'><span class='kw'>if</span> (<span class='st'>"SQLite"</span> <span class='kw'>%in%</span> <span class='fu'><a href='readOGR.html'>ogrDrivers</a></span>()$<span class='no'>name</span>) {
   <span class='no'>tf</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempfile</a></span>()
   <span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='fu'>writeOGR</span>(<span class='no'>cities</span>, <span class='no'>tf</span>, <span class='st'>"cities"</span>, <span class='kw'>driver</span><span class='kw'>=</span><span class='st'>"SQLite"</span>, <span class='kw'>layer_options</span><span class='kw'>=</span><span class='st'>"LAUNDER=NO"</span>))
 }
@@ -313,7 +268,7 @@
 #&gt; It has 0 fields
 #&gt; [1] "0 0"
 #&gt; OGR data source with driver: GeoJSON 
-#&gt; Source: "/tmp/RtmpfdN0rB/filec2503c2ac94", layer: "GeoJSON"
+#&gt; Source: "/tmp/Rtmplg1ShC/file59dc248293cf6", layer: "GeoJSON"
 #&gt; with 1 features
 #&gt; It has 1 fields
 #&gt; [1] "0 0"
@@ -335,7 +290,7 @@
 }
 <span class='fu'><a href='https://rdrr.io/r/base/list.files.html'>list.files</a></span>(<span class='no'>td</span>)</div><div class='output co'>#&gt; [1] "cities.dbf" "cities.prj" "cities.shp" "cities.shx" "meuse.kml" </div><div class='input'><span class='no'>roads</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='readOGR.html'>readOGR</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"vectors"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"rgdal"</span>)[<span class='fl'>1</span>],
  <span class='st'>"kiritimati_primary_roads"</span>)</div><div class='output co'>#&gt; OGR data source with driver: ESRI Shapefile 
-#&gt; Source: "/tmp/RtmpKX7V7q/temp_libpathbee5e280a0c/rgdal/vectors", layer: "kiritimati_primary_roads"
+#&gt; Source: "/tmp/RtmpxxwPB0/temp_libpath59a0f120a1efc/rgdal/vectors", layer: "kiritimati_primary_roads"
 #&gt; with 35 features
 #&gt; It has 1 fields</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>roads</span>)</div><div class='output co'>#&gt; Object of class SpatialLinesDataFrame
 #&gt; Coordinates:
@@ -359,7 +314,7 @@
   <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>roads2</span>)
 }
 <span class='no'>scot_BNG</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='readOGR.html'>readOGR</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"vectors"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"rgdal"</span>)[<span class='fl'>1</span>], <span class='st'>"scot_BNG"</span>)</div><div class='output co'>#&gt; OGR data source with driver: ESRI Shapefile 
-#&gt; Source: "/tmp/RtmpKX7V7q/temp_libpathbee5e280a0c/rgdal/vectors", layer: "scot_BNG"
+#&gt; Source: "/tmp/RtmpxxwPB0/temp_libpath59a0f120a1efc/rgdal/vectors", layer: "scot_BNG"
 #&gt; with 56 features
 #&gt; It has 13 fields</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>scot_BNG</span>)</div><div class='output co'>#&gt; Object of class SpatialPolygonsDataFrame
 #&gt; Coordinates:
@@ -371,14 +326,13 @@
 #&gt; [+proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000
 #&gt; +y_0=-100000 +ellps=airy +units=m +no_defs]
 #&gt; Data attributes:
-#&gt;      SP_ID              NAME         ID_x           COUNT       
-#&gt;  0      : 1   Aberdeen    : 1   Min.   : 1.00   Min.   : 0.000  
-#&gt;  1      : 1   Angus       : 1   1st Qu.:14.75   1st Qu.: 4.750  
-#&gt;  10     : 1   Annandale   : 1   Median :28.50   Median : 8.000  
-#&gt;  11     : 1   Argyll-Bute : 1   Mean   :28.50   Mean   : 9.571  
-#&gt;  12     : 1   Banff-Buchan: 1   3rd Qu.:42.25   3rd Qu.:11.000  
-#&gt;  13     : 1   Bearsden    : 1   Max.   :56.00   Max.   :39.000  
-#&gt;  (Other):50   (Other)     :50                                   
+#&gt;     SP_ID               NAME                ID_x           COUNT       
+#&gt;  Length:56          Length:56          Min.   : 1.00   Min.   : 0.000  
+#&gt;  Class :character   Class :character   1st Qu.:14.75   1st Qu.: 4.750  
+#&gt;  Mode  :character   Mode  :character   Median :28.50   Median : 8.000  
+#&gt;                                        Mean   :28.50   Mean   : 9.571  
+#&gt;                                        3rd Qu.:42.25   3rd Qu.:11.000  
+#&gt;                                        Max.   :56.00   Max.   :39.000  
 #&gt;       SMR             LONG            LAT              PY         
 #&gt;  Min.   :  0.0   Min.   :54.94   Min.   :1.430   Min.   :  27075  
 #&gt;  1st Qu.: 49.6   1st Qu.:55.78   1st Qu.:3.288   1st Qu.: 100559  
@@ -386,7 +340,6 @@
 #&gt;  Mean   :152.6   Mean   :56.40   Mean   :4.012   Mean   : 267498  
 #&gt;  3rd Qu.:223.0   3rd Qu.:57.02   3rd Qu.:4.730   3rd Qu.: 313845  
 #&gt;  Max.   :652.2   Max.   :60.24   Max.   :6.800   Max.   :2316353  
-#&gt;                                                                   
 #&gt;       EXP_             AFF             X_COOR           Y_COOR       
 #&gt;  Min.   : 1.100   Min.   : 0.000   Min.   :112892   Min.   : 561163  
 #&gt;  1st Qu.: 4.050   1st Qu.: 1.000   1st Qu.:256624   1st Qu.: 649520  
@@ -394,15 +347,13 @@
 #&gt;  Mean   : 9.575   Mean   : 8.661   Mean   :288524   Mean   : 723127  
 #&gt;  3rd Qu.:10.125   3rd Qu.:11.500   3rd Qu.:333948   3rd Qu.: 794380  
 #&gt;  Max.   :88.700   Max.   :24.000   Max.   :442244   Max.   :1168904  
-#&gt;                                                                      
 #&gt;       ID_y      
 #&gt;  Min.   : 1.00  
 #&gt;  1st Qu.:14.75  
 #&gt;  Median :28.50  
 #&gt;  Mean   :28.50  
 #&gt;  3rd Qu.:42.25  
-#&gt;  Max.   :56.00  
-#&gt;                 </div><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/strsplit.html'>strsplit</a></span>(<span class='fu'><a href='GDALDriver-class.html'>getGDALVersionInfo</a></span>(), <span class='st'>" "</span>)<span class='kw'>[[</span><span class='fl'>1</span>]][<span class='fl'>2</span>] <span class='kw'>&lt;</span> <span class='st'>"2"</span>) {
+#&gt;  Max.   :56.00  </div><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/strsplit.html'>strsplit</a></span>(<span class='fu'><a href='GDALDriver-class.html'>getGDALVersionInfo</a></span>(), <span class='st'>" "</span>)<span class='kw'>[[</span><span class='fl'>1</span>]][<span class='fl'>2</span>] <span class='kw'>&lt;</span> <span class='st'>"2"</span>) {
 <span class='co'># For GDAL &gt;= 2, the TAB driver may need a BOUNDS layer option</span>
   <span class='fu'>writeOGR</span>(<span class='no'>scot_BNG</span>, <span class='no'>td</span>, <span class='st'>"scot_BNG"</span>, <span class='kw'>driver</span><span class='kw'>=</span><span class='st'>"MapInfo File"</span>)
   <span class='fu'><a href='https://rdrr.io/r/base/list.files.html'>list.files</a></span>(<span class='no'>td</span>)
@@ -414,7 +365,7 @@
  <span class='kw'>dataset_options</span><span class='kw'>=</span><span class='st'>"FORMAT=MIF"</span>)
 <span class='fu'><a href='https://rdrr.io/r/base/list.files.html'>list.files</a></span>(<span class='no'>td</span>)</div><div class='output co'>#&gt; [1] "cities.dbf"   "cities.prj"   "cities.shp"   "cities.shx"   "meuse.kml"   
 #&gt; [6] "scot_BNG.mid" "scot_BNG.mif"</div><div class='input'><span class='no'>scot_BNG3</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='readOGR.html'>readOGR</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='no'>td</span>, <span class='st'>"scot_BNG.mif"</span>, <span class='kw'>sep</span><span class='kw'>=</span><span class='st'>"/"</span>), <span class='st'>"scot_BNG"</span>)</div><div class='output co'>#&gt; OGR data source with driver: MapInfo File 
-#&gt; Source: "/tmp/RtmpfdN0rB/rgdal_examples/scot_BNG.mif", layer: "scot_BNG"
+#&gt; Source: "/tmp/Rtmplg1ShC/rgdal_examples/scot_BNG.mif", layer: "scot_BNG"
 #&gt; with 56 features
 #&gt; It has 13 fields</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>scot_BNG3</span>)</div><div class='output co'>#&gt; Object of class SpatialPolygonsDataFrame
 #&gt; Coordinates:
@@ -426,14 +377,13 @@
 #&gt; [+proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000
 #&gt; +y_0=-100000 +ellps=airy +units=m +no_defs]
 #&gt; Data attributes:
-#&gt;      SP_ID              NAME         ID_x           COUNT       
-#&gt;  0      : 1   Aberdeen    : 1   Min.   : 1.00   Min.   : 0.000  
-#&gt;  1      : 1   Angus       : 1   1st Qu.:14.75   1st Qu.: 4.750  
-#&gt;  10     : 1   Annandale   : 1   Median :28.50   Median : 8.000  
-#&gt;  11     : 1   Argyll-Bute : 1   Mean   :28.50   Mean   : 9.571  
-#&gt;  12     : 1   Banff-Buchan: 1   3rd Qu.:42.25   3rd Qu.:11.000  
-#&gt;  13     : 1   Bearsden    : 1   Max.   :56.00   Max.   :39.000  
-#&gt;  (Other):50   (Other)     :50                                   
+#&gt;     SP_ID               NAME                ID_x           COUNT       
+#&gt;  Length:56          Length:56          Min.   : 1.00   Min.   : 0.000  
+#&gt;  Class :character   Class :character   1st Qu.:14.75   1st Qu.: 4.750  
+#&gt;  Mode  :character   Mode  :character   Median :28.50   Median : 8.000  
+#&gt;                                        Mean   :28.50   Mean   : 9.571  
+#&gt;                                        3rd Qu.:42.25   3rd Qu.:11.000  
+#&gt;                                        Max.   :56.00   Max.   :39.000  
 #&gt;       SMR             LONG            LAT              PY         
 #&gt;  Min.   :  0.0   Min.   :54.94   Min.   :1.430   Min.   :  27075  
 #&gt;  1st Qu.: 49.6   1st Qu.:55.78   1st Qu.:3.288   1st Qu.: 100559  
@@ -441,7 +391,6 @@
 #&gt;  Mean   :152.6   Mean   :56.40   Mean   :4.012   Mean   : 267498  
 #&gt;  3rd Qu.:223.0   3rd Qu.:57.02   3rd Qu.:4.730   3rd Qu.: 313845  
 #&gt;  Max.   :652.2   Max.   :60.24   Max.   :6.800   Max.   :2316353  
-#&gt;                                                                   
 #&gt;       EXP_             AFF             X_COOR           Y_COOR       
 #&gt;  Min.   : 1.100   Min.   : 0.000   Min.   :112892   Min.   : 561163  
 #&gt;  1st Qu.: 4.050   1st Qu.: 1.000   1st Qu.:256624   1st Qu.: 649520  
@@ -449,34 +398,20 @@
 #&gt;  Mean   : 9.575   Mean   : 8.661   Mean   :288524   Mean   : 723127  
 #&gt;  3rd Qu.:10.125   3rd Qu.:11.500   3rd Qu.:333948   3rd Qu.: 794380  
 #&gt;  Max.   :88.700   Max.   :24.000   Max.   :442244   Max.   :1168904  
-#&gt;                                                                      
 #&gt;       ID_y      
 #&gt;  Min.   : 1.00  
 #&gt;  1st Qu.:14.75  
 #&gt;  Median :28.50  
 #&gt;  Mean   :28.50  
 #&gt;  3rd Qu.:42.25  
-#&gt;  Max.   :56.00  
-#&gt;                 </div><div class='input'><span class='kw'>if</span>(<span class='fu'><a href='https://rdrr.io/r/base/nchar.html'>nchar</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/Sys.getenv.html'>Sys.getenv</a></span>(<span class='st'>"OSGEO4W_ROOT"</span>)) <span class='kw'>&gt;</span> <span class='fl'>0</span>) {
+#&gt;  Max.   :56.00  </div><div class='input'><span class='kw'>if</span>(<span class='fu'><a href='https://rdrr.io/r/base/nchar.html'>nchar</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/Sys.getenv.html'>Sys.getenv</a></span>(<span class='st'>"OSGEO4W_ROOT"</span>)) <span class='kw'>&gt;</span> <span class='fl'>0</span>) {
     <span class='fu'><a href='https://rdrr.io/r/base/getwd.html'>setwd</a></span>(<span class='no'>OLDPWD</span>)
 }</div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#details">Details</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#note">Note</a></li>
-      <li><a href="#warning">Warning</a></li>
-      <li><a href="#writeogr-polygon-bug-in-"><code>writeOGR</code> Polygon bug in 1.1-1</a></li>
-      <li><a href="#references">References</a></li>
-      <li><a href="#see-also">See also</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
-    <h2>Author</h2>
-    <p>Roger Bivand</p>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -487,7 +422,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>
