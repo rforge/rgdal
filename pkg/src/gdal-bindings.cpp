@@ -319,14 +319,14 @@ SEXP
 RGDAL_GDALwithGEOS(void) {
     SEXP ans;
 
-    int withGEOS;
+//    int withGEOS;
 
-#if GDAL_VERSION_MAJOR >= 3
+#if GDAL_VERSION_MAJOR >= 3 // New GDAL
 
     PROTECT(ans=NEW_CHARACTER(1));
     SET_STRING_ELT(ans, 0, COPY_TO_USER_STRING(GDALVersionInfo("BUILD_INFO")));
 
-#else
+#else // Old GDAL
 
     PROTECT(ans=NEW_LOGICAL(1));
 
@@ -339,17 +339,17 @@ RGDAL_GDALwithGEOS(void) {
 #if GDAL_VERSION_MAJOR == 1 || ( GDAL_VERSION_MAJOR == 2 && GDAL_VERSION_MINOR <= 2 ) // thanks to Even Roualt https://github.com/OSGeo/gdal/issues/681
 //#if GDAL_VERSION_MAJOR <= 2 && GDAL_VERSION_MINOR <= 2
     OGRGeometryFactory::createFromWkt( &pszWKT, NULL, &poGeometry1 );
-#else
+#else // l 339
     OGRGeometryFactory::createFromWkt( (const char*) pszWKT, NULL, &poGeometry1 );
-#endif
+#endif // l 339
     pszWKT = (char*) "POINT (30 20)";
 #if GDAL_VERSION_MAJOR == 1 || ( GDAL_VERSION_MAJOR == 2 && GDAL_VERSION_MINOR <= 2 ) // thanks to Even Roualt https://github.com/OSGeo/gdal/issues/681
 //#if GDAL_VERSION_MAJOR <= 2 && GDAL_VERSION_MINOR <= 2
     OGRGeometryFactory::createFromWkt( &pszWKT, NULL, &poGeometry2 );
-#else
+#else // l 346
     OGRGeometryFactory::createFromWkt( (const char*) pszWKT, NULL, &poGeometry2 );
-#endif
-    withGEOS = 1;
+#endif // l 346
+    int withGEOS = 1;
     if (poGeometry1->Union(poGeometry2) == NULL) withGEOS = 0;//FIXME VG
     OGRGeometryFactory::destroyGeometry(poGeometry1);
     OGRGeometryFactory::destroyGeometry(poGeometry2);
@@ -358,7 +358,7 @@ RGDAL_GDALwithGEOS(void) {
     saved_err_no = 0;
     LOGICAL_POINTER(ans)[0] = withGEOS;
 
-#endif
+#endif // New GDAL
 
     UNPROTECT(1);
 
