@@ -135,7 +135,7 @@ SEXP R_GDAL_OSR_PROJ();;// GDAL
 SEXP RGDAL_project(SEXP n, SEXP xlon, SEXP ylat, SEXP projarg, SEXP ob_tran); // both
 SEXP project_inv(SEXP n, SEXP x, SEXP y, SEXP projarg, SEXP ob_tran); // both
 SEXP project_ng(SEXP n, SEXP xlon, SEXP ylat, SEXP zz, SEXP inv, SEXP ob_tran, SEXP coordOp); // both
-SEXP project_ng_coordOp(SEXP proj, SEXP inv, SEXP ob_tran); // both
+SEXP project_ng_coordOp(SEXP proj, SEXP inv); // both
 
 #ifdef __cplusplus
 }

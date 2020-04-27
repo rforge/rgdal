@@ -158,7 +158,7 @@ SEXP project_ng(SEXP n, SEXP xlon, SEXP ylat, SEXP zz, SEXP inv, SEXP ob_tran, S
     return(R_NilValue);
 }
 
-SEXP project_ng_coordOp(SEXP proj, SEXP inv, SEXP ob_tran) {
+SEXP project_ng_coordOp(SEXP proj, SEXP inv) {
     Rprintf("Not available for PROJ version < 6");
     return(R_NilValue);
 }

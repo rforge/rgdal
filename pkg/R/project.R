@@ -157,7 +157,8 @@ get_last_coordOp <- function() {
                         proj <- paste0(proj, " +type=crs")
                 }
                 coordOp <- .Call("project_ng_coordOp", proj, as.logical(inv),
-                    as.logical(use_ob_tran), PACKAGE="rgdal")
+                    #as.logical(use_ob_tran), 
+                    PACKAGE="rgdal")
             }
             if (verbose) cat(strwrap(coordOp), sep="\n")
             res <- .Call("project_ng",
@@ -332,7 +333,7 @@ if (!isGeneric("spTransform"))
                     else use_ob_tran1 <- TRUE
                     if (is.null(coordOp)) {
                         out_coordOp <- .Call("project_ng_coordOp", proj,
-                            as.logical(inv), as.logical(use_ob_tran1),
+                            as.logical(inv), #as.logical(use_ob_tran1),
                             PACKAGE="rgdal")
                     }
                     res <- .Call("project_ng", as.integer(n), 
@@ -374,7 +375,7 @@ if (!isGeneric("spTransform"))
                     else use_ob_tran1 <- TRUE
                     if (is.null(coordOp)) {
                         out_coordOp <- .Call("project_ng_coordOp", proj,
-                            as.logical(inv), as.logical(use_ob_tran1),
+                            as.logical(inv), #as.logical(use_ob_tran1),
                             PACKAGE="rgdal")
                     }
                     res <- .Call("project_ng", as.integer(n), 
@@ -467,7 +468,7 @@ setMethod("spTransform", signature("SpatialGridDataFrame", "CRS"),
                 else use_ob_tran1 <- TRUE
                 if (is.null(coordOp)) {
                     coordOp <- .Call("project_ng_coordOp", proj,
-                        as.logical(inv), as.logical(use_ob_tran1),
+                        as.logical(inv), #as.logical(use_ob_tran1),
                         PACKAGE="rgdal")
                 }
                 res <- .Call("project_ng", as.integer(n), 
@@ -661,7 +662,7 @@ setMethod("spTransform", signature("SpatialLinesDataFrame", "CRS"), spTransform.
                 else use_ob_tran1 <- TRUE
                 if (is.null(coordOp)) {
                     coordOp <- .Call("project_ng_coordOp", proj,
-                        as.logical(inv), as.logical(use_ob_tran1),
+                        as.logical(inv), #as.logical(use_ob_tran1),
                         PACKAGE="rgdal")
                 }
                 res <- .Call("project_ng", as.integer(n), 

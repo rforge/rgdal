@@ -73,8 +73,8 @@ local_RGDAL_Init <- function() .Call('RGDAL_Init', PACKAGE="rgdal")
     ifelse(GDAL_iconv(), "",
         paste(" GDAL does not use iconv for recoding strings.\n")),
     paste(' GDAL binary built with GEOS:', getGDALwithGEOS(), "\n"),
-    ' Loaded PROJ.4 runtime: ', getPROJ4VersionInfo(), '\n',
-    paste(" Path to PROJ.4 shared files: ", pl[1], sep=""), "\n",
+    ' Loaded PROJ runtime: ', getPROJ4VersionInfo(), '\n',
+    paste(" Path to PROJ shared files: ", pl[1], sep=""), "\n",
     ifelse((get("has_proj_def.dat", envir=.RGDAL_CACHE)  || (PROJis6ormore())), "", "WARNING: no proj_defs.dat in PROJ.4 shared files\n"), sep="")
   CDN_enabled <- is_proj_network_enabled()
   if (!is.null(CDN_enabled))

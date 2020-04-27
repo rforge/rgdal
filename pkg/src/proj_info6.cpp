@@ -405,7 +405,7 @@ SEXP CRS_compare(SEXP fromargs, SEXP toargs, SEXP type1, SEXP type2) {
 SEXP transform_ng(SEXP fromargs, SEXP toargs, SEXP coordOp, SEXP npts, SEXP x, SEXP y, SEXP z) {
 
     PJ_CONTEXT *ctx = proj_context_create();
-    PJ *source_crs, *target_crs;
+    PJ *source_crs = NULL, *target_crs = NULL;
     PJ* pj_transform = NULL;
 
     int i, n, nwarn=0, have_z, pc=0, have_CO, vis_order;
@@ -492,7 +492,7 @@ SEXP transform_ng(SEXP fromargs, SEXP toargs, SEXP coordOp, SEXP npts, SEXP x, S
     if (have_z) {
         if((n1 = proj_trans_generic(pj_transform, PJ_FWD, xx, stride,
             (size_t) n, yy, stride, (size_t) n, zz, stride, (size_t) n,
-            NULL, stride, 0)) != n) {
+            NULL, stride, 0)) != (size_t) n) {
             proj_destroy(pj_transform);
             if (!have_CO) {
                 proj_destroy(target_crs);
@@ -505,7 +505,7 @@ SEXP transform_ng(SEXP fromargs, SEXP toargs, SEXP coordOp, SEXP npts, SEXP x, S
     } else {
       if((n1 = proj_trans_generic(pj_transform, PJ_FWD, xx, stride,
           (size_t) n, yy, stride, (size_t) n, NULL, stride, 0,
-          NULL, stride, 0)) != n) {
+          NULL, stride, 0)) != (size_t) n) {
           proj_destroy(pj_transform);
           if (!have_CO) {
               proj_destroy(target_crs);
@@ -600,19 +600,21 @@ SEXP transform_ng(SEXP fromargs, SEXP toargs, SEXP coordOp, SEXP npts, SEXP x, S
     return(res);
 }
 
-SEXP project_ng_coordOp(SEXP proj, SEXP inv, SEXP ob_tran) {
+SEXP project_ng_coordOp(SEXP proj, SEXP inv//, SEXP ob_tran
+) {
 
     PJ_CONTEXT *ctx = proj_context_create();
     PJ *source_crs, *target_crs;
     PJ* pj_transform = NULL;
-    int use_ob_tran, use_inv;
+    int //use_ob_tran = LOGICAL_POINTER(ob_tran)[0], 
+        use_inv;
 
     proj_log_func(ctx, NULL, silent_logger);
 
-    if (ob_tran == R_NilValue) use_ob_tran = 0;
+/*    if (ob_tran == R_NilValue) use_ob_tran = 0;
     else if (LOGICAL_POINTER(ob_tran)[0] == 1) use_ob_tran = 1;
     else if (LOGICAL_POINTER(ob_tran)[0] == 0) use_ob_tran = 0;
-    else use_ob_tran = 0;
+    else use_ob_tran = 0;*/
 
     if (inv == R_NilValue) use_inv = 0;
     else if (LOGICAL_POINTER(inv)[0] == 1) use_inv = 1;
@@ -816,7 +818,7 @@ PROJcopyEPSG(SEXP tf) {
     }
     fprintf(fptf, "\"code\",\"note\",\"prj4\",\"prj_method\"\n");
 
-    PJ *pj;
+    PJ *pj = NULL;
 // blocks error messages in this context
     proj_log_func(ctx, NULL, proj_logger);
     for (i = 0; i < crs_cnt; i++) {
