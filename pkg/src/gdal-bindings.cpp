@@ -1570,8 +1570,9 @@ RGDAL_GetRasterData(SEXP sxpRasterBand,
   // Create matrix transposed
   int pc=0;
   SEXP sRStorage;
-  PROTECT(sRStorage = allocMatrix(uRType,
-			       INTEGER(sxpDimOut)[1],
+// Mathias Moser https://stat.ethz.ch/pipermail/r-sig-geo/2020-April/028072.html
+  PROTECT(sRStorage = allocVector(uRType,
+			       ((R_xlen_t) INTEGER(sxpDimOut)[1]) *
 			       INTEGER(sxpDimOut)[0])); pc++;
 
 // replication for 2.4.0 RSB 20060726
@@ -1660,7 +1661,7 @@ RGDAL_GetRasterData(SEXP sxpRasterBand,
     noDataValue = NUMERIC_POINTER(NDV)[0];
   }
 
-  int i;
+  /*int*/ R_xlen_t i;
 
   if (hasNoDataValue) {
 
