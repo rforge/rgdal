@@ -1669,7 +1669,7 @@ RGDAL_GetRasterData(SEXP sxpRasterBand,
 
     case INTSXP:
 
-      for (i = 0; i < LENGTH(sRStorage); ++i)
+      for (i = 0; i < XLENGTH(sRStorage); ++i)
 	if (INTEGER(sRStorage)[i] == (int) noDataValue) {
 	  INTEGER(sRStorage)[i] = NA_INTEGER;
 	}
@@ -1682,7 +1682,7 @@ RGDAL_GetRasterData(SEXP sxpRasterBand,
 
         case GDT_Float32:
 
-        for (i = 0; i < LENGTH(sRStorage); ++i)
+        for (i = 0; i < XLENGTH(sRStorage); ++i)
 	  if (REAL(sRStorage)[i] == (double) ((float) noDataValue)) {
 	    REAL(sRStorage)[i] = NA_REAL;
 	  }
@@ -1690,7 +1690,7 @@ RGDAL_GetRasterData(SEXP sxpRasterBand,
 
         case GDT_Float64:
 
-        for (i = 0; i < LENGTH(sRStorage); ++i)
+        for (i = 0; i < XLENGTH(sRStorage); ++i)
 	  if (REAL(sRStorage)[i] == (double) (noDataValue)) {
 	    REAL(sRStorage)[i] = NA_REAL;
 	  }
@@ -1717,7 +1717,7 @@ RGDAL_GetRasterData(SEXP sxpRasterBand,
   } else {
     installErrorHandler();
     if (uRType == REALSXP && pRasterBand->GetRasterDataType() == GDT_Float32) {
-        for (i = 0; i < LENGTH(sRStorage); ++i)
+        for (i = 0; i < XLENGTH(sRStorage); ++i)
 	  if (ISNAN(REAL(sRStorage)[i])) {
 	    REAL(sRStorage)[i] = NA_REAL;
 	  }
