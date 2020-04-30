@@ -18,6 +18,29 @@ if (new_proj_and_gdal()) warning("NOT UPDATED FOR PROJ >= 6")
     .Call("RGDAL_SetProject", object, proj4string, PACKAGE="rgdal")
 }
 
+#RH: not tested yet.
+.gd_SetProjectWkt <- function(object, crs) {
+    if (new_proj_and_gdal()) {
+        iCRS <- slot(dataset, "proj4string")
+        wkt2 <- comment(iCRS)
+        if (!is.null(wkt2)) {
+            if (!is.null(enforce_xy)) {
+                stopifnot(is.logical(enforce_xy))
+                stopifnot(length(enforce_xy) == 1L)
+                stopifnot(!is.na(enforce_xy))
+            } else {
+                enforce_xy <- get_enforce_xy()
+            }
+            .Call("RGDAL_SetProject_WKT2", object, wkt2, enforce_xy, PACKAGE = "rgdal")
+		} else {
+			warning("NOT UPDATED FOR PROJ >= 6")
+			.Call("RGDAL_SetProject", object, proj4string, PACKAGE="rgdal")
+		}
+	} else {
+		.Call("RGDAL_SetProject", object, proj4string, PACKAGE="rgdal")	
+	}
+}
+
 
 .gd_SetStatistics <- function(object, statistics) {
 	.Call("RGDAL_SetStatistics", object, as.double(statistics), PACKAGE="rgdal")
@@ -48,6 +71,8 @@ GDALcall <- function(object, option, ...) {
 		.gd_SetNoDataValue(object, ...)
 	} else if (option == 'SetGeoTransform') {
 		.gd_SetGeoTransform(object, ...)
+	} else if (option == 'SetProjectWkt') {
+		.gd_SetProjectWkt(object, ...)
 	} else if (option == 'SetProject') {
 		.gd_SetProject(object, ...)
 	} else if (option == 'SetStatistics') {
