@@ -239,7 +239,7 @@ rgdal:::is_proj_network_enabled()
 When we then search for candidate coordinate operations, we see that the operation using an absent grid now sees that download is enabled, and proposes the 1m accuracy candidate, because the required grid can be downloaded:
 
 ```{r, eval=run}
-list_coordOps(wkt(b_pump), "EPSG:4326")
+list_coordOps(WKT, "EPSG:4326")
 ```
 
 On making the transformation, we may see that the coordinate operation takes longer than expected, because on first pass the grid is downloaded from the network:
