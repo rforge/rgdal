@@ -48,7 +48,7 @@ prettify_wkt <- function(inSRID) {
 print.coordOps <- function(x, ...) {
     n <- nrow(x)
     cat("Candidate coordinate operations found: ", n, "\n")
-    if (!is.na(attr(x, "area_of_interest")))
+    if (!all(is.na(attr(x, "area_of_interest"))))
         cat("Search specification:", paste("Area of interest: ", 
             paste(attr(x, "area_of_interest"),
             collapse=", ")), "\n")

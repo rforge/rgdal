@@ -1,5 +1,5 @@
 
-R version 4.0.0 beta (2020-04-13 r78215) -- "Arbor Day"
+R version 4.0.0 (2020-04-24) -- "Arbor Day"
 Copyright (C) 2020 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -17,11 +17,11 @@ Type 'q()' to quit R.
 
 > suppressPackageStartupMessages(library(rgdal))
 > getPROJ4VersionInfo()
-[1] "Rel. 7.0.0, March 1st, 2020, [PJ_VERSION: 700]"
+[1] "Rel. 7.0.1, May 1st, 2020, [PJ_VERSION: 701]"
 attr(,"short")
-[1] 700
+[1] 701
 > getGDALVersionInfo()
-[1] "GDAL 3.1.0dev-bc1aa43f1d, released 2020/03/28"
+[1] "GDAL 3.1.0, released 2020/05/03"
 > d <- system.file("vectors", package="rgdal")
 > #shps <- ogrListLayers(d)
 > (o <- OGRSpatialRef(d, "trin_inca_pl03"))
@@ -94,11 +94,11 @@ In OGRSpatialRef(file.path(d, "PacoursIKA2.TAB"), "PacoursIKA2") :
 > (o <- getProjectionRef(ds, OVERRIDE_PROJ_DATUM_WITH_TOWGS84=TRUE))
 [1] "+proj=cea +lat_ts=33.75 +lon_0=-117.333333333333 +x_0=0 +y_0=0 +datum=NAD27 +units=m +no_defs"
 > if (new_proj_and_gdal()) comment(o)
-[1] "PROJCRS[\"unnamed\",\n    BASEGEOGCRS[\"NAD27\",\n        DATUM[\"North American Datum 1927\",\n            ELLIPSOID[\"Clarke 1866\",6378206.4,294.978698213898,\n                LENGTHUNIT[\"metre\",1]]],\n        PRIMEM[\"Greenwich\",0,\n            ANGLEUNIT[\"degree\",0.0174532925199433]],\n        ID[\"EPSG\",4267]],\n    CONVERSION[\"unnamed\",\n        METHOD[\"Lambert Cylindrical Equal Area (Spherical)\",\n            ID[\"EPSG\",9834]],\n        PARAMETER[\"Latitude of 1st standard parallel\",33.75,\n            ANGLEUNIT[\"degree\",0.0174532925199433],\n            ID[\"EPSG\",8823]],\n        PARAMETER[\"Longitude of natural origin\",-117.333333333333,\n            ANGLEUNIT[\"degree\",0.0174532925199433],\n            ID[\"EPSG\",8802]],\n        PARAMETER[\"False easting\",0,\n            LENGTHUNIT[\"metre\",1],\n            ID[\"EPSG\",8806]],\n        PARAMETER[\"False northing\",0,\n            LENGTHUNIT[\"metre\",1],\n            ID[\"EPSG\",8807]]],\n    CS[Cartesian,2],\n        AXIS[\"easting\",east,\n            ORDER[1],\n            LENGTHUNIT[\"metre\",1,\n                ID[\"EPSG\",9001]]],\n        AXIS[\"northing\",north,\n            ORDER[2],\n            LENGTHUNIT[\"metre\",1,\n                ID[\"EPSG\",9001]]]]"
+[1] "PROJCRS[\"unnamed\",\n    BASEGEOGCRS[\"NAD27\",\n        DATUM[\"North American Datum 1927\",\n            ELLIPSOID[\"Clarke 1866\",6378206.4,294.978698213898,\n                LENGTHUNIT[\"metre\",1]]],\n        PRIMEM[\"Greenwich\",0,\n            ANGLEUNIT[\"degree\",0.0174532925199433]],\n        ID[\"EPSG\",4267]],\n    CONVERSION[\"unnamed\",\n        METHOD[\"Lambert Cylindrical Equal Area\",\n            ID[\"EPSG\",9835]],\n        PARAMETER[\"Latitude of 1st standard parallel\",33.75,\n            ANGLEUNIT[\"degree\",0.0174532925199433],\n            ID[\"EPSG\",8823]],\n        PARAMETER[\"Longitude of natural origin\",-117.333333333333,\n            ANGLEUNIT[\"degree\",0.0174532925199433],\n            ID[\"EPSG\",8802]],\n        PARAMETER[\"False easting\",0,\n            LENGTHUNIT[\"metre\",1],\n            ID[\"EPSG\",8806]],\n        PARAMETER[\"False northing\",0,\n            LENGTHUNIT[\"metre\",1],\n            ID[\"EPSG\",8807]]],\n    CS[Cartesian,2],\n        AXIS[\"easting\",east,\n            ORDER[1],\n            LENGTHUNIT[\"metre\",1,\n                ID[\"EPSG\",9001]]],\n        AXIS[\"northing\",north,\n            ORDER[2],\n            LENGTHUNIT[\"metre\",1,\n                ID[\"EPSG\",9001]]]]"
 > (o <- getProjectionRef(ds, OVERRIDE_PROJ_DATUM_WITH_TOWGS84=FALSE))
 [1] "+proj=cea +lat_ts=33.75 +lon_0=-117.333333333333 +x_0=0 +y_0=0 +datum=NAD27 +units=m +no_defs"
 > if (new_proj_and_gdal()) comment(o)
-[1] "PROJCRS[\"unnamed\",\n    BASEGEOGCRS[\"NAD27\",\n        DATUM[\"North American Datum 1927\",\n            ELLIPSOID[\"Clarke 1866\",6378206.4,294.978698213898,\n                LENGTHUNIT[\"metre\",1]]],\n        PRIMEM[\"Greenwich\",0,\n            ANGLEUNIT[\"degree\",0.0174532925199433]],\n        ID[\"EPSG\",4267]],\n    CONVERSION[\"unnamed\",\n        METHOD[\"Lambert Cylindrical Equal Area (Spherical)\",\n            ID[\"EPSG\",9834]],\n        PARAMETER[\"Latitude of 1st standard parallel\",33.75,\n            ANGLEUNIT[\"degree\",0.0174532925199433],\n            ID[\"EPSG\",8823]],\n        PARAMETER[\"Longitude of natural origin\",-117.333333333333,\n            ANGLEUNIT[\"degree\",0.0174532925199433],\n            ID[\"EPSG\",8802]],\n        PARAMETER[\"False easting\",0,\n            LENGTHUNIT[\"metre\",1],\n            ID[\"EPSG\",8806]],\n        PARAMETER[\"False northing\",0,\n            LENGTHUNIT[\"metre\",1],\n            ID[\"EPSG\",8807]]],\n    CS[Cartesian,2],\n        AXIS[\"easting\",east,\n            ORDER[1],\n            LENGTHUNIT[\"metre\",1,\n                ID[\"EPSG\",9001]]],\n        AXIS[\"northing\",north,\n            ORDER[2],\n            LENGTHUNIT[\"metre\",1,\n                ID[\"EPSG\",9001]]]]"
+[1] "PROJCRS[\"unnamed\",\n    BASEGEOGCRS[\"NAD27\",\n        DATUM[\"North American Datum 1927\",\n            ELLIPSOID[\"Clarke 1866\",6378206.4,294.978698213898,\n                LENGTHUNIT[\"metre\",1]]],\n        PRIMEM[\"Greenwich\",0,\n            ANGLEUNIT[\"degree\",0.0174532925199433]],\n        ID[\"EPSG\",4267]],\n    CONVERSION[\"unnamed\",\n        METHOD[\"Lambert Cylindrical Equal Area\",\n            ID[\"EPSG\",9835]],\n        PARAMETER[\"Latitude of 1st standard parallel\",33.75,\n            ANGLEUNIT[\"degree\",0.0174532925199433],\n            ID[\"EPSG\",8823]],\n        PARAMETER[\"Longitude of natural origin\",-117.333333333333,\n            ANGLEUNIT[\"degree\",0.0174532925199433],\n            ID[\"EPSG\",8802]],\n        PARAMETER[\"False easting\",0,\n            LENGTHUNIT[\"metre\",1],\n            ID[\"EPSG\",8806]],\n        PARAMETER[\"False northing\",0,\n            LENGTHUNIT[\"metre\",1],\n            ID[\"EPSG\",8807]]],\n    CS[Cartesian,2],\n        AXIS[\"easting\",east,\n            ORDER[1],\n            LENGTHUNIT[\"metre\",1,\n                ID[\"EPSG\",9001]]],\n        AXIS[\"northing\",north,\n            ORDER[2],\n            LENGTHUNIT[\"metre\",1,\n                ID[\"EPSG\",9001]]]]"
 > GDAL.close(ds)
 > ds <- GDAL.open(file.path(d, "erdas_spnad83.tif"))
 > (o <- getProjectionRef(ds, OVERRIDE_PROJ_DATUM_WITH_TOWGS84=TRUE))
@@ -142,4 +142,4 @@ In getProjectionRef(ds, OVERRIDE_PROJ_DATUM_WITH_TOWGS84 = FALSE) :
 > 
 > proc.time()
    user  system elapsed 
-  0.456   0.039   0.497 
+  0.432   0.030   0.456 
