@@ -115,7 +115,12 @@ Reading the file loses the PROJ.4 `+datum=` key-value pair, but the WKT2:2019 st
 proj4string(b_pump)
 ```
 ```{r, eval=odd_run}
-cat(wkt(b_pump), "\n")
+if (packageVersion("sp") > "1.4.1") {
+  WKT <- wkt(b_pump)
+} else {
+  WKT <- comment(slot(b_pump, "proj4string"))
+}
+cat(WKT, "\n")
 ```
 
 
@@ -153,7 +158,7 @@ print(coordinates(isballpark), digits=10)
 Let us repeat the search using the WKT2 string; here we see that providing a well-specified CRS representation allows us to choose 2m accuracy for the coordinate operation. Further, we can also see that, had we had access to a named grid, we could have achieved 1m accuracy:
 
 ```{r, eval=odd_run}
-list_coordOps(wkt(b_pump), "EPSG:4326")
+list_coordOps(WKT, "EPSG:4326")
 ```
 
 The Helmert transformation has parameters retrieved from the PROJ SQLite database (code 1314):
