@@ -1,3 +1,11 @@
+2020-05-16 12:11  rsbivand
+
+	* ChangeLog, DESCRIPTION, R/list_coordOps.R, configure,
+	  data/GridsDatums.rda, inst/ChangeLog, man/GridsDatums.Rd,
+	  src/rgdal.h, tests/srs_rendering.Rout.save,
+	  vignettes/CRS_projections_transformations.Rmd,
+	  vignettes/PROJ.bib: add new vignette
+
 2020-05-01 13:26  rsbivand
 
 	* man/wrappers.Rd: tidy
