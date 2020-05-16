@@ -95,6 +95,9 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/CRS_projections_transformations.html">Why have CRS, projections and transformations changed?</a>
+    </li>
+    <li>
       <a href="../articles/PROJ6_GDAL3.html">Migration to PROJ6/GDAL3</a>
     </li>
   </ul>
@@ -231,7 +234,7 @@ The object has a "grids" attribute containing a nested list of grids for each co
 #&gt; URL: https://cdn.proj.org/uk_os_OSTN15_NTv2_OSGBtoETRS.tif </div><div class='input'><span class='kw'>if</span> (<span class='no'>run</span>) {
   <span class='no'>wkt_datum</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='showWKT.html'>showSRID</a></span>(<span class='st'>"EPSG:27700"</span>, <span class='st'>"WKT2"</span>)
   (<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>list_coordOps</span>(<span class='no'>wkt_datum</span>, <span class='st'>"EPSG:4326"</span>))
-}</div><div class='output co'>#&gt; Candidate coordinate operations found:  7 
+}</div><div class='output co'>#&gt; Candidate coordinate operations found:  8 
 #&gt; Strict containment:  FALSE 
 #&gt; Visualization order:  TRUE 
 #&gt; Source: PROJCRS["OSGB 1936 / British National Grid", BASEGEOGCRS["OSGB
@@ -276,7 +279,7 @@ The object has a "grids" attribute containing a nested list of grids for each co
 #&gt; attr(,"description")
 #&gt; [1] "Inverse of British National Grid + OSGB 1936 to WGS 84 (6) + axis order change (2D)"</div><div class='input'><span class='kw'>if</span> (<span class='no'>run</span>) {
   <span class='fu'>list_coordOps</span>(<span class='st'>"EPSG:27700"</span>, <span class='st'>"EPSG:4326"</span>)
-}</div><div class='output co'>#&gt; Candidate coordinate operations found:  7 
+}</div><div class='output co'>#&gt; Candidate coordinate operations found:  8 
 #&gt; Strict containment:  FALSE 
 #&gt; Visualization order:  TRUE 
 #&gt; Source: EPSG:27700 

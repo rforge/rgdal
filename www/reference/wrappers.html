@@ -95,6 +95,9 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/CRS_projections_transformations.html">Why have CRS, projections and transformations changed?</a>
+    </li>
+    <li>
       <a href="../articles/PROJ6_GDAL3.html">Migration to PROJ6/GDAL3</a>
     </li>
   </ul>
@@ -125,7 +128,7 @@
     </div>
 
     <pre class="usage"><span class='fu'>GDALcall</span>(<span class='no'>object</span>, <span class='no'>option</span>, <span class='no'>...</span>)
-<span class='fu'>rawTransform</span>(<span class='no'>projfrom</span>, <span class='no'>projto</span>, <span class='no'>n</span>, <span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>z</span><span class='kw'>=</span><span class='kw'>NULL</span>)</pre>
+<span class='fu'>rawTransform</span>(<span class='no'>projfrom</span>, <span class='no'>projto</span>, <span class='no'>n</span>, <span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>z</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>wkt</span><span class='kw'>=</span><span class='fl'>FALSE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -165,6 +168,10 @@
     <tr>
       <th>z</th>
       <td><p>z coordinates</p></td>
+    </tr>
+    <tr>
+      <th>wkt</th>
+      <td><p>default FALSE, if TRUE, the caller determines that projfrom and projto are wkt and that new_proj_and_gdal() returns TRUE to avoid multiple warnings when the function is called repetitively</p></td>
     </tr>
     </table>
 
