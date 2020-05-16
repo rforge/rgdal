@@ -54,8 +54,10 @@ ellps <- projInfo("ellps")
 ```
 
 ```{r, eval=odd_run}
-eval(parse(text=clrk66$major))
-eval(parse(text=clrk66$ell))
+#eval(parse(text=clrk66$major))
+#eval(parse(text=clrk66$ell))
+a <- 6378206.4
+b <- 6356583.8
 print(sqrt((a^2-b^2)/a^2), digits=10)
 ```
 
