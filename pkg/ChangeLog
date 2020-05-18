@@ -1,3 +1,73 @@
+2020-05-18 13:10  rsbivand
+
+	* vignettes/CRS_projections_transformations.Rmd: tidy
+
+2020-05-18 12:46  rsbivand
+
+	* NAMESPACE, vignettes/CRS_projections_transformations.Rmd: try to
+	  get new vignette to build on old PROJ
+
+2020-05-18 08:46  rsbivand
+
+	* NAMESPACE, vignettes/CRS_projections_transformations.Rmd: try to
+	  get new vignette to build on old PROJ
+
+2020-05-18 08:16  rsbivand
+
+	* NAMESPACE: try to get new vignette to build on old PROJ
+
+2020-05-18 08:07  rsbivand
+
+	* NAMESPACE, vignettes/CRS_projections_transformations.Rmd: try to
+	  get new vignette to build on old PROJ
+
+2020-05-18 08:03  rsbivand
+
+	* NAMESPACE, vignettes/CRS_projections_transformations.Rmd: try to
+	  get new vignette to build on old PROJ
+
+2020-05-16 18:02  rsbivand
+
+	* NAMESPACE, vignettes/CRS_projections_transformations.Rmd: try to
+	  get new vignette to build on old PROJ
+
+2020-05-16 17:36  rsbivand
+
+	* NAMESPACE, vignettes/CRS_projections_transformations.Rmd: try to
+	  get new vignette to build on old PROJ
+
+2020-05-16 14:04  rsbivand
+
+	* NAMESPACE: try to get new vignette to build on old PROJ
+
+2020-05-16 13:57  rsbivand
+
+	* inst/vectors/b_pump.gpkg: try to get new vignette to build on old
+	  PROJ
+
+2020-05-16 13:37  rsbivand
+
+	* NAMESPACE: try to get new vignette to build on old PROJ
+
+2020-05-16 13:36  rsbivand
+
+	* vignettes/CRS_projections_transformations.Rmd: try to get new
+	  vignette to build on old PROJ
+
+2020-05-16 13:24  rsbivand
+
+	* DESCRIPTION, NAMESPACE: try to get new vignette to build on old
+	  PROJ
+
+2020-05-16 13:20  rsbivand
+
+	* vignettes/CRS_projections_transformations.Rmd: try to get new
+	  vignette to build on old PROJ
+
+2020-05-16 12:28  rsbivand
+
+	* ChangeLog, inst/ChangeLog: tidy
+
 2020-05-16 12:11  rsbivand
 
 	* ChangeLog, DESCRIPTION, R/list_coordOps.R, configure,
