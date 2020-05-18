@@ -210,7 +210,7 @@ The `rgdal::project()` uses the underlying geographical coordinate reference sys
 
 ```{r, eval=odd_run}
 (a <- project(coordinates(b_pump), proj4string(b_pump), inv=TRUE, verbose=TRUE))
-(b <- project(coordinates(b_pump), wkt(b_pump), inv=TRUE))
+(b <- project(coordinates(b_pump), WKT, inv=TRUE))
 ```
 
 The projected points only inverse project the projected coordinates using the specified projection
