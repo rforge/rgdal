@@ -81,6 +81,9 @@ Signalling changes, PROJ.4 changed its name to PR$\phi$J, and began burning thro
 ```{r}
 shpr <- strsplit(attr(getPROJ4libPath(), "search_path"), ifelse(.Platform$OS.type == "unix", ":", ";"))[[1]]
 shpr
+```
+
+```{r, echo=FALSE, results='hide'}
 if (is.null(shpr)) odd_run <- FALSE
 ```
 
@@ -225,11 +228,11 @@ c(spDists(coordinates(isballpark), a)*1000)
 
 PROJ 7 introduced on-demand downloading of (chunks of) transformation grids from a content delivery network to a user-writable directory on the PROJ search path (usually the first path component). The status of the downloaded grids is stored in another SQLite database, `cache.db`. Let is unlink this file, and check that **rgdal** is running with on-demand downloading disabled:
 
-```{r}
+```{r, echo=FALSE, results='hide'}
 run <- run && (attr(getPROJ4VersionInfo(), "short") >= 700)
 ```
 
-```{r}
+```{r, echo=FALSE, results='hide'}
 run <- run && shpr[1] == "/home/rsb/.local/share/proj"
 ```
 
@@ -270,7 +273,7 @@ The coordinate values differ little from the 2m accuracy Helmert pipeline:
 print(coordinates(is1m), digits=10)
 ```
 
-as we can see, the 1m accuracy point is 1.7m from the 2m accuract point, just to the West:
+as we can see, the 1m accuracy point is 1.7m from the 2m accuracy point, just to the West:
 
 ```{r, eval=run}
 c(spDists(is2m, is1m)*1000)
