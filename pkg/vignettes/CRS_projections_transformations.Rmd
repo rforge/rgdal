@@ -78,6 +78,11 @@ While the representation of coordinate reference systems (sometimes supplemented
 ## PR$\phi$J
 
 Signalling changes, PROJ.4 changed its name to PR$\phi$J, and began burning through major version numbers. PROJ 5 (2018) introduced transformation pipelines [@knudsen+evers17;@evers+knudsen17], representing coordinate operations using a syntax similar to PROJ.4 strings, but showing the whole operation pipeline. PROJ 6 (2019) followed up by shifting from ad-hoc text files for holding coordinate reference system and coordinate operation metadata to an SQLite database. In an increasing number of cases, more accurate coordinate operations could be supported using open access transformation grids, and the grid files needed were now tabulated in the SQLite database. This database is distributed with PROJ, and kept in a directory on the PROJ search path, usually the only or final directory (`getPROJ4libPath()` returns the current search path in an attribute). 
+```{r}
+shpr <- strsplit(attr(getPROJ4libPath(), "search_path"), ifelse(.Platform$OS.type == "unix", ":", ";"))[[1]]
+shpr
+if (is.null(shpr)) odd_run <- FALSE
+```
 
 ```{r, echo=FALSE, results='hide'}
 run <- FALSE
@@ -86,7 +91,6 @@ if (require("RSQLite", quietly=TRUE)) run <- TRUE
 
 ```{r, eval=run && odd_run}
 library(RSQLite)
-shpr <- strsplit(attr(getPROJ4libPath(), "search_path"), ":")[[1]]
 db <- dbConnect(SQLite(), dbname=file.path(shpr[length(shpr)], "proj.db"))
 dbListTables(db)
 ```
@@ -224,10 +228,16 @@ PROJ 7 introduced on-demand downloading of (chunks of) transformation grids from
 ```{r}
 run <- run && (attr(getPROJ4VersionInfo(), "short") >= 700)
 ```
+
+```{r}
+run <- run && shpr[1] == "/home/rsb/.local/share/proj"
+```
+
 ```{r, eval=run}
 unlink(file.path(shpr[1], "cache.db"))
 rgdal:::is_proj_network_enabled()
 ```
+
 
 We can (for now, this will be handled later in a function) enable on-demand download setting an environment variable; we see that with this setting, network download is enabled:
 

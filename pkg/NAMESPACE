@@ -77,6 +77,3 @@ S3method(close, SpatialGDALWrite)
 S3method(print, summary.SpatialGDAL)
 S3method(print, coordOps)
 
-
-
-
