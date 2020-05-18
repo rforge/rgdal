@@ -29,7 +29,7 @@ Defining the CRS became necessary when integrating other data with a different C
 
 ```{r, echo=FALSE}
 mvrun <- FALSE
-if (require(mapview, quietly=TRUE)) mvrun <- TRUE
+if (require(mapview, quietly=TRUE) && .Platform$OS.type == "unix") mvrun <- TRUE
 ```
 
 ```{r, eval=mvrun}
@@ -270,7 +270,7 @@ The coordinate values differ little from the 2m accuracy Helmert pipeline:
 print(coordinates(is1m), digits=10)
 ```
 
-as we can see, the 1m accuracy point is 1.7m from the2m accuract point, just to the West:
+as we can see, the 1m accuracy point is 1.7m from the 2m accuract point, just to the West:
 
 ```{r, eval=run}
 c(spDists(is2m, is1m)*1000)
