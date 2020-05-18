@@ -277,7 +277,7 @@ c(spDists(is2m, is1m)*1000)
 ```
 
 
-```{r, eval=mrun}
+```{r, eval=mrun && run}
 c(maptools::gzAzimuth(coordinates(is1m), coordinates(is2m)))
 ```
 
@@ -301,7 +301,7 @@ rgdal:::is_proj_network_enabled()
 
 The outcome positions are shown here; at zoom 18 we can see that the 1m accuracy green point matches the Open Street Map location of the pump very well:
 
-```{r, eval=mvrun}
+```{r, eval=mvrun && run}
 library(mapview)
 mapview(is2m, map.type="OpenStreetMap", legend=FALSE) + mapview(is1m, col.regions="green", legend=FALSE) + mapview(isballpark, col.regions="red", legend=FALSE)
 ```
