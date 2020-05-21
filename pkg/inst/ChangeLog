@@ -1,3 +1,13 @@
+2020-05-21 14:48  rsbivand
+
+	* NAMESPACE, R/AAA.R, R/gdal.R, R/ogr.R, R/ogr_sp.R,
+	  man/showWKT.Rd: add options access to mute exportToProj4
+	  degradation warnings
+
+2020-05-18 13:12  rsbivand
+
+	* ChangeLog, inst/ChangeLog: tidy
+
 2020-05-18 13:10  rsbivand
 
 	* vignettes/CRS_projections_transformations.Rmd: tidy
