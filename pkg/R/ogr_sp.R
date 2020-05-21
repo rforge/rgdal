@@ -511,6 +511,20 @@ set_thin_PROJ6_warnings <- function(value) {
     assign("thin_PROJ6_warnings", value, envir=.RGDAL_CACHE)
 }
 
+get_rgdal_show_exportToProj4_warnings <- function() {
+  get("rgdal_show_exportToProj4_warnings", envir=.RGDAL_CACHE)
+}
+
+set_rgdal_show_exportToProj4_warnings <- function(value) {
+    stopifnot(is.logical(value))
+    stopifnot(length(value) == 1L)
+    stopifnot(!is.na(value))
+    assign("rgdal_show_exportToProj4_warnings", value, envir=.RGDAL_CACHE)
+}
+
+get_PROJ6_warnings_count <- function() {
+    get("PROJ6_warnings_count", envir=.RGDAL_CACHE)
+}
 
 get_enforce_xy <- function() {
     get("enforce_xy", envir=.RGDAL_CACHE)
@@ -602,9 +616,10 @@ showSRID <- function(inSRID, format="WKT2", multiline="NO", enforce_xy=NULL, EPS
                 } else {
                     msg <- ""
                 }
-                if (!get_thin_PROJ6_warnings()) {
+                if (get_rgdal_show_exportToProj4_warnings()) {
+                 if (!get_thin_PROJ6_warnings()) {
                     if (nchar(msg) > 0) warning(msg)
-                } else {
+                 } else {
                     if (nchar(msg) > 0 && get("PROJ6_warnings_count",
                         envir=.RGDAL_CACHE) == 0L) {
                         warning(paste0("PROJ6/GDAL3 PROJ string degradation in workflow\n repeated warnings suppressed\n ", msg))
@@ -612,6 +627,7 @@ showSRID <- function(inSRID, format="WKT2", multiline="NO", enforce_xy=NULL, EPS
                             get("PROJ6_warnings_count",
                             envir=.RGDAL_CACHE) + 1L, envir=.RGDAL_CACHE)
                     }
+                 }
                 }
             }
 #warning("Discarded ellps ", attr(res, "ellps"),
@@ -625,6 +641,7 @@ showSRID <- function(inSRID, format="WKT2", multiline="NO", enforce_xy=NULL, EPS
                     msg <- paste0(msg, ",\n but +towgs84= values preserved")
                 if (get_P6_datum_hard_fail()) stop(msg)
                 else {
+                  if (get_rgdal_show_exportToProj4_warnings()) {
                     if (!get_thin_PROJ6_warnings()) {
                         warning(msg)
                     } else {
@@ -636,6 +653,7 @@ showSRID <- function(inSRID, format="WKT2", multiline="NO", enforce_xy=NULL, EPS
                                 envir=.RGDAL_CACHE) + 1L, envir=.RGDAL_CACHE)
                         }
                     }
+                  }
                 }
             }
             res <- c(res)

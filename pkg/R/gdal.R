@@ -459,7 +459,8 @@ getProjectionRef <- function(dataset, OVERRIDE_PROJ_DATUM_WITH_TOWGS84=NULL, enf
     if (no_ellps) {
       msg <- paste0("Discarded ellps ", attr(res, "ellps"),
             " in CRS definition: ", c(res))
-      if (!get_thin_PROJ6_warnings()) {
+      if (get_rgdal_show_exportToProj4_warnings()) {
+       if (!get_thin_PROJ6_warnings()) {
         warning(msg)
         } else {
           if (get("PROJ6_warnings_count",
@@ -470,6 +471,7 @@ getProjectionRef <- function(dataset, OVERRIDE_PROJ_DATUM_WITH_TOWGS84=NULL, enf
               envir=.RGDAL_CACHE) + 1L, envir=.RGDAL_CACHE)
             }
           }
+         }
     }
 # warning("Discarded ellps ", attr(res, "ellps"),
 #            " in CRS definition: ", c(res))
@@ -481,6 +483,7 @@ getProjectionRef <- function(dataset, OVERRIDE_PROJ_DATUM_WITH_TOWGS84=NULL, enf
         msg <- paste0(msg, ",\n but +towgs84= values preserved")
       if (get_P6_datum_hard_fail()) stop(msg)
       else {
+       if (get_rgdal_show_exportToProj4_warnings()) {
         if (!get_thin_PROJ6_warnings()) {
           warning(msg)
         } else {
@@ -492,6 +495,7 @@ getProjectionRef <- function(dataset, OVERRIDE_PROJ_DATUM_WITH_TOWGS84=NULL, enf
               envir=.RGDAL_CACHE) + 1L, envir=.RGDAL_CACHE)
             }
           }
+         }
         }
 #warning(msg)
     }

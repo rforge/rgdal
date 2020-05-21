@@ -294,7 +294,8 @@ OGRSpatialRef <- function(dsn, layer, morphFromESRI=NULL, dumpSRS=FALSE,
     if (no_ellps) {
       msg <- paste0("Discarded ellps ", attr(res, "ellps"),
             " in CRS definition: ", c(res))
-      if (!get_thin_PROJ6_warnings()) {
+      if (get_rgdal_show_exportToProj4_warnings()) {
+       if (!get_thin_PROJ6_warnings()) {
         warning(msg)
         } else {
           if (get("PROJ6_warnings_count",
@@ -305,6 +306,7 @@ OGRSpatialRef <- function(dsn, layer, morphFromESRI=NULL, dumpSRS=FALSE,
               envir=.RGDAL_CACHE) + 1L, envir=.RGDAL_CACHE)
           }
       }
+     }
     }
     if ((!is.null(attr(res, "datum"))) && (nchar(attr(res, "datum")) > 0L)
       && (length(grep("datum", c(res))) == 0L)) {
