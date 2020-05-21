@@ -316,6 +316,7 @@ OGRSpatialRef <- function(dsn, layer, morphFromESRI=NULL, dumpSRS=FALSE,
         msg <- paste0(msg, ",\n but +towgs84= values preserved")
       if (get_P6_datum_hard_fail()) stop(msg)
       else {
+      if (get_rgdal_show_exportToProj4_warnings()) {
         if (!get_thin_PROJ6_warnings()) {
           warning(msg)
         } else {
@@ -327,6 +328,7 @@ OGRSpatialRef <- function(dsn, layer, morphFromESRI=NULL, dumpSRS=FALSE,
               envir=.RGDAL_CACHE) + 1L, envir=.RGDAL_CACHE)
             }
           }
+         }
         }
 #warning(msg)
     }
