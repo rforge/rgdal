@@ -1,3 +1,12 @@
+2020-05-21 15:18  rsbivand
+
+	* R/ogr.R: add options access to mute exportToProj4 degradation
+	  warnings
+
+2020-05-21 14:49  rsbivand
+
+	* ChangeLog, inst/ChangeLog: tidy
+
 2020-05-21 14:48  rsbivand
 
 	* NAMESPACE, R/AAA.R, R/gdal.R, R/ogr.R, R/ogr_sp.R,
