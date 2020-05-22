@@ -83,27 +83,28 @@ local_RGDAL_Init <- function() .Call('RGDAL_Init', PACKAGE="rgdal")
   Smess <- paste('rgdal: version: ',
     utils::packageDescription("rgdal")$Version,
     ', (SVN revision ', svn_version, ')\n',
-    ' Geospatial Data Abstraction Library ',
+    'Geospatial Data Abstraction Library ',
     'extensions to R successfully loaded\n',
-    ' Loaded GDAL runtime: ', rver, ifelse(ver_ok, '\n',
+    'Loaded GDAL runtime: ', rver, ifelse(ver_ok, '\n',
     '\n   but rgdal build and GDAL runtime not in sync:\n   ... consider re-installing rgdal!!\n'),
-    paste(" Path to GDAL shared files: ", gdl[1], sep=""), "\n",
+    paste("Path to GDAL shared files: ", gdl[1], sep=""), "\n",
     ifelse(GDAL_iconv(), "",
         paste(" GDAL does not use iconv for recoding strings.\n")),
-    paste(' GDAL binary built with GEOS:', getGDALwithGEOS(), "\n"),
-    ' Loaded PROJ runtime: ', getPROJ4VersionInfo(), '\n',
-    paste(" Path to PROJ shared files: ", pl[1], sep=""), "\n",
+    paste('GDAL binary built with GEOS:', getGDALwithGEOS(), "\n"),
+    'Loaded PROJ runtime: ', getPROJ4VersionInfo(), '\n',
+    paste("Path to PROJ shared files: ", pl[1], sep=""), "\n",
     ifelse((get("has_proj_def.dat", envir=.RGDAL_CACHE)  || (PROJis6ormore())), "", "WARNING: no proj_defs.dat in PROJ.4 shared files\n"), sep="")
   CDN_enabled <- is_proj_network_enabled()
   if (!is.null(CDN_enabled))
-    Smess <- paste(Smess, "PROJ CDN enabled:", CDN_enabled, "\n")
+    Smess <- paste(Smess, "PROJ CDN enabled:", CDN_enabled, "\n", sep="")
   splVersion <- version_sp_linkingTo()
-  Smess <- paste(Smess, "Linking to sp version:", splVersion, "\n")
+  Smess <- paste(Smess, "Linking to sp version:", splVersion, "\n", sep="")
   spVcheck <- NULL
   if("sp" %in% .packages()) 
     spVcheck <- utils::packageVersion("sp") == splVersion
   if (!is.null(spVcheck) && !spVcheck) paste(Smess, 
     "sp version used to install rgdal and loaded sp version differ\n")
+  Smess <- paste(Smess, "To mute warnings of possible GDAL/OSR exportToProj4() degradation,\nuse options(\"rgdal_show_exportToProj4_warnings\"=\"none\") before loading rgdal.\n", sep="")
   packageStartupMessage(Smess, appendLF = FALSE)
 }
 
