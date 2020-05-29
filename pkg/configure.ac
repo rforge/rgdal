@@ -41,7 +41,7 @@ if test ${R_MAJOR} -ge 4; then
  CXX11=`"${RBIN}" CMD config CXX11`
  CXX11STD=`"${RBIN}" CMD config CXX11STD`
 else
- if test ${R_MAJOR} -eq 3 -a ${R_MINOR} -ge 4; then
+ if test ${R_MAJOR} -eq 3 && ${R_MINOR} -ge 4; then
   CXX11=`"${RBIN}" CMD config CXX11`
   CXX11STD=`"${RBIN}" CMD config CXX11STD`
  else
@@ -155,7 +155,7 @@ GDAL_MAJOR=`echo $GDAL_VERSION | cut -f1 -d"."`
 GDAL_MINOR=`echo $GDAL_VERSION | cut -f2 -d"."`
 GDAL_PATCH=`echo $GDAL_VERSION | cut -f3 -d"."`
 
-if test ${GDAL_MAJOR} = 2 -a ${GDAL_MINOR} -ge 3 ; then
+if test ${GDAL_MAJOR} = 2 && test ${GDAL_MINOR} -ge 3 ; then
   AC_MSG_CHECKING([C++11 support for GDAL >= 2.3.0])
   if test ${HAVE_CXX11} = 1 ; then
     AC_MSG_RESULT(yes)
@@ -169,7 +169,7 @@ AC_MSG_CHECKING([GDAL version >= 1.11.4])
 if test ${GDAL_MAJOR} -gt 1 ; then
   AC_MSG_RESULT(yes)
 else
-  if test ${GDAL_MAJOR} = 1 -a ${GDAL_MINOR} = 11 -a ${GDAL_PATCH} -ge 4 ; then
+  if test ${GDAL_MAJOR} = 1 && test ${GDAL_MINOR} = 11 && test ${GDAL_PATCH} -ge 4 ; then
     AC_MSG_RESULT(yes)
   else
     AC_MSG_RESULT(no)
@@ -179,7 +179,7 @@ fi
 
 
 AC_MSG_CHECKING([GDAL version <= 2.5 or >= 3.0])
-if test ${GDAL_MAJOR} -lt 2 -o ${GDAL_MAJOR} -gt 2; then
+if test ${GDAL_MAJOR} -lt 2 || test ${GDAL_MAJOR} -gt 2; then
   AC_MSG_RESULT(yes)
 else
   if test ${GDAL_MAJOR} = 2; then
@@ -468,14 +468,22 @@ fi
 fi
 
 AC_MSG_CHECKING([Using GDAL < 3 with PROJ >= 6])
-if test ${GDAL_MAJOR} -lt 3 -a ${PROJ_VERSION_DOT} -ge 600; then
+#echo "${GDAL_MAJOR}"
+#echo "${PROJ_VERSION_DOT}"
+if test ${GDAL_MAJOR} -lt 3 && test ${PROJ_VERSION_DOT} -ge 600; then
     AC_MSG_RESULT(yes)
-    AC_MSG_ERROR([GDAL >= 3 should be used with PROJ >= 6])
+    if test ${PROJ_API} = "proj.h"; then
+        AC_MSG_ERROR([GDAL >= 3 should be used with PROJ >= 6, use --with-proj_api="proj_api.h" for deprecated API])
+    else
+        AC_MSG_WARN([GDAL >= 3 should be used with PROJ >= 6])
+    fi
   else
     AC_MSG_RESULT(no)
 fi
 
-if test "${PROJ6}" = "no" -o "${PROJ_API}" =  "proj_api.h"; then
+
+
+if test "${PROJ6}" = "no" || test "${PROJ_API}" =  "proj_api.h"; then
     PKG_CPPFLAGS="${PKG_CPPFLAGS} -DACCEPT_USE_OF_DEPRECATED_PROJ_API_H"
 fi
 #AC_MSG_NOTICE([CPP FLAGS: ${PKG_CPPFLAGS}])
@@ -744,38 +752,6 @@ AC_MSG_NOTICE([Copy data for:])
 fi
 
 
-if test ${PROJ6} = "yes"; then
-  sqlok=yes
-  AC_CHECK_HEADER([sqlite3.h],,sqlok=no)
-  if test "${sqlok}" = no; then
-    AC_MSG_ERROR([sqlite3.h not found in given locations.])
-  fi
-  AC_CHECK_LIB([sqlite3], [sqlite3_libversion],,sqlok=no)
-  if test "${sqlok}" = no; then
-    AC_MSG_ERROR([sqlite3_libversion not found in libsqlite3.])
-  fi
-fi
-
-if test "${PROJV1}" -ge 7; then
-  curlok=yes
-  AC_CHECK_HEADER([curl/curl.h],,curlok=no)
-  if test "${curlok}" = no; then
-    AC_MSG_ERROR([curl.h not found in given locations.])
-  fi
-  AC_CHECK_LIB([curl], [curl_version],,curlok=no)
-  if test "${curlok}" = no; then
-    AC_MSG_ERROR([curl_version not found in libcurl.])
-  fi
-  tiffok=yes
-  AC_CHECK_HEADER([tiff.h],,tiffok=no)
-  if test "${tiffok}" = no; then
-    AC_MSG_ERROR([tiff.h not found in given locations.])
-  fi
-  AC_CHECK_LIB([tiff], [TIFFOpen],,tiffok=no)
-  if test "${tiffok}" = no; then
-    AC_MSG_ERROR([TIFFOpen not found in libtiff.])
-  fi
-fi
 
 #AC_MSG_NOTICE([CPP FLAGS: ${PKG_CPPFLAGS}])
 
@@ -789,8 +765,11 @@ AC_SUBST([PKG_CPPFLAGS], ["${PKG_CPPFLAGS} ${proj_include_path}"])
 fi
 #AC_MSG_NOTICE([CPP FLAGS: ${PKG_CPPFLAGS}])
 if test ${PROJ6} = "yes" ; then
-AC_SUBST([PKG_CPPFLAGS], ["${PKG_CPPFLAGS} -DPROJ_H_API"])
-#AC_SUBST([PKG_CPPFLAGS], ["${PKG_CPPFLAGS} -DACCEPT_USE_OF_DEPRECATED_PROJ_API_H"])
+  if test ${PROJ_API} = "proj.h"; then
+    AC_SUBST([PKG_CPPFLAGS], ["${PKG_CPPFLAGS} -DPROJ_H_API"])
+  else
+    AC_SUBST([PKG_CPPFLAGS], ["${PKG_CPPFLAGS} -DACCEPT_USE_OF_DEPRECATED_PROJ_API_H"])
+  fi
 fi
 
 AC_SUBST([PKG_LIBS], ["${INPKG_LIBS} ${GDAL_LIBS}"])
@@ -804,12 +783,6 @@ if test [ -n "$PROJ_LIB_PATH" ] ; then
 AC_SUBST([PKG_LIBS], ["${PKG_LIBS} ${PROJ_LIB_PATH}"])
 else
 AC_SUBST([PKG_LIBS], ["${PKG_LIBS} -lproj"])
-fi
-if test ${PROJ6} = "yes" ; then
-AC_SUBST([PKG_LIBS], ["${PKG_LIBS} -lsqlite3"])
-fi
-if test "${PROJV1}" -ge 7; then
-AC_SUBST([PKG_LIBS], ["${PKG_LIBS} -lcurl -ltiff"])
 fi
 AC_MSG_NOTICE([Package CPP flags: ${PKG_CPPFLAGS}])
 AC_MSG_NOTICE([Package LIBS: ${PKG_LIBS}])

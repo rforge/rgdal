@@ -44,7 +44,7 @@ The **mapproj** package provided coordinate reference system and projection supp
 
 ```{r, echo=FALSE}
 odd_run <- FALSE
-if (PROJis6ormore()) odd_run <- TRUE
+if (PROJis6ormore() && GDALis3ormore()) odd_run <- TRUE
 ```
 
 
