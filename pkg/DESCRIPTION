@@ -1,7 +1,7 @@
 Package: rgdal
 Title: Bindings for the 'Geospatial' Data Abstraction Library
-Version: 1.5-8
-Date: 2020-05-16
+Version: 1.5-9
+Date: 2020-05-30
 Depends: R (>= 3.5.0), methods, sp (>= 1.1-0)
 Imports: grDevices, graphics, stats, utils
 LinkingTo: sp
@@ -21,6 +21,6 @@ Authors@R: c(
 	person("Colin", "Rundel", role = "ctb"))
 License: GPL (>= 2)
 URL: http://rgdal.r-forge.r-project.org, https://www.gdal.org, https://proj.org, https://r-forge.r-project.org/projects/rgdal/
-SystemRequirements: for building from source: GDAL >= 1.11.4, library from https://trac.osgeo.org/gdal/wiki/DownloadSource and PROJ.4 (proj >= 4.8.0) from https://download.osgeo.org/proj/, note that sqlite3 >= 3.11 is required by PROJ >= 6.0.0; GDAL OSX frameworks built by William Kyngesburye at http://www.kyngchaos.com/ may be used for source installs on OSX. For installation with older external dependencies, override configure checks with --configure-args="enable-deprecated=yes". Consider source installations using archived versions of rgdal contemporary with installed external dependencies, for example rgdal_0.8-7 for PROJ4 4.8.0 (March 2012).
+SystemRequirements: PROJ (>= 4.8.0, https://proj.org/download.html, note that sqlite3 >= 3.11 is required by PROJ >= 6.0.0, and curl and libtiff are also required by PROJ >= 7.0.0) and GDAL (>= 1.11.4, https://gdal.org/download.html), with versions either (A) PROJ < 6 and GDAL < 3 or (B) PROJ >= 6 and GDAL >= 3. Consider source installations using archived versions of rgdal contemporary with installed external dependencies, for example rgdal_0.8-7 for PROJ4 4.8.0 (March 2012).
 VignetteBuilder: knitr
 RoxygenNote: 6.1.1
