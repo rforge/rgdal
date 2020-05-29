@@ -1,3 +1,19 @@
+2020-05-29 16:59  rsbivand
+
+	* configure, configure.ac, man/CRS-class.Rd, src/inverser.c,
+	  src/proj6.cpp, src/proj_info6.cpp, src/projectit.cpp,
+	  vignettes/CRS_projections_transformations.Rmd: expose configure
+	  arg --with-proj_api=proj_api.h for broken homebrew
+
+2020-05-29 14:13  rsbivand
+
+	* DESCRIPTION, vignettes/CRS_projections_transformations.Rmd: fix
+	  PROJ < 6 & GDAL < 3 vignette issues
+
+2020-05-22 08:07  rsbivand
+
+	* ChangeLog, inst/ChangeLog: tidy
+
 2020-05-22 08:03  rsbivand
 
 	* R/AAA.R: add options access to mute exportToProj4 degradation
