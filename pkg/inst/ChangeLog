@@ -1,3 +1,11 @@
+2020-05-31 15:30  rsbivand
+
+	* configure, configure.ac: addressing configure issues
+
+2020-05-29 17:00  rsbivand
+
+	* ChangeLog, inst/ChangeLog: tidy
+
 2020-05-29 16:59  rsbivand
 
 	* configure, configure.ac, man/CRS-class.Rd, src/inverser.c,
