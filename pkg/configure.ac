@@ -43,7 +43,8 @@ if test ${R_MAJOR} -ge 4; then
  CXX11=`"${RBIN}" CMD config CXX11`
  CXX11STD=`"${RBIN}" CMD config CXX11STD`
 else
- if test ${R_MAJOR} -eq 3 -a ${R_MINOR} -ge 4; then
+# if test ${R_MAJOR} -eq 3 -a ${R_MINOR} -ge 4; then
+ if test ${R_MAJOR} -eq 3 && test ${R_MINOR} -ge 4; then
   CXX11=`"${RBIN}" CMD config CXX11`
   CXX11STD=`"${RBIN}" CMD config CXX11STD`
  else
@@ -82,8 +83,8 @@ AC_CHECK_FILE([/usr/bin/svnversion],
  [SVN_VERSION=""])
 
 #SVN_VERSION=`svnversion -n '.'`
-if test "${SVN_VERSION}" != "exported" -a test -n "${SVN_VERSION}" -a test "${SVN_VERSION}" != "Unversioned directory"; then
-  echo "${SVN_VERSION}" > inst/SVN_VERSION
+#if test "${SVN_VERSION}" != "exported" -a test -n "${SVN_VERSION}" -a test "${SVN_VERSION}" != "Unversioned directory"; then
+if test "${SVN_VERSION}" != "exported" && test -n "${SVN_VERSION}" && test "${SVN_VERSION}" != "Unversioned directory"; then  echo "${SVN_VERSION}" > inst/SVN_VERSION
 else
   SVN_VERSION=`cat inst/SVN_VERSION | tr -d '\n'`
 fi
@@ -164,7 +165,8 @@ GDAL_MAJOR=`echo $GDAL_VERSION | cut -f1 -d"."`
 GDAL_MINOR=`echo $GDAL_VERSION | cut -f2 -d"."`
 GDAL_PATCH=`echo $GDAL_VERSION | cut -f3 -d"."`
 
-if test ${GDAL_MAJOR} = 2 -a test ${GDAL_MINOR} -ge 3 ; then
+#if test ${GDAL_MAJOR} = 2 -a test ${GDAL_MINOR} -ge 3 ; then
+if test ${GDAL_MAJOR} = 2 && test ${GDAL_MINOR} -ge 3 ; then
   AC_MSG_CHECKING([C++11 support for GDAL >= 2.3.0])
   if test ${HAVE_CXX11} = 1 ; then
     AC_MSG_RESULT(yes)
@@ -178,7 +180,8 @@ AC_MSG_CHECKING([GDAL version >= 1.11.4])
 if test ${GDAL_MAJOR} -gt 1 ; then
   AC_MSG_RESULT(yes)
 else
-  if test ${GDAL_MAJOR} = 1 -a test ${GDAL_MINOR} = 11 -a test ${GDAL_PATCH} -ge 4 ; then
+#  if test ${GDAL_MAJOR} = 1 -a test ${GDAL_MINOR} = 11 -a test ${GDAL_PATCH} -ge 4 ; then
+  if test ${GDAL_MAJOR} = 1 && test ${GDAL_MINOR} = 11 && test ${GDAL_PATCH} -ge 4 ; then
     AC_MSG_RESULT(yes)
   else
     AC_MSG_RESULT(no)
@@ -548,7 +551,8 @@ if test -z "${PROJ_VERSION_DOT}"; then
   PROJ_VERSION_DOT=`echo ${PROJ_VERSION_H} | tr -d "."`
 fi
 AC_MSG_CHECKING([Using GDAL < 3 with PROJ >= 6])
-if test ${GDAL_MAJOR} -lt 3 -a test ${PROJ_VERSION_DOT} -ge 600; then
+#if test ${GDAL_MAJOR} -lt 3 -a test ${PROJ_VERSION_DOT} -ge 600; then
+if test ${GDAL_MAJOR} -lt 3 && test ${PROJ_VERSION_DOT} -ge 600; then
     AC_MSG_RESULT(yes)
     if test ${PROJ_API} = "proj.h"; then
         AC_MSG_ERROR([GDAL >= 3 should be used with PROJ >= 6, use --with-proj_api="proj_api.h" for deprecated API])
