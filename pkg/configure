@@ -2072,8 +2072,12 @@ $as_echo "$as_me: CXX: ${CXX}" >&6;}
 #CXX_11
 
 R_VERSION=`echo 'o <- R.version; cat(paste0(o$major, ".", o$minor))' | ${RBIN} --vanilla --slave`
+{ $as_echo "$as_me:${as_lineno-$LINENO}: R_VERSION is: ${R_VERSION}" >&5
+$as_echo "$as_me: R_VERSION is: ${R_VERSION}" >&6;}
 R_MINOR=`echo $R_VERSION | cut -f2 -d"."`
 R_MAJOR=`echo $R_VERSION | cut -f1 -d"."`
+{ $as_echo "$as_me:${as_lineno-$LINENO}: R_MAJOR is: ${R_MAJOR}, R_MINOR is: ${R_MINOR}" >&5
+$as_echo "$as_me: R_MAJOR is: ${R_MAJOR}, R_MINOR is: ${R_MINOR}" >&6;}
 
 #if test ${R_MINOR} -ge 4; then
 #: ${CXX=`"${RBIN}" CMD config CXX11`}
@@ -2094,7 +2098,13 @@ else
  fi
 fi
 
+{ $as_echo "$as_me:${as_lineno-$LINENO}: CXX11 is: ${CXX11}, CXX11STD is: ${CXX11STD}" >&5
+$as_echo "$as_me: CXX11 is: ${CXX11}, CXX11STD is: ${CXX11STD}" >&6;}
+
 CXX="${CXX11} ${CXX11STD}"
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: CXX is: ${CXX}" >&5
+$as_echo "$as_me: CXX is: ${CXX}" >&6;}
 
 if test -n "${CXX11}"; then
 HAVE_CXX11=1
@@ -2268,6 +2278,11 @@ $as_echo "no" >&6; }
 
 	exit 1
 fi
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: GDAL_LIBS is: ${GDAL_LIBS}" >&5
+$as_echo "$as_me: GDAL_LIBS is: ${GDAL_LIBS}" >&6;}
+{ $as_echo "$as_me:${as_lineno-$LINENO}: GDAL_DEP_LIBS is: ${GDAL_DEP_LIBS}" >&5
+$as_echo "$as_me: GDAL_DEP_LIBS is: ${GDAL_DEP_LIBS}" >&6;}
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: GDAL: ${GDAL_VERSION}" >&5
 $as_echo "$as_me: GDAL: ${GDAL_VERSION}" >&6;}

@@ -28,8 +28,10 @@ AC_MSG_NOTICE([CXX: ${CXX}])
 #CXX_11
 
 R_VERSION=`echo 'o <- R.version; cat(paste0(o$major, ".", o$minor))' | ${RBIN} --vanilla --slave`
+AC_MSG_NOTICE([R_VERSION is: ${R_VERSION}])
 R_MINOR=`echo $R_VERSION | cut -f2 -d"."`
 R_MAJOR=`echo $R_VERSION | cut -f1 -d"."`
+AC_MSG_NOTICE([R_MAJOR is: ${R_MAJOR}, R_MINOR is: ${R_MINOR}])
 
 #if test ${R_MINOR} -ge 4; then
 #: ${CXX=`"${RBIN}" CMD config CXX11`}
@@ -50,7 +52,11 @@ else
  fi
 fi
 
+AC_MSG_NOTICE([CXX11 is: ${CXX11}, CXX11STD is: ${CXX11STD}])
+
 CXX="${CXX11} ${CXX11STD}"
+
+AC_MSG_NOTICE([CXX is: ${CXX}])
 
 if test -n "${CXX11}"; then
 HAVE_CXX11=1
@@ -148,6 +154,9 @@ else
 
 	exit 1
 fi
+
+AC_MSG_NOTICE([GDAL_LIBS is: ${GDAL_LIBS}])
+AC_MSG_NOTICE([GDAL_DEP_LIBS is: ${GDAL_DEP_LIBS}])
 
 AC_MSG_NOTICE([GDAL: ${GDAL_VERSION}])
 #GDAL_VER_DOT=`echo $GDAL_VERSION | tr -d "."`
