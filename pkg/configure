@@ -2072,12 +2072,10 @@ $as_echo "$as_me: CXX: ${CXX}" >&6;}
 #CXX_11
 
 R_VERSION=`echo 'o <- R.version; cat(paste0(o$major, ".", o$minor))' | ${RBIN} --vanilla --slave`
-{ $as_echo "$as_me:${as_lineno-$LINENO}: R_VERSION is: ${R_VERSION}" >&5
-$as_echo "$as_me: R_VERSION is: ${R_VERSION}" >&6;}
+#AC_MSG_NOTICE([R_VERSION is: ${R_VERSION}])
 R_MINOR=`echo $R_VERSION | cut -f2 -d"."`
 R_MAJOR=`echo $R_VERSION | cut -f1 -d"."`
-{ $as_echo "$as_me:${as_lineno-$LINENO}: R_MAJOR is: ${R_MAJOR}, R_MINOR is: ${R_MINOR}" >&5
-$as_echo "$as_me: R_MAJOR is: ${R_MAJOR}, R_MINOR is: ${R_MINOR}" >&6;}
+#AC_MSG_NOTICE([R_MAJOR is: ${R_MAJOR}, R_MINOR is: ${R_MINOR}])
 
 #if test ${R_MINOR} -ge 4; then
 #: ${CXX=`"${RBIN}" CMD config CXX11`}
@@ -2280,10 +2278,8 @@ $as_echo "no" >&6; }
 	exit 1
 fi
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: GDAL_LIBS is: ${GDAL_LIBS}" >&5
-$as_echo "$as_me: GDAL_LIBS is: ${GDAL_LIBS}" >&6;}
-{ $as_echo "$as_me:${as_lineno-$LINENO}: GDAL_DEP_LIBS is: ${GDAL_DEP_LIBS}" >&5
-$as_echo "$as_me: GDAL_DEP_LIBS is: ${GDAL_DEP_LIBS}" >&6;}
+#AC_MSG_NOTICE([GDAL_LIBS is: ${GDAL_LIBS}])
+#AC_MSG_NOTICE([GDAL_DEP_LIBS is: ${GDAL_DEP_LIBS}])
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: GDAL: ${GDAL_VERSION}" >&5
 $as_echo "$as_me: GDAL: ${GDAL_VERSION}" >&6;}
@@ -3981,6 +3977,7 @@ fi
 if test -z "${PROJ_VERSION_DOT}"; then
   PROJ_VERSION_DOT=`echo ${PROJ_VERSION_H} | tr -d "."`
 fi
+NEW_PROJ_WITH_OLD_GDAL="no"
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking Using GDAL < 3 with PROJ >= 6" >&5
 $as_echo_n "checking Using GDAL < 3 with PROJ >= 6... " >&6; }
 #if test ${GDAL_MAJOR} -lt 3 -a test ${PROJ_VERSION_DOT} -ge 600; then
@@ -3990,6 +3987,7 @@ $as_echo "yes" >&6; }
     if test ${PROJ_API} = "proj.h"; then
         as_fn_error $? "GDAL >= 3 should be used with PROJ >= 6, use --with-proj_api=\"proj_api.h\" for deprecated API" "$LINENO" 5
     else
+        NEW_PROJ_WITH_OLD_GDAL="yes"
         { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: GDAL >= 3 should be used with PROJ >= 6" >&5
 $as_echo "$as_me: WARNING: GDAL >= 3 should be used with PROJ >= 6" >&2;}
     fi
@@ -4000,7 +3998,7 @@ fi
 
 
 
-if test "${PROJ6}" = "no" || test "${PROJ_API}" =  "proj_api.h"; then
+if test "${PROJ6}" = "yes" && test "${PROJ_API}" =  "proj_api.h"; then
     PKG_CPPFLAGS="${PKG_CPPFLAGS} -DACCEPT_USE_OF_DEPRECATED_PROJ_API_H"
 fi
 #AC_MSG_NOTICE([CPP FLAGS: ${PKG_CPPFLAGS}])
@@ -4304,12 +4302,11 @@ PKG_CPPFLAGS="${INPKG_CPPFLAGS} ${GDAL_CPPFLAGS}"
 
 #AC_MSG_NOTICE([CPP FLAGS: ${PKG_CPPFLAGS}])
 if test  -n "$proj_include_path"  ; then
-{ $as_echo "$as_me:${as_lineno-$LINENO}: INC_PATH: ${proj_include_path}" >&5
-$as_echo "$as_me: INC_PATH: ${proj_include_path}" >&6;}
+#AC_MSG_NOTICE([INC_PATH: ${proj_include_path}])
 PKG_CPPFLAGS="${PKG_CPPFLAGS} ${proj_include_path}"
 
 fi
-#AC_MSG_NOTICE([CPP FLAGS: ${PKG_CPPFLAGS}])
+
 if test ${PROJ6} = "yes" ; then
   if test ${PROJ_API} = "proj.h"; then
     PKG_CPPFLAGS="${PKG_CPPFLAGS} -DPROJ_H_API"
@@ -4318,6 +4315,11 @@ if test ${PROJ6} = "yes" ; then
     PKG_CPPFLAGS="${PKG_CPPFLAGS} -DACCEPT_USE_OF_DEPRECATED_PROJ_API_H"
 
   fi
+fi
+
+if test ${NEW_PROJ_WITH_OLD_GDAL} = "yes" ; then
+  PKG_CPPFLAGS="${PKG_CPPFLAGS} -DNEW_PROJ_WITH_OLD_GDAL"
+
 fi
 
 PKG_LIBS="${INPKG_LIBS} ${GDAL_LIBS}"

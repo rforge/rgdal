@@ -28,10 +28,10 @@ AC_MSG_NOTICE([CXX: ${CXX}])
 #CXX_11
 
 R_VERSION=`echo 'o <- R.version; cat(paste0(o$major, ".", o$minor))' | ${RBIN} --vanilla --slave`
-AC_MSG_NOTICE([R_VERSION is: ${R_VERSION}])
+#AC_MSG_NOTICE([R_VERSION is: ${R_VERSION}])
 R_MINOR=`echo $R_VERSION | cut -f2 -d"."`
 R_MAJOR=`echo $R_VERSION | cut -f1 -d"."`
-AC_MSG_NOTICE([R_MAJOR is: ${R_MAJOR}, R_MINOR is: ${R_MINOR}])
+#AC_MSG_NOTICE([R_MAJOR is: ${R_MAJOR}, R_MINOR is: ${R_MINOR}])
 
 #if test ${R_MINOR} -ge 4; then
 #: ${CXX=`"${RBIN}" CMD config CXX11`}
@@ -156,8 +156,8 @@ else
 	exit 1
 fi
 
-AC_MSG_NOTICE([GDAL_LIBS is: ${GDAL_LIBS}])
-AC_MSG_NOTICE([GDAL_DEP_LIBS is: ${GDAL_DEP_LIBS}])
+#AC_MSG_NOTICE([GDAL_LIBS is: ${GDAL_LIBS}])
+#AC_MSG_NOTICE([GDAL_DEP_LIBS is: ${GDAL_DEP_LIBS}])
 
 AC_MSG_NOTICE([GDAL: ${GDAL_VERSION}])
 #GDAL_VER_DOT=`echo $GDAL_VERSION | tr -d "."`
@@ -550,6 +550,7 @@ fi
 if test -z "${PROJ_VERSION_DOT}"; then
   PROJ_VERSION_DOT=`echo ${PROJ_VERSION_H} | tr -d "."`
 fi
+NEW_PROJ_WITH_OLD_GDAL="no"
 AC_MSG_CHECKING([Using GDAL < 3 with PROJ >= 6])
 #if test ${GDAL_MAJOR} -lt 3 -a test ${PROJ_VERSION_DOT} -ge 600; then
 if test ${GDAL_MAJOR} -lt 3 && test ${PROJ_VERSION_DOT} -ge 600; then
@@ -557,6 +558,7 @@ if test ${GDAL_MAJOR} -lt 3 && test ${PROJ_VERSION_DOT} -ge 600; then
     if test ${PROJ_API} = "proj.h"; then
         AC_MSG_ERROR([GDAL >= 3 should be used with PROJ >= 6, use --with-proj_api="proj_api.h" for deprecated API])
     else
+        NEW_PROJ_WITH_OLD_GDAL="yes"
         AC_MSG_WARN([GDAL >= 3 should be used with PROJ >= 6])
     fi
   else
@@ -565,7 +567,7 @@ fi
 
 
 
-if test "${PROJ6}" = "no" || test "${PROJ_API}" =  "proj_api.h"; then
+if test "${PROJ6}" = "yes" && test "${PROJ_API}" =  "proj_api.h"; then
     PKG_CPPFLAGS="${PKG_CPPFLAGS} -DACCEPT_USE_OF_DEPRECATED_PROJ_API_H"
 fi
 #AC_MSG_NOTICE([CPP FLAGS: ${PKG_CPPFLAGS}])
@@ -842,16 +844,20 @@ fi
 AC_SUBST([PKG_CPPFLAGS], ["${INPKG_CPPFLAGS} ${GDAL_CPPFLAGS}"])
 #AC_MSG_NOTICE([CPP FLAGS: ${PKG_CPPFLAGS}])
 if test [ -n "$proj_include_path" ] ; then
-AC_MSG_NOTICE([INC_PATH: ${proj_include_path}])
+#AC_MSG_NOTICE([INC_PATH: ${proj_include_path}])
 AC_SUBST([PKG_CPPFLAGS], ["${PKG_CPPFLAGS} ${proj_include_path}"])
 fi
-#AC_MSG_NOTICE([CPP FLAGS: ${PKG_CPPFLAGS}])
+
 if test ${PROJ6} = "yes" ; then
   if test ${PROJ_API} = "proj.h"; then
     AC_SUBST([PKG_CPPFLAGS], ["${PKG_CPPFLAGS} -DPROJ_H_API"])
   else
     AC_SUBST([PKG_CPPFLAGS], ["${PKG_CPPFLAGS} -DACCEPT_USE_OF_DEPRECATED_PROJ_API_H"])
   fi
+fi
+
+if test ${NEW_PROJ_WITH_OLD_GDAL} = "yes" ; then
+  AC_SUBST([PKG_CPPFLAGS], ["${PKG_CPPFLAGS} -DNEW_PROJ_WITH_OLD_GDAL"])
 fi
 
 AC_SUBST([PKG_LIBS], ["${INPKG_LIBS} ${GDAL_LIBS}"])

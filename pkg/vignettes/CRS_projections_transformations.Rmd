@@ -113,12 +113,12 @@ For these reasons, **sf**  and **sp** are changing from PROJ.4 strings represent
 
 The introduction of interactive mapping using **mapview** and **tmap** among other packages highlights the need to set the coordinate reference system (CRS) of objects correctly, so that zooming does not reveal embarrassing divergences. Using the location of the Broad Street pump disabled by Dr John Snow to stop a cholera epidemic in Soho, London, in 1854 (Brody et al. 2000), we can start to see what steps are being taken. The point location of the pump is given in projected coordinates, defined in the British National Grid. The workflow used by `mapview::mapview()` is to transform first to WGS84 (EPSG:4326) using `sf::st_transform()` if need be, before permitting **leaflet** to project to Web Mercator (EPSG:3857) internally.
 
-```{r, warning=TRUE}
+```{r, warning=TRUE, eval=odd_run}
 b_pump <- readOGR(system.file("vectors/b_pump.gpkg", package="rgdal"))
 ```
 Reading the file loses the PROJ.4 `+datum=` key-value pair, but the WKT2:2019 string is complete:
 
-```{r, warning=TRUE}
+```{r, warning=TRUE, eval=odd_run}
 proj4string(b_pump)
 ```
 ```{r, eval=odd_run}
