@@ -1,3 +1,12 @@
+2020-06-09 10:01  rsbivand
+
+	* DESCRIPTION, man/make_EPSG.Rd: remove direct link to
+	  http://www.epsg.org
+
+2020-06-08 14:47  rsbivand
+
+	* ChangeLog, inst/ChangeLog: tidy
+
 2020-06-08 14:47  rsbivand
 
 	* R/AAA.R, vignettes/CRS_projections_transformations.Rmd: tidy
