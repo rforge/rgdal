@@ -482,6 +482,9 @@ rm -f proj_conf_test_proj_api.c proj_conf_test_proj_api
   fi
 fi # PROJ_API = ""
 
+dnl PROJ >= 6 contains C++ code, so AC_CHECK_LIB needs to be
+dnl with the C++ runtime (and rgdal is going to use C++).
+AC_LANG(C++)
 
 if test "${PROJ_API}" =  "proj.h" ; then # proj.h
 
@@ -713,7 +716,9 @@ int main() {
 }
 _EOCONF]
 
-${CXX} ${CPPFLAGS} ${PKG_CPPFLAGS} -o proj_conf_test2 proj_conf_test2.cpp ${PKG_LIBS} -lproj
+dnl PROJ >= 6 needs C++ runtime and libsqlite3 (and perhaps more)
+dnl when statically linked.
+${CXX} ${CPPFLAGS} ${PKG_CPPFLAGS} -o proj_conf_test2 proj_conf_test2.cpp ${PKG_LIBS} -lproj -lsqlite3
 if test [ -n "$proj_share_path" ] ; then
   PROJ_LIB="${proj_share_path}" ./proj_conf_test2
   proj_share=`echo $?`
