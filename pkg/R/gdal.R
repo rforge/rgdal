@@ -466,10 +466,10 @@ getProjectionRef <- function(dataset, OVERRIDE_PROJ_DATUM_WITH_TOWGS84=NULL, enf
           if (get("PROJ6_warnings_count",
             envir=.RGDAL_CACHE) == 0L) {
             warning(paste0("PROJ6/GDAL3 PROJ string degradation in workflow\n repeated warnings suppressed\n ", msg))
-            assign("PROJ6_warnings_count",
-              get("PROJ6_warnings_count",
-              envir=.RGDAL_CACHE) + 1L, envir=.RGDAL_CACHE)
-            }
+          }
+          assign("PROJ6_warnings_count",
+            get("PROJ6_warnings_count",
+            envir=.RGDAL_CACHE) + 1L, envir=.RGDAL_CACHE)
           }
          }
     }
@@ -490,10 +490,10 @@ getProjectionRef <- function(dataset, OVERRIDE_PROJ_DATUM_WITH_TOWGS84=NULL, enf
           if (get("PROJ6_warnings_count",
             envir=.RGDAL_CACHE) == 0L) {
             warning(paste0("PROJ6/GDAL3 PROJ string degradation in workflow\n repeated warnings suppressed\n ", msg))
-            assign("PROJ6_warnings_count",
+          }
+          assign("PROJ6_warnings_count",
               get("PROJ6_warnings_count",
               envir=.RGDAL_CACHE) + 1L, envir=.RGDAL_CACHE)
-            }
           }
          }
         }
