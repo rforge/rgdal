@@ -572,6 +572,7 @@ showSRID <- function(inSRID, format="WKT2", multiline="NO", enforce_xy=NULL, EPS
     if (substring(inSRID, 1, 2) == "PR") in_format = 3L
     if (substring(inSRID, 1, 2) == "GE") in_format = 3L
     if (substring(inSRID, 1, 2) == "BA") in_format = 3L
+    if (substring(inSRID, 1, 2) == "BO") in_format = 3L
     if (substring(inSRID, 1, 1) == "S") in_format = 3L
     if (substring(inSRID, 1, 2) == "CO") in_format = 3L
     if (substring(inSRID, 1, 4) == "EPSG") in_format = 4L
