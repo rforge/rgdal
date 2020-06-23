@@ -465,7 +465,7 @@ getProjectionRef <- function(dataset, OVERRIDE_PROJ_DATUM_WITH_TOWGS84=NULL, enf
         } else {
           if (get("PROJ6_warnings_count",
             envir=.RGDAL_CACHE) == 0L) {
-            warning(paste0("PROJ6/GDAL3 PROJ string degradation in workflow\n repeated warnings suppressed\n ", msg))
+            warning(paste0("PROJ/GDAL PROJ string degradation in workflow\n repeated warnings suppressed\n ", msg))
           }
           assign("PROJ6_warnings_count",
             get("PROJ6_warnings_count",
@@ -489,7 +489,7 @@ getProjectionRef <- function(dataset, OVERRIDE_PROJ_DATUM_WITH_TOWGS84=NULL, enf
         } else {
           if (get("PROJ6_warnings_count",
             envir=.RGDAL_CACHE) == 0L) {
-            warning(paste0("PROJ6/GDAL3 PROJ string degradation in workflow\n repeated warnings suppressed\n ", msg))
+            warning(paste0("PROJ/GDAL PROJ string degradation in workflow\n repeated warnings suppressed\n ", msg))
           }
           assign("PROJ6_warnings_count",
               get("PROJ6_warnings_count",
