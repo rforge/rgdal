@@ -161,7 +161,7 @@ SEXP RGDAL_projInfo(SEXP type) {
                 n1++;
 //Rprintf("%s %f %s\n", units[i]->proj_short_name, units[i]->conv_factor, units[i]->name);
             }
-            if (n1 > n) break;
+            if (n1 >= n) break; //EPJ correction
         }
         proj_unit_list_destroy(units);
 // >= 710 proj_get_units_from_database()
