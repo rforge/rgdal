@@ -137,7 +137,35 @@ SEXP RGDAL_projInfo(SEXP type) {
         SET_STRING_ELT(ansnames, 1, COPY_TO_USER_STRING("to_meter"));
         SET_STRING_ELT(ansnames, 2, COPY_TO_USER_STRING("name"));
         setAttrib(ans, R_NamesSymbol, ansnames);
-
+#if ((PROJ_VERSION_MAJOR == 7 && PROJ_VERSION_MINOR >= 1) || PROJ_VERSION_MAJOR > 7)
+        PROJ_UNIT_INFO** units;
+        units = proj_get_units_from_database(nullptr, nullptr, "linear", false, nullptr);
+        n = 0;
+//Rprintf("n: %d\n", n);
+        for (int i = 0; units && units[i]; i++) {
+            if (units[i]->proj_short_name) n++;
+//Rprintf("%s\n", units[i]->proj_short_name);
+        }
+//Rprintf("n: %d\n", n);
+        SET_VECTOR_ELT(ans, 0, NEW_CHARACTER(n));
+        SET_VECTOR_ELT(ans, 1, NEW_NUMERIC(n));
+        SET_VECTOR_ELT(ans, 2, NEW_CHARACTER(n));
+        int n1=0;
+        for (int i = 0; units && units[i]; i++) {
+            if (units[i]->proj_short_name) {
+                SET_STRING_ELT(VECTOR_ELT(ans, 0), n1, 
+		    COPY_TO_USER_STRING(units[i]->proj_short_name));
+                NUMERIC_POINTER(VECTOR_ELT(ans, 1))[n1] = units[i]->conv_factor;
+                SET_STRING_ELT(VECTOR_ELT(ans, 2), n1, 
+		    COPY_TO_USER_STRING(units[i]->name));
+                n1++;
+//Rprintf("%s %f %s\n", units[i]->proj_short_name, units[i]->conv_factor, units[i]->name);
+            }
+            if (n1 > n) break;
+        }
+        proj_unit_list_destroy(units);
+// >= 710 proj_get_units_from_database()
+#else
         const struct PJ_UNITS *lu;
         for (lu = proj_list_units(); lu->id ; ++lu) n++;
         SET_VECTOR_ELT(ans, 0, NEW_CHARACTER(n));
@@ -153,6 +181,7 @@ SEXP RGDAL_projInfo(SEXP type) {
 		COPY_TO_USER_STRING(lu->name));
             n++;
         }
+#endif
     } else error("no such type");
     
     UNPROTECT(pc);
