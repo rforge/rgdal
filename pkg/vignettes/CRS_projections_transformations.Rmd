@@ -29,7 +29,7 @@ Defining the CRS became necessary when integrating other data with a different C
 
 ```{r, echo=FALSE}
 mvrun <- FALSE
-if (require(mapview, quietly=TRUE) && .Platform$OS.type == "unix") mvrun <- TRUE
+if (require(mapview, quietly=TRUE) && .Platform$OS.type == "unix" && require(curl, quietly=TRUE) && curl::has_internet()) mvrun <- TRUE
 ```
 
 ```{r, eval=mvrun}
