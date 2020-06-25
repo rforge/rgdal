@@ -1,3 +1,13 @@
+2020-06-25 17:40  rsbivand
+
+	* DESCRIPTION, configure, man/llgrid.Rd, man/readGDAL.Rd,
+	  vignettes/CRS_projections_transformations.Rmd: remove submission
+	  warnings
+
+2020-06-25 12:44  rsbivand
+
+	* ChangeLog, inst/ChangeLog: tidy
+
 2020-06-25 12:43  rsbivand
 
 	* src/proj6.cpp: logic correction
