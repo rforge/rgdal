@@ -679,6 +679,7 @@ SHELL'
 ac_subst_files=''
 ac_user_opts='
 enable_option_checking
+enable_loadflags
 with_gdal_config
 with_proj_include
 with_proj_lib
@@ -1301,6 +1302,14 @@ if test -n "$ac_init_help"; then
      short | recursive ) echo "Configuration of rgdal 1.5-13:";;
    esac
   cat <<\_ACEOF
+
+Optional Features:
+  --disable-option-checking  ignore unrecognized --enable/--with options
+  --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
+  --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
+  --enable-loadflags=yes/no
+                          use value of R CMD config LDFLAGS for configure,
+                          default yes
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
@@ -2069,6 +2078,30 @@ RBIN="${R_HOME}/bin/R"
 $as_echo "$as_me: CC: ${CC}" >&6;}
 { $as_echo "$as_me:${as_lineno-$LINENO}: CXX: ${CXX}" >&5
 $as_echo "$as_me: CXX: ${CXX}" >&6;}
+{ $as_echo "$as_me:${as_lineno-$LINENO}: CFLAGS: ${CFLAGS}" >&5
+$as_echo "$as_me: CFLAGS: ${CFLAGS}" >&6;}
+{ $as_echo "$as_me:${as_lineno-$LINENO}: CPPFLAGS: ${CPPFLAGS}" >&5
+$as_echo "$as_me: CPPFLAGS: ${CPPFLAGS}" >&6;}
+{ $as_echo "$as_me:${as_lineno-$LINENO}: LDFLAGS: ${LDFLAGS}" >&5
+$as_echo "$as_me: LDFLAGS: ${LDFLAGS}" >&6;}
+
+# Check whether --enable-loadflags was given.
+if test "${enable_loadflags+set}" = set; then :
+  enableval=$enable_loadflags; loadflags=${enableval}
+else
+  loadflags="yes"
+fi
+
+
+echo "loadflags: $loadflags"
+
+if test  "${loadflags}" == "no"  ; then
+    LDFLAGS=""
+    { $as_echo "$as_me:${as_lineno-$LINENO}: value of R CMD config LDFLAGS not used for configure" >&5
+$as_echo "$as_me: value of R CMD config LDFLAGS not used for configure" >&6;}
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: LDFLAGS: ${LDFLAGS}" >&5
+$as_echo "$as_me: LDFLAGS: ${LDFLAGS}" >&6;}
 
 #CXX_11
 
