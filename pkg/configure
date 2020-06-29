@@ -2071,6 +2071,7 @@ RBIN="${R_HOME}/bin/R"
 #: ${CPP=`"${RBIN}" CMD config CPP`}
 : ${CFLAGS=`"${RBIN}" CMD config CFLAGS`}
 : ${CPPFLAGS=`"${RBIN}" CMD config CPPFLAGS`}
+: ${CXXFLAGS=`"${RBIN}" CMD config CXXFLAGS`}
 : ${LDFLAGS=`"${RBIN}" CMD config LDFLAGS`}
 # AC_SUBST([CC],["clang"])
 # AC_SUBST([CXX],["clang++"])
@@ -2082,6 +2083,8 @@ $as_echo "$as_me: CXX: ${CXX}" >&6;}
 $as_echo "$as_me: CFLAGS: ${CFLAGS}" >&6;}
 { $as_echo "$as_me:${as_lineno-$LINENO}: CPPFLAGS: ${CPPFLAGS}" >&5
 $as_echo "$as_me: CPPFLAGS: ${CPPFLAGS}" >&6;}
+{ $as_echo "$as_me:${as_lineno-$LINENO}: CXXFLAGS: ${CXXFLAGS}" >&5
+$as_echo "$as_me: CXXFLAGS: ${CXXFLAGS}" >&6;}
 { $as_echo "$as_me:${as_lineno-$LINENO}: LDFLAGS: ${LDFLAGS}" >&5
 $as_echo "$as_me: LDFLAGS: ${LDFLAGS}" >&6;}
 
