@@ -2096,7 +2096,7 @@ else
 fi
 
 
-echo "loadflags: $loadflags"
+#echo "loadflags: $loadflags"
 
 if test  "${loadflags}" == "no"  ; then
     LDFLAGS=""

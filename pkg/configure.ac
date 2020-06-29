@@ -36,7 +36,7 @@ AC_ARG_ENABLE([loadflags],
     [loadflags=${enableval}], 
     [loadflags="yes"])
 
-echo "loadflags: $loadflags"
+#echo "loadflags: $loadflags"
 
 if test [ "${loadflags}" == "no" ] ; then
     LDFLAGS=""
