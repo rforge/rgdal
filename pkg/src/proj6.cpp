@@ -198,16 +198,14 @@ SEXP get_proj_search_path(void) {
 
 }
 
-SEXP set_proj_search_path(SEXP path) {
-#if PROJ_VERSION_MAJOR > 6
-    Rprintf("Not available for PROJ version 6");
-    return(R_NilValue);
-// sf usage for only one path component
-#else
+SEXP set_proj_paths(SEXP paths) {
     //PJ_CONTEXT *ctx = proj_context_create();
     SEXP res;
-    const char *paths = CHAR(STRING_ELT(path, 0));
-    proj_context_set_search_paths(PJ_DEFAULT_CTX, 1, &paths);
+    int i, n = length(paths);
+    char **paths_loc = (char **) R_alloc((size_t) n, sizeof(char*));
+    for (i=0; i<n; i++) paths_loc[i] = (char *) CHAR(STRING_ELT(paths, i));
+//    const char *paths = CHAR(STRING_ELT(path, 0));
+    proj_context_set_search_paths(PJ_DEFAULT_CTX, n, (const char* const*) paths_loc);
     if (int this_errno = proj_context_errno(PJ_DEFAULT_CTX) != 0) {
         const char *errstr = proj_errno_string(this_errno);
         //proj_context_destroy(ctx);
@@ -218,7 +216,6 @@ SEXP set_proj_search_path(SEXP path) {
     UNPROTECT(1);
     //proj_context_destroy(ctx);
     return(res);
-#endif
 }
 
 

@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgdal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5-10</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5-13</span>
       </span>
     </div>
 
@@ -147,7 +147,7 @@
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The output data frame lists the information given by the proj application with flags -lp, -le, -ld or -lu.</p>
+    <p>The output data frame lists the information given by the proj application with flags -lp, -le, -ld or -lu. From PROJ 6, <code>"datum"</code> is not available. From PROJ 7.1.0, <code>"units"</code> returns the conversion factor as numeric, not character.</p>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A data frame with a name and description column, and two extra columns for the "ellps" and "datum" tags.</p>
@@ -156,341 +156,469 @@
     <p><a href='https://proj.org/'>https://proj.org/</a></p>
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
-    <p>Loading the rgdal package changes the <code>PROJ\_LIB</code> environmental variable to the PROJ.4 support files bundles with the package.</p>
+    <p>Loading the rgdal package may change the <code>PROJ\_LIB</code> environmental variable to the PROJ.4 support files if bundled with binary packages.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>getPROJ4VersionInfo</span>()</div><div class='output co'>#&gt; [1] "Rel. 7.0.1, May 1st, 2020, [PJ_VERSION: 701]"
+    <pre class="examples"><div class='input'><span class='fu'>getPROJ4VersionInfo</span>()</div><div class='output co'>#&gt; [1] "Rel. 7.1.0, August 1st, 2020, [PJ_VERSION: 710]"
 #&gt; attr(,"short")
-#&gt; [1] 701</div><div class='input'><span class='fu'>projInfo</span>()</div><div class='output co'>#&gt;             name
-#&gt; 1            aea
-#&gt; 2           aeqd
-#&gt; 3         affine
-#&gt; 4           airy
-#&gt; 5         aitoff
-#&gt; 6           alsk
-#&gt; 7          apian
-#&gt; 8         august
-#&gt; 9       axisswap
-#&gt; 10         bacon
-#&gt; 11    bertin1953
-#&gt; 12          bipc
-#&gt; 13         boggs
-#&gt; 14         bonne
-#&gt; 15       calcofi
-#&gt; 16          cart
-#&gt; 17          cass
-#&gt; 18            cc
-#&gt; 19          ccon
-#&gt; 20           cea
-#&gt; 21         chamb
-#&gt; 22         collg
-#&gt; 23        comill
-#&gt; 24         crast
-#&gt; 25   deformation
-#&gt; 26         denoy
-#&gt; 27          eck1
-#&gt; 28          eck2
-#&gt; 29          eck3
-#&gt; 30          eck4
-#&gt; 31          eck5
-#&gt; 32          eck6
-#&gt; 33       eqearth
-#&gt; 34           eqc
-#&gt; 35          eqdc
-#&gt; 36         euler
-#&gt; 37        etmerc
-#&gt; 38         fahey
-#&gt; 39          fouc
-#&gt; 40        fouc_s
-#&gt; 41          gall
-#&gt; 42          geoc
-#&gt; 43    geogoffset
-#&gt; 44          geos
-#&gt; 45         gins8
-#&gt; 46       gn_sinu
-#&gt; 47          gnom
-#&gt; 48         goode
-#&gt; 49          gs48
-#&gt; 50          gs50
-#&gt; 51        hammer
-#&gt; 52        hatano
-#&gt; 53       healpix
-#&gt; 54      rhealpix
-#&gt; 55       helmert
-#&gt; 56    hgridshift
-#&gt; 57        horner
-#&gt; 58           igh
-#&gt; 59         imw_p
-#&gt; 60          isea
-#&gt; 61          kav5
-#&gt; 62          kav7
-#&gt; 63        krovak
-#&gt; 64         labrd
-#&gt; 65          laea
-#&gt; 66        lagrng
-#&gt; 67          larr
-#&gt; 68          lask
-#&gt; 69        lonlat
-#&gt; 70        latlon
-#&gt; 71           lcc
-#&gt; 72          lcca
-#&gt; 73          leac
-#&gt; 74        lee_os
-#&gt; 75         loxim
-#&gt; 76          lsat
-#&gt; 77         mbt_s
-#&gt; 78       mbt_fps
-#&gt; 79        mbtfpp
-#&gt; 80        mbtfpq
-#&gt; 81        mbtfps
-#&gt; 82          merc
-#&gt; 83        mil_os
-#&gt; 84          mill
-#&gt; 85       misrsom
-#&gt; 86          moll
-#&gt; 87   molobadekas
-#&gt; 88    molodensky
-#&gt; 89         murd1
-#&gt; 90         murd2
-#&gt; 91         murd3
-#&gt; 92      natearth
-#&gt; 93     natearth2
-#&gt; 94          nell
-#&gt; 95        nell_h
-#&gt; 96         nicol
-#&gt; 97         nsper
-#&gt; 98          nzmg
-#&gt; 99          noop
-#&gt; 100      ob_tran
-#&gt; 101         ocea
-#&gt; 102          oea
-#&gt; 103        omerc
-#&gt; 104        ortel
-#&gt; 105        ortho
-#&gt; 106       pconic
-#&gt; 107    patterson
-#&gt; 108     pipeline
-#&gt; 109         poly
-#&gt; 110          pop
-#&gt; 111         push
-#&gt; 112        putp1
-#&gt; 113        putp2
-#&gt; 114        putp3
-#&gt; 115       putp3p
-#&gt; 116       putp4p
-#&gt; 117        putp5
-#&gt; 118       putp5p
-#&gt; 119        putp6
-#&gt; 120       putp6p
-#&gt; 121      qua_aut
-#&gt; 122          qsc
-#&gt; 123        robin
-#&gt; 124        rouss
-#&gt; 125        rpoly
-#&gt; 126          sch
-#&gt; 127          set
-#&gt; 128         sinu
-#&gt; 129       somerc
-#&gt; 130        stere
-#&gt; 131       sterea
-#&gt; 132      gstmerc
-#&gt; 133          tcc
-#&gt; 134         tcea
-#&gt; 135        times
-#&gt; 136       tissot
-#&gt; 137        tmerc
-#&gt; 138      tobmerc
-#&gt; 139        tpeqd
-#&gt; 140        tpers
-#&gt; 141  unitconvert
-#&gt; 142          ups
-#&gt; 143         urm5
-#&gt; 144       urmfps
-#&gt; 145          utm
-#&gt; 146        vandg
-#&gt; 147       vandg2
-#&gt; 148       vandg3
-#&gt; 149       vandg4
-#&gt; 150        vitk1
-#&gt; 151   vgridshift
-#&gt; 152         wag1
-#&gt; 153         wag2
-#&gt; 154         wag3
-#&gt; 155         wag4
-#&gt; 156         wag5
-#&gt; 157         wag6
-#&gt; 158         wag7
-#&gt; 159      webmerc
-#&gt; 160        weren
-#&gt; 161        wink1
-#&gt; 162        wink2
-#&gt; 163       wintri
-#&gt; 164 xyzgridshift
+#&gt; [1] 710</div><div class='input'><span class='fu'>projInfo</span>()</div><div class='output co'>#&gt;             name
+#&gt; 1     adams_hemi
+#&gt; 2      adams_ws1
+#&gt; 3      adams_ws2
+#&gt; 4            aea
+#&gt; 5           aeqd
+#&gt; 6         affine
+#&gt; 7           airy
+#&gt; 8         aitoff
+#&gt; 9           alsk
+#&gt; 10         apian
+#&gt; 11        august
+#&gt; 12      axisswap
+#&gt; 13         bacon
+#&gt; 14    bertin1953
+#&gt; 15          bipc
+#&gt; 16         boggs
+#&gt; 17         bonne
+#&gt; 18       calcofi
+#&gt; 19          cart
+#&gt; 20          cass
+#&gt; 21            cc
+#&gt; 22          ccon
+#&gt; 23           cea
+#&gt; 24         chamb
+#&gt; 25         collg
+#&gt; 26        comill
+#&gt; 27         crast
+#&gt; 28      defmodel
+#&gt; 29   deformation
+#&gt; 30         denoy
+#&gt; 31          eck1
+#&gt; 32          eck2
+#&gt; 33          eck3
+#&gt; 34          eck4
+#&gt; 35          eck5
+#&gt; 36          eck6
+#&gt; 37       eqearth
+#&gt; 38           eqc
+#&gt; 39          eqdc
+#&gt; 40         euler
+#&gt; 41        etmerc
+#&gt; 42         fahey
+#&gt; 43          fouc
+#&gt; 44        fouc_s
+#&gt; 45          gall
+#&gt; 46          geoc
+#&gt; 47    geogoffset
+#&gt; 48          geos
+#&gt; 49         gins8
+#&gt; 50       gn_sinu
+#&gt; 51          gnom
+#&gt; 52         goode
+#&gt; 53          gs48
+#&gt; 54          gs50
+#&gt; 55         guyou
+#&gt; 56        hammer
+#&gt; 57        hatano
+#&gt; 58       healpix
+#&gt; 59      rhealpix
+#&gt; 60       helmert
+#&gt; 61    hgridshift
+#&gt; 62        horner
+#&gt; 63           igh
+#&gt; 64         igh_o
+#&gt; 65         imw_p
+#&gt; 66          isea
+#&gt; 67          kav5
+#&gt; 68          kav7
+#&gt; 69        krovak
+#&gt; 70         labrd
+#&gt; 71          laea
+#&gt; 72        lagrng
+#&gt; 73          larr
+#&gt; 74          lask
+#&gt; 75        lonlat
+#&gt; 76        latlon
+#&gt; 77           lcc
+#&gt; 78          lcca
+#&gt; 79          leac
+#&gt; 80        lee_os
+#&gt; 81         loxim
+#&gt; 82          lsat
+#&gt; 83         mbt_s
+#&gt; 84       mbt_fps
+#&gt; 85        mbtfpp
+#&gt; 86        mbtfpq
+#&gt; 87        mbtfps
+#&gt; 88          merc
+#&gt; 89        mil_os
+#&gt; 90          mill
+#&gt; 91       misrsom
+#&gt; 92          moll
+#&gt; 93   molobadekas
+#&gt; 94    molodensky
+#&gt; 95         murd1
+#&gt; 96         murd2
+#&gt; 97         murd3
+#&gt; 98      natearth
+#&gt; 99     natearth2
+#&gt; 100         nell
+#&gt; 101       nell_h
+#&gt; 102        nicol
+#&gt; 103        nsper
+#&gt; 104         nzmg
+#&gt; 105         noop
+#&gt; 106      ob_tran
+#&gt; 107         ocea
+#&gt; 108          oea
+#&gt; 109        omerc
+#&gt; 110        ortel
+#&gt; 111        ortho
+#&gt; 112       pconic
+#&gt; 113    patterson
+#&gt; 114     peirce_q
+#&gt; 115     pipeline
+#&gt; 116         poly
+#&gt; 117          pop
+#&gt; 118         push
+#&gt; 119        putp1
+#&gt; 120        putp2
+#&gt; 121        putp3
+#&gt; 122       putp3p
+#&gt; 123       putp4p
+#&gt; 124        putp5
+#&gt; 125       putp5p
+#&gt; 126        putp6
+#&gt; 127       putp6p
+#&gt; 128      qua_aut
+#&gt; 129          qsc
+#&gt; 130        robin
+#&gt; 131        rouss
+#&gt; 132        rpoly
+#&gt; 133          sch
+#&gt; 134          set
+#&gt; 135         sinu
+#&gt; 136       somerc
+#&gt; 137        stere
+#&gt; 138       sterea
+#&gt; 139      gstmerc
+#&gt; 140          tcc
+#&gt; 141         tcea
+#&gt; 142        times
+#&gt; 143       tissot
+#&gt; 144        tmerc
+#&gt; 145      tobmerc
+#&gt; 146        tpeqd
+#&gt; 147        tpers
+#&gt; 148  unitconvert
+#&gt; 149          ups
+#&gt; 150         urm5
+#&gt; 151       urmfps
+#&gt; 152          utm
+#&gt; 153        vandg
+#&gt; 154       vandg2
+#&gt; 155       vandg3
+#&gt; 156       vandg4
+#&gt; 157        vitk1
+#&gt; 158   vgridshift
+#&gt; 159         wag1
+#&gt; 160         wag2
+#&gt; 161         wag3
+#&gt; 162         wag4
+#&gt; 163         wag5
+#&gt; 164         wag6
+#&gt; 165         wag7
+#&gt; 166      webmerc
+#&gt; 167        weren
+#&gt; 168        wink1
+#&gt; 169        wink2
+#&gt; 170       wintri
+#&gt; 171 xyzgridshift
 #&gt;                                                         description
-#&gt; 1                                                 Albers Equal Area
-#&gt; 2                                             Azimuthal Equidistant
-#&gt; 3                                             Affine transformation
-#&gt; 4                                                              Airy
-#&gt; 5                                                            Aitoff
-#&gt; 6                                      Mod. Stereographic of Alaska
-#&gt; 7                                                  Apian Globular I
-#&gt; 8                                               August Epicycloidal
-#&gt; 9                                                     Axis ordering
-#&gt; 10                                                   Bacon Globular
-#&gt; 11                                                      Bertin 1953
-#&gt; 12                              Bipolar conic of western hemisphere
-#&gt; 13                                                  Boggs Eumorphic
-#&gt; 14                                          Bonne (Werner lat_1=90)
-#&gt; 15                        Cal Coop Ocean Fish Invest Lines/Stations
-#&gt; 16                                   Geodetic/cartesian conversions
-#&gt; 17                                                          Cassini
-#&gt; 18                                              Central Cylindrical
-#&gt; 19                                                    Central Conic
-#&gt; 20                                           Equal Area Cylindrical
-#&gt; 21                                             Chamberlin Trimetric
-#&gt; 22                                                        Collignon
-#&gt; 23                                                   Compact Miller
-#&gt; 24                                   Craster Parabolic (Putnins P4)
-#&gt; 25                                             Kinematic grid shift
-#&gt; 26                                          Denoyer Semi-Elliptical
-#&gt; 27                                                         Eckert I
-#&gt; 28                                                        Eckert II
-#&gt; 29                                                       Eckert III
-#&gt; 30                                                        Eckert IV
-#&gt; 31                                                         Eckert V
-#&gt; 32                                                        Eckert VI
-#&gt; 33                                                      Equal Earth
-#&gt; 34                           Equidistant Cylindrical (Plate Carree)
-#&gt; 35                                                Equidistant Conic
-#&gt; 36                                                            Euler
-#&gt; 37                                     Extended Transverse Mercator
-#&gt; 38                                                            Fahey
-#&gt; 39                                                          Foucaut
-#&gt; 40                                               Foucaut Sinusoidal
-#&gt; 41                                        Gall (Gall Stereographic)
-#&gt; 42                                              Geocentric Latitude
-#&gt; 43                                                Geographic Offset
-#&gt; 44                                     Geostationary Satellite View
-#&gt; 45                                        Ginsburg VIII (TsNIIGAiK)
-#&gt; 46                                        General Sinusoidal Series
-#&gt; 47                                                         Gnomonic
-#&gt; 48                                                 Goode Homolosine
-#&gt; 49                                    Mod. Stereographic of 48 U.S.
-#&gt; 50                                    Mod. Stereographic of 50 U.S.
-#&gt; 51                                     Hammer &amp; Eckert-Greifendorff
-#&gt; 52                                   Hatano Asymmetrical Equal Area
-#&gt; 53                                                          HEALPix
-#&gt; 54                                                         rHEALPix
-#&gt; 55                   3(6)-, 4(8)- and 7(14)-parameter Helmert shift
-#&gt; 56                                            Horizontal grid shift
-#&gt; 57                                     Horner polynomial evaluation
-#&gt; 58                                     Interrupted Goode Homolosine
-#&gt; 59                         International Map of the World Polyconic
-#&gt; 60                                    Icosahedral Snyder Equal Area
-#&gt; 61                                                      Kavraisky V
-#&gt; 62                                                    Kavraisky VII
-#&gt; 63                                                           Krovak
-#&gt; 64                                                          Laborde
-#&gt; 65                                     Lambert Azimuthal Equal Area
-#&gt; 66                                                         Lagrange
-#&gt; 67                                                         Larrivee
-#&gt; 68                                                        Laskowski
-#&gt; 69                                              Lat/long (Geodetic)
-#&gt; 70                                        Lat/long (Geodetic alias)
-#&gt; 71                                          Lambert Conformal Conic
-#&gt; 72                              Lambert Conformal Conic Alternative
-#&gt; 73                                         Lambert Equal Area Conic
-#&gt; 74                                        Lee Oblated Stereographic
-#&gt; 75                                                       Loximuthal
-#&gt; 76                                        Space oblique for LANDSAT
-#&gt; 77                           McBryde-Thomas Flat-Polar Sine (No. 1)
-#&gt; 78                            McBryde-Thomas Flat-Pole Sine (No. 2)
-#&gt; 79                              McBride-Thomas Flat-Polar Parabolic
-#&gt; 80                                McBryde-Thomas Flat-Polar Quartic
-#&gt; 81                             McBryde-Thomas Flat-Polar Sinusoidal
-#&gt; 82                                                         Mercator
-#&gt; 83                                     Miller Oblated Stereographic
-#&gt; 84                                               Miller Cylindrical
-#&gt; 85                                           Space oblique for MISR
-#&gt; 86                                                        Mollweide
-#&gt; 87                                Molodensky-Badekas transformation
-#&gt; 88                                             Molodensky transform
-#&gt; 89                                                        Murdoch I
-#&gt; 90                                                       Murdoch II
-#&gt; 91                                                      Murdoch III
-#&gt; 92                                                    Natural Earth
-#&gt; 93                                                  Natural Earth 2
-#&gt; 94                                                             Nell
-#&gt; 95                                                      Nell-Hammer
-#&gt; 96                                                Nicolosi Globular
-#&gt; 97                                           Near-sided perspective
-#&gt; 98                                             New Zealand Map Grid
-#&gt; 99                                                     No operation
-#&gt; 100                                  General Oblique Transformation
-#&gt; 101                                  Oblique Cylindrical Equal Area
-#&gt; 102                                              Oblated Equal Area
-#&gt; 103                                                Oblique Mercator
-#&gt; 104                                                   Ortelius Oval
-#&gt; 105                                                    Orthographic
-#&gt; 106                                               Perspective Conic
-#&gt; 107                                           Patterson Cylindrical
-#&gt; 108                                 Transformation pipeline manager
-#&gt; 109                                            Polyconic (American)
-#&gt; 110                   Retrieve coordinate value from pipeline stack
-#&gt; 111                         Save coordinate value on pipeline stack
-#&gt; 112                                                      Putnins P1
-#&gt; 113                                                      Putnins P2
-#&gt; 114                                                      Putnins P3
-#&gt; 115                                                     Putnins P3'
-#&gt; 116                                                     Putnins P4'
-#&gt; 117                                                      Putnins P5
-#&gt; 118                                                     Putnins P5'
-#&gt; 119                                                      Putnins P6
-#&gt; 120                                                     Putnins P6'
-#&gt; 121                                                Quartic Authalic
-#&gt; 122                                Quadrilateralized Spherical Cube
-#&gt; 123                                                        Robinson
-#&gt; 124                                         Roussilhe Stereographic
-#&gt; 125                                           Rectangular Polyconic
-#&gt; 126                                    Spherical Cross-track Height
-#&gt; 127                                            Set coordinate value
-#&gt; 128                                   Sinusoidal (Sanson-Flamsteed)
-#&gt; 129                                            Swiss. Obl. Mercator
-#&gt; 130                                                   Stereographic
-#&gt; 131                               Oblique Stereographic Alternative
-#&gt; 132 Gauss-Schreiber Transverse Mercator (aka Gauss-Laborde Reunion)
-#&gt; 133                                  Transverse Central Cylindrical
-#&gt; 134                               Transverse Cylindrical Equal Area
-#&gt; 135                                                           Times
-#&gt; 136                                                          Tissot
-#&gt; 137                                             Transverse Mercator
-#&gt; 138                                                 Tobler-Mercator
-#&gt; 139                                           Two Point Equidistant
-#&gt; 140                                              Tilted perspective
-#&gt; 141                                                 Unit conversion
-#&gt; 142                                   Universal Polar Stereographic
-#&gt; 143                                                        Urmaev V
-#&gt; 144                                    Urmaev Flat-Polar Sinusoidal
-#&gt; 145                             Universal Transverse Mercator (UTM)
-#&gt; 146                                             van der Grinten (I)
-#&gt; 147                                              van der Grinten II
-#&gt; 148                                             van der Grinten III
-#&gt; 149                                              van der Grinten IV
-#&gt; 150                                                     Vitkovsky I
-#&gt; 151                                             Vertical grid shift
-#&gt; 152                                         Wagner I (Kavraisky VI)
-#&gt; 153                                                       Wagner II
-#&gt; 154                                                      Wagner III
-#&gt; 155                                                       Wagner IV
-#&gt; 156                                                        Wagner V
-#&gt; 157                                                       Wagner VI
-#&gt; 158                                                      Wagner VII
-#&gt; 159                                  Web Mercator / Pseudo Mercator
-#&gt; 160                                                   Werenskiold I
-#&gt; 161                                                        Winkel I
-#&gt; 162                                                       Winkel II
-#&gt; 163                                                   Winkel Tripel
-#&gt; 164                                           Geocentric grid shift</div></pre>
+#&gt; 1                                      Adams Hemisphere in a Square
+#&gt; 2                                         Adams World in a Square I
+#&gt; 3                                        Adams World in a Square II
+#&gt; 4                                                 Albers Equal Area
+#&gt; 5                                             Azimuthal Equidistant
+#&gt; 6                                             Affine transformation
+#&gt; 7                                                              Airy
+#&gt; 8                                                            Aitoff
+#&gt; 9                                      Mod. Stereographic of Alaska
+#&gt; 10                                                 Apian Globular I
+#&gt; 11                                              August Epicycloidal
+#&gt; 12                                                    Axis ordering
+#&gt; 13                                                   Bacon Globular
+#&gt; 14                                                      Bertin 1953
+#&gt; 15                              Bipolar conic of western hemisphere
+#&gt; 16                                                  Boggs Eumorphic
+#&gt; 17                                          Bonne (Werner lat_1=90)
+#&gt; 18                        Cal Coop Ocean Fish Invest Lines/Stations
+#&gt; 19                                   Geodetic/cartesian conversions
+#&gt; 20                                                          Cassini
+#&gt; 21                                              Central Cylindrical
+#&gt; 22                                                    Central Conic
+#&gt; 23                                           Equal Area Cylindrical
+#&gt; 24                                             Chamberlin Trimetric
+#&gt; 25                                                        Collignon
+#&gt; 26                                                   Compact Miller
+#&gt; 27                                   Craster Parabolic (Putnins P4)
+#&gt; 28                                                Deformation model
+#&gt; 29                                             Kinematic grid shift
+#&gt; 30                                          Denoyer Semi-Elliptical
+#&gt; 31                                                         Eckert I
+#&gt; 32                                                        Eckert II
+#&gt; 33                                                       Eckert III
+#&gt; 34                                                        Eckert IV
+#&gt; 35                                                         Eckert V
+#&gt; 36                                                        Eckert VI
+#&gt; 37                                                      Equal Earth
+#&gt; 38                           Equidistant Cylindrical (Plate Carree)
+#&gt; 39                                                Equidistant Conic
+#&gt; 40                                                            Euler
+#&gt; 41                                     Extended Transverse Mercator
+#&gt; 42                                                            Fahey
+#&gt; 43                                                          Foucaut
+#&gt; 44                                               Foucaut Sinusoidal
+#&gt; 45                                        Gall (Gall Stereographic)
+#&gt; 46                                              Geocentric Latitude
+#&gt; 47                                                Geographic Offset
+#&gt; 48                                     Geostationary Satellite View
+#&gt; 49                                        Ginsburg VIII (TsNIIGAiK)
+#&gt; 50                                        General Sinusoidal Series
+#&gt; 51                                                         Gnomonic
+#&gt; 52                                                 Goode Homolosine
+#&gt; 53                                    Mod. Stereographic of 48 U.S.
+#&gt; 54                                    Mod. Stereographic of 50 U.S.
+#&gt; 55                                                            Guyou
+#&gt; 56                                     Hammer &amp; Eckert-Greifendorff
+#&gt; 57                                   Hatano Asymmetrical Equal Area
+#&gt; 58                                                          HEALPix
+#&gt; 59                                                         rHEALPix
+#&gt; 60                   3(6)-, 4(8)- and 7(14)-parameter Helmert shift
+#&gt; 61                                            Horizontal grid shift
+#&gt; 62                                     Horner polynomial evaluation
+#&gt; 63                                     Interrupted Goode Homolosine
+#&gt; 64                        Interrupted Goode Homolosine Oceanic View
+#&gt; 65                         International Map of the World Polyconic
+#&gt; 66                                    Icosahedral Snyder Equal Area
+#&gt; 67                                                      Kavraisky V
+#&gt; 68                                                    Kavraisky VII
+#&gt; 69                                                           Krovak
+#&gt; 70                                                          Laborde
+#&gt; 71                                     Lambert Azimuthal Equal Area
+#&gt; 72                                                         Lagrange
+#&gt; 73                                                         Larrivee
+#&gt; 74                                                        Laskowski
+#&gt; 75                                              Lat/long (Geodetic)
+#&gt; 76                                        Lat/long (Geodetic alias)
+#&gt; 77                                          Lambert Conformal Conic
+#&gt; 78                              Lambert Conformal Conic Alternative
+#&gt; 79                                         Lambert Equal Area Conic
+#&gt; 80                                        Lee Oblated Stereographic
+#&gt; 81                                                       Loximuthal
+#&gt; 82                                        Space oblique for LANDSAT
+#&gt; 83                           McBryde-Thomas Flat-Polar Sine (No. 1)
+#&gt; 84                            McBryde-Thomas Flat-Pole Sine (No. 2)
+#&gt; 85                              McBride-Thomas Flat-Polar Parabolic
+#&gt; 86                                McBryde-Thomas Flat-Polar Quartic
+#&gt; 87                             McBryde-Thomas Flat-Polar Sinusoidal
+#&gt; 88                                                         Mercator
+#&gt; 89                                     Miller Oblated Stereographic
+#&gt; 90                                               Miller Cylindrical
+#&gt; 91                                           Space oblique for MISR
+#&gt; 92                                                        Mollweide
+#&gt; 93                                Molodensky-Badekas transformation
+#&gt; 94                                             Molodensky transform
+#&gt; 95                                                        Murdoch I
+#&gt; 96                                                       Murdoch II
+#&gt; 97                                                      Murdoch III
+#&gt; 98                                                    Natural Earth
+#&gt; 99                                                  Natural Earth 2
+#&gt; 100                                                            Nell
+#&gt; 101                                                     Nell-Hammer
+#&gt; 102                                               Nicolosi Globular
+#&gt; 103                                          Near-sided perspective
+#&gt; 104                                            New Zealand Map Grid
+#&gt; 105                                                    No operation
+#&gt; 106                                  General Oblique Transformation
+#&gt; 107                                  Oblique Cylindrical Equal Area
+#&gt; 108                                              Oblated Equal Area
+#&gt; 109                                                Oblique Mercator
+#&gt; 110                                                   Ortelius Oval
+#&gt; 111                                                    Orthographic
+#&gt; 112                                               Perspective Conic
+#&gt; 113                                           Patterson Cylindrical
+#&gt; 114                                              Peirce Quincuncial
+#&gt; 115                                 Transformation pipeline manager
+#&gt; 116                                            Polyconic (American)
+#&gt; 117                   Retrieve coordinate value from pipeline stack
+#&gt; 118                         Save coordinate value on pipeline stack
+#&gt; 119                                                      Putnins P1
+#&gt; 120                                                      Putnins P2
+#&gt; 121                                                      Putnins P3
+#&gt; 122                                                     Putnins P3'
+#&gt; 123                                                     Putnins P4'
+#&gt; 124                                                      Putnins P5
+#&gt; 125                                                     Putnins P5'
+#&gt; 126                                                      Putnins P6
+#&gt; 127                                                     Putnins P6'
+#&gt; 128                                                Quartic Authalic
+#&gt; 129                                Quadrilateralized Spherical Cube
+#&gt; 130                                                        Robinson
+#&gt; 131                                         Roussilhe Stereographic
+#&gt; 132                                           Rectangular Polyconic
+#&gt; 133                                    Spherical Cross-track Height
+#&gt; 134                                            Set coordinate value
+#&gt; 135                                   Sinusoidal (Sanson-Flamsteed)
+#&gt; 136                                            Swiss. Obl. Mercator
+#&gt; 137                                                   Stereographic
+#&gt; 138                               Oblique Stereographic Alternative
+#&gt; 139 Gauss-Schreiber Transverse Mercator (aka Gauss-Laborde Reunion)
+#&gt; 140                                  Transverse Central Cylindrical
+#&gt; 141                               Transverse Cylindrical Equal Area
+#&gt; 142                                                           Times
+#&gt; 143                                                          Tissot
+#&gt; 144                                             Transverse Mercator
+#&gt; 145                                                 Tobler-Mercator
+#&gt; 146                                           Two Point Equidistant
+#&gt; 147                                              Tilted perspective
+#&gt; 148                                                 Unit conversion
+#&gt; 149                                   Universal Polar Stereographic
+#&gt; 150                                                        Urmaev V
+#&gt; 151                                    Urmaev Flat-Polar Sinusoidal
+#&gt; 152                             Universal Transverse Mercator (UTM)
+#&gt; 153                                             van der Grinten (I)
+#&gt; 154                                              van der Grinten II
+#&gt; 155                                             van der Grinten III
+#&gt; 156                                              van der Grinten IV
+#&gt; 157                                                     Vitkovsky I
+#&gt; 158                                             Vertical grid shift
+#&gt; 159                                         Wagner I (Kavraisky VI)
+#&gt; 160                                                       Wagner II
+#&gt; 161                                                      Wagner III
+#&gt; 162                                                       Wagner IV
+#&gt; 163                                                        Wagner V
+#&gt; 164                                                       Wagner VI
+#&gt; 165                                                      Wagner VII
+#&gt; 166                                  Web Mercator / Pseudo Mercator
+#&gt; 167                                                   Werenskiold I
+#&gt; 168                                                        Winkel I
+#&gt; 169                                                       Winkel II
+#&gt; 170                                                   Winkel Tripel
+#&gt; 171                                           Geocentric grid shift</div><div class='input'><span class='fu'>projInfo</span>(<span class='st'>"ellps"</span>)</div><div class='output co'>#&gt;         name          major                  ell
+#&gt; 1      MERIT    a=6378137.0           rf=298.257
+#&gt; 2      SGS85    a=6378136.0           rf=298.257
+#&gt; 3      GRS80    a=6378137.0     rf=298.257222101
+#&gt; 4      IAU76    a=6378140.0           rf=298.257
+#&gt; 5       airy  a=6377563.396       rf=299.3249646
+#&gt; 6     APL4.9    a=6378137.0            rf=298.25
+#&gt; 7      NWL9D    a=6378145.0            rf=298.25
+#&gt; 8   mod_airy  a=6377340.189        b=6356034.446
+#&gt; 9     andrae   a=6377104.43             rf=300.0
+#&gt; 10    danish a=6377019.2563             rf=300.0
+#&gt; 11   aust_SA    a=6378160.0            rf=298.25
+#&gt; 12     GRS67    a=6378160.0    rf=298.2471674270
+#&gt; 13   GSK2011    a=6378136.5       rf=298.2564151
+#&gt; 14    bessel  a=6377397.155       rf=299.1528128
+#&gt; 15  bess_nam  a=6377483.865       rf=299.1528128
+#&gt; 16    clrk66    a=6378206.4          b=6356583.8
+#&gt; 17    clrk80  a=6378249.145          rf=293.4663
+#&gt; 18 clrk80ign    a=6378249.2 rf=293.4660212936269
+#&gt; 19       CPM    a=6375738.7            rf=334.29
+#&gt; 20    delmbr     a=6376428.             rf=311.5
+#&gt; 21   engelis   a=6378136.05          rf=298.2566
+#&gt; 22   evrst30  a=6377276.345          rf=300.8017
+#&gt; 23   evrst48  a=6377304.063          rf=300.8017
+#&gt; 24   evrst56  a=6377301.243          rf=300.8017
+#&gt; 25   evrst69  a=6377295.664          rf=300.8017
+#&gt; 26   evrstSS  a=6377298.556          rf=300.8017
+#&gt; 27   fschr60     a=6378166.             rf=298.3
+#&gt; 28  fschr60m     a=6378155.             rf=298.3
+#&gt; 29   fschr68     a=6378150.             rf=298.3
+#&gt; 30   helmert     a=6378200.             rf=298.3
+#&gt; 31     hough    a=6378270.0              rf=297.
+#&gt; 32      intl    a=6378388.0              rf=297.
+#&gt; 33     krass    a=6378245.0             rf=298.3
+#&gt; 34     kaula     a=6378163.            rf=298.24
+#&gt; 35     lerch     a=6378139.           rf=298.257
+#&gt; 36     mprts     a=6397300.              rf=191.
+#&gt; 37  new_intl    a=6378157.5          b=6356772.2
+#&gt; 38   plessis     a=6376523.           b=6355863.
+#&gt; 39      PZ90    a=6378136.0         rf=298.25784
+#&gt; 40    SEasia    a=6378155.0       b=6356773.3205
+#&gt; 41   walbeck    a=6376896.0       b=6355834.8467
+#&gt; 42     WGS60    a=6378165.0             rf=298.3
+#&gt; 43     WGS66    a=6378145.0            rf=298.25
+#&gt; 44     WGS72    a=6378135.0            rf=298.26
+#&gt; 45     WGS84    a=6378137.0     rf=298.257223563
+#&gt; 46    sphere    a=6370997.0          b=6370997.0
+#&gt;                        description
+#&gt; 1                       MERIT 1983
+#&gt; 2        Soviet Geodetic System 85
+#&gt; 3             GRS 1980(IUGG, 1980)
+#&gt; 4                         IAU 1976
+#&gt; 5                        Airy 1830
+#&gt; 6              Appl. Physics. 1965
+#&gt; 7         Naval Weapons Lab., 1965
+#&gt; 8                    Modified Airy
+#&gt; 9       Andrae 1876 (Den., Iclnd.)
+#&gt; 10  Andrae 1876 (Denmark, Iceland)
+#&gt; 11 Australian Natl &amp; S. Amer. 1969
+#&gt; 12               GRS 67(IUGG 1967)
+#&gt; 13                        GSK-2011
+#&gt; 14                     Bessel 1841
+#&gt; 15           Bessel 1841 (Namibia)
+#&gt; 16                     Clarke 1866
+#&gt; 17                Clarke 1880 mod.
+#&gt; 18              Clarke 1880 (IGN).
+#&gt; 19 Comm. des Poids et Mesures 1799
+#&gt; 20         Delambre 1810 (Belgium)
+#&gt; 21                    Engelis 1985
+#&gt; 22                    Everest 1830
+#&gt; 23                    Everest 1948
+#&gt; 24                    Everest 1956
+#&gt; 25                    Everest 1969
+#&gt; 26       Everest (Sabah &amp; Sarawak)
+#&gt; 27    Fischer (Mercury Datum) 1960
+#&gt; 28           Modified Fischer 1960
+#&gt; 29                    Fischer 1968
+#&gt; 30                    Helmert 1906
+#&gt; 31                           Hough
+#&gt; 32    International 1909 (Hayford)
+#&gt; 33                Krassovsky, 1942
+#&gt; 34                      Kaula 1961
+#&gt; 35                      Lerch 1979
+#&gt; 36                 Maupertius 1738
+#&gt; 37          New International 1967
+#&gt; 38           Plessis 1817 (France)
+#&gt; 39                           PZ-90
+#&gt; 40                  Southeast Asia
+#&gt; 41                         Walbeck
+#&gt; 42                          WGS 60
+#&gt; 43                          WGS 66
+#&gt; 44                          WGS 72
+#&gt; 45                          WGS 84
+#&gt; 46       Normal Sphere (r=6370997)</div><div class='input'><span class='fu'>projInfo</span>(<span class='st'>"units"</span>)</div><div class='output co'>#&gt;        id     to_meter               name
+#&gt; 1      mm 1.000000e-03         millimetre
+#&gt; 2      cm 1.000000e-02         centimetre
+#&gt; 3       m 1.000000e+00              metre
+#&gt; 4      ft 3.048000e-01               foot
+#&gt; 5   us-ft 3.048006e-01     US survey foot
+#&gt; 6    fath 1.828800e+00             fathom
+#&gt; 7     kmi 1.852000e+03      nautical mile
+#&gt; 8   us-ch 2.011684e+01    US survey chain
+#&gt; 9   us-mi 1.609347e+03     US survey mile
+#&gt; 10     km 1.000000e+03          kilometre
+#&gt; 11 ind-ft 3.047984e-01 Indian foot (1937)
+#&gt; 12 ind-yd 9.143952e-01 Indian yard (1937)
+#&gt; 13     mi 1.609344e+03       Statute mile
+#&gt; 14     yd 9.144000e-01               yard
+#&gt; 15     ch 2.011680e+01              chain
+#&gt; 16   link 2.011680e-01               link
+#&gt; 17     dm 1.000000e-02          decimeter
+#&gt; 18     in 2.540000e-02               inch
+#&gt; 19 ind-ch 2.011670e+01       Indian chain
+#&gt; 20  us-in 2.540005e-02     US survey inch
+#&gt; 21  us-yd 9.144018e-01     US survey yard</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

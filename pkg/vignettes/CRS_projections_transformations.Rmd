@@ -81,10 +81,9 @@ While the representation of coordinate reference systems (sometimes supplemented
 
 ## PR$\phi$J
 
-Signalling changes, PROJ.4 changed its name to PR$\phi$J, and began burning through major version numbers. PROJ 5 (2018) introduced transformation pipelines [@knudsen+evers17; @evers+knudsen17], representing coordinate operations using a syntax similar to PROJ.4 strings, but showing the whole operation pipeline. PROJ 6 (2019) followed up by shifting from ad-hoc text files for holding coordinate reference system and coordinate operation metadata to an SQLite database. In an increasing number of cases, more accurate coordinate operations could be supported using open access transformation grids, and the grid files needed were now tabulated in the SQLite database. This database is distributed with PROJ, and kept in a directory on the PROJ search path, usually the only or final directory (`getPROJ4libPath()` returns the current search path in an attribute). 
+Signalling changes, PROJ.4 changed its name to PR$\phi$J, and began burning through major version numbers. PROJ 5 (2018) introduced transformation pipelines [@knudsen+evers17; @evers+knudsen17], representing coordinate operations using a syntax similar to PROJ.4 strings, but showing the whole operation pipeline. PROJ 6 (2019) followed up by shifting from ad-hoc text files for holding coordinate reference system and coordinate operation metadata to an SQLite database. In an increasing number of cases, more accurate coordinate operations could be supported using open access transformation grids, and the grid files needed were now tabulated in the SQLite database. This database is distributed with PROJ, and kept in a directory on the PROJ search path, usually the only or final directory (`get_proj_search_paths()` returns a vector of current search paths). 
 ```{r, eval=odd_run}
-shpr <- strsplit(attr(getPROJ4libPath(), "search_path"), ifelse(.Platform$OS.type == "unix", ":", ";"))[[1]]
-shpr
+(shpr <- get_proj_search_paths())
 ```
 
 ```{r, echo=FALSE, results='hide', eval=odd_run}
@@ -236,27 +235,25 @@ PROJ 7 introduced on-demand downloading of (chunks of) transformation grids from
 run <- run && (attr(getPROJ4VersionInfo(), "short") >= 700)
 ```
 
-```{r, echo=FALSE, results='hide', eval=odd_run}
-run <- run && shpr[1] == "/home/rsb/.local/share/proj"
-```
-
-```{r}
-run
-shpr
+```{r, eval=odd_run && run}
+tf <- tempfile()
+dir.create(tf)
+paths <- c(tf, shpr[length(shpr)])
+set_proj_search_paths(paths)
 ```
 
 
 ```{r, eval=run && odd_run}
-unlink(file.path(shpr[1], "cache.db"))
-rgdal:::is_proj_network_enabled()
+is_proj_CDN_enabled()
 ```
 
 
-We can (for now, this will be handled later in a function) enable on-demand download setting an environment variable; we see that with this setting, network download is enabled:
+We can enable on-demand download setting an internal PR$\phi$J variable; we see that with this setting, network download is enabled:
 
 ```{r, eval=run && odd_run}
-Sys.setenv("PROJ_NETWORK"="ON")
-rgdal:::is_proj_network_enabled()
+enable_proj_CDN()
+is_proj_CDN_enabled()
+(shpr1 <- get_proj_search_paths())
 ```
 
 When we then search for candidate coordinate operations, we see that the operation using an absent grid now sees that download is enabled, and proposes the 1m accuracy candidate, because the required grid can be downloaded:
@@ -298,17 +295,20 @@ If we look in the SQLite database of downloaded grids, we see that the grid comp
 
 ```{r, eval=run && odd_run}
 library(RSQLite)
-db <- dbConnect(SQLite(), dbname=file.path(shpr[1], "cache.db"))
+if (file.exists(file.path(shpr1[1], "cache.db"))) {
+db <- dbConnect(SQLite(), dbname=file.path(shpr1[1], "cache.db"))
 (tbls <- dbListTables(db))
 if ("chunks" %in% tbls) dbReadTable(db, "chunks")
 dbDisconnect(db)
+}
 ```
 
 Finally, we disable grid download to return to the status existing when **rgdal** was attached. 
 
 ```{r, eval=run && odd_run}
-Sys.setenv("PROJ_NETWORK"="OFF")
-rgdal:::is_proj_network_enabled()
+disable_proj_CDN()
+is_proj_CDN_enabled()
+(set_proj_search_paths(shpr))
 ```
 
 

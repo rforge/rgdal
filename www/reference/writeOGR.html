@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgdal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5-10</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5-13</span>
       </span>
     </div>
 
@@ -220,7 +220,7 @@
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='showWKT.html'>set_thin_PROJ6_warnings</a></span>(<span class='fl'>TRUE</span>)
 <span class='no'>cities</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='readOGR.html'>readOGR</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"vectors"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"rgdal"</span>)[<span class='fl'>1</span>], <span class='st'>"cities"</span>)</div><div class='output co'>#&gt; OGR data source with driver: ESRI Shapefile 
-#&gt; Source: "/tmp/RtmpEreEhT/temp_libpath193a751bafe22a/rgdal/vectors", layer: "cities"
+#&gt; Source: "/tmp/RtmpZbgnPX/temp_libpath856ec521b3e58/rgdal/vectors", layer: "cities"
 #&gt; with 606 features
 #&gt; It has 4 fields
 #&gt; Integer64 fields read as strings:  POPULATION </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span>(<span class='no'>cities</span>$<span class='no'>POPULATION</span>) <span class='kw'>&lt;-</span> <span class='no'>cities</span>$<span class='no'>POPULATION</span> <span class='kw'>==</span> -<span class='fl'>99</span>
@@ -236,7 +236,7 @@
 <span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='fu'>writeOGR</span>(<span class='no'>cities</span>, <span class='no'>td</span>, <span class='st'>"cities"</span>, <span class='kw'>driver</span><span class='kw'>=</span><span class='st'>"ESRI Shapefile"</span>))</div><div class='output co'>#&gt; Error in writeOGR(cities, td, "cities", driver = "ESRI Shapefile") : 
 #&gt;   layer exists, use a new layer name</div><div class='input'><span class='fu'>writeOGR</span>(<span class='no'>cities</span>, <span class='no'>td</span>, <span class='st'>"cities"</span>, <span class='kw'>driver</span><span class='kw'>=</span><span class='st'>"ESRI Shapefile"</span>, <span class='kw'>overwrite_layer</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
 <span class='no'>cities2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='readOGR.html'>readOGR</a></span>(<span class='no'>td</span>, <span class='st'>"cities"</span>)</div><div class='output co'>#&gt; OGR data source with driver: ESRI Shapefile 
-#&gt; Source: "/tmp/RtmpAvK8x8/rgdal_examples", layer: "cities"
+#&gt; Source: "/tmp/RtmpSXSrCA/rgdal_examples", layer: "cities"
 #&gt; with 606 features
 #&gt; It has 4 fields</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>cities2</span>$<span class='no'>POPULATION</span>)</div><div class='output co'>#&gt;    Length     Class      Mode 
 #&gt;       606 character character </div><div class='input'><span class='kw'>if</span> (<span class='st'>"SQLite"</span> <span class='kw'>%in%</span> <span class='fu'><a href='readOGR.html'>ogrDrivers</a></span>()$<span class='no'>name</span>) {
@@ -271,7 +271,7 @@
 #&gt; It has 0 fields
 #&gt; [1] "0 0"
 #&gt; OGR data source with driver: GeoJSON 
-#&gt; Source: "/tmp/RtmpAvK8x8/file193de11be70402", layer: "GeoJSON"
+#&gt; Source: "/tmp/RtmpSXSrCA/file85a6ac2c1469", layer: "GeoJSON"
 #&gt; with 1 features
 #&gt; It has 1 fields
 #&gt; [1] "0 0"
@@ -293,7 +293,7 @@
 }
 <span class='fu'><a href='https://rdrr.io/r/base/list.files.html'>list.files</a></span>(<span class='no'>td</span>)</div><div class='output co'>#&gt; [1] "cities.dbf" "cities.prj" "cities.shp" "cities.shx" "meuse.kml" </div><div class='input'><span class='no'>roads</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='readOGR.html'>readOGR</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"vectors"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"rgdal"</span>)[<span class='fl'>1</span>],
  <span class='st'>"kiritimati_primary_roads"</span>)</div><div class='output co'>#&gt; OGR data source with driver: ESRI Shapefile 
-#&gt; Source: "/tmp/RtmpEreEhT/temp_libpath193a751bafe22a/rgdal/vectors", layer: "kiritimati_primary_roads"
+#&gt; Source: "/tmp/RtmpZbgnPX/temp_libpath856ec521b3e58/rgdal/vectors", layer: "kiritimati_primary_roads"
 #&gt; with 35 features
 #&gt; It has 1 fields</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>roads</span>)</div><div class='output co'>#&gt; Object of class SpatialLinesDataFrame
 #&gt; Coordinates:
@@ -317,7 +317,7 @@
   <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>roads2</span>)
 }
 <span class='no'>scot_BNG</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='readOGR.html'>readOGR</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"vectors"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"rgdal"</span>)[<span class='fl'>1</span>], <span class='st'>"scot_BNG"</span>)</div><div class='output co'>#&gt; OGR data source with driver: ESRI Shapefile 
-#&gt; Source: "/tmp/RtmpEreEhT/temp_libpath193a751bafe22a/rgdal/vectors", layer: "scot_BNG"
+#&gt; Source: "/tmp/RtmpZbgnPX/temp_libpath856ec521b3e58/rgdal/vectors", layer: "scot_BNG"
 #&gt; with 56 features
 #&gt; It has 13 fields</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>scot_BNG</span>)</div><div class='output co'>#&gt; Object of class SpatialPolygonsDataFrame
 #&gt; Coordinates:
@@ -368,7 +368,7 @@
  <span class='kw'>dataset_options</span><span class='kw'>=</span><span class='st'>"FORMAT=MIF"</span>)
 <span class='fu'><a href='https://rdrr.io/r/base/list.files.html'>list.files</a></span>(<span class='no'>td</span>)</div><div class='output co'>#&gt; [1] "cities.dbf"   "cities.prj"   "cities.shp"   "cities.shx"   "meuse.kml"   
 #&gt; [6] "scot_BNG.mid" "scot_BNG.mif"</div><div class='input'><span class='no'>scot_BNG3</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='readOGR.html'>readOGR</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='no'>td</span>, <span class='st'>"scot_BNG.mif"</span>, <span class='kw'>sep</span><span class='kw'>=</span><span class='st'>"/"</span>), <span class='st'>"scot_BNG"</span>)</div><div class='output co'>#&gt; OGR data source with driver: MapInfo File 
-#&gt; Source: "/tmp/RtmpAvK8x8/rgdal_examples/scot_BNG.mif", layer: "scot_BNG"
+#&gt; Source: "/tmp/RtmpSXSrCA/rgdal_examples/scot_BNG.mif", layer: "scot_BNG"
 #&gt; with 56 features
 #&gt; It has 13 fields</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>scot_BNG3</span>)</div><div class='output co'>#&gt; Object of class SpatialPolygonsDataFrame
 #&gt; Coordinates:

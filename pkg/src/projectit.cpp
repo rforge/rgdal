@@ -135,7 +135,7 @@ SEXP get_proj_search_path(void) {
     return(R_NilValue);
 }
 
-SEXP set_proj_search_path(SEXP path) {
+SEXP set_proj_path(SEXP path) {
     Rprintf("Not available for deprecated API");
     return(R_NilValue);
 }
@@ -170,6 +170,15 @@ SEXP proj_network_enabled() {
     return(R_NilValue);
 }
 
+SEXP enable_proj_network() {
+//    Rprintf("Not available for deprecated API");
+    return(R_NilValue);
+}
+
+SEXP disable_proj_network() {
+//    Rprintf("Not available for deprecated API");
+    return(R_NilValue);
+}
 
 /*SEXP P6_SRID_proj(SEXP inSRID, SEXP format, SEXP multiline, SEXP in_format,
     SEXP epsg, SEXP out_format) {

@@ -126,11 +126,13 @@ SEXP PROJ4VersionInfo(void); // different
 SEXP PROJ4NADsInstalled(void); // both, different at R level ??
 SEXP PROJ4_proj_def_dat_Installed(void); // both, different at R level ??
 SEXP get_proj_search_path(void); // both
-SEXP set_proj_search_path(SEXP path); // both
+SEXP set_proj_paths(SEXP path); // both
 SEXP transform(SEXP fromargs, SEXP toargs, SEXP npts, SEXP x, SEXP y, SEXP z); // both
 SEXP transform_ng(SEXP fromargs, SEXP toargs, SEXP coordOp, SEXP npts, SEXP x, SEXP y, SEXP z); // both
 SEXP CRS_compare(SEXP fromargs, SEXP toargs, SEXP type1, SEXP type2);
 SEXP proj_network_enabled(); // both
+SEXP enable_proj_network(); // both
+SEXP disable_proj_network(); // both
 SEXP RGDAL_projInfo(SEXP type); // both
 SEXP R_GDAL_OSR_PROJ();// GDAL
 SEXP RGDAL_project(SEXP n, SEXP xlon, SEXP ylat, SEXP projarg, SEXP ob_tran); // both

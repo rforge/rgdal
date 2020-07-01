@@ -20,8 +20,16 @@ new_proj_and_gdal <- function() {
     PROJis6ormore() && GDALis3ormore()
 }
 
-is_proj_network_enabled <- function() {
+is_proj_CDN_enabled <- function() {
     .Call("proj_network_enabled", PACKAGE="rgdal")
+}
+
+enable_proj_CDN <- function() {
+    invisible(.Call("enable_proj_network", PACKAGE="rgdal"))
+}
+
+disable_proj_CDN <- function() {
+    invisible(.Call("disable_proj_network", PACKAGE="rgdal"))
 }
 
 GDAL_OSR_PROJ <- function() {
@@ -36,23 +44,33 @@ GDAL_OSR_PROJ <- function() {
 
 getPROJ4libPath <- function() {
     res <- Sys.getenv("PROJ_LIB")
-    if (new_proj_and_gdal()) {
+    if (PROJis6ormore()) {
         attr(res, "search_path") <- .Call("get_proj_search_path",
             PACKAGE="rgdal")
     }
     res
 }
 
-set_proj_search_paths <- function(paths) {
-    PV <- .Call("PROJ4VersionInfo", PACKAGE="rgdal")[[2]]
-    if (PV >= 600 && PV < 700) {
-        stopifnot(is.character(paths))
-        stopifnot(length(paths) == 1)
-        stopifnot(dir.exists(paths[1]))
-# length restricted to 1 for PROJ 6
-        res <- .Call("set_proj_search_path", paths[1], PACKAGE="rgdal")
+get_proj_search_paths <- function() {
+    if (PROJis6ormore()) {
+        res <- .Call("get_proj_search_path", PACKAGE="rgdal")
+        res <- strsplit(res, .Platform$path.sep)[[1]]
     } else {
-        res <- ""
+        res <- NULL
+    }
+    res
+}
+
+set_proj_search_paths <- function(paths) {
+    if (PROJis6ormore()) {
+        stopifnot(!missing(paths))
+        stopifnot(is.character(paths))
+        stopifnot(length(paths) > 0)
+        n <- length(paths)
+        for (i in 1:n) stopifnot(dir.exists(paths[i]))
+        res <- .Call("set_proj_paths", paths, PACKAGE="rgdal")
+    } else {
+        res <- NULL
     }
     res
 }
