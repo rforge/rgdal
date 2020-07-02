@@ -70,6 +70,9 @@ local_RGDAL_Init <- function() .Call('RGDAL_Init', PACKAGE="rgdal")
   rver <- getGDALVersionInfo()
 
   gdl <- getGDAL_DATA_Path()
+  skip_writable <- Sys.getenv("PROJ_SKIP_READ_USER_WRITABLE_DIRECTORY")
+  if (nchar(skip_writable) == 0)
+    Sys.setenv("PROJ_SKIP_READ_USER_WRITABLE_DIRECTORY"=TRUE)
   pl <- getPROJ4libPath()
   if (nchar(pl) == 0) {
     if (is.null(attr(pl, "search_path"))) pl <- "(autodetected)"

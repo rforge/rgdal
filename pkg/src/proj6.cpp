@@ -198,6 +198,21 @@ SEXP get_proj_search_path(void) {
 
 }
 
+SEXP get_proj_user_writable_dir() {
+
+    SEXP res;
+#if ((PROJ_VERSION_MAJOR == 7 && PROJ_VERSION_MINOR >= 1) || PROJ_VERSION_MAJOR > 7)
+    PROTECT(res = NEW_CHARACTER(1));
+    SET_STRING_ELT(res, 0, COPY_TO_USER_STRING(proj_context_get_user_writable_directory(PJ_DEFAULT_CTX, FALSE)));
+    UNPROTECT(1);
+    return(res);
+#else
+    return(R_NilValue);
+#endif
+
+}
+
+
 SEXP set_proj_paths(SEXP paths) {
     //PJ_CONTEXT *ctx = proj_context_create();
     SEXP res;

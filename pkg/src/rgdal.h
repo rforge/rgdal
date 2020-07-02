@@ -127,6 +127,7 @@ SEXP PROJ4NADsInstalled(void); // both, different at R level ??
 SEXP PROJ4_proj_def_dat_Installed(void); // both, different at R level ??
 SEXP get_proj_search_path(void); // both
 SEXP set_proj_paths(SEXP path); // both
+SEXP get_proj_user_writable_dir(); // both
 SEXP transform(SEXP fromargs, SEXP toargs, SEXP npts, SEXP x, SEXP y, SEXP z); // both
 SEXP transform_ng(SEXP fromargs, SEXP toargs, SEXP coordOp, SEXP npts, SEXP x, SEXP y, SEXP z); // both
 SEXP CRS_compare(SEXP fromargs, SEXP toargs, SEXP type1, SEXP type2);
