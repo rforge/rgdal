@@ -155,7 +155,7 @@ SEXP P6_SRID_show(SEXP inSRID, SEXP format, SEXP multiline, SEXP in_format,
 
 SEXP R_GDAL_OSR_PROJ() {
 
-#if GDAL_VERSION_MAJOR >= 3
+#if ((GDAL_VERSION_MAJOR == 3 && GDAL_VERSION_MINOR == 0 && GDAL_VERSION_REV >= 1) || (GDAL_VERSION_MAJOR == 3 && GDAL_VERSION_MINOR > 0) || (GDAL_VERSION_MAJOR > 3))
         SEXP OSRProjVersion;
         int pnMajor, pnMinor, pnPatch, pc=0;
 
