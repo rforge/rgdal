@@ -25,12 +25,27 @@ is_proj_CDN_enabled <- function() {
 }
 
 enable_proj_CDN <- function() {
-    invisible(.Call("enable_proj_network", PACKAGE="rgdal"))
+    .Call("enable_proj_network", PACKAGE="rgdal")
+    paste0("Using: ", proj_CDN_user_writable_dir(), sep="")
 }
 
 disable_proj_CDN <- function() {
     invisible(.Call("disable_proj_network", PACKAGE="rgdal"))
 }
+
+proj_CDN_user_writable_dir <- function() {
+    .Call("get_proj_user_writable_dir", PACKAGE="rgdal")
+}
+
+#> td <- tempfile()
+#> dir.create(td)
+#> Sys.getenv("PROJ_USER_WRITABLE_DIRECTORY")
+#[1] ""
+#> Sys.setenv("PROJ_USER_WRITABLE_DIRECTORY"=td)
+#> 
+#> Sys.getenv("PROJ_USER_WRITABLE_DIRECTORY")
+#[1] "/tmp/RtmpeCIepM/fileae56312f1ebcd"
+
 
 GDAL_OSR_PROJ <- function() {
     res <- .Call("R_GDAL_OSR_PROJ", PACKAGE="rgdal")

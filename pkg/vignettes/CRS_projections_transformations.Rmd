@@ -21,6 +21,9 @@ vignette: >
 Changes in the representation of coordinate reference systems (CRS), and of operations on coordinates, that have been occurring over decades must now be implemented in the way spatial objects are handled in R packages. Up to the 1990s, most spatial data simply used the coordinates given by the local mapping authority; for example, the  Meuse bank data set used a planar representation in metres, which turned out to be `EPSG:28992`, "Amersfoort / RD New". A major resource for finding out why CRS were specified as they were are [Clifford J. Mugnier's columns](https://www.asprs.org/asprs-publications/grids-and-datums) in *Photogrammetric Engineering & Remote Sensing*, references to which are available in **rgdal**; the Netherlands were covered in the February 2003 column:
 
 ```{r}
+td <- tempfile()
+dir.create(td)
+Sys.setenv("PROJ_USER_WRITABLE_DIRECTORY"=td)
 library(rgdal)
 data("GridsDatums")
 GridsDatums[grep("Netherlands", GridsDatums$country),]
@@ -202,7 +205,7 @@ c(spDists(isballpark, is2m)*1000)
 
 ```{r, echo=FALSE}
 mrun <- FALSE
-if (require(maptools, quietly=TRUE)) mrun <- TRUE
+if (suppressPackageStartupMessages(require(maptools, quietly=TRUE))) mrun <- TRUE
 ```
 
 
@@ -229,31 +232,39 @@ c(spDists(coordinates(isballpark), a)*1000)
 
 ## Transformation grid files
 
-PROJ 7 introduced on-demand downloading of (chunks of) transformation grids from a content delivery network to a user-writable directory on the PROJ search path (usually the first path component). The status of the downloaded grids is stored in another SQLite database, `cache.db`. Let is unlink this file, and check that **rgdal** is running with on-demand downloading disabled:
+PROJ 7 introduced on-demand downloading of (chunks of) transformation grids from a content delivery network to a user-writable directory on the PROJ search path (usually the first path component). The status of the downloaded grids is stored in another SQLite database, `cache.db`. The PR$\phi$J user-writable CDN directory is set as soon as the internal search path is queried, and for most uses, the default value will allow all programs using PR$\phi$J such as R packages, QGIS, GRASS, etc., to access any downloaded grids. Grids are checked for staleness at regular intervals. This directory may be set to a non-default value with the `PROJ_USER_WRITABLE_DIRECTORY` environment variable *before* **rgdal** (and any other package using PR$\phi$J) is loaded and attached, from PR$\phi$J >= 7.1.0. The code used at the beginning of this vignette is repeated here for convenience:
+
+
+```{r, eval=FALSE}
+td <- tempfile()
+dir.create(td)
+Sys.setenv("PROJ_USER_WRITABLE_DIRECTORY"=td)
+library(rgdal)
+```
 
 ```{r, echo=FALSE, results='hide', eval=odd_run}
-run <- run && (attr(getPROJ4VersionInfo(), "short") >= 700)
+run <- run && (attr(getPROJ4VersionInfo(), "short") >= 710)
 ```
 
-```{r, eval=odd_run && run}
-tf <- tempfile()
-dir.create(tf)
-paths <- c(tf, shpr[length(shpr)])
-set_proj_search_paths(paths)
-```
-
+Let us check that **rgdal** is running with on-demand downloading disabled:
 
 ```{r, eval=run && odd_run}
 is_proj_CDN_enabled()
 ```
 
 
-We can enable on-demand download setting an internal PR$\phi$J variable; we see that with this setting, network download is enabled:
+We can enable on-demand download using a function that reports the value of the PR$\phi$J CDN user-writable directory; we see that with this setting, network download is enabled:
 
 ```{r, eval=run && odd_run}
 enable_proj_CDN()
 is_proj_CDN_enabled()
-(shpr1 <- get_proj_search_paths())
+```
+
+The reader will recall that the search path was stored in `shpr` above, the first element being the user-writable directory; at this point no SQLite database has been created:
+
+```{r, eval=run && odd_run}
+shpr[1]
+try(file.size(file.path(shpr[1], "cache.db")))
 ```
 
 When we then search for candidate coordinate operations, we see that the operation using an absent grid now sees that download is enabled, and proposes the 1m accuracy candidate, because the required grid can be downloaded:
@@ -291,24 +302,27 @@ c(spDists(is2m, is1m)*1000)
 c(maptools::gzAzimuth(coordinates(is1m), coordinates(is2m)))
 ```
 
+Now the SQLite grid cache database has been created and has grown in size:
+
+```{r, eval=run && odd_run}
+try(file.size(file.path(shpr[1], "cache.db")))
+```
+
 If we look in the SQLite database of downloaded grids, we see that the grid components that were downloaded. Here we have not yet used the area of interest to limit the number of chunks involved:
 
 ```{r, eval=run && odd_run}
 library(RSQLite)
-if (file.exists(file.path(shpr1[1], "cache.db"))) {
-db <- dbConnect(SQLite(), dbname=file.path(shpr1[1], "cache.db"))
-(tbls <- dbListTables(db))
-if ("chunks" %in% tbls) dbReadTable(db, "chunks")
+db <- dbConnect(SQLite(), dbname=file.path(shpr[1], "cache.db"))
+dbListTables(db)
+dbReadTable(db, "chunks")
 dbDisconnect(db)
-}
 ```
 
-Finally, we disable grid download to return to the status existing when **rgdal** was attached. 
+Finally, we disable grid download to return to the status existing when **rgdal** was attached; the cached grids in this case, using an R temporary directory, will be discarded, but in usual workflows, grids are downloaded once, used often and updated seldom when the server versions change. 
 
 ```{r, eval=run && odd_run}
 disable_proj_CDN()
 is_proj_CDN_enabled()
-(set_proj_search_paths(shpr))
 ```
 
 

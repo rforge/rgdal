@@ -203,7 +203,7 @@ SEXP get_proj_user_writable_dir() {
     SEXP res;
 #if ((PROJ_VERSION_MAJOR == 7 && PROJ_VERSION_MINOR >= 1) || PROJ_VERSION_MAJOR > 7)
     PROTECT(res = NEW_CHARACTER(1));
-    SET_STRING_ELT(res, 0, COPY_TO_USER_STRING(proj_context_get_user_writable_directory(PJ_DEFAULT_CTX, FALSE)));
+    SET_STRING_ELT(res, 0, COPY_TO_USER_STRING(proj_context_get_user_writable_directory(PJ_DEFAULT_CTX, false)));
     UNPROTECT(1);
     return(res);
 #else
