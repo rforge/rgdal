@@ -46,6 +46,11 @@ plot(cbind(state.center$x, state.center$y), asp=1, type="n")
 text(cbind(state.center$x, state.center$y), state.abb)
 plot(res, asp=1, type="n")
 text(res, state.abb)
+broke_proj <- FALSE
+pv <- .Call("PROJ4VersionInfo", PACKAGE="rgdal")[[2]]
+# https://github.com/OSGeo/PROJ/issues/1525
+if (pv >= 600 && pv < 620) broke_proj <- TRUE
+if (!broke_proj) {
 crds <- matrix(data=c(9.05, 48.52), ncol=2)
 a <- project(crds, paste("+proj=ob_tran +o_proj=longlat",
  "+o_lon_p=-162 +o_lat_p=39.25 +lon_0=180 +ellps=sphere +no_defs"),
@@ -56,6 +61,7 @@ project(a, paste("+proj=ob_tran +o_proj=longlat",
  "+o_lon_p=-162 +o_lat_p=39.25 +lon_0=180 +ellps=sphere +no_defs"),
  inv=TRUE, use_ob_tran=TRUE)
 #added after posting by Martin Ivanov
+}
 #
 getPROJ4VersionInfo()
 # Test for UTM == TMERC (<= 4.9.2) or UTM == ETMERC (> 4.9.2)

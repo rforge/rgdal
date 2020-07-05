@@ -238,7 +238,7 @@ SEXP set_proj_paths(SEXP paths) {
 
 SEXP list_coordinate_ops(SEXP source, SEXP target, SEXP area_of_interest, SEXP strict_containment, SEXP vis_order) {
 
-    //PJ_CONTEXT *ctx = proj_context_create();
+    PJ_CONTEXT *ctx = proj_context_create();
     PJ_OPERATION_FACTORY_CONTEXT* operation_factory_context = NULL;
     PJ_OBJ_LIST *pj_operations = NULL;
     PJ *source_crs, *target_crs;
@@ -251,32 +251,32 @@ SEXP list_coordinate_ops(SEXP source, SEXP target, SEXP area_of_interest, SEXP s
     const char *out_short_name, *out_full_name, *out_package_name, *out_url;
     PJ_PROJ_INFO pjinfo;
 
-    source_crs = proj_create(PJ_DEFAULT_CTX, CHAR(STRING_ELT(source, 0)));
+    source_crs = proj_create(ctx, CHAR(STRING_ELT(source, 0)));
 
     if (source_crs == NULL) {
-        //proj_context_destroy(ctx);
+        proj_context_destroy(ctx);
         error("source crs not created");
     }
     
-    target_crs = proj_create(PJ_DEFAULT_CTX, CHAR(STRING_ELT(target, 0)));
+    target_crs = proj_create(ctx, CHAR(STRING_ELT(target, 0)));
 
     if (target_crs == NULL) {
         proj_destroy(source_crs);
-        //proj_context_destroy(ctx);
+        proj_context_destroy(ctx);
         error("target crs not created");
     }
 
-    operation_factory_context = proj_create_operation_factory_context(PJ_DEFAULT_CTX,
+    operation_factory_context = proj_create_operation_factory_context(ctx,
         NULL);
     if (operation_factory_context == NULL) {
         proj_destroy(source_crs); proj_destroy(target_crs);
-        //proj_context_destroy(ctx);
+        proj_context_destroy(ctx);
         error("operation factory context not created");
     }
 
     if (!ISNA(NUMERIC_POINTER(area_of_interest)[0])) {
         proj_operation_factory_context_set_area_of_interest(
-            PJ_DEFAULT_CTX, operation_factory_context,
+            ctx, operation_factory_context,
             NUMERIC_POINTER(area_of_interest)[0],
             NUMERIC_POINTER(area_of_interest)[1],
             NUMERIC_POINTER(area_of_interest)[2],
@@ -285,23 +285,23 @@ SEXP list_coordinate_ops(SEXP source, SEXP target, SEXP area_of_interest, SEXP s
 
     if (LOGICAL_POINTER(strict_containment)[0])
         proj_operation_factory_context_set_spatial_criterion(
-            PJ_DEFAULT_CTX, operation_factory_context,
+            ctx, operation_factory_context,
             PROJ_SPATIAL_CRITERION_STRICT_CONTAINMENT);
     else proj_operation_factory_context_set_spatial_criterion(
-            PJ_DEFAULT_CTX, operation_factory_context,
+            ctx, operation_factory_context,
             PROJ_SPATIAL_CRITERION_PARTIAL_INTERSECTION);
 
     proj_operation_factory_context_set_grid_availability_use(
-            PJ_DEFAULT_CTX, operation_factory_context,
+            ctx, operation_factory_context,
             PROJ_GRID_AVAILABILITY_USED_FOR_SORTING);
 
-    pj_operations = proj_create_operations(PJ_DEFAULT_CTX,
+    pj_operations = proj_create_operations(ctx,
                 source_crs, target_crs, operation_factory_context);
     
     if (pj_operations == NULL) {
         proj_operation_factory_context_destroy(operation_factory_context);
         proj_destroy(source_crs); proj_destroy(target_crs);
-        //proj_context_destroy(ctx);
+        proj_context_destroy(ctx);
         error("operations list not created");
     }
 
@@ -311,7 +311,7 @@ SEXP list_coordinate_ops(SEXP source, SEXP target, SEXP area_of_interest, SEXP s
         proj_list_destroy(pj_operations);
         proj_operation_factory_context_destroy(operation_factory_context);
         proj_destroy(source_crs); proj_destroy(target_crs);
-        //proj_context_destroy(ctx);
+        proj_context_destroy(ctx);
         return(R_NilValue);
     }
 
@@ -334,16 +334,16 @@ SEXP list_coordinate_ops(SEXP source, SEXP target, SEXP area_of_interest, SEXP s
 
 
     for (i=0; i<num_operations; i++) {
-        pj_transform = proj_list_get(PJ_DEFAULT_CTX, pj_operations, i);
+        pj_transform = proj_list_get(ctx, pj_operations, i);
         if (LOGICAL_POINTER(vis_order)[0])
-            pj_transform = proj_normalize_for_visualization(PJ_DEFAULT_CTX, pj_transform);
-        is_instantiable = proj_coordoperation_is_instantiable(PJ_DEFAULT_CTX,
+            pj_transform = proj_normalize_for_visualization(ctx, pj_transform);
+        is_instantiable = proj_coordoperation_is_instantiable(ctx,
             pj_transform);
-        is_ballpark = proj_coordoperation_has_ballpark_transformation(PJ_DEFAULT_CTX,
+        is_ballpark = proj_coordoperation_has_ballpark_transformation(ctx,
             pj_transform);
-        accuracy = proj_coordoperation_get_accuracy(PJ_DEFAULT_CTX,
+        accuracy = proj_coordoperation_get_accuracy(ctx,
             pj_transform);
-        grid_count = proj_coordoperation_get_grid_used_count(PJ_DEFAULT_CTX,
+        grid_count = proj_coordoperation_get_grid_used_count(ctx,
             pj_transform);
         pjinfo = proj_pj_info(pj_transform);
         SET_STRING_ELT(VECTOR_ELT(ans, 0), i,
@@ -359,7 +359,7 @@ SEXP list_coordinate_ops(SEXP source, SEXP target, SEXP area_of_interest, SEXP s
         if (grid_count > 0L) {
             SET_VECTOR_ELT(VECTOR_ELT(ans, 6), i, NEW_LIST(grid_count));
             for (j=0; j<grid_count; j++) {
-                grid_OK = proj_coordoperation_get_grid_used(PJ_DEFAULT_CTX, pj_transform,
+                grid_OK = proj_coordoperation_get_grid_used(ctx, pj_transform,
                     j, &out_short_name, &out_full_name, &out_package_name,
                     &out_url, &out_direct_download, &out_open_license,
                     &out_available);
@@ -411,7 +411,7 @@ SEXP list_coordinate_ops(SEXP source, SEXP target, SEXP area_of_interest, SEXP s
     proj_list_destroy(pj_operations);
     proj_operation_factory_context_destroy(operation_factory_context);
     proj_destroy(source_crs); proj_destroy(target_crs);
-    //proj_context_destroy(ctx);
+    proj_context_destroy(ctx);
 
     UNPROTECT(pc);
     return(ans);
@@ -518,14 +518,29 @@ SEXP transform_ng(SEXP fromargs, SEXP toargs, SEXP coordOp, SEXP npts, SEXP x, S
 	    error("target crs creation failed: %s", errstr);
         }
 //Rprintf("target crs: %s\n", proj_pj_info(target_crs).description); 
-        if ((pj_transform = proj_create_crs_to_crs_from_pj(PJ_DEFAULT_CTX, source_crs,
-            target_crs, 0, NULL)) == 0) {
+#if PROJ_VERSION_MAJOR == 6  && PROJ_VERSION_MINOR < 2
+        if ((pj_transform = proj_create_crs_to_crs(PJ_DEFAULT_CTX,
+            CHAR(STRING_ELT(fromargs, 0)),
+            CHAR(STRING_ELT(toargs, 0)), 0)) == 0) {
+// FIXME >= 6.2.0
             proj_destroy(target_crs);
             proj_destroy(source_crs);
             const char *errstr = proj_errno_string(proj_context_errno(PJ_DEFAULT_CTX));
             //proj_context_destroy(ctx);
 	    error("coordinate operation creation from WKT failed: %s", errstr);
         }
+
+#else
+        if ((pj_transform = proj_create_crs_to_crs_from_pj(PJ_DEFAULT_CTX, 
+            source_crs, target_crs, 0, NULL)) == 0) {
+// FIXME >= 6.2.0
+            proj_destroy(target_crs);
+            proj_destroy(source_crs);
+            const char *errstr = proj_errno_string(proj_context_errno(PJ_DEFAULT_CTX));
+            //proj_context_destroy(ctx);
+	    error("coordinate operation creation from WKT failed: %s", errstr);
+        }
+#endif
 //Rprintf("%s\n", proj_pj_info(pj_transform).definition);
         if (vis_order == 1) 
             pj_transform = proj_normalize_for_visualization(PJ_DEFAULT_CTX, pj_transform);
@@ -701,11 +716,20 @@ SEXP project_ng_coordOp(SEXP proj, SEXP inv//, SEXP ob_tran
         error("source crs creation failed: %s", errstr);
     }
 //Rprintf("source crs: %s\n", proj_pj_info(source_crs).definition); 
+#if PROJ_VERSION_MAJOR == 6  && PROJ_VERSION_MINOR < 2
+    if (use_inv) pj_transform = proj_create_crs_to_crs(PJ_DEFAULT_CTX, 
+        proj_as_wkt(PJ_DEFAULT_CTX, target_crs, PJ_WKT2_2018, NULL),
+        proj_as_wkt(PJ_DEFAULT_CTX, source_crs, PJ_WKT2_2018, NULL), 0);
+    else pj_transform = proj_create_crs_to_crs(PJ_DEFAULT_CTX,
+        proj_as_wkt(PJ_DEFAULT_CTX, source_crs, PJ_WKT2_2018, NULL),
+        proj_as_wkt(PJ_DEFAULT_CTX, target_crs, PJ_WKT2_2018, NULL), 0);
+#else
     if (use_inv) pj_transform = proj_create_crs_to_crs_from_pj(PJ_DEFAULT_CTX, target_crs,
         source_crs, 0, NULL);
     else pj_transform = proj_create_crs_to_crs_from_pj(PJ_DEFAULT_CTX, source_crs,
         target_crs, 0, NULL);
-
+// FIXME >= 6.2.0
+#endif
     if (pj_transform == 0) {
         proj_destroy(target_crs);
         proj_destroy(source_crs);

@@ -148,24 +148,40 @@ plot(grd_BNG, add=TRUE, lty=2)
 text(coordinates(grdtxt_BNG),
    labels=parse(text=as.character(grdtxt_BNG$labels)))
 par(opar)
+broke_proj <- FALSE
+# https://github.com/OSGeo/PROJ/issues/1525
+pv <- .Call("PROJ4VersionInfo", PACKAGE="rgdal")[[2]]
+if (pv >= 600 && pv < 620) broke_proj <- TRUE
+if (!broke_proj) { 
 crds <- matrix(data=c(9.05, 48.52), ncol=2)
 spPoint <- SpatialPoints(coords=crds,
  proj4string=CRS("+proj=longlat +ellps=sphere +no_defs"))
-a <- spTransform(spPoint, CRS(paste("+proj=ob_tran +o_proj=longlat",
- "+o_lon_p=-162 +o_lat_p=39.25 +lon_0=180 +ellps=sphere +no_defs")),
- use_ob_tran=TRUE)
+ob_tran_def <- paste("+proj=ob_tran +o_proj=longlat",
+ "+o_lon_p=-162 +o_lat_p=39.25 +lon_0=180 +ellps=sphere +no_defs")
+tg <- CRS(ob_tran_def)
+# proj4string not propagated in GDAL 3.0.0
+a <- spTransform(spPoint, tg, use_ob_tran=TRUE)
 a
+}
 #should be (-5.917698, -1.87195)
+if (!broke_proj) {
 spTransform(a, CRS("+proj=longlat +ellps=sphere +no_defs"),
  use_ob_tran=TRUE)
+}
+if (!broke_proj) {
 try(spTransform(a, CRS(paste("+proj=tmerc +lat_0=0 +lon_0=9 +k=1",
 "+x_0=3500000 +y_0=0 +ellps=bessel +units=m +no_defs")),
  use_ob_tran=TRUE))
+}
+if (!broke_proj) {
 spTransform(spPoint, CRS(paste("+proj=tmerc +lat_0=0 +lon_0=9 +k=1",
 "+x_0=3500000 +y_0=0 +ellps=bessel +units=m +no_defs")))
+}
+if (!broke_proj) {
 spTransform(spTransform(a, CRS("+proj=longlat +ellps=sphere +no_defs"),
  use_ob_tran=TRUE), CRS(paste("+proj=tmerc +lat_0=0 +lon_0=9 +k=1",
 "+x_0=3500000 +y_0=0 +ellps=bessel +units=m +no_defs")))
+}
 crds1 <- matrix(data=c(7, 51, 8, 52, 9, 52, 10, 51, 7, 51), ncol=2,
 byrow=TRUE, dimnames=list(NULL, c("lon", "lat")));
 crds2 <- matrix(data=c(8, 48, 9, 49, 11, 49, 9, 48, 8, 48), ncol=2,
@@ -176,22 +192,28 @@ spLines <- SpatialLines(list(Lines(list(Line(crds1), Line(crds2),
 Line(crds3)), ID="a")));
 slot(spLines, "proj4string") <- CRS("+proj=longlat +ellps=sphere +no_defs");
 bbox(spLines);
-spLines_tr <- spTransform(spLines, CRS(paste0("+proj=ob_tran +o_proj=longlat",
-" +o_lon_p=-162 +o_lat_p=39.25 +lon_0=180 +ellps=sphere +no_defs")),
-use_ob_tran=TRUE);
+if (!broke_proj) {
+spLines_tr <- spTransform(spLines, tg, use_ob_tran=TRUE);
 bbox(spLines_tr)
+}
+if (!broke_proj) {
 bbox(spTransform(spLines_tr, CRS("+proj=longlat +ellps=sphere"),
  use_ob_tran=TRUE))
+}
+if (!broke_proj) {
 spPolygons <- SpatialPolygons(list(Polygons(list(Polygon(crds1),
 Polygon(crds2), Polygon(crds3)), ID="a")));
 slot(spPolygons, "proj4string") <- CRS("+proj=longlat +ellps=sphere +no_defs");
 bbox(spPolygons);
-spPolygons_tr <- spTransform(spPolygons, CRS(paste0("+proj=ob_tran",
-" +o_proj=longlat +o_lon_p=-162 +o_lat_p=39.25 +lon_0=180 +ellps=sphere +no_defs")),
-use_ob_tran=TRUE);
+}
+if (!broke_proj) {
+spPolygons_tr <- spTransform(spPolygons, tg, use_ob_tran=TRUE);
 bbox(spPolygons_tr)
+}
+if (!broke_proj) {
 bbox(spTransform(spPolygons_tr, CRS("+proj=longlat +ellps=sphere"),
  use_ob_tran=TRUE))
+}
 #added after posting by Martin Ivanov
 data(nor2k)
 summary(nor2k)
