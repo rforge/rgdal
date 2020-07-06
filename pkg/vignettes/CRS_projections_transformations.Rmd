@@ -136,14 +136,6 @@ if (packageVersion("sp") > "1.4.1") {
 cat(WKT, "\n")
 ```
 
-## Areas of interest
-
-```{r}
-#o <- ifelse(is.projected(b_pump), project(t(unclass(bbox(b_pump))), wkt(b_pump), inv=TRUE), t(unclass(bbox(b_pump))))
-#(aoi <- c(t(o + c(-0.1, +0.1))))
-```
-
-
 ## Pipelines
 
 PROJ.4 assumed that the from/source and to/target coordinate reference system definitions involved in coordinate operations each contained the specifications necessary to get from source to WGS84 and then on from WGS84 to target. PR$\phi$J drops this assumption, searching among many candidate coordinate operations for viable pipelines. The search is conducted using the tables given in the `proj.db` SQLite database, which is now backed by authorities, and regularly updated at each release to the current upstream state. The tables are searched to find lists of candidates.
@@ -188,11 +180,6 @@ The Helmert transformation has parameters retrieved from the PROJ SQLite databas
 helm <- dbReadTable(db, "helmert_transformation_table")
 helm[helm$code == "1314",c(1:3, 15:17, 20:22, 25)]
 dbDisconnect(db)
-```
-
-
-```{r, eval=run && odd_run}
-#nrow(list_coordOps(WKT, "EPSG:4326", area_of_interest=aoi))
 ```
 
 
@@ -243,6 +230,30 @@ c(spDists(coordinates(isballpark), a)*1000)
 ```
 
 
+### Areas of interest
+
+The search for candidate coordinate operations may be expedited if the area of interest is provided. This is a vector of minumum longitude and latitude followed by maximum longitude and latitude, so we need to inverse project the bounding box of projected **sp** objects and coerce that matrix into the required order:
+
+```{r, eval=run && odd_run}
+if (is.projected(b_pump)) { 
+  o <- project(t(unclass(bbox(b_pump))), wkt(b_pump), inv=TRUE)
+} else {
+  o <- t(unclass(bbox(b_pump)))
+}
+(aoi <- c(t(o + c(-0.1, +0.1))))
+```
+Without an area of interest, the coordinate operation look-up found 8 candidate operations, with a given area of interest, only 5 are found with the `strict_containment=` argument taking its default value of `FALSE`, so that the candidates found do not have to contain the area of interest strictly:
+
+```{r, eval=run && odd_run}
+nrow(list_coordOps(WKT, "EPSG:4326", area_of_interest=aoi))
+```
+In this case, changing this argument to `TRUE` makes no further difference:
+
+```{r, eval=run && odd_run}
+nrow(list_coordOps(WKT, "EPSG:4326", strict_containment=TRUE, area_of_interest=aoi))
+```
+Methods for projection and transformation use the area of interest implicit in the data object, controlled by an argument: `use_aoi`, default `TRUE`, for `+proj=ob_tran, `FALSE`.
+
 ## Transformation grid files
 
 PROJ 7 introduced on-demand downloading of (chunks of) transformation grids from a content delivery network to a user-writable directory on the PROJ search path (usually the first path component). The status of the downloaded grids is stored in another SQLite database, `cache.db`. The PR$\phi$J user-writable CDN directory is set as soon as the internal search path is queried, and for most uses, the default value will allow all programs using PR$\phi$J such as R packages, QGIS, GRASS, etc., to access any downloaded grids. Grids are checked for staleness at regular intervals. This directory may be set to a non-default value with the `PROJ_USER_WRITABLE_DIRECTORY` environment variable *before* **rgdal** (and any other package using PR$\phi$J) is loaded and attached, from PR$\phi$J >= 7.1.0. The code used at the beginning of this vignette is repeated here for convenience:
@@ -280,10 +291,11 @@ shpr[1]
 try(file.size(file.path(shpr[1], "cache.db")))
 ```
 
-When we then search for candidate coordinate operations, we see that the operation using an absent grid now sees that download is enabled, and proposes the 1m accuracy candidate, because the required grid can be downloaded:
+When we then search for candidate coordinate operations, we see that the operation using an absent grid now sees that download is enabled, and proposes the 1m accuracy candidate, because the required grid can be downloaded (again using the area of interest):
+
 
 ```{r, eval=run && odd_run}
-list_coordOps(WKT, "EPSG:4326")
+list_coordOps(WKT, "EPSG:4326", area_of_interest=aoi)
 ```
 
 On making the transformation, we may see that the coordinate operation takes longer than expected, because on first pass the grid is downloaded from the network:

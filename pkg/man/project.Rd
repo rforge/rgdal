@@ -7,7 +7,8 @@
 }
 \usage{
 project(xy, proj, inv = FALSE, use_ob_tran=FALSE, legacy=TRUE,
- allowNAs_if_not_legacy=FALSE, coordOp = NULL, verbose = FALSE)
+ allowNAs_if_not_legacy=FALSE, coordOp = NULL, verbose = FALSE,
+ use_aoi=TRUE)
 }
 
 \arguments{
@@ -19,6 +20,7 @@ project(xy, proj, inv = FALSE, use_ob_tran=FALSE, legacy=TRUE,
   \item{allowNAs_if_not_legacy}{used if legacy is FALSE, default FALSE; introduced to handle use of NAs as object separators in \pkg{oce}}
   \item{coordOp}{default NULL, for PROJ >= 6 used to pass through a pre-defined coordinate operation}
   \item{verbose}{default FALSE, for PROJ >=6 used to show the coordinate operation used}
+  \item{use_aoi}{With PROJ >= 6, use the area of interest defined as the range of \code{xy} in limiting the search for candidate coordinate operations; set FALSE if \code{use_ob_tran} is TRUE}
 }
 \details{
   Full details of projection arguments available from website below, and examples in file "epsg" in the data directory installed with PROJ.4.

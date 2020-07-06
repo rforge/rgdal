@@ -467,13 +467,14 @@ SEXP CRS_compare(SEXP fromargs, SEXP toargs, SEXP type1, SEXP type2) {
     return(res);
 }
 
-SEXP transform_ng(SEXP fromargs, SEXP toargs, SEXP coordOp, SEXP npts, SEXP x, SEXP y, SEXP z) {
+SEXP transform_ng(SEXP fromargs, SEXP toargs, SEXP coordOp, SEXP npts, SEXP x, SEXP y, SEXP z, SEXP aoi) {
 
     //PJ_CONTEXT *ctx = proj_context_create();
     PJ *source_crs = NULL, *target_crs = NULL;
     PJ* pj_transform = NULL;
+    PJ_AREA *area_of_interest = 0;
 
-    int i, n, nwarn=0, have_z, pc=0, have_CO, vis_order;
+    int i, n, nwarn=0, have_z, pc=0, have_CO, vis_order, use_aoi=1;
     double *xx, *yy, *zz=NULL;
     SEXP enforce_xy = getAttrib(npts, install("enforce_xy"));
     SEXP res;
@@ -489,6 +490,18 @@ SEXP transform_ng(SEXP fromargs, SEXP toargs, SEXP coordOp, SEXP npts, SEXP x, S
     else if (LOGICAL_POINTER(enforce_xy)[0] == 1) vis_order = 1;
     else if (LOGICAL_POINTER(enforce_xy)[0] == 0) vis_order = 0;
     else vis_order = 0;
+
+    if (aoi == R_NilValue) use_aoi = 0;
+
+    if (!have_CO && use_aoi) {
+        area_of_interest = proj_area_create();
+        proj_area_set_bbox(area_of_interest, NUMERIC_POINTER(aoi)[0],
+            NUMERIC_POINTER(aoi)[1], NUMERIC_POINTER(aoi)[2],
+            NUMERIC_POINTER(aoi)[3]);
+    }
+//        proj_area_destroy(area_of_interest);
+
+
 	
 //Rprintf("have_CO: %d, have_z: %d: %d\n", have_CO, have_z);
 
@@ -504,6 +517,7 @@ SEXP transform_ng(SEXP fromargs, SEXP toargs, SEXP coordOp, SEXP npts, SEXP x, S
     } else {
 //Rprintf("source crs input: %s\n", CHAR(STRING_ELT(fromargs, 0)));
     	if ((source_crs = proj_create(PJ_DEFAULT_CTX, CHAR(STRING_ELT(fromargs, 0)))) == NULL) {
+            proj_area_destroy(area_of_interest);
             const char *errstr = proj_errno_string(proj_context_errno(PJ_DEFAULT_CTX));
             //proj_context_destroy(ctx);
 	    error("source crs creation failed: %s", errstr);
@@ -512,6 +526,7 @@ SEXP transform_ng(SEXP fromargs, SEXP toargs, SEXP coordOp, SEXP npts, SEXP x, S
 //Rprintf("source crs: %s\n", proj_pj_info(source_crs).description); 
 //Rprintf("target crs input:  %s\n", CHAR(STRING_ELT(toargs, 0)));
 	if ((target_crs = proj_create(PJ_DEFAULT_CTX, CHAR(STRING_ELT(toargs, 0)))) == NULL) {
+            proj_area_destroy(area_of_interest);
             proj_destroy(source_crs);
             const char *errstr = proj_errno_string(proj_context_errno(PJ_DEFAULT_CTX));
             //proj_context_destroy(ctx);
@@ -521,8 +536,9 @@ SEXP transform_ng(SEXP fromargs, SEXP toargs, SEXP coordOp, SEXP npts, SEXP x, S
 #if PROJ_VERSION_MAJOR == 6  && PROJ_VERSION_MINOR < 2
         if ((pj_transform = proj_create_crs_to_crs(PJ_DEFAULT_CTX,
             CHAR(STRING_ELT(fromargs, 0)),
-            CHAR(STRING_ELT(toargs, 0)), 0)) == 0) {
+            CHAR(STRING_ELT(toargs, 0)), area_of_interest)) == 0) {
 // FIXME >= 6.2.0
+            proj_area_destroy(area_of_interest);
             proj_destroy(target_crs);
             proj_destroy(source_crs);
             const char *errstr = proj_errno_string(proj_context_errno(PJ_DEFAULT_CTX));
@@ -532,8 +548,9 @@ SEXP transform_ng(SEXP fromargs, SEXP toargs, SEXP coordOp, SEXP npts, SEXP x, S
 
 #else
         if ((pj_transform = proj_create_crs_to_crs_from_pj(PJ_DEFAULT_CTX, 
-            source_crs, target_crs, 0, NULL)) == 0) {
+            source_crs, target_crs, area_of_interest, NULL)) == 0) {
 // FIXME >= 6.2.0
+            proj_area_destroy(area_of_interest);
             proj_destroy(target_crs);
             proj_destroy(source_crs);
             const char *errstr = proj_errno_string(proj_context_errno(PJ_DEFAULT_CTX));
@@ -575,6 +592,7 @@ SEXP transform_ng(SEXP fromargs, SEXP toargs, SEXP coordOp, SEXP npts, SEXP x, S
             NULL, stride, 0)) != (size_t) n) {
             proj_destroy(pj_transform);
             if (!have_CO) {
+                proj_area_destroy(area_of_interest);
                 proj_destroy(target_crs);
                 proj_destroy(source_crs);
             }
@@ -588,6 +606,7 @@ SEXP transform_ng(SEXP fromargs, SEXP toargs, SEXP coordOp, SEXP npts, SEXP x, S
           NULL, stride, 0)) != (size_t) n) {
           proj_destroy(pj_transform);
           if (!have_CO) {
+              proj_area_destroy(area_of_interest);
               proj_destroy(target_crs);
               proj_destroy(source_crs);
           }
@@ -647,8 +666,9 @@ SEXP transform_ng(SEXP fromargs, SEXP toargs, SEXP coordOp, SEXP npts, SEXP x, S
 
     proj_destroy(pj_transform);
     if (!have_CO) {
-         proj_destroy(target_crs);
-         proj_destroy(source_crs);
+        proj_area_destroy(area_of_interest);
+        proj_destroy(target_crs);
+        proj_destroy(source_crs);
     }
     //proj_context_destroy(ctx);
 
@@ -680,14 +700,15 @@ SEXP transform_ng(SEXP fromargs, SEXP toargs, SEXP coordOp, SEXP npts, SEXP x, S
     return(res);
 }
 
-SEXP project_ng_coordOp(SEXP proj, SEXP inv//, SEXP ob_tran
+SEXP project_ng_coordOp(SEXP proj, SEXP inv, SEXP aoi//, SEXP ob_tran
 ) {
 
     //PJ_CONTEXT *ctx = proj_context_create();
     PJ *source_crs, *target_crs;
     PJ* pj_transform = NULL;
+    PJ_AREA *area_of_interest = 0;
     int //use_ob_tran = LOGICAL_POINTER(ob_tran)[0], 
-        use_inv;
+        use_inv, use_aoi=1;
 
     proj_log_func(PJ_DEFAULT_CTX, NULL, silent_logger);
 
@@ -700,6 +721,9 @@ SEXP project_ng_coordOp(SEXP proj, SEXP inv//, SEXP ob_tran
     else if (LOGICAL_POINTER(inv)[0] == 1) use_inv = 1;
     else if (LOGICAL_POINTER(inv)[0] == 0) use_inv = 0;
     else use_inv = 0;
+
+    if (aoi == R_NilValue) use_aoi = 0;
+    
 
 //Rprintf("target crs input: %s\n", CHAR(STRING_ELT(proj, 0)));
     if ((target_crs = proj_create(PJ_DEFAULT_CTX, CHAR(STRING_ELT(proj, 0)))) == 0) {
@@ -716,21 +740,32 @@ SEXP project_ng_coordOp(SEXP proj, SEXP inv//, SEXP ob_tran
         error("source crs creation failed: %s", errstr);
     }
 //Rprintf("source crs: %s\n", proj_pj_info(source_crs).definition); 
+
+    if (use_aoi) {
+        area_of_interest = proj_area_create();
+        proj_area_set_bbox(area_of_interest, NUMERIC_POINTER(aoi)[0],
+            NUMERIC_POINTER(aoi)[1], NUMERIC_POINTER(aoi)[2],
+            NUMERIC_POINTER(aoi)[3]);
+    }
+
 #if PROJ_VERSION_MAJOR == 6  && PROJ_VERSION_MINOR < 2
     if (use_inv) pj_transform = proj_create_crs_to_crs(PJ_DEFAULT_CTX, 
         proj_as_wkt(PJ_DEFAULT_CTX, target_crs, PJ_WKT2_2018, NULL),
-        proj_as_wkt(PJ_DEFAULT_CTX, source_crs, PJ_WKT2_2018, NULL), 0);
+        proj_as_wkt(PJ_DEFAULT_CTX, source_crs, PJ_WKT2_2018, NULL),
+        area_of_interest);
     else pj_transform = proj_create_crs_to_crs(PJ_DEFAULT_CTX,
         proj_as_wkt(PJ_DEFAULT_CTX, source_crs, PJ_WKT2_2018, NULL),
-        proj_as_wkt(PJ_DEFAULT_CTX, target_crs, PJ_WKT2_2018, NULL), 0);
+        proj_as_wkt(PJ_DEFAULT_CTX, target_crs, PJ_WKT2_2018, NULL),
+        area_of_interest);
 #else
     if (use_inv) pj_transform = proj_create_crs_to_crs_from_pj(PJ_DEFAULT_CTX, target_crs,
-        source_crs, 0, NULL);
+        source_crs, area_of_interest, NULL);
     else pj_transform = proj_create_crs_to_crs_from_pj(PJ_DEFAULT_CTX, source_crs,
-        target_crs, 0, NULL);
+        target_crs, area_of_interest, NULL);
 // FIXME >= 6.2.0
 #endif
     if (pj_transform == 0) {
+        proj_area_destroy(area_of_interest);
         proj_destroy(target_crs);
         proj_destroy(source_crs);
         const char *errstr = proj_errno_string(proj_context_errno(PJ_DEFAULT_CTX));
@@ -747,6 +782,7 @@ SEXP project_ng_coordOp(SEXP proj, SEXP inv//, SEXP ob_tran
         COPY_TO_USER_STRING(proj_pj_info(pj_transform).definition));
     UNPROTECT(1);
     proj_destroy(pj_transform);
+    proj_area_destroy(area_of_interest);
     proj_destroy(target_crs);
     proj_destroy(source_crs);
     //proj_context_destroy(ctx);

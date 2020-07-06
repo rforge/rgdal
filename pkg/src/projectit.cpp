@@ -156,7 +156,7 @@ SEXP CRS_compare(SEXP fromargs, SEXP toargs, SEXP type1, SEXP type2) {
     return(R_NilValue);
 }
 
-SEXP transform_ng(SEXP fromargs, SEXP toargs, SEXP coordOp, SEXP npts, SEXP x, SEXP y, SEXP z) {
+SEXP transform_ng(SEXP fromargs, SEXP toargs, SEXP coordOp, SEXP npts, SEXP x, SEXP y, SEXP z SEXP aoi) {
     Rprintf("Not available for deprecated API");
     return(R_NilValue);
 }
@@ -166,7 +166,7 @@ SEXP project_ng(SEXP n, SEXP xlon, SEXP ylat, SEXP zz, SEXP inv, SEXP ob_tran, S
     return(R_NilValue);
 }
 
-SEXP project_ng_coordOp(SEXP proj, SEXP inv) {
+SEXP project_ng_coordOp(SEXP proj, SEXP inv, SEXP aoi) {
     Rprintf("Not available for deprecated API");
     return(R_NilValue);
 }

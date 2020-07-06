@@ -37,15 +37,6 @@ proj_CDN_user_writable_dir <- function() {
     .Call("get_proj_user_writable_dir", PACKAGE="rgdal")
 }
 
-#> td <- tempfile()
-#> dir.create(td)
-#> Sys.getenv("PROJ_USER_WRITABLE_DIRECTORY")
-#[1] ""
-#> Sys.setenv("PROJ_USER_WRITABLE_DIRECTORY"=td)
-#> 
-#> Sys.getenv("PROJ_USER_WRITABLE_DIRECTORY")
-#[1] "/tmp/RtmpeCIepM/fileae56312f1ebcd"
-
 
 GDAL_OSR_PROJ <- function() {
     res <- .Call("R_GDAL_OSR_PROJ", PACKAGE="rgdal")
@@ -120,7 +111,32 @@ get_last_coordOp <- function() {
     get(".last_coordOp", envir=.RGDAL_CACHE)
 }
 
-"project" <- function(xy, proj, inv=FALSE, use_ob_tran=FALSE, legacy=TRUE, allowNAs_if_not_legacy=FALSE, coordOp=NULL, verbose=FALSE) {
+get_aoi <- function(obj, xy, inv, proj) {
+    if (missing(obj)) { # used in project
+        bb <- cbind(range(xy[,1], na.rm=TRUE), range(xy[,2], na.rm=TRUE))
+        if (inv) {
+            o <- project(bb, proj, inv=inv, use_aoi=FALSE)
+        } else {
+            o <- bb
+        }
+    } else { # used in spTransform
+        if (is.projected(obj)) { 
+            tg <- wkt(obj)
+            if (is.null(tg)) tg <- proj4string(obj)
+            o <- project(t(bbox(obj))[,1:2], tg, inv=TRUE, use_aoi=FALSE)
+        } else {
+            o <- t(bbox(obj))[,1:2]
+        }
+    }
+    if (any(!is.finite(c(o)))) return(NULL)
+    aoi <- o + c(-0.1, +0.1) # stretch envelope
+    aoi[,1] <- sapply(aoi[,1], function(x) { if (x > 180) 180 - x else if (x < -180) 360 + x else x})
+    aoi[,2] <- sapply(aoi[,2], function(y) { if (y > 90) 90 else if (y < -90) -90 else y}) # constrain to -180/180, -90/90
+    c(t(aoi))
+}
+
+
+"project" <- function(xy, proj, inv=FALSE, use_ob_tran=FALSE, legacy=TRUE, allowNAs_if_not_legacy=FALSE, coordOp=NULL, verbose=FALSE, use_aoi=TRUE) {
 
 #    if (new_proj_and_gdal()) 
 #        warning("project() will not be adapted for PROJ 6 and is deprecated")
@@ -203,9 +219,14 @@ get_last_coordOp <- function() {
                     if (length(grep(" \\+type=crs", proj)) == 0L)
                         proj <- paste0(proj, " +type=crs")
                 }
-                coordOp <- .Call("project_ng_coordOp", proj, as.logical(inv),
-                    #as.logical(use_ob_tran), 
-                    PACKAGE="rgdal")
+                aoi <- NULL
+                if (!use_ob_tran && use_aoi) {
+                    aoi <- get_aoi(xy=xy, inv=inv, proj=proj)
+                    stopifnot(length(aoi) == 4)
+                    aoi <- as.numeric(aoi)
+                }
+                coordOp <- .Call("project_ng_coordOp", proj,
+                    as.logical(inv), aoi, PACKAGE="rgdal")
             }
             if (verbose) cat(strwrap(coordOp), sep="\n")
             res <- .Call("project_ng",
@@ -354,6 +375,22 @@ if (!isGeneric("spTransform"))
         if (!is.null(dots$coordOp)) {
             coordOp <- dots$coordOp
         }
+        
+        use_aoi <- TRUE
+        if (!is.null(dots$use_aoi)) {
+            use_aoi <- dots$use_aoi
+            if (use_ob_tran != 0L) use_aoi <- FALSE
+            if (!is.null(coordOp)) use_aoi <- FALSE
+            if (!new_proj_and_gdal()) use_aoi <- FALSE
+        }
+        
+        aoi <- NULL
+        if (use_aoi) {
+            aoi <- get_aoi(x)
+            stopifnot(length(aoi) == 4)
+            aoi <- as.numeric(aoi)
+        }
+
 	crds <- coordinates(x)
 	crds.names <- dimnames(crds)[[2]] # crds is matrix
 	n <- nrow(crds)
@@ -363,7 +400,7 @@ if (!isGeneric("spTransform"))
                 if (use_ob_tran == 0L) {
                     attr(n, "enforce_xy") <- enforce_xy
                     res <- .Call("transform_ng", from_args, to_args, coordOp, n,
-		        as.double(crds[,1]), as.double(crds[,2]), NULL,
+		        as.double(crds[,1]), as.double(crds[,2]), NULL, aoi,
 		        PACKAGE="rgdal")
                     out_coordOp <- res[[5]]
                 } else {
@@ -380,7 +417,7 @@ if (!isGeneric("spTransform"))
                     else use_ob_tran1 <- TRUE
                     if (is.null(coordOp)) {
                         out_coordOp <- .Call("project_ng_coordOp", proj,
-                            as.logical(inv), #as.logical(use_ob_tran1),
+                            as.logical(inv), NULL, #as.logical(use_ob_tran1),
                             PACKAGE="rgdal")
                     }
                     res <- .Call("project_ng", as.integer(n), 
@@ -406,7 +443,7 @@ if (!isGeneric("spTransform"))
                     attr(n, "enforce_xy") <- enforce_xy
                     res <- .Call("transform_ng", from_args, to_args, coordOp, n,
 		        as.double(crds[,1]), as.double(crds[,2]),
-                        as.double(crds[,3]), PACKAGE="rgdal")
+                        as.double(crds[,3]), aoi, PACKAGE="rgdal")
                     out_coordOp <- res[[6]]
                 } else {
                     if (use_ob_tran == -1L) {
@@ -422,7 +459,7 @@ if (!isGeneric("spTransform"))
                     else use_ob_tran1 <- TRUE
                     if (is.null(coordOp)) {
                         out_coordOp <- .Call("project_ng_coordOp", proj,
-                            as.logical(inv), #as.logical(use_ob_tran1),
+                            as.logical(inv), NULL, #as.logical(use_ob_tran1),
                             PACKAGE="rgdal")
                     }
                     res <- .Call("project_ng", as.integer(n), 
@@ -489,7 +526,7 @@ setMethod("spTransform", signature("SpatialGridDataFrame", "CRS"),
 
 
 ".spTransform_Line" <- function(x, to_args, from_args, ii, jj,
-                use_ob_tran, coordOp, enforce_xy) {
+                use_ob_tran, coordOp, enforce_xy, aoi) {
 	crds <- slot(x, "coords")
 	n <- nrow(crds)
         attr(n, "ob_tran") <- use_ob_tran
@@ -497,7 +534,7 @@ setMethod("spTransform", signature("SpatialGridDataFrame", "CRS"),
             if (use_ob_tran == 0L) {
                 attr(n, "enforce_xy") <- enforce_xy
                 res <- .Call("transform_ng", from_args, to_args, coordOp, n,
-		    as.double(crds[,1]), as.double(crds[,2]), NULL,
+		    as.double(crds[,1]), as.double(crds[,2]), NULL, aoi,
 		    PACKAGE="rgdal")
                 out_coordOp <- res[[5]]
             } else {
@@ -515,7 +552,7 @@ setMethod("spTransform", signature("SpatialGridDataFrame", "CRS"),
                 else use_ob_tran1 <- TRUE
                 if (is.null(coordOp)) {
                     coordOp <- .Call("project_ng_coordOp", proj,
-                        as.logical(inv), #as.logical(use_ob_tran1),
+                        as.logical(inv), NULL, #as.logical(use_ob_tran1),
                         PACKAGE="rgdal")
                 }
                 res <- .Call("project_ng", as.integer(n), 
@@ -545,7 +582,7 @@ setMethod("spTransform", signature("SpatialGridDataFrame", "CRS"),
 #setMethod("spTransform", signature("Sline", "CRS"), spTransform.Sline)
 
 ".spTransform_Lines" <- function(x, to_args, from_args, ii,
-                use_ob_tran, coordOp, enforce_xy) {
+                use_ob_tran, coordOp, enforce_xy, aoi) {
 	ID <- slot(x, "ID")
 	input <- slot(x, "Lines")
 	n <- length(input)
@@ -554,7 +591,8 @@ setMethod("spTransform", signature("SpatialGridDataFrame", "CRS"),
 	for (i in 1:n) {
             output[[i]] <- .spTransform_Line(input[[i]], 
 		to_args=to_args, from_args=from_args, ii=ii, jj=i,
-                use_ob_tran=use_ob_tran, coordOp=coordOp, enforce_xy=enforce_xy)
+                use_ob_tran=use_ob_tran, coordOp=coordOp,
+                enforce_xy=enforce_xy, aoi=aoi)
             if (is.null(coordOp) && new_proj_and_gdal() && i == 1) {
                 out_coordOp <- attr(output[[i]], "coordOp")
                 coordOp <-  gsub(" ", " +", paste0("+", out_coordOp))
@@ -651,13 +689,29 @@ setMethod("spTransform", signature("SpatialGridDataFrame", "CRS"),
         if (!is.null(dots$coordOp)) {
             coordOp <- dots$coordOp
         }
+        use_aoi <- TRUE
+        if (!is.null(dots$use_aoi)) {
+            use_aoi <- dots$use_aoi
+            if (use_ob_tran != 0L) use_aoi <- FALSE
+            if (!is.null(coordOp)) use_aoi <- FALSE
+            if (!new_proj_and_gdal()) use_aoi <- FALSE
+        }
+        
+        aoi <- NULL
+        if (use_aoi) {
+            aoi <- get_aoi(x)
+            stopifnot(length(aoi) == 4)
+            aoi <- as.numeric(aoi)
+        }
+
 	input <- slot(x, "lines")
 	n <- length(input)
 	output <- vector(mode="list", length=n)
 	for (i in 1:n) {
             output[[i]] <- .spTransform_Lines(input[[i]], 
 		to_args=to_args, from_args=from_args, ii=i,
-                use_ob_tran=use_ob_tran, coordOp=coordOp, enforce_xy=enforce_xy)
+                use_ob_tran=use_ob_tran, coordOp=coordOp,
+                enforce_xy=enforce_xy, aoi=aoi)
             if (is.null(coordOp) && new_proj_and_gdal() && i == 1) {
                 out_coordOp <- attr(output[[i]], "coordOp")
                 coordOp <-  gsub(" ", " +", paste0("+", out_coordOp))
@@ -683,7 +737,7 @@ setMethod("spTransform", signature("SpatialLinesDataFrame", "CRS"), spTransform.
 
 
 ".spTransform_Polygon" <- function(x, to_args, from_args, ii, jj,
-                use_ob_tran, coordOp, enforce_xy) {
+                use_ob_tran, coordOp, enforce_xy, aoi) {
 	crds <- slot(x, "coords")
 	n <- nrow(crds)
         attr(n, "ob_tran") <- use_ob_tran
@@ -691,7 +745,7 @@ setMethod("spTransform", signature("SpatialLinesDataFrame", "CRS"), spTransform.
             if (use_ob_tran == 0L) {
                 attr(n, "enforce_xy") <- enforce_xy
                 res <- .Call("transform_ng", from_args, to_args, coordOp, n,
-		    as.double(crds[,1]), as.double(crds[,2]), NULL,
+		    as.double(crds[,1]), as.double(crds[,2]), NULL, aoi,
 		    PACKAGE="rgdal")
                 out_coordOp <- res[[5]]
             } else {
@@ -709,7 +763,7 @@ setMethod("spTransform", signature("SpatialLinesDataFrame", "CRS"), spTransform.
                 else use_ob_tran1 <- TRUE
                 if (is.null(coordOp)) {
                     coordOp <- .Call("project_ng_coordOp", proj,
-                        as.logical(inv), #as.logical(use_ob_tran1),
+                        as.logical(inv), NULL, #as.logical(use_ob_tran1),
                         PACKAGE="rgdal")
                 }
                 res <- .Call("project_ng", as.integer(n), 
@@ -738,7 +792,7 @@ setMethod("spTransform", signature("SpatialLinesDataFrame", "CRS"), spTransform.
 
 
 ".spTransform_Polygons" <- function(x, to_args, from_args, ii,
-                use_ob_tran, coordOp, enforce_xy) {
+                use_ob_tran, coordOp, enforce_xy, aoi) {
 	ID <- slot(x, "ID")
 	input <- slot(x, "Polygons")
 	n <- length(input)
@@ -747,7 +801,8 @@ setMethod("spTransform", signature("SpatialLinesDataFrame", "CRS"), spTransform.
 	for (i in 1:n) {
             output[[i]] <- .spTransform_Polygon(input[[i]], 
 		to_args=to_args, from_args=from_args, ii=ii, jj=i,
-                use_ob_tran=use_ob_tran, coordOp=coordOp, enforce_xy=enforce_xy)
+                use_ob_tran=use_ob_tran, coordOp=coordOp,
+                enforce_xy=enforce_xy, aoi=aoi)
             if (is.null(coordOp) && new_proj_and_gdal() && i == 1) {
                 out_coordOp <- attr(output[[i]], "coordOp")
                 coordOp <-  gsub(" ", " +", paste0("+", out_coordOp))
@@ -844,13 +899,29 @@ setMethod("spTransform", signature("SpatialLinesDataFrame", "CRS"), spTransform.
         if (!is.null(dots$coordOp)) {
             coordOp <- dots$coordOp
         }
+        use_aoi <- TRUE
+        if (!is.null(dots$use_aoi)) {
+            use_aoi <- dots$use_aoi
+            if (use_ob_tran != 0L) use_aoi <- FALSE
+            if (!is.null(coordOp)) use_aoi <- FALSE
+            if (!new_proj_and_gdal()) use_aoi <- FALSE
+        }
+        
+        aoi <- NULL
+        if (use_aoi) {
+            aoi <- get_aoi(x)
+            stopifnot(length(aoi) == 4)
+            aoi <- as.numeric(aoi)
+        }
+
 	input <- slot(x, "polygons")
 	n <- length(input)
 	output <- vector(mode="list", length=n)
 	for (i in 1:n) {
             output[[i]] <- .spTransform_Polygons(input[[i]], 
 		to_args=to_args, from_args=from_args, ii=i,
-                use_ob_tran=use_ob_tran, coordOp=coordOp, enforce_xy=enforce_xy)
+                use_ob_tran=use_ob_tran, coordOp=coordOp,
+                enforce_xy=enforce_xy, aoi=aoi)
             if (is.null(coordOp) && new_proj_and_gdal() && i == 1) {
                 out_coordOp <- attr(output[[i]], "coordOp")
                 coordOp <-  gsub(" ", " +", paste0("+", out_coordOp))
