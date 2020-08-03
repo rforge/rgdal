@@ -22,10 +22,10 @@ make_EPSG(file)
   \item{prj_method}{extra character column from PROJ 6 showing the projection method}
   ...
 }
-\references{\url{https://epsg.org/home.html}.}
+\references{(Currently invalid certificate, URL otherwise valid https://epsg.org/home.html).}
 
 \author{Roger Bivand}
-\note{See also Clifford J. Mugnier's Grids \& Datums columns in Photogrammetric Engineering & Remote Sensing, \url{http://www.asprs.org/a/resources/grids/}, see also \code{\link{GridsDatums}}.}
+\note{See also Clifford J. Mugnier's Grids \& Datums columns in Photogrammetric Engineering & Remote Sensing, \url{https://www.asprs.org/a/resources/grids/}, see also \code{\link{GridsDatums}}.}
 \examples{
 EPSG <- try(make_EPSG())
 # from PROJ 6.0.0, EPSG data is no longer stored in a flat file

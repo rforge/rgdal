@@ -1,7 +1,7 @@
 Package: rgdal
 Title: Bindings for the 'Geospatial' Data Abstraction Library
-Version: 1.5-14
-Date: 2020-08-02
+Version: 1.5-15
+Date: 2020-08-03
 Depends: R (>= 3.5.0), methods, sp (>= 1.1-0)
 Imports: grDevices, graphics, stats, utils
 LinkingTo: sp
@@ -20,7 +20,7 @@ Authors@R: c(
 	person("Jeroen", "Ooms", role = "ctb"),
 	person("Colin", "Rundel", role = "ctb"))
 License: GPL (>= 2)
-URL: http://rgdal.r-forge.r-project.org, https://www.gdal.org, https://proj.org, https://r-forge.r-project.org/projects/rgdal/
+URL: http://rgdal.r-forge.r-project.org, https://gdal.org, https://proj.org, https://r-forge.r-project.org/projects/rgdal/
 SystemRequirements: PROJ (>= 4.8.0, https://proj.org/download.html) and GDAL (>= 1.11.4, https://gdal.org/download.html), with versions either (A) PROJ < 6 and GDAL < 3 or (B) PROJ >= 6 and GDAL >= 3. For degraded PROJ >= 6 and GDAL < 3, use the configure argument '--with-proj_api="proj_api.h"'.
 VignetteBuilder: knitr
 RoxygenNote: 6.1.1
