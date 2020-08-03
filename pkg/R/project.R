@@ -122,7 +122,12 @@ get_aoi <- function(obj, xy, inv, proj) {
     } else { # used in spTransform
         if (is.projected(obj)) { 
             tg <- wkt(obj)
-            if (is.null(tg)) tg <- proj4string(obj)
+            if (is.null(tg)) {
+                tg <- proj4string(obj)
+                if (length(grep("+init", tg)) > 0L) {
+                    tg <- wkt(CRS(tg))
+                }
+            }
             o <- project(t(bbox(obj))[,1:2], tg, inv=TRUE, use_aoi=FALSE)
         } else {
             o <- t(bbox(obj))[,1:2]
