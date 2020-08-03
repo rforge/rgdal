@@ -30,7 +30,7 @@ Note that from PROJ.4 4.9.3, the definition of UTM is changed from TMERC to ETME
 \value{
   A two column matrix with projected coordinates.
 }
-\references{\url{http://proj.org/}}
+\references{\url{https://proj.org/}}
 \author{Barry Rowlingson, Roger Bivand \email{Roger.Bivand@nhh.no}}
 
 \note{ The locations of Hawaii and Alaska in the data source are (putting it mildly) arbitrary, please avoid airlines using these positions.}
