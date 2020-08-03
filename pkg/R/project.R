@@ -222,8 +222,10 @@ get_aoi <- function(obj, xy, inv, proj) {
                 aoi <- NULL
                 if (!use_ob_tran && use_aoi) {
                     aoi <- get_aoi(xy=xy, inv=inv, proj=proj)
-                    stopifnot(length(aoi) == 4)
-                    aoi <- as.numeric(aoi)
+                    if (!is.null(aoi)) {
+                        stopifnot(length(aoi) == 4)
+                        aoi <- as.numeric(aoi)
+                    }
                 }
                 coordOp <- .Call("project_ng_coordOp", proj,
                     as.logical(inv), aoi, PACKAGE="rgdal")
@@ -387,8 +389,10 @@ if (!isGeneric("spTransform"))
         aoi <- NULL
         if (use_aoi) {
             aoi <- get_aoi(x)
-            stopifnot(length(aoi) == 4)
-            aoi <- as.numeric(aoi)
+            if (!is.null(aoi)) {
+                stopifnot(length(aoi) == 4)
+                aoi <- as.numeric(aoi)
+            }
         }
 
 	crds <- coordinates(x)
@@ -700,8 +704,10 @@ setMethod("spTransform", signature("SpatialGridDataFrame", "CRS"),
         aoi <- NULL
         if (use_aoi) {
             aoi <- get_aoi(x)
-            stopifnot(length(aoi) == 4)
-            aoi <- as.numeric(aoi)
+            if (!is.null(aoi)) {
+                stopifnot(length(aoi) == 4)
+                aoi <- as.numeric(aoi)
+            }
         }
 
 	input <- slot(x, "lines")
@@ -910,8 +916,10 @@ setMethod("spTransform", signature("SpatialLinesDataFrame", "CRS"), spTransform.
         aoi <- NULL
         if (use_aoi) {
             aoi <- get_aoi(x)
-            stopifnot(length(aoi) == 4)
-            aoi <- as.numeric(aoi)
+            if (!is.null(aoi)) {
+                stopifnot(length(aoi) == 4)
+                aoi <- as.numeric(aoi)
+            }
         }
 
 	input <- slot(x, "polygons")
