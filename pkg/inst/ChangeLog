@@ -1,3 +1,12 @@
+2020-08-03 15:31  rsbivand
+
+	* man/CRS-class.Rd, man/SpatialGDAL-class.Rd, man/project.Rd: fix
+	  stale(ish) links
+
+2020-08-03 09:04  rsbivand
+
+	* ChangeLog, inst/ChangeLog: tidy
+
 2020-08-03 09:03  rsbivand
 
 	* DESCRIPTION, man/GDALDriver-class.Rd,
