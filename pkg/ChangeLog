@@ -1,3 +1,16 @@
+2020-08-03 09:03  rsbivand
+
+	* DESCRIPTION, man/GDALDriver-class.Rd,
+	  man/GDALMajorObject-class.Rd, man/GDALRasterBand-class.Rd,
+	  man/GDALReadOnlyDataset-class.Rd, man/RGB2PCT.Rd,
+	  man/SGDF2PCT.Rd, man/displayDataset.Rd, man/make_EPSG.Rd,
+	  man/readGDAL.Rd, man/readOGR.Rd, man/writeOGR.Rd: fix stale(ish)
+	  links
+
+2020-08-03 06:46  rsbivand
+
+	* ChangeLog, inst/ChangeLog: tidy
+
 2020-08-03 06:45  rsbivand
 
 	* ChangeLog, R/project.R: rebuild plotKML CRS to drop +init
