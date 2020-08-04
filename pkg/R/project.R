@@ -116,7 +116,8 @@ get_aoi <- function(obj, xy, inv, proj) {
     if (missing(obj)) { # used in project
         bb <- cbind(range(xy[,1], na.rm=TRUE), range(xy[,2], na.rm=TRUE))
         if (inv) {
-            o <- project(bb, proj, inv=inv, use_aoi=FALSE)
+            o <- try(project(bb, proj, inv=inv, use_aoi=FALSE), silent=TRUE)
+            if (inherits(o, "try-error")) return(NULL)
         } else {
             o <- bb
         }
@@ -129,7 +130,9 @@ get_aoi <- function(obj, xy, inv, proj) {
                     tg <- wkt(CRS(tg))
                 }
             }
-            o <- project(t(bbox(obj))[,1:2], tg, inv=TRUE, use_aoi=FALSE)
+            o <- try(project(t(bbox(obj))[,1:2], tg, inv=TRUE, use_aoi=FALSE),
+                silent=TRUE)
+            if (inherits(o, "try-error")) return(NULL)
         } else {
             o <- t(bbox(obj))[,1:2]
         }
