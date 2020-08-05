@@ -1,3 +1,11 @@
+2020-08-04 19:37  rsbivand
+
+	* R/project.R: add try() around project() in get_aoi()
+
+2020-08-04 08:55  rsbivand
+
+	* ChangeLog, inst/ChangeLog: tidy
+
 2020-08-04 08:54  rsbivand
 
 	* DESCRIPTION, R/project.R, configure, src/projectit.cpp: repeat
