@@ -383,15 +383,21 @@ orig
 ```
 The original `"CRS"` object contains a `+datum=` key (deprecated in GDAL's `exportToProj4()` from GDAL 3) and a `+towgs84=` key, the handling of which has varied in different releases of PROJ >= 6 and GDAL 3. From **rgdal** 1.5-17 (development version), a PROJ function `proj_get_source_crs` is used by default, but may be avoided by setting the `sp::CRS()`  `get_source_if_boundcrs=` argument to FALSE. The function will return the source CRS of a `BOUNDCRS` object. In some versions of PROJ/GDAL, the inclusion of a `+towgs84=` key is taken as meaning that the user wishes to create an object with the given source CRS, but because a `+towgs84=` key is present, it is assumed that the target is `WGS 84` with the given transformation method. Proj4 strings with `+towgs84=` keys have no authority for the parameters given, and do not harmonise with the use of the EPSG database. 
 
+To run the examples, we need the current development version of **sp** from `"rsbivand/sp"`:
+
+```{r, eval=odd_run, warning=FALSE}
+sp_version_ok <- length(grep("get_source_if_boundcrs", deparse(args(sp::CRS)))) > 0L
+```
+
 Running `sp::CRS()` takes the original Proj4 key-value pairs, and converts them into a WKT2 representation as well as returning an (unused) Proj4 string. This is kept in place for packages still expecting to see/use it, but all **rgdal** functions and methods use the WKT2 representation. Here, we do not try to handle the `BOUNDCRS` special case, something that leads to difficulties with some versions of PROJ later in workflows. The `BOUNDCRS` contains a `SOURCECRS` and a `TARGETCRS` (which also has swapped axes), while really all that was needed was the contents of the `SOURCECRS`:
 
 
-```{r, eval=odd_run, warning=FALSE}
+```{r, eval=odd_run && sp_version_ok, warning=FALSE}
 orig1 <- CRS(slot(orig, "projargs"), get_source_if_boundcrs=FALSE)
 cat(wkt(orig1), "\n")
 ```
 
-Using the default setting to remove the unintended `BOUNDCRS` representation, we can get what was (probably) intended:
+Using the default setting to remove the unintended `BOUNDCRS` representation, we can get what was (probably) intended (when the **sp** version is as was before this work-around was added, the following two chunck yield `BOUNDCRS` for some versions of PROJ/GDAL:
 
 ```{r, eval=odd_run, warning=FALSE}
 orig1a <- CRS(slot(orig, "projargs"))
