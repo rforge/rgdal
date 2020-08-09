@@ -101,7 +101,7 @@
 ## Path to GDAL shared files: /usr/local/share/gdal
 ## GDAL binary built with GEOS: TRUE 
 ## Loaded PROJ runtime: Rel. 7.1.0, August 1st, 2020, [PJ_VERSION: 710]
-## Path to PROJ shared files: /tmp/RtmpR8jgol/file1800b7afa6489:/usr/local/share/proj:/usr/local/share/proj
+## Path to PROJ shared files: /tmp/RtmpzTkDoo/file1931c6f0a7f6f:/usr/local/share/proj:/usr/local/share/proj
 ## PROJ CDN enabled: FALSE
 ## Linking to sp version:1.4-4
 ## To mute warnings of possible GDAL/OSR exportToProj4() degradation,
@@ -118,7 +118,7 @@
 <span class="no">x</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/mapview/man/mapView.html">mapview</a></span>(<span class="no">meuse</span>, <span class="kw">zcol</span><span class="kw">=</span><span class="st">"zinc"</span>)
 <span class="fu"><a href="https://rdrr.io/pkg/mapview/man/mapshot.html">mapshot</a></span>(<span class="no">x</span>, <span class="kw">file</span><span class="kw">=</span><span class="st">"meuse.png"</span>)</pre></body></html></div>
 <div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="kw pkg">knitr</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html">include_graphics</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"misc/meuse.png"</span>, <span class="kw">package</span><span class="kw">=</span><span class="st">"rgdal"</span>))</pre></body></html></div>
-<p><img src="../../../../../../../../tmp/RtmpAZ1IRZ/temp_libpath17c763a667796/rgdal/misc/meuse.png" width="496"></p>
+<p><img src="../../../../../../lib/r_libs/rgdal/misc/meuse.png" width="496"></p>
 </div>
 <div id="coordinate-reference-system-representation" class="section level1">
 <h1 class="hasAnchor">
@@ -149,7 +149,7 @@
 <a href="#prphij" class="anchor"></a>PR<span class="math inline">\(\phi\)</span>J</h2>
 <p>Signalling changes, PROJ.4 changed its name to PR<span class="math inline">\(\phi\)</span>J, and began burning through major version numbers. PROJ 5 (2018) introduced transformation pipelines <span class="citation">(Knudsen and Evers <a href="#ref-knudsen+evers17" role="doc-biblioref">2017</a>; Evers and Knudsen <a href="#ref-evers+knudsen17" role="doc-biblioref">2017</a>)</span>, representing coordinate operations using a syntax similar to PROJ.4 strings, but showing the whole operation pipeline. PROJ 6 (2019) followed up by shifting from ad-hoc text files for holding coordinate reference system and coordinate operation metadata to an SQLite database. In an increasing number of cases, more accurate coordinate operations could be supported using open access transformation grids, and the grid files needed were now tabulated in the SQLite database. This database is distributed with PROJ, and kept in a directory on the PROJ search path, usually the only or final directory (<code><a href="../reference/is_proj_CDN_enabled.html">get_proj_search_paths()</a></code> returns a vector of current search paths).</p>
 <div class="sourceCode" id="cb12"><html><body><pre class="r">(<span class="no">shpr</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/is_proj_CDN_enabled.html">get_proj_search_paths</a></span>())</pre></body></html></div>
-<pre><code>## [1] "/tmp/RtmpR8jgol/file1800b7afa6489" "/usr/local/share/proj"            
+<pre><code>## [1] "/tmp/RtmpzTkDoo/file1931c6f0a7f6f" "/usr/local/share/proj"            
 ## [3] "/usr/local/share/proj"</code></pre>
 <div class="sourceCode" id="cb14"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">RSQLite</span>)
 <span class="no">db</span> <span class="kw">&lt;-</span> <span class="fu">dbConnect</span>(<span class="fu"><a href="https://rsqlite.r-dbi.org/reference/SQLite.html">SQLite</a></span>(), <span class="kw">dbname</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="no">shpr</span>[<span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">shpr</span>)], <span class="st">"proj.db"</span>))
@@ -216,7 +216,7 @@
 ## dumpSRS, : Discarded datum OSGB_1936 in CRS definition: +proj=tmerc +lat_0=49
 ## +lon_0=-2 +k=0.999601 +x_0=400000 +y_0=-100000 +ellps=airy +units=m +no_defs</code></pre>
 <pre><code>## OGR data source with driver: GPKG 
-## Source: "/tmp/RtmpAZ1IRZ/temp_libpath17c763a667796/rgdal/vectors/b_pump.gpkg", layer: "b_pump"
+## Source: "/home/rsb/lib/r_libs/rgdal/vectors/b_pump.gpkg", layer: "b_pump"
 ## with 1 features
 ## It has 1 fields
 ## Integer64 fields read as strings:  cat</code></pre>
@@ -445,12 +445,12 @@
 <pre><code>## [1] FALSE</code></pre>
 <p>We can enable on-demand download using a function that reports the value of the PR<span class="math inline">\(\phi\)</span>J CDN user-writable directory; we see that with this setting, network download is enabled:</p>
 <div class="sourceCode" id="cb67"><html><body><pre class="r"><span class="fu"><a href="../reference/is_proj_CDN_enabled.html">enable_proj_CDN</a></span>()</pre></body></html></div>
-<pre><code>## [1] "Using: /tmp/RtmpR8jgol/file1800b7afa6489"</code></pre>
+<pre><code>## [1] "Using: /tmp/RtmpzTkDoo/file1931c6f0a7f6f"</code></pre>
 <div class="sourceCode" id="cb69"><html><body><pre class="r"><span class="fu"><a href="../reference/is_proj_CDN_enabled.html">is_proj_CDN_enabled</a></span>()</pre></body></html></div>
 <pre><code>## [1] TRUE</code></pre>
 <p>The reader will recall that the search path was stored in <code>shpr</code> above, the first element being the user-writable directory; at this point no SQLite database has been created:</p>
 <div class="sourceCode" id="cb71"><html><body><pre class="r"><span class="no">shpr</span>[<span class="fl">1</span>]</pre></body></html></div>
-<pre><code>## [1] "/tmp/RtmpR8jgol/file1800b7afa6489"</code></pre>
+<pre><code>## [1] "/tmp/RtmpzTkDoo/file1931c6f0a7f6f"</code></pre>
 <div class="sourceCode" id="cb73"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/try.html">try</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/file.info.html">file.size</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="no">shpr</span>[<span class="fl">1</span>], <span class="st">"cache.db"</span>)))</pre></body></html></div>
 <pre><code>## [1] NA</code></pre>
 <p>When we then search for candidate coordinate operations, we see that the operation using an absent grid now sees that download is enabled, and proposes the 1m accuracy candidate, because the required grid can be downloaded (again using the area of interest):</p>
@@ -491,7 +491,7 @@
 <p>On making the transformation, we may see that the coordinate operation takes longer than expected, because on first pass the grid is downloaded from the network:</p>
 <div class="sourceCode" id="cb77"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span>(<span class="no">is1m</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/spTransform-methods.html">spTransform</a></span>(<span class="no">b_pump</span>, <span class="fu"><a href="../reference/CRS-class.html">CRS</a></span>(<span class="kw">SRS_string</span><span class="kw">=</span><span class="st">"EPSG:4326"</span>)))</pre></body></html></div>
 <pre><code>##    user  system elapsed 
-##   0.067   0.013   1.281</code></pre>
+##   0.073   0.011   0.274</code></pre>
 <p>The coordinate operation used now specifies the grid in the pipeline:</p>
 <div class="sourceCode" id="cb79"><html><body><pre class="r"><span class="fu"><a href="../reference/spTransform-methods.html">get_last_coordOp</a></span>()</pre></body></html></div>
 <pre><code>## [1] "+proj=pipeline +step +inv +proj=tmerc +lat_0=49 +lon_0=-2 +k=0.999601 +x_0=400000 +y_0=-100000 +ellps=airy +step +proj=hgridshift +grids=uk_os_OSTN15_NTv2_OSGBtoETRS.tif +step +proj=unitconvert +xy_in=rad +xy_out=deg"</code></pre>
@@ -561,7 +561,7 @@
 <span class="no">x</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/mapview/man/mapView.html">mapview</a></span>(<span class="no">is2m</span>, <span class="kw">map.type</span><span class="kw">=</span><span class="st">"OpenStreetMap"</span>, <span class="kw">legend</span><span class="kw">=</span><span class="fl">FALSE</span>) + <span class="fu"><a href="https://rdrr.io/pkg/mapview/man/mapView.html">mapview</a></span>(<span class="no">is1m</span>, <span class="kw">col.regions</span><span class="kw">=</span><span class="st">"green"</span>, <span class="kw">legend</span><span class="kw">=</span><span class="fl">FALSE</span>) + <span class="fu"><a href="https://rdrr.io/pkg/mapview/man/mapView.html">mapview</a></span>(<span class="no">isballpark</span>, <span class="kw">col.regions</span><span class="kw">=</span><span class="st">"red"</span>, <span class="kw">legend</span><span class="kw">=</span><span class="fl">FALSE</span>)
 <span class="fu"><a href="https://rdrr.io/pkg/mapview/man/mapshot.html">mapshot</a></span>(<span class="no">x</span>, <span class="kw">file</span><span class="kw">=</span><span class="st">"snow.png"</span>)</pre></body></html></div>
 <div class="sourceCode" id="cb97"><html><body><pre class="r"><span class="kw pkg">knitr</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html">include_graphics</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"misc/snow.png"</span>, <span class="kw">package</span><span class="kw">=</span><span class="st">"rgdal"</span>))</pre></body></html></div>
-<p><img src="../../../../../../../../tmp/RtmpAZ1IRZ/temp_libpath17c763a667796/rgdal/misc/snow.png" width="496"></p>
+<p><img src="../../../../../../lib/r_libs/rgdal/misc/snow.png" width="496"></p>
 </div>
 <div id="rebuilding-crs-objects" class="section level2">
 <h2 class="hasAnchor">
@@ -579,8 +579,10 @@
 ## +y_0=-100000 +datum=OSGB36 +units=m +no_defs +ellps=airy
 ## +towgs84=446.448,-125.157,542.060,0.1502,0.2470,0.8421,-20.4894</code></pre>
 <p>The original <code>"CRS"</code> object contains a <code>+datum=</code> key (deprecated in GDAL’s <code>exportToProj4()</code> from GDAL 3) and a <code>+towgs84=</code> key, the handling of which has varied in different releases of PROJ &gt;= 6 and GDAL 3. From <strong>rgdal</strong> 1.5-17 (development version), a PROJ function <code>proj_get_source_crs</code> is used by default, but may be avoided by setting the <code><a href="https://rdrr.io/pkg/sp/man/CRS-class.html">sp::CRS()</a></code> <code>get_source_if_boundcrs=</code> argument to FALSE. The function will return the source CRS of a <code>BOUNDCRS</code> object. In some versions of PROJ/GDAL, the inclusion of a <code>+towgs84=</code> key is taken as meaning that the user wishes to create an object with the given source CRS, but because a <code>+towgs84=</code> key is present, it is assumed that the target is <code>WGS 84</code> with the given transformation method. Proj4 strings with <code>+towgs84=</code> keys have no authority for the parameters given, and do not harmonise with the use of the EPSG database.</p>
+<p>To run the examples, we need the current development version of <strong>sp</strong> from <code>"rsbivand/sp"</code>:</p>
+<div class="sourceCode" id="cb102"><html><body><pre class="r"><span class="no">sp_version_ok</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/grep.html">grep</a></span>(<span class="st">"get_source_if_boundcrs"</span>, <span class="fu"><a href="https://rdrr.io/r/base/deparse.html">deparse</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/args.html">args</a></span>(<span class="kw pkg">sp</span><span class="kw ns">::</span><span class="no"><a href="https://rdrr.io/pkg/sp/man/CRS-class.html">CRS</a></span>)))) <span class="kw">&gt;</span> <span class="fl">0L</span></pre></body></html></div>
 <p>Running <code><a href="https://rdrr.io/pkg/sp/man/CRS-class.html">sp::CRS()</a></code> takes the original Proj4 key-value pairs, and converts them into a WKT2 representation as well as returning an (unused) Proj4 string. This is kept in place for packages still expecting to see/use it, but all <strong>rgdal</strong> functions and methods use the WKT2 representation. Here, we do not try to handle the <code>BOUNDCRS</code> special case, something that leads to difficulties with some versions of PROJ later in workflows. The <code>BOUNDCRS</code> contains a <code>SOURCECRS</code> and a <code>TARGETCRS</code> (which also has swapped axes), while really all that was needed was the contents of the <code>SOURCECRS</code>:</p>
-<div class="sourceCode" id="cb102"><html><body><pre class="r"><span class="no">orig1</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/CRS-class.html">CRS</a></span>(<span class="fu">slot</span>(<span class="no">orig</span>, <span class="st">"projargs"</span>), <span class="kw">get_source_if_boundcrs</span><span class="kw">=</span><span class="fl">FALSE</span>)
+<div class="sourceCode" id="cb103"><html><body><pre class="r"><span class="no">orig1</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/CRS-class.html">CRS</a></span>(<span class="fu">slot</span>(<span class="no">orig</span>, <span class="st">"projargs"</span>), <span class="kw">get_source_if_boundcrs</span><span class="kw">=</span><span class="fl">FALSE</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span>(<span class="fu"><a href="https://rdrr.io/pkg/sp/man/is.projected.html">wkt</a></span>(<span class="no">orig1</span>), <span class="st">"\n"</span>)</pre></body></html></div>
 <pre><code>## BOUNDCRS[
 ##     SOURCECRS[
@@ -652,8 +654,8 @@
 ##             ID["EPSG",8610]],
 ##         PARAMETER["Scale difference",0.9999795106,
 ##             ID["EPSG",8611]]]]</code></pre>
-<p>Using the default setting to remove the unintended <code>BOUNDCRS</code> representation, we can get what was (probably) intended:</p>
-<div class="sourceCode" id="cb104"><html><body><pre class="r"><span class="no">orig1a</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/CRS-class.html">CRS</a></span>(<span class="fu">slot</span>(<span class="no">orig</span>, <span class="st">"projargs"</span>))
+<p>Using the default setting to remove the unintended <code>BOUNDCRS</code> representation, we can get what was (probably) intended (when the <strong>sp</strong> version is as was before this work-around was added, the following two chunck yield <code>BOUNDCRS</code> for some versions of PROJ/GDAL:</p>
+<div class="sourceCode" id="cb105"><html><body><pre class="r"><span class="no">orig1a</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/CRS-class.html">CRS</a></span>(<span class="fu">slot</span>(<span class="no">orig</span>, <span class="st">"projargs"</span>))
 <span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span>(<span class="fu"><a href="https://rdrr.io/pkg/sp/man/is.projected.html">wkt</a></span>(<span class="no">orig1a</span>), <span class="st">"\n"</span>)</pre></body></html></div>
 <pre><code>## PROJCRS["unknown",
 ##     BASEGEOGCRS["unknown",
@@ -692,7 +694,7 @@
 ##             LENGTHUNIT["metre",1,
 ##                 ID["EPSG",9001]]]]</code></pre>
 <p>The <code><a href="https://rdrr.io/pkg/sp/man/CRS-class.html">sp::rebuild_CRS()</a></code> method for <code>"CRS"</code> objects (and thus that for <code>"Spatial"</code> objects) can be used to do the same as using <code><a href="https://rdrr.io/pkg/sp/man/CRS-class.html">sp::CRS()</a></code> directly, with special treatment for a number of other objects inheriting from <code>"Spatial"</code>:</p>
-<div class="sourceCode" id="cb106"><html><body><pre class="r"><span class="no">orig1b</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/sp/man/CRS-class.html">rebuild_CRS</a></span>(<span class="no">orig</span>)
+<div class="sourceCode" id="cb107"><html><body><pre class="r"><span class="no">orig1b</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/sp/man/CRS-class.html">rebuild_CRS</a></span>(<span class="no">orig</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span>(<span class="fu"><a href="https://rdrr.io/pkg/sp/man/is.projected.html">wkt</a></span>(<span class="no">orig1b</span>), <span class="st">"\n"</span>)</pre></body></html></div>
 <pre><code>## PROJCRS["unknown",
 ##     BASEGEOGCRS["unknown",
