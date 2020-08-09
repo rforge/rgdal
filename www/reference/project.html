@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgdal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5-13</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5-17</span>
       </span>
     </div>
 
@@ -128,7 +128,8 @@
     </div>
 
     <pre class="usage"><span class='fu'>project</span>(<span class='no'>xy</span>, <span class='no'>proj</span>, <span class='kw'>inv</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>use_ob_tran</span><span class='kw'>=</span><span class='fl'>FALSE</span>, <span class='kw'>legacy</span><span class='kw'>=</span><span class='fl'>TRUE</span>,
- <span class='kw'>allowNAs_if_not_legacy</span><span class='kw'>=</span><span class='fl'>FALSE</span>, <span class='kw'>coordOp</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+ <span class='kw'>allowNAs_if_not_legacy</span><span class='kw'>=</span><span class='fl'>FALSE</span>, <span class='kw'>coordOp</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+ <span class='kw'>use_aoi</span><span class='kw'>=</span><span class='fl'>TRUE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -165,6 +166,10 @@
       <th>verbose</th>
       <td><p>default FALSE, for PROJ &gt;=6 used to show the coordinate operation used</p></td>
     </tr>
+    <tr>
+      <th>use_aoi</th>
+      <td><p>With PROJ &gt;= 6, use the area of interest defined as the range of <code>xy</code> in limiting the search for candidate coordinate operations; set FALSE if <code>use_ob_tran</code> is TRUE</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
@@ -176,7 +181,7 @@
     <p>A two column matrix with projected coordinates.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p><a href='http://proj.org/'>http://proj.org/</a></p>
+    <p><a href='https://proj.org/'>https://proj.org/</a></p>
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
     <p>The locations of Hawaii and Alaska in the data source are (putting it mildly) arbitrary, please avoid airlines using these positions.</p>
@@ -196,17 +201,23 @@
 #&gt;  Median : 0.000e+00   Median :-2.025e-13  
 #&gt;  Mean   :-1.705e-15   Mean   :-4.767e-13  
 #&gt;  3rd Qu.: 0.000e+00   3rd Qu.:-1.155e-13  
-#&gt;  Max.   : 0.000e+00   Max.   :-4.263e-14  </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span>(<span class='no'>state.center</span>$<span class='no'>x</span>, <span class='no'>state.center</span>$<span class='no'>y</span>), <span class='kw'>asp</span><span class='kw'>=</span><span class='fl'>1</span>, <span class='kw'>type</span><span class='kw'>=</span><span class='st'>"n"</span>)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/text.html'>text</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span>(<span class='no'>state.center</span>$<span class='no'>x</span>, <span class='no'>state.center</span>$<span class='no'>y</span>), <span class='no'>state.abb</span>)</div><div class='img'><img src='project-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>res</span>, <span class='kw'>asp</span><span class='kw'>=</span><span class='fl'>1</span>, <span class='kw'>type</span><span class='kw'>=</span><span class='st'>"n"</span>)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/text.html'>text</a></span>(<span class='no'>res</span>, <span class='no'>state.abb</span>)</div><div class='img'><img src='project-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='no'>crds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='kw'>data</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>9.05</span>, <span class='fl'>48.52</span>), <span class='kw'>ncol</span><span class='kw'>=</span><span class='fl'>2</span>)
+#&gt;  Max.   : 0.000e+00   Max.   :-4.263e-14  </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span>(<span class='no'>state.center</span>$<span class='no'>x</span>, <span class='no'>state.center</span>$<span class='no'>y</span>), <span class='kw'>asp</span><span class='kw'>=</span><span class='fl'>1</span>, <span class='kw'>type</span><span class='kw'>=</span><span class='st'>"n"</span>)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/text.html'>text</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span>(<span class='no'>state.center</span>$<span class='no'>x</span>, <span class='no'>state.center</span>$<span class='no'>y</span>), <span class='no'>state.abb</span>)</div><div class='img'><img src='project-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>res</span>, <span class='kw'>asp</span><span class='kw'>=</span><span class='fl'>1</span>, <span class='kw'>type</span><span class='kw'>=</span><span class='st'>"n"</span>)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/text.html'>text</a></span>(<span class='no'>res</span>, <span class='no'>state.abb</span>)</div><div class='img'><img src='project-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='no'>broke_proj</span> <span class='kw'>&lt;-</span> <span class='fl'>FALSE</span>
+<span class='no'>pv</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/CallExternal.html'>.Call</a></span>(<span class='st'>"PROJ4VersionInfo"</span>, <span class='kw'>PACKAGE</span><span class='kw'>=</span><span class='st'>"rgdal"</span>)<span class='kw'>[[</span><span class='fl'>2</span>]]
+<span class='co'># https://github.com/OSGeo/PROJ/issues/1525</span>
+<span class='kw'>if</span> (<span class='no'>pv</span> <span class='kw'>&gt;=</span> <span class='fl'>600</span> <span class='kw'>&amp;&amp;</span> <span class='no'>pv</span> <span class='kw'>&lt;</span> <span class='fl'>620</span>) <span class='no'>broke_proj</span> <span class='kw'>&lt;-</span> <span class='fl'>TRUE</span>
+<span class='kw'>if</span> (!<span class='no'>broke_proj</span>) {
+<span class='no'>crds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='kw'>data</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>9.05</span>, <span class='fl'>48.52</span>), <span class='kw'>ncol</span><span class='kw'>=</span><span class='fl'>2</span>)
 <span class='no'>a</span> <span class='kw'>&lt;-</span> <span class='fu'>project</span>(<span class='no'>crds</span>, <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='st'>"+proj=ob_tran +o_proj=longlat"</span>,
  <span class='st'>"+o_lon_p=-162 +o_lat_p=39.25 +lon_0=180 +ellps=sphere +no_defs"</span>),
  <span class='kw'>use_ob_tran</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
-<span class='no'>a</span></div><div class='output co'>#&gt;           [,1]     [,2]
-#&gt; [1,] -5.917698 -1.87195</div><div class='input'><span class='co'>#should be (-5.917698, -1.87195)</span>
+<span class='no'>a</span>
+<span class='co'>#should be (-5.917698, -1.87195)</span>
 <span class='fu'>project</span>(<span class='no'>a</span>, <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='st'>"+proj=ob_tran +o_proj=longlat"</span>,
  <span class='st'>"+o_lon_p=-162 +o_lat_p=39.25 +lon_0=180 +ellps=sphere +no_defs"</span>),
- <span class='kw'>inv</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>use_ob_tran</span><span class='kw'>=</span><span class='fl'>TRUE</span>)</div><div class='output co'>#&gt;      [,1]  [,2]
-#&gt; [1,] 9.05 48.52</div><div class='input'><span class='co'>#added after posting by Martin Ivanov</span>
-<span class='co'>#</span>
+ <span class='kw'>inv</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>use_ob_tran</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
+<span class='co'>#added after posting by Martin Ivanov</span>
+}</div><div class='output co'>#&gt;      [,1]  [,2]
+#&gt; [1,] 9.05 48.52</div><div class='input'><span class='co'>#</span>
 <span class='fu'><a href='projInfo.html'>getPROJ4VersionInfo</a></span>()</div><div class='output co'>#&gt; [1] "Rel. 7.1.0, August 1st, 2020, [PJ_VERSION: 710]"
 #&gt; attr(,"short")
 #&gt; [1] 710</div><div class='input'><span class='co'># Test for UTM == TMERC (&lt;= 4.9.2) or UTM == ETMERC (&gt; 4.9.2)</span>
