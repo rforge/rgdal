@@ -233,6 +233,39 @@ SEXP set_proj_paths(SEXP paths) {
     return(res);
 }
 
+SEXP get_source_crs(SEXP source) {
+
+    PJ_CONTEXT *ctx = proj_context_create();
+    PJ *source_crs, *target_crs;
+    SEXP res;
+
+    source_crs = proj_create(ctx, CHAR(STRING_ELT(source, 0)));
+
+    if (source_crs == NULL) {
+        proj_context_destroy(ctx);
+        error("source crs not created");
+    }
+
+    target_crs = proj_get_source_crs(ctx, source_crs);
+
+    if (target_crs == NULL) {
+        proj_context_destroy(ctx);
+        error("target crs not created");
+    }
+
+    PROTECT(res = NEW_CHARACTER(1));
+    SET_STRING_ELT(res, 0,
+        COPY_TO_USER_STRING(proj_as_wkt(ctx, target_crs, PJ_WKT2_2019, NULL)));
+    UNPROTECT(1);
+    proj_destroy(target_crs);
+    proj_destroy(source_crs);
+    proj_context_destroy(ctx);
+
+    return(res);
+
+
+}
+
 
 // unname(sapply(o[[2]], function(x) gsub(" ", " +", paste0("+", x))))
 

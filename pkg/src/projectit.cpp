@@ -186,6 +186,12 @@ SEXP disable_proj_network() {
     return(R_NilValue);
 }
 
+SEXP get_source_crs(SEXP source) {
+//    Rprintf("Not available for deprecated API");
+    return(R_NilValue);
+}
+
+
 /*SEXP P6_SRID_proj(SEXP inSRID, SEXP format, SEXP multiline, SEXP in_format,
     SEXP epsg, SEXP out_format) {
 

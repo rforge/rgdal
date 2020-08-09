@@ -78,7 +78,8 @@ checkCRSArgs <- function(uprojargs=NA_character_) {
   res
 }
 
-checkCRSArgs_ng <- function(uprojargs=NA_character_, SRS_string=NULL) {
+checkCRSArgs_ng <- function(uprojargs=NA_character_, SRS_string=NULL,
+  get_source_if_boundcrs=TRUE) {
   no_SRS <- is.null(SRS_string)
   no_PROJ <- is.na(uprojargs)
   res <- vector(mode="list", length=3L)
@@ -116,7 +117,16 @@ checkCRSArgs_ng <- function(uprojargs=NA_character_, SRS_string=NULL) {
       res[[2]] <- uprojargs1
     }
     wkt2 <- showSRID(uprojargs, format="WKT2", multiline="YES")
-    if (!inherits(wkt2, "try-error")) res[[3]] <- wkt2
+    if (!inherits(wkt2, "try-error")) {
+      if (get_source_if_boundcrs) {
+        if (length(grep("^BOUNDCRS", wkt2)) > 0L) {
+          wkt2a <- try(.Call("get_source_crs", wkt2, PACKAGE="rgdal"),
+            silent=TRUE)
+          if (!inherits(wkt2a, "try-error")) wkt2 <- wkt2a
+        }
+      }
+      res[[3]] <- wkt2
+    }
   }
   res
 }

@@ -85,6 +85,7 @@ static R_CallMethodDef CallEntries[] = {
     {"proj_network_enabled", (DL_FUNC) &proj_network_enabled, 0},
     {"enable_proj_network", (DL_FUNC) &enable_proj_network, 0},
     {"disable_proj_network", (DL_FUNC) &disable_proj_network, 0},
+    {"get_source_crs", (DL_FUNC) &get_source_crs, 1},
     {"RGDAL_SetGeoTransform", (DL_FUNC) &RGDAL_SetGeoTransform, 2},
     {"RGDAL_GetNoDataValue", (DL_FUNC) &RGDAL_GetNoDataValue, 1},
     {"RGDAL_GetMetadata", (DL_FUNC) &RGDAL_GetMetadata, 2},

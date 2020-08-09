@@ -369,5 +369,43 @@ mapshot(x, file="snow.png")
 knitr::include_graphics(system.file("misc/snow.png", package="rgdal"))
 ```
 
+## Rebuilding CRS objects
+
+Package authors of the almost 150 packages with **sp** objects with outdated `"CRS"` objects stored in `*.rda` or `*RData` files as data sets should update the `"proj4string"` slots of these objects and re-store. The `GGHB.IG` data set in the **CARBayesdata** package (version 2.1) can serve as an example.
+
+```{r, eval=odd_run}
+# library(CARBayesdata)
+library(sp)
+# data(GGHB.IG)
+# orig <- slot(GGHB.IG, "proj4string")
+(load(system.file("misc/GGHB.IG_CRS.rda", package="rgdal")))
+orig
+```
+The original `"CRS"` object contains a `+datum=` key (deprecated in GDAL's `exportToProj4()` from GDAL 3) and a `+towgs84=` key, the handling of which has varied in different releases of PROJ >= 6 and GDAL 3. From **rgdal** 1.5-17 (development version), a PROJ function `proj_get_source_crs` is used by default, but may be avoided by setting the `sp::CRS()`  `get_source_if_boundcrs=` argument to FALSE. The function will return the source CRS of a `BOUNDCRS` object. In some versions of PROJ/GDAL, the inclusion of a `+towgs84=` key is taken as meaning that the user wishes to create an object with the given source CRS, but because a `+towgs84=` key is present, it is assumed that the target is `WGS 84` with the given transformation method. Proj4 strings with `+towgs84=` keys have no authority for the parameters given, and do not harmonise with the use of the EPSG database. 
+
+Running `sp::CRS()` takes the original Proj4 key-value pairs, and converts them into a WKT2 representation as well as returning an (unused) Proj4 string. This is kept in place for packages still expecting to see/use it, but all **rgdal** functions and methods use the WKT2 representation. Here, we do not try to handle the `BOUNDCRS` special case, something that leads to difficulties with some versions of PROJ later in workflows. The `BOUNDCRS` contains a `SOURCECRS` and a `TARGETCRS` (which also has swapped axes), while really all that was needed was the contents of the `SOURCECRS`:
+
+
+```{r, eval=odd_run, warning=FALSE}
+orig1 <- CRS(slot(orig, "projargs"), get_source_if_boundcrs=FALSE)
+cat(wkt(orig1), "\n")
+```
+
+Using the default setting to remove the unintended `BOUNDCRS` representation, we can get what was (probably) intended:
+
+```{r, eval=odd_run, warning=FALSE}
+orig1a <- CRS(slot(orig, "projargs"))
+cat(wkt(orig1a), "\n")
+```
+
+The `sp::rebuild_CRS()` method for `"CRS"` objects (and thus that for `"Spatial"` objects) can be used to do the same as using `sp::CRS()` directly, with special treatment for a number of other objects inheriting from `"Spatial"`:
+
+```{r, eval=odd_run, warning=FALSE}
+orig1b <- rebuild_CRS(orig)
+cat(wkt(orig1b), "\n")
+```
+
+In practice, `sp::rebuild_CRS()` methods may be used, but users should check the output for coherence, and the PROJ function for extracting `SOURCECRS` from `BOUNDCRS` avoided if it has unfortunate consequences.
+
 ### References
 
