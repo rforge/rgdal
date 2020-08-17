@@ -148,7 +148,8 @@ get_aoi <- function(obj, xy, inv, proj) {
 OSRIsProjected <- function(obj) {
     stopifnot(inherits(obj, "CRS"))
     wkt2 <- wkt(obj)
-    if (!is.null(wkt2)) return(.Call("OSR_is_projected", wkt2, PACKAGE="rgdal"))
+    if (!is.null(wkt2) && new_proj_and_gdal())
+        return(.Call("OSR_is_projected", wkt2, PACKAGE="rgdal"))
     p4str <- slot(obj, "projargs")
     if (is.na(p4str) || !nzchar(p4str)) 
 	return(as.logical(NA))    
