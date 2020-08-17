@@ -141,6 +141,7 @@ SEXP project_inv(SEXP n, SEXP x, SEXP y, SEXP projarg, SEXP ob_tran); // both
 SEXP project_ng(SEXP n, SEXP xlon, SEXP ylat, SEXP zz, SEXP inv, SEXP ob_tran, SEXP coordOp); // both
 SEXP project_ng_coordOp(SEXP proj, SEXP inv, SEXP aoi); // both
 SEXP get_source_crs(SEXP source); // both
+SEXP OSR_is_projected(SEXP inSRID);
 
 #ifdef __cplusplus
 }

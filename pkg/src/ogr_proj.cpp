@@ -160,6 +160,26 @@ SEXP P6_SRID_show(SEXP inSRID, SEXP format, SEXP multiline, SEXP in_format,
 
 }
 
+SEXP OSR_is_projected(SEXP inSRID) {
+
+    OGRSpatialReference *hSRS = new OGRSpatialReference;
+    int is_proj;
+    SEXP ans;
+
+    installErrorHandler();
+    if (hSRS->SetFromUserInput((const char *) CHAR(STRING_ELT(inSRID, 0))) != OGRERR_NONE) {
+        delete hSRS;
+        uninstallErrorHandlerAndTriggerError();
+        error("Can't parse user input string");
+    }
+    uninstallErrorHandlerAndTriggerError();
+    is_proj = hSRS->IsProjected();
+    PROTECT(ans = NEW_LOGICAL(1));
+    LOGICAL_POINTER(ans)[0] = is_proj;
+    UNPROTECT(1);
+    return(ans);
+}
+
 
 SEXP R_GDAL_OSR_PROJ() {
 

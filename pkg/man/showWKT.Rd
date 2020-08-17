@@ -10,6 +10,7 @@
 \alias{get_rgdal_show_exportToProj4_warnings}
 \alias{set_rgdal_show_exportToProj4_warnings}
 \alias{get_PROJ6_warnings_count}
+\alias{OSRIsProjected}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Show Well-Known Text spatial reference system metadata}
 \description{
@@ -28,6 +29,7 @@ set_thin_PROJ6_warnings(value)
 get_rgdal_show_exportToProj4_warnings()
 set_rgdal_show_exportToProj4_warnings(value)
 get_PROJ6_warnings_count()
+OSRIsProjected(obj)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -37,7 +39,8 @@ get_PROJ6_warnings_count()
   \item{enforce_xy}{(PROJ6+/GDAL3+) either use global setting (default NULL) or override policy for coordinate ordering easting/x as first axis, northing/y as second axis.}
   \item{wkt}{A valid WKT character string representing a spatial reference system}
   \item{morphFromESRI}{default TRUE, morph the WKT string from the representation used by ESRI}
-  \item{inSRID}{Input coordinate reference string (PROJ >= 6, GDAL <= 3)}
+  \item{inSRID}{Input coordinate reference string}
+  \item{obj}{valid CRS object}
   \item{format}{Output format, default WKT2}
   \item{multiline}{Multiline output, either \code{"NO"} or \code{"YES"}}
   \item{EPSG_to_init}{default TRUE, workaround for PROJ 6.3.0 frailty leading to the dropping of +ellps= and +units=; DATUM seems to disappear in the internal definition}
@@ -93,6 +96,9 @@ showSRID(paste0(prj, " +nadgrids=OSTN15_NTv2_OSGBtoETRS.gsb"), "WKT2")
 if (run) {
 showSRID("ESRI:102761", "WKT2")
 }
+OSRIsProjected(CRS("+proj=longlat"))
+OSRIsProjected(CRS("+proj=geocent"))
+OSRIsProjected(CRS("+proj=geocent +units=km"))
 }
 \keyword{spatial}
 
