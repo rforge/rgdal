@@ -82,7 +82,7 @@ checkCRSArgs_ng <- function(uprojargs=NA_character_, SRS_string=NULL,
   get_source_if_boundcrs=TRUE) {
   no_SRS <- is.null(SRS_string)
   no_PROJ <- is.na(uprojargs)
-  prefer_proj <- TRUE
+  prefer_proj <- get_prefer_proj()
   res <- vector(mode="list", length=3L)
   res[[1]] <- FALSE
   res[[2]] <- NA_character_
