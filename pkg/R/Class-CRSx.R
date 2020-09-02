@@ -104,7 +104,7 @@ checkCRSArgs_ng <- function(uprojargs=NA_character_, SRS_string=NULL,
       res[[2]] <- NA_character_
     } else {
       res[[1]] <- TRUE
-      res[[2]] <- gsub(" +type=crs", "", uprojargs1)
+      res[[2]] <- gsub(" \\+type\\=crs", "", uprojargs1)
     }
     wkt2 <- try(showSRID(SRS_string, format="WKT2", multiline="YES",
         prefer_proj=prefer_proj), silent=TRUE)
@@ -126,7 +126,7 @@ checkCRSArgs_ng <- function(uprojargs=NA_character_, SRS_string=NULL,
       res[[2]] <- NA_character_
     } else {
       res[[1]] <- TRUE
-      res[[2]] <- gsub(" +type=crs", "", uprojargs1)
+      res[[2]] <- gsub(" \\+type\\=crs", "", uprojargs1)
     }
     wkt2 <- try(showSRID(uprojargs, format="WKT2", multiline="YES",
         prefer_proj=prefer_proj), silent=TRUE)
