@@ -545,8 +545,7 @@ set_enforce_xy <- function(value) {
 }
 
 
-showSRID <- function(inSRID, format="WKT2", multiline="NO", enforce_xy=NULL, EPSG_to_init=TRUE#, prefer_proj=FALSE
-) {
+showSRID <- function(inSRID, format="WKT2", multiline="NO", enforce_xy=NULL, EPSG_to_init=TRUE, prefer_proj=FALSE) {
     valid_WKT_formats <- c("SFSQL", "WKT1_SIMPLE", "WKT1", "WKT1_GDAL",
         "WKT1_ESRI", "WKT2_2015", "WKT2_2018", "WKT2") # add WKT2_2019 ??
     valid_formats <- c("PROJ", valid_WKT_formats)
@@ -579,7 +578,7 @@ showSRID <- function(inSRID, format="WKT2", multiline="NO", enforce_xy=NULL, EPS
     if (substring(inSRID, 1, 4) == "ESRI") in_format = 5L
     epsg <- as.integer(NA)
     if (in_format == 4L) {
-        if (EPSG_to_init) {
+        if (EPSG_to_init && !prefer_proj) {
             in_format = 1L
             inSRID <- paste0("+init=epsg:", substring(inSRID, 6, nchar(inSRID)))
         } else {
@@ -599,10 +598,17 @@ showSRID <- function(inSRID, format="WKT2", multiline="NO", enforce_xy=NULL, EPS
     if (new_proj_and_gdal()) {
         if (!is.na(in_format)) {
             attr(in_format, "enforce_xy") <- enforce_xy
-                res <- try(.Call("P6_SRID_show", as.character(inSRID),
+                if (prefer_proj) {
+                  res <- try(.Call("P6_SRID_proj", as.character(inSRID),
                     as.character(format), as.character(multiline), 
                     in_format, as.integer(epsg),
                     as.integer(out_format), PACKAGE="rgdal"), silent=TRUE)
+                } else {
+                  res <- try(.Call("P6_SRID_show", as.character(inSRID),
+                    as.character(format), as.character(multiline), 
+                    in_format, as.integer(epsg),
+                    as.integer(out_format), PACKAGE="rgdal"), silent=TRUE)
+                }
                 if (inherits(res, "try-error"))
                     stop(unclass(attr(res, "condition"))$message, "\n", inSRID) 
             no_towgs84 <- ((is.null(attr(res, "towgs84"))) || 

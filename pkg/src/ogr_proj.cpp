@@ -39,6 +39,7 @@ SEXP P6_SRID_show(SEXP inSRID, SEXP format, SEXP multiline, SEXP in_format,
     else if (LOGICAL_POINTER(enforce_xy)[0] == 1) vis_order = 1;
     else if (LOGICAL_POINTER(enforce_xy)[0] == 0) vis_order = 0;
     else vis_order = 0;
+//Rprintf("vis_order: %d\n", vis_order);
 //srs.SetFromUserInput("ESRI:102008")
     if (INTEGER_POINTER(in_format)[0] == 1L) {
         installErrorHandler();
@@ -82,10 +83,13 @@ SEXP P6_SRID_show(SEXP inSRID, SEXP format, SEXP multiline, SEXP in_format,
         uninstallErrorHandlerAndTriggerError();
     }
 
+//    Rprintf("MappingStrategy in: %d\n",  hSRS->GetAxisMappingStrategy());
     if (hSRS != NULL) {
-        if (vis_order == 1) 
+        if (vis_order == 1) {
             hSRS->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
+        }
     }
+//    Rprintf("MappingStrategy out: %d\n", hSRS->GetAxisMappingStrategy());
 
 
     PROTECT(ans=NEW_CHARACTER(1)); pc++;
