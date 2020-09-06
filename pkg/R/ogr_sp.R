@@ -618,6 +618,8 @@ showSRID <- function(inSRID, format="WKT2", multiline="NO", enforce_xy=NULL, EPS
         if (!is.na(in_format)) {
             attr(in_format, "enforce_xy") <- enforce_xy
                 if (prefer_proj) {
+                  if (in_format == 1L && !grepl("\\+type\\=crs", inSRID))
+                    inSRID <- paste0(inSRID, " +type=crs")
                   res <- try(.Call("P6_SRID_proj", as.character(inSRID),
                     as.character(format), as.character(multiline), 
                     in_format, as.integer(epsg),
