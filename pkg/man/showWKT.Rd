@@ -101,6 +101,12 @@ showSRID(paste0(prj, " +nadgrids=OSTN15_NTv2_OSGBtoETRS.gsb"), "WKT2")
 if (run) {
 showSRID("ESRI:102761", "WKT2")
 }
+if (run) {
+showSRID("OGC:CRS84", "WKT2")
+}
+if (run) {
+showSRID("urn:ogc:def:crs:OGC:1.3:CRS84", "WKT2")
+}
 OSRIsProjected(CRS("+proj=longlat"))
 OSRIsProjected(CRS("+proj=geocent"))
 OSRIsProjected(CRS("+proj=geocent +units=km"))

@@ -47,6 +47,8 @@ prettify_wkt <- function(inSRID) {
         res <- strwrap(gsub(",", ", ", inSRID), exdent=8,
             width=0.8*getOption("width"))
     if (substring(inSRID, 1, 4) == "EPSG") res <- inSRID
+    if (substring(inSRID, 1, 4) == "ESRI") res <- inSRID
+    if (substring(inSRID, 1, 3) == "OGC") res <- inSRID
     res
 }
 
