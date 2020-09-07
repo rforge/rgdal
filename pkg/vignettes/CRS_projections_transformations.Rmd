@@ -125,7 +125,7 @@ It will be useful to know that in general `"OGC:CRS84"` should be used instead o
 
 
 ```{r, warning=TRUE, eval=odd_run}
-cat(wkt(CRS("OGC:CRS84")), "\n")
+cat(wkt(CRS(SRS_string="OGC:CRS84")), "\n")
 ```
 
 Note that all `"GEOGCRS"` `"BBOX"` CRS bounding boxes are always specified latitude minimum, longitude minimum, latitude maximum, longitude maximum, even though the declared axis order is the opposite.
