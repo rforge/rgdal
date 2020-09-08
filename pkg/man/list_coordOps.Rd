@@ -44,24 +44,24 @@ Fragile: work in progress
 run <- new_proj_and_gdal()
 if (run) {
   discarded_datum <- showSRID("EPSG:27700", "PROJ")
-  (x <- list_coordOps(paste0(discarded_datum, " +type=crs"), "EPSG:4326"))
+  (x <- list_coordOps(paste0(discarded_datum, " +type=crs"), "OGC:CRS84"))
 }
 if (run) {
   best_instantiable_coordOp(x)
 }
 if (run) {
   restored_datum <- showSRID("EPSG:27700", "PROJ")
-  list_coordOps(paste0(restored_datum, " +datum=OSGB36 +type=crs"), "EPSG:4326")
+  list_coordOps(paste0(restored_datum, " +datum=OSGB36 +type=crs"), "OGC:CRS84")
 }
 if (run) {
   wkt_datum <- showSRID("EPSG:27700", "WKT2")
-  (x <- list_coordOps(wkt_datum, "EPSG:4326"))
+  (x <- list_coordOps(wkt_datum, "OGC:CRS84"))
 }
 if (run) {
   best_instantiable_coordOp(x)
 }
 if (run) {
-  list_coordOps("EPSG:27700", "EPSG:4326")
+  list_coordOps("EPSG:27700", "OGC:CRS84")
 }
 if (run) {
 }
