@@ -23,7 +23,8 @@ In modern workflows with PROJ >= 6 and GDAL >= 3, use only \code{showSRID()}
 showWKT(p4s, file = NULL, morphToESRI = FALSE, enforce_xy = NULL)
 showP4(wkt, morphFromESRI=FALSE, enforce_xy = NULL)
 showEPSG(p4s, enforce_xy = NULL)
-showSRID(inSRID, format="WKT2", multiline="NO", enforce_xy = NULL, EPSG_to_init=TRUE, prefer_proj=NULL)
+showSRID(inSRID, format="WKT2", multiline="NO", enforce_xy = NULL, EPSG_to_init=TRUE,
+ prefer_proj=NULL)
 get_P6_datum_hard_fail()
 set_P6_datum_hard_fail(value)
 get_thin_PROJ6_warnings()

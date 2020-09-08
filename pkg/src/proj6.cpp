@@ -200,8 +200,8 @@ SEXP get_proj_search_path(void) {
 
 SEXP get_proj_user_writable_dir() {
 
-    SEXP res;
 #if ((PROJ_VERSION_MAJOR == 7 && PROJ_VERSION_MINOR >= 1) || PROJ_VERSION_MAJOR > 7)
+    SEXP res;
     PROTECT(res = NEW_CHARACTER(1));
     SET_STRING_ELT(res, 0, COPY_TO_USER_STRING(proj_context_get_user_writable_directory(PJ_DEFAULT_CTX, false)));
     UNPROTECT(1);
@@ -916,12 +916,11 @@ SEXP P6_SRID_proj(SEXP inSRID, SEXP format, SEXP multiline, SEXP in_format,
     SEXP epsg, SEXP out_format) {
 
     SEXP ans;
-    SEXP Datum, ToWGS84, Ellps;
+    SEXP Datum, Ellps;
     int pc=0;
     int vis_order;
     SEXP enforce_xy = getAttrib(in_format, install("enforce_xy"));
     const char *pszSRS = NULL;
-    char **papszOptions = NULL;
 
     if (enforce_xy == R_NilValue) vis_order = 0;
     else if (LOGICAL_POINTER(enforce_xy)[0] == 1) vis_order = 1;
@@ -962,6 +961,8 @@ SEXP P6_SRID_proj(SEXP inSRID, SEXP format, SEXP multiline, SEXP in_format,
         PROTECT(Datum = NEW_CHARACTER(1)); pc++;
         SET_STRING_ELT(Datum, 0, COPY_TO_USER_STRING(proj_get_name(dtm)));
         proj_destroy(dtm);
+    } else {
+        Datum = R_NilValue;
     }
 
     PJ* ellps = proj_get_ellipsoid(ctx, source_crs);
@@ -969,7 +970,10 @@ SEXP P6_SRID_proj(SEXP inSRID, SEXP format, SEXP multiline, SEXP in_format,
         PROTECT(Ellps = NEW_CHARACTER(1)); pc++;
         SET_STRING_ELT(Ellps, 0, COPY_TO_USER_STRING(proj_get_name(ellps)));
         proj_destroy(ellps);
+    } else {
+        Ellps = R_NilValue;
     }
+
 
 
     PROTECT(ans=NEW_CHARACTER(1)); pc++;
