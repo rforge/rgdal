@@ -563,6 +563,7 @@ showSRID <- function(inSRID, format="WKT2", multiline="NO", enforce_xy=NULL, EPS
     valid_formats <- c("PROJ", valid_WKT_formats)
     stopifnot(is.character(inSRID))
     stopifnot(length(inSRID) == 1L)
+    stopifnot(nzchar(inSRID))
     stopifnot(is.character(format))
     stopifnot(length(format) == 1L)
     if (!(format %in% valid_formats)) stop("invalid format value")

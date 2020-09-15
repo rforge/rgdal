@@ -108,6 +108,10 @@ showSRID("OGC:CRS84", "WKT2")
 if (run) {
 showSRID("urn:ogc:def:crs:OGC:1.3:CRS84", "WKT2")
 }
+if (run) {
+try(showSRID("", "WKT2"))
+}
+
 OSRIsProjected(CRS("+proj=longlat"))
 OSRIsProjected(CRS("+proj=geocent"))
 OSRIsProjected(CRS("+proj=geocent +units=km"))
