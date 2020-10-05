@@ -48,14 +48,14 @@ In OGRSpatialRef(d, "scot_BNG") :
 > if (new_proj_and_gdal()) comment(o)
 NULL
 > (o <- OGRSpatialRef(file.path(d, "ps_cant_31.MIF"), "ps_cant_31"))
-[1] "+proj=longlat +a=6378137.01 +rf=298.257223563 +no_defs"
+[1] "+proj=longlat +a=6378137.01 +rf=298.257223563 +no_defs +type=crs"
 Warning messages:
 1: In OGRSpatialRef(file.path(d, "ps_cant_31.MIF"), "ps_cant_31") :
   Discarded ellps WGS 84 (MAPINFO Datum 0) in CRS definition: +proj=longlat +a=6378137.01 +rf=298.257223563 +no_defs
 2: In OGRSpatialRef(file.path(d, "ps_cant_31.MIF"), "ps_cant_31") :
   Discarded datum MIF 0 in CRS definition: +proj=longlat +a=6378137.01 +rf=298.257223563 +no_defs
 3: In showSRID(wkt2, "PROJ") :
-  Discarded ellps WGS 84 (MAPINFO Datum 0) in CRS definition: +proj=longlat +a=6378137.01 +rf=298.257223563 +no_defs
+  Discarded ellps WGS 84 (MAPINFO Datum 0) in CRS definition: +proj=longlat +a=6378137.01 +rf=298.257223563 +no_defs +type=crs
 4: In showSRID(wkt2, "PROJ") : Discarded datum MIF 0 in CRS definition
 > if (new_proj_and_gdal()) comment(o)
 [1] "GEOGCRS[\"unnamed\",\n    DATUM[\"MIF 0\",\n        ELLIPSOID[\"WGS 84 (MAPINFO Datum 0)\",6378137.01,298.257223563,\n            LENGTHUNIT[\"metre\",1,\n                ID[\"EPSG\",9001]]]],\n    PRIMEM[\"Greenwich\",0,\n        ANGLEUNIT[\"degree\",0.0174532925199433,\n            ID[\"EPSG\",9122]]],\n    CS[ellipsoidal,2],\n        AXIS[\"latitude\",north,\n            ORDER[1],\n            ANGLEUNIT[\"degree\",0.0174532925199433,\n                ID[\"EPSG\",9122]]],\n        AXIS[\"longitude\",east,\n            ORDER[2],\n            ANGLEUNIT[\"degree\",0.0174532925199433,\n                ID[\"EPSG\",9122]]]]"
@@ -142,4 +142,4 @@ In getProjectionRef(ds, OVERRIDE_PROJ_DATUM_WITH_TOWGS84 = FALSE) :
 > 
 > proc.time()
    user  system elapsed 
-  0.415   0.044   0.470 
+  0.415   0.042   0.453 
