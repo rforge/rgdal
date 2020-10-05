@@ -1,3 +1,15 @@
+2020-10-05 10:12  rsbivand
+
+	* tests/test_enforce_xy.Rout.save: tidy
+
+2020-10-05 09:58  rsbivand
+
+	* tests/srs_rendering.Rout.save: tidy
+
+2020-10-05 09:53  rsbivand
+
+	* ChangeLog, inst/ChangeLog: tidy
+
 2020-09-15 10:04  rsbivand
 
 	* R/ogr_sp.R, man/showWKT.Rd: SRS_string empty string error
