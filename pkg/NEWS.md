@@ -2,6 +2,8 @@
 
 * condition `tests/test_enforce_xy.R` on PROJ >= 6 and GDAL >= 3 (email BDR, I forgot to re-check with PROJ-5.2.0/GDAL-2.2.4).
 
+* Adaptation to EPSG 10 database format started (from PROJ 7.2)
+
 # Version 1.5-17 (2020-10-08, rev. 1051-1070)
 
 * `"CRS"` instantiation now prefers PROJ: use `rgdal::set_prefer_proj(FALSE)` to return to earlier behaviour. It seems that access from C/C++ code to mechanisms in PROJ offers more depth than going through GDAL to PROJ. This `"CRS"` instantiation in **sp** and **raster**; Proj4 and WKT2 strings may differ depending on whether instantiation is straight from PROJ or goes via GDAL. Confirmed with multiple reverse dependency checks over almost 900 CRAN packages.
