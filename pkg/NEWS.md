@@ -58,5 +58,11 @@
 
 * Use `"CRS"` object comment carrying WKT2 (2019) multiline string representation on write operations.
 
-# Version 1.4-8 (
+# Versions 1.4-7 and 1.4-8
+
+* Fixed configure issue for R 4.0.0
+
+* Fixed length of `class()` errors for matrices becoming arrays in R 4.0.0
+
+# Version 1.4-6 (Final pre-WKT2 release)
 
