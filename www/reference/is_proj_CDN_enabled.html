@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgdal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5-17</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5-18</span>
       </span>
     </div>
 
@@ -102,6 +102,9 @@
     </li>
   </ul>
 </li>
+<li>
+  <a href="../news/index.html">Changelog</a>
+</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         
@@ -127,12 +130,12 @@
     <p>From PROJ 7 (and partly 7.1), it is becoming possible to use transformation grids downloaded on demand to improve coordinate operation accuracy from a content download network (CDN). These functions report on and control the use of the CDN.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>is_proj_CDN_enabled</span>()
-<span class='fu'>enable_proj_CDN</span>()
-<span class='fu'>disable_proj_CDN</span>()
-<span class='fu'>proj_CDN_user_writable_dir</span>()
-<span class='fu'>get_proj_search_paths</span>()
-<span class='fu'>set_proj_search_paths</span>(<span class='no'>paths</span>)</pre>
+    <pre class="usage"><span class='fu'>is_proj_CDN_enabled</span><span class='op'>(</span><span class='op'>)</span>
+<span class='fu'>enable_proj_CDN</span><span class='op'>(</span><span class='op'>)</span>
+<span class='fu'>disable_proj_CDN</span><span class='op'>(</span><span class='op'>)</span>
+<span class='fu'>proj_CDN_user_writable_dir</span><span class='op'>(</span><span class='op'>)</span>
+<span class='fu'>get_proj_search_paths</span><span class='op'>(</span><span class='op'>)</span>
+<span class='fu'>set_proj_search_paths</span><span class='op'>(</span><span class='va'>paths</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -152,9 +155,15 @@
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p><a href='https://cdn.proj.org/'>https://cdn.proj.org/</a>.</p>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Roger Bivand</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>is_proj_CDN_enabled</span>()</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='fu'>proj_CDN_user_writable_dir</span>()</div><div class='output co'>#&gt; [1] "/home/rsb/.local/share/proj"</div><div class='input'><span class='fu'>get_proj_search_paths</span>()</div><div class='output co'>#&gt; [1] "/home/rsb/.local/share/proj" "/usr/local/share/proj"      
+    <pre class="examples"><div class='input'><span class='fu'>is_proj_CDN_enabled</span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='fu'>proj_CDN_user_writable_dir</span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] "/home/rsb/.local/share/proj"</div><div class='input'><span class='fu'>get_proj_search_paths</span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] "/home/rsb/.local/share/proj" "/usr/local/share/proj"      
 #&gt; [3] "/usr/local/share/proj"      </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -171,7 +180,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

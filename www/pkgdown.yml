@@ -1,8 +1,8 @@
 pandoc: 2.7.3
-pkgdown: 1.5.1
+pkgdown: 1.6.1
 pkgdown_sha: ~
 articles:
   CRS_projections_transformations: CRS_projections_transformations.html
   PROJ6_GDAL3: PROJ6_GDAL3.html
-last_built: 2020-08-09T19:06Z
+last_built: 2020-10-09T11:36Z
 

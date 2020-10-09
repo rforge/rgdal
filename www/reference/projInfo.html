@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgdal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5-17</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5-18</span>
       </span>
     </div>
 
@@ -102,6 +102,9 @@
     </li>
   </ul>
 </li>
+<li>
+  <a href="../news/index.html">Changelog</a>
+</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         
@@ -127,14 +130,14 @@
     <p>The <code>projInfo</code> function lists known values and descriptions for PROJ.4 tags for tag in <code><a href='https://rdrr.io/r/base/c.html'>c("proj", "ellps", "datum", "units")</a></code>; <code>getPROJ4VersionInfo</code> returns the version of the underlying PROJ.4 release, <code>getPROJ4libPath</code> returns the value of the PROJ\_LIB environment variable, <code>projNAD</code> detects the presence of NAD datum conversion tables (looking for conus).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>projInfo</span>(<span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"proj"</span>)
-<span class='fu'>getPROJ4VersionInfo</span>()
-<span class='fu'>getPROJ4libPath</span>()
-<span class='fu'>projNAD</span>()
-<span class='fu'>GDAL_OSR_PROJ</span>()
-<span class='fu'>GDALis3ormore</span>()
-<span class='fu'>PROJis6ormore</span>()
-<span class='fu'>new_proj_and_gdal</span>()</pre>
+    <pre class="usage"><span class='fu'>projInfo</span><span class='op'>(</span>type <span class='op'>=</span> <span class='st'>"proj"</span><span class='op'>)</span>
+<span class='fu'>getPROJ4VersionInfo</span><span class='op'>(</span><span class='op'>)</span>
+<span class='fu'>getPROJ4libPath</span><span class='op'>(</span><span class='op'>)</span>
+<span class='fu'>projNAD</span><span class='op'>(</span><span class='op'>)</span>
+<span class='fu'>GDAL_OSR_PROJ</span><span class='op'>(</span><span class='op'>)</span>
+<span class='fu'>GDALis3ormore</span><span class='op'>(</span><span class='op'>)</span>
+<span class='fu'>PROJis6ormore</span><span class='op'>(</span><span class='op'>)</span>
+<span class='fu'>new_proj_and_gdal</span><span class='op'>(</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -154,14 +157,19 @@
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p><a href='https://proj.org/'>https://proj.org/</a></p>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Roger Bivand <a href='mailto:Roger.Bivand@nhh.no'>Roger.Bivand@nhh.no</a></p>
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
     <p>Loading the rgdal package may change the <code>PROJ\_LIB</code> environmental variable to the PROJ.4 support files if bundled with binary packages.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>getPROJ4VersionInfo</span>()</div><div class='output co'>#&gt; [1] "Rel. 7.1.0, August 1st, 2020, [PJ_VERSION: 710]"
+    <pre class="examples"><div class='input'><span class='fu'>getPROJ4VersionInfo</span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] "Rel. 7.2.0, November 1st, 2020, [PJ_VERSION: 720]"
 #&gt; attr(,"short")
-#&gt; [1] 710</div><div class='input'><span class='fu'>projInfo</span>()</div><div class='output co'>#&gt;             name
+#&gt; [1] 720</div><div class='input'><span class='fu'>projInfo</span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;             name
 #&gt; 1     adams_hemi
 #&gt; 2      adams_ws1
 #&gt; 3      adams_ws2
@@ -304,35 +312,36 @@
 #&gt; 140          tcc
 #&gt; 141         tcea
 #&gt; 142        times
-#&gt; 143       tissot
-#&gt; 144        tmerc
-#&gt; 145      tobmerc
-#&gt; 146        tpeqd
-#&gt; 147        tpers
-#&gt; 148  unitconvert
-#&gt; 149          ups
-#&gt; 150         urm5
-#&gt; 151       urmfps
-#&gt; 152          utm
-#&gt; 153        vandg
-#&gt; 154       vandg2
-#&gt; 155       vandg3
-#&gt; 156       vandg4
-#&gt; 157        vitk1
-#&gt; 158   vgridshift
-#&gt; 159         wag1
-#&gt; 160         wag2
-#&gt; 161         wag3
-#&gt; 162         wag4
-#&gt; 163         wag5
-#&gt; 164         wag6
-#&gt; 165         wag7
-#&gt; 166      webmerc
-#&gt; 167        weren
-#&gt; 168        wink1
-#&gt; 169        wink2
-#&gt; 170       wintri
-#&gt; 171 xyzgridshift
+#&gt; 143     tinshift
+#&gt; 144       tissot
+#&gt; 145        tmerc
+#&gt; 146      tobmerc
+#&gt; 147        tpeqd
+#&gt; 148        tpers
+#&gt; 149  unitconvert
+#&gt; 150          ups
+#&gt; 151         urm5
+#&gt; 152       urmfps
+#&gt; 153          utm
+#&gt; 154        vandg
+#&gt; 155       vandg2
+#&gt; 156       vandg3
+#&gt; 157       vandg4
+#&gt; 158        vitk1
+#&gt; 159   vgridshift
+#&gt; 160         wag1
+#&gt; 161         wag2
+#&gt; 162         wag3
+#&gt; 163         wag4
+#&gt; 164         wag5
+#&gt; 165         wag6
+#&gt; 166         wag7
+#&gt; 167      webmerc
+#&gt; 168        weren
+#&gt; 169        wink1
+#&gt; 170        wink2
+#&gt; 171       wintri
+#&gt; 172 xyzgridshift
 #&gt;                                                         description
 #&gt; 1                                      Adams Hemisphere in a Square
 #&gt; 2                                         Adams World in a Square I
@@ -476,35 +485,37 @@
 #&gt; 140                                  Transverse Central Cylindrical
 #&gt; 141                               Transverse Cylindrical Equal Area
 #&gt; 142                                                           Times
-#&gt; 143                                                          Tissot
-#&gt; 144                                             Transverse Mercator
-#&gt; 145                                                 Tobler-Mercator
-#&gt; 146                                           Two Point Equidistant
-#&gt; 147                                              Tilted perspective
-#&gt; 148                                                 Unit conversion
-#&gt; 149                                   Universal Polar Stereographic
-#&gt; 150                                                        Urmaev V
-#&gt; 151                                    Urmaev Flat-Polar Sinusoidal
-#&gt; 152                             Universal Transverse Mercator (UTM)
-#&gt; 153                                             van der Grinten (I)
-#&gt; 154                                              van der Grinten II
-#&gt; 155                                             van der Grinten III
-#&gt; 156                                              van der Grinten IV
-#&gt; 157                                                     Vitkovsky I
-#&gt; 158                                             Vertical grid shift
-#&gt; 159                                         Wagner I (Kavraisky VI)
-#&gt; 160                                                       Wagner II
-#&gt; 161                                                      Wagner III
-#&gt; 162                                                       Wagner IV
-#&gt; 163                                                        Wagner V
-#&gt; 164                                                       Wagner VI
-#&gt; 165                                                      Wagner VII
-#&gt; 166                                  Web Mercator / Pseudo Mercator
-#&gt; 167                                                   Werenskiold I
-#&gt; 168                                                        Winkel I
-#&gt; 169                                                       Winkel II
-#&gt; 170                                                   Winkel Tripel
-#&gt; 171                                           Geocentric grid shift</div><div class='input'><span class='fu'>projInfo</span>(<span class='st'>"ellps"</span>)</div><div class='output co'>#&gt;         name          major                  ell
+#&gt; 143                              Triangulation based transformation
+#&gt; 144                                                          Tissot
+#&gt; 145                                             Transverse Mercator
+#&gt; 146                                                 Tobler-Mercator
+#&gt; 147                                           Two Point Equidistant
+#&gt; 148                                              Tilted perspective
+#&gt; 149                                                 Unit conversion
+#&gt; 150                                   Universal Polar Stereographic
+#&gt; 151                                                        Urmaev V
+#&gt; 152                                    Urmaev Flat-Polar Sinusoidal
+#&gt; 153                             Universal Transverse Mercator (UTM)
+#&gt; 154                                             van der Grinten (I)
+#&gt; 155                                              van der Grinten II
+#&gt; 156                                             van der Grinten III
+#&gt; 157                                              van der Grinten IV
+#&gt; 158                                                     Vitkovsky I
+#&gt; 159                                             Vertical grid shift
+#&gt; 160                                         Wagner I (Kavraisky VI)
+#&gt; 161                                                       Wagner II
+#&gt; 162                                                      Wagner III
+#&gt; 163                                                       Wagner IV
+#&gt; 164                                                        Wagner V
+#&gt; 165                                                       Wagner VI
+#&gt; 166                                                      Wagner VII
+#&gt; 167                                  Web Mercator / Pseudo Mercator
+#&gt; 168                                                   Werenskiold I
+#&gt; 169                                                        Winkel I
+#&gt; 170                                                       Winkel II
+#&gt; 171                                                   Winkel Tripel
+#&gt; 172                                           Geocentric grid shift</div><div class='input'><span class='fu'>projInfo</span><span class='op'>(</span><span class='st'>"ellps"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;         name          major                  ell
 #&gt; 1      MERIT    a=6378137.0           rf=298.257
 #&gt; 2      SGS85    a=6378136.0           rf=298.257
 #&gt; 3      GRS80    a=6378137.0     rf=298.257222101
@@ -597,7 +608,8 @@
 #&gt; 43                          WGS 66
 #&gt; 44                          WGS 72
 #&gt; 45                          WGS 84
-#&gt; 46       Normal Sphere (r=6370997)</div><div class='input'><span class='fu'>projInfo</span>(<span class='st'>"units"</span>)</div><div class='output co'>#&gt;        id     to_meter               name
+#&gt; 46       Normal Sphere (r=6370997)</div><div class='input'><span class='fu'>projInfo</span><span class='op'>(</span><span class='st'>"units"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;        id     to_meter               name
 #&gt; 1      mm 1.000000e-03         millimetre
 #&gt; 2      cm 1.000000e-02         centimetre
 #&gt; 3       m 1.000000e+00              metre
@@ -634,7 +646,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

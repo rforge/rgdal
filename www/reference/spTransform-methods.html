@@ -74,7 +74,7 @@ From version 1.5, spTransform uses the modern PROJ coordinate operation framewor
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgdal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5-17</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5-18</span>
       </span>
     </div>
 
@@ -104,6 +104,9 @@ From version 1.5, spTransform uses the modern PROJ coordinate operation framewor
     </li>
   </ul>
 </li>
+<li>
+  <a href="../news/index.html">Changelog</a>
+</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         
@@ -131,11 +134,11 @@ From version 1.5, spTransform uses the modern PROJ coordinate operation framewor
 <p>From version 1.5, <code>spTransform</code> uses the modern PROJ coordinate operation framework for transformations. This avoids pivoting through WGS84 if possible, and uses WKT2 (2019) strings for source and target CRS often constructed from the bundled EPSG SQLite database. The database is searched for feasible candidate coordinate operations, and the most accurate available is chosen. More details are available in a vignette: <code><a href='../articles/CRS_projections_transformations.html'>vignette("CRS_projections_transformations")</a></code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_transform_wkt_comment</span>()
-<span class='fu'>set_transform_wkt_comment</span>(<span class='no'>value</span>)
-<span class='fu'>get_enforce_xy</span>()
-<span class='fu'>set_enforce_xy</span>(<span class='no'>value</span>)
-<span class='fu'>get_last_coordOp</span>()</pre>
+    <pre class="usage"><span class='fu'>get_transform_wkt_comment</span><span class='op'>(</span><span class='op'>)</span>
+<span class='fu'>set_transform_wkt_comment</span><span class='op'>(</span><span class='va'>value</span><span class='op'>)</span>
+<span class='fu'>get_enforce_xy</span><span class='op'>(</span><span class='op'>)</span>
+<span class='fu'>set_enforce_xy</span><span class='op'>(</span><span class='va'>value</span><span class='op'>)</span>
+<span class='fu'>get_last_coordOp</span><span class='op'>(</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -148,7 +151,7 @@ From version 1.5, spTransform uses the modern PROJ coordinate operation framewor
 
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
 
-    <dl'>
+    <dl>
 
 <dt>"ANY"</dt><dd><p>default void method</p></dd>
 
@@ -177,15 +180,19 @@ Note that warnings about different projections may be issued when the PROJ.4 lib
 <p>If a SpatialPoints object has three dimensions, the third will also be transformed, with the metric of the third dimension assumed to be meters if the vertical units metric is not given in the projection description with +vunits= or +vto_meter= (which is 1.0 by default) <a href='https://proj.org/faq.html'>https://proj.org/faq.html</a>.</p>
 <p>Note that WGS84 is both an ellipse and a datum, and that since 1984 there have been changes in the relative positions of continents, leading to a number of modifications. This is discussed for example in <a href='http://www.uvm.edu/giv/resources/WGS84_NAD83.pdf'>http://www.uvm.edu/giv/resources/WGS84_NAD83.pdf</a>; there are then multiple transformations between NAD83 and WGS84 depending on the WGS84 definition used. One would expect that &#8220;+towgs84=&#8221; is a no-op for WGS84, but this only applies sometimes, and as there are now at least 30 years between now and 1984, things have shifted. It may be useful to note that &#8220;+nadgrids=@null&#8221; can help, see these threads: <a href='https://stat.ethz.ch/pipermail/r-sig-geo/2014-August/021611.html'>https://stat.ethz.ch/pipermail/r-sig-geo/2014-August/021611.html</a>, <a href='http://lists.maptools.org/pipermail/proj/2014-August/006894.html'>http://lists.maptools.org/pipermail/proj/2014-August/006894.html</a>, with thanks to Hermann Peifer for assistance.</p>
 <p>Note that from PROJ.4 4.9.3, the definition of UTM is changed from TMERC to ETMERC; see example.</p>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Roger Bivand <a href='mailto:Roger.Bivand@nhh.no'>Roger.Bivand@nhh.no</a></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='showWKT.html'>set_thin_PROJ6_warnings</a></span>(<span class='fl'>TRUE</span>)
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>state</span>)
-<span class='no'>states</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='no'>state.x77</span>, <span class='no'>state.center</span>)
-<span class='no'>states</span> <span class='kw'>&lt;-</span> <span class='no'>states</span>[<span class='no'>states</span>$<span class='no'>x</span> <span class='kw'>&gt;</span> -<span class='fl'>121</span>,]
-<span class='fu'>coordinates</span>(<span class='no'>states</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"x"</span>, <span class='st'>"y"</span>)
-<span class='fu'>proj4string</span>(<span class='no'>states</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='st'>"+proj=longlat +ellps=clrk66"</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>states</span>)</div><div class='output co'>#&gt; Object of class SpatialPointsDataFrame
+    <pre class="examples"><div class='input'><span class='fu'><a href='showWKT.html'>set_thin_PROJ6_warnings</a></span><span class='op'>(</span><span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>state</span><span class='op'>)</span>
+<span class='va'>states</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span><span class='va'>state.x77</span>, <span class='va'>state.center</span><span class='op'>)</span>
+<span class='va'>states</span> <span class='op'>&lt;-</span> <span class='va'>states</span><span class='op'>[</span><span class='va'>states</span><span class='op'>$</span><span class='va'>x</span> <span class='op'>&gt;</span> <span class='op'>-</span><span class='fl'>121</span>,<span class='op'>]</span>
+<span class='fu'><a href='https://rdrr.io/pkg/sp/man/coordinates.html'>coordinates</a></span><span class='op'>(</span><span class='va'>states</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"x"</span>, <span class='st'>"y"</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/pkg/sp/man/is.projected.html'>proj4string</a></span><span class='op'>(</span><span class='va'>states</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'><a href='CRS-class.html'>CRS</a></span><span class='op'>(</span><span class='st'>"+proj=longlat +ellps=clrk66"</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>states</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; Object of class SpatialPointsDataFrame
 #&gt; Coordinates:
 #&gt;         min      max
 #&gt; x -120.0680 -68.9801
@@ -207,8 +214,9 @@ Note that warnings about different projections may be issued when the PROJ.4 lib
 #&gt;  Median : 6.850   Median :53.05   Median :114.50   Median : 54277  
 #&gt;  Mean   : 7.321   Mean   :52.64   Mean   :105.65   Mean   : 61749  
 #&gt;  3rd Qu.:10.625   3rd Qu.:58.62   3rd Qu.:139.25   3rd Qu.: 79914  
-#&gt;  Max.   :15.100   Max.   :67.30   Max.   :188.00   Max.   :262134  </div><div class='input'><span class='no'>state.ll83</span> <span class='kw'>&lt;-</span> <span class='fu'>spTransform</span>(<span class='no'>states</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='st'>"+proj=longlat +ellps=GRS80"</span>))
-<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>state.ll83</span>)</div><div class='output co'>#&gt; Object of class SpatialPointsDataFrame
+#&gt;  Max.   :15.100   Max.   :67.30   Max.   :188.00   Max.   :262134  </div><div class='input'><span class='va'>state.ll83</span> <span class='op'>&lt;-</span> <span class='fu'>spTransform</span><span class='op'>(</span><span class='va'>states</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span><span class='op'>(</span><span class='st'>"+proj=longlat +ellps=GRS80"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>state.ll83</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; Object of class SpatialPointsDataFrame
 #&gt; Coordinates:
 #&gt;         min      max
 #&gt; x -120.0680 -68.9801
@@ -230,8 +238,9 @@ Note that warnings about different projections may be issued when the PROJ.4 lib
 #&gt;  Median : 6.850   Median :53.05   Median :114.50   Median : 54277  
 #&gt;  Mean   : 7.321   Mean   :52.64   Mean   :105.65   Mean   : 61749  
 #&gt;  3rd Qu.:10.625   3rd Qu.:58.62   3rd Qu.:139.25   3rd Qu.: 79914  
-#&gt;  Max.   :15.100   Max.   :67.30   Max.   :188.00   Max.   :262134  </div><div class='input'><span class='no'>state.merc</span> <span class='kw'>&lt;-</span> <span class='fu'>spTransform</span>(<span class='no'>states</span>, <span class='kw'>CRS</span><span class='kw'>=</span><span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='st'>"+proj=merc +ellps=GRS80"</span>))
-<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>state.merc</span>)</div><div class='output co'>#&gt; Object of class SpatialPointsDataFrame
+#&gt;  Max.   :15.100   Max.   :67.30   Max.   :188.00   Max.   :262134  </div><div class='input'><span class='va'>state.merc</span> <span class='op'>&lt;-</span> <span class='fu'>spTransform</span><span class='op'>(</span><span class='va'>states</span>, CRS<span class='op'>=</span><span class='fu'><a href='CRS-class.html'>CRS</a></span><span class='op'>(</span><span class='st'>"+proj=merc +ellps=GRS80"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>state.merc</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; Object of class SpatialPointsDataFrame
 #&gt; Coordinates:
 #&gt;         min      max
 #&gt; x -13365909 -7678830
@@ -254,9 +263,10 @@ Note that warnings about different projections may be issued when the PROJ.4 lib
 #&gt;  Median : 6.850   Median :53.05   Median :114.50   Median : 54277  
 #&gt;  Mean   : 7.321   Mean   :52.64   Mean   :105.65   Mean   : 61749  
 #&gt;  3rd Qu.:10.625   3rd Qu.:58.62   3rd Qu.:139.25   3rd Qu.: 79914  
-#&gt;  Max.   :15.100   Max.   :67.30   Max.   :188.00   Max.   :262134  </div><div class='input'><span class='no'>state.merc</span> <span class='kw'>&lt;-</span> <span class='fu'>spTransform</span>(<span class='no'>states</span>,
- <span class='kw'>CRS</span><span class='kw'>=</span><span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='st'>"+proj=merc +ellps=GRS80 +units=us-mi"</span>))
-<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>state.merc</span>)</div><div class='output co'>#&gt; Object of class SpatialPointsDataFrame
+#&gt;  Max.   :15.100   Max.   :67.30   Max.   :188.00   Max.   :262134  </div><div class='input'><span class='va'>state.merc</span> <span class='op'>&lt;-</span> <span class='fu'>spTransform</span><span class='op'>(</span><span class='va'>states</span>,
+ CRS<span class='op'>=</span><span class='fu'><a href='CRS-class.html'>CRS</a></span><span class='op'>(</span><span class='st'>"+proj=merc +ellps=GRS80 +units=us-mi"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>state.merc</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; Object of class SpatialPointsDataFrame
 #&gt; Coordinates:
 #&gt;         min       max
 #&gt; x -8305.174 -4771.394
@@ -280,23 +290,24 @@ Note that warnings about different projections may be issued when the PROJ.4 lib
 #&gt;  Median : 6.850   Median :53.05   Median :114.50   Median : 54277  
 #&gt;  Mean   : 7.321   Mean   :52.64   Mean   :105.65   Mean   : 61749  
 #&gt;  3rd Qu.:10.625   3rd Qu.:58.62   3rd Qu.:139.25   3rd Qu.: 79914  
-#&gt;  Max.   :15.100   Max.   :67.30   Max.   :188.00   Max.   :262134  </div><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='projInfo.html'>PROJis6ormore</a></span>() <span class='kw'>||</span> (!<span class='fu'><a href='projInfo.html'>PROJis6ormore</a></span>() <span class='kw'>&amp;&amp;</span> <span class='fu'><a href='projInfo.html'>projNAD</a></span>())) {
-<span class='no'>states</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='no'>state.x77</span>, <span class='no'>state.center</span>)
-<span class='no'>states</span> <span class='kw'>&lt;-</span> <span class='no'>states</span>[<span class='no'>states</span>$<span class='no'>x</span> <span class='kw'>&gt;</span> -<span class='fl'>121</span>,]
-<span class='fu'>coordinates</span>(<span class='no'>states</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"x"</span>, <span class='st'>"y"</span>)
-<span class='fu'>proj4string</span>(<span class='no'>states</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='st'>"+init=epsg:4267"</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>states</span>))
-<span class='no'>state.ll83</span> <span class='kw'>&lt;-</span> <span class='fu'>spTransform</span>(<span class='no'>states</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='st'>"+init=epsg:4269"</span>))
-<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>state.ll83</span>))
-<span class='no'>state.kansasSlcc</span> <span class='kw'>&lt;-</span> <span class='fu'>spTransform</span>(<span class='no'>states</span>, <span class='kw'>CRS</span><span class='kw'>=</span><span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='st'>"+init=epsg:26978"</span>))
-<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>state.kansasSlcc</span>))
-<span class='no'>SFpoint_NAD83</span> <span class='kw'>&lt;-</span> <span class='fu'>SpatialPoints</span>(<span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(-<span class='fl'>103.869667</span>, <span class='fl'>44.461676</span>), <span class='kw'>nrow</span><span class='kw'>=</span><span class='fl'>1</span>),
- <span class='kw'>proj4string</span><span class='kw'>=</span><span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='st'>"+init=epsg:4269"</span>))
-<span class='no'>SFpoint_NAD27</span> <span class='kw'>&lt;-</span> <span class='fu'>spTransform</span>(<span class='no'>SFpoint_NAD83</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='st'>"+init=epsg:4267"</span>))
-<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/all.equal.html'>all.equal</a></span>(<span class='fu'>coordinates</span>(<span class='no'>SFpoint_NAD83</span>), <span class='fu'>coordinates</span>(<span class='no'>SFpoint_NAD27</span>)))
-<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='fu'>coordinates</span>(<span class='no'>SFpoint_NAD27</span>), <span class='kw'>digits</span><span class='kw'>=</span><span class='fl'>12</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='fu'>coordinates</span>(<span class='no'>SFpoint_NAD83</span>), <span class='kw'>digits</span><span class='kw'>=</span><span class='fl'>12</span>)
-}</div><div class='output co'>#&gt; Object of class SpatialPointsDataFrame
+#&gt;  Max.   :15.100   Max.   :67.30   Max.   :188.00   Max.   :262134  </div><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='projInfo.html'>PROJis6ormore</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>||</span> <span class='op'>(</span><span class='op'>!</span><span class='fu'><a href='projInfo.html'>PROJis6ormore</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>&amp;&amp;</span> <span class='fu'><a href='projInfo.html'>projNAD</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='va'>states</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span><span class='va'>state.x77</span>, <span class='va'>state.center</span><span class='op'>)</span>
+<span class='va'>states</span> <span class='op'>&lt;-</span> <span class='va'>states</span><span class='op'>[</span><span class='va'>states</span><span class='op'>$</span><span class='va'>x</span> <span class='op'>&gt;</span> <span class='op'>-</span><span class='fl'>121</span>,<span class='op'>]</span>
+<span class='fu'><a href='https://rdrr.io/pkg/sp/man/coordinates.html'>coordinates</a></span><span class='op'>(</span><span class='va'>states</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"x"</span>, <span class='st'>"y"</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/pkg/sp/man/is.projected.html'>proj4string</a></span><span class='op'>(</span><span class='va'>states</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'><a href='CRS-class.html'>CRS</a></span><span class='op'>(</span><span class='st'>"+init=epsg:4267"</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>states</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>state.ll83</span> <span class='op'>&lt;-</span> <span class='fu'>spTransform</span><span class='op'>(</span><span class='va'>states</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span><span class='op'>(</span><span class='st'>"+init=epsg:4269"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>state.ll83</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>state.kansasSlcc</span> <span class='op'>&lt;-</span> <span class='fu'>spTransform</span><span class='op'>(</span><span class='va'>states</span>, CRS<span class='op'>=</span><span class='fu'><a href='CRS-class.html'>CRS</a></span><span class='op'>(</span><span class='st'>"+init=epsg:26978"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>state.kansasSlcc</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>SFpoint_NAD83</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/sp/man/SpatialPoints.html'>SpatialPoints</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>103.869667</span>, <span class='fl'>44.461676</span><span class='op'>)</span>, nrow<span class='op'>=</span><span class='fl'>1</span><span class='op'>)</span>,
+ proj4string<span class='op'>=</span><span class='fu'><a href='CRS-class.html'>CRS</a></span><span class='op'>(</span><span class='st'>"+init=epsg:4269"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>SFpoint_NAD27</span> <span class='op'>&lt;-</span> <span class='fu'>spTransform</span><span class='op'>(</span><span class='va'>SFpoint_NAD83</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span><span class='op'>(</span><span class='st'>"+init=epsg:4267"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/all.equal.html'>all.equal</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/sp/man/coordinates.html'>coordinates</a></span><span class='op'>(</span><span class='va'>SFpoint_NAD83</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/pkg/sp/man/coordinates.html'>coordinates</a></span><span class='op'>(</span><span class='va'>SFpoint_NAD27</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/sp/man/coordinates.html'>coordinates</a></span><span class='op'>(</span><span class='va'>SFpoint_NAD27</span><span class='op'>)</span>, digits<span class='op'>=</span><span class='fl'>12</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/sp/man/coordinates.html'>coordinates</a></span><span class='op'>(</span><span class='va'>SFpoint_NAD83</span><span class='op'>)</span>, digits<span class='op'>=</span><span class='fl'>12</span><span class='op'>)</span>
+<span class='op'>}</span>
+</div><div class='output co'>#&gt; Object of class SpatialPointsDataFrame
 #&gt; Coordinates:
 #&gt;         min      max
 #&gt; x -120.0680 -68.9801
@@ -372,11 +383,12 @@ Note that warnings about different projections may be issued when the PROJ.4 lib
 #&gt;           coords.x1     coords.x2
 #&gt; [1,] -103.869185754 44.4616921053
 #&gt;        coords.x1 coords.x2
-#&gt; [1,] -103.869667 44.461676</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>meuse</span>)
-<span class='fu'>coordinates</span>(<span class='no'>meuse</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"x"</span>, <span class='st'>"y"</span>)
-<span class='fu'>proj4string</span>(<span class='no'>meuse</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='st'>"+init=epsg:28992"</span>)
+#&gt; [1,] -103.869667 44.461676</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>meuse</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/pkg/sp/man/coordinates.html'>coordinates</a></span><span class='op'>(</span><span class='va'>meuse</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"x"</span>, <span class='st'>"y"</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/pkg/sp/man/is.projected.html'>proj4string</a></span><span class='op'>(</span><span class='va'>meuse</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'><a href='CRS-class.html'>CRS</a></span><span class='op'>(</span><span class='st'>"+init=epsg:28992"</span><span class='op'>)</span>
 <span class='co'># see http://trac.osgeo.org/gdal/ticket/1987</span>
-<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>meuse</span>)</div><div class='output co'>#&gt; Object of class SpatialPointsDataFrame
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>meuse</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; Object of class SpatialPointsDataFrame
 #&gt; Coordinates:
 #&gt;      min    max
 #&gt; x 178605 181390
@@ -410,8 +422,9 @@ Note that warnings about different projections may be issued when the PROJ.4 lib
 #&gt;  Fw     :10   Mean   : 290.3  
 #&gt;  Ab     : 8   3rd Qu.: 450.0  
 #&gt;  (Other):25   Max.   :1000.0  
-#&gt;  NA's   : 1                   </div><div class='input'><span class='no'>meuse.utm</span> <span class='kw'>&lt;-</span> <span class='fu'>spTransform</span>(<span class='no'>meuse</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='st'>"+proj=utm +zone=32 +datum=WGS84"</span>))
-<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>meuse.utm</span>)</div><div class='output co'>#&gt; Object of class SpatialPointsDataFrame
+#&gt;  NA's   : 1                   </div><div class='input'><span class='va'>meuse.utm</span> <span class='op'>&lt;-</span> <span class='fu'>spTransform</span><span class='op'>(</span><span class='va'>meuse</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span><span class='op'>(</span><span class='st'>"+proj=utm +zone=32 +datum=WGS84"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>meuse.utm</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; Object of class SpatialPointsDataFrame
 #&gt; Coordinates:
 #&gt;         min       max
 #&gt; x  269909.9  272832.1
@@ -444,15 +457,16 @@ Note that warnings about different projections may be issued when the PROJ.4 lib
 #&gt;  Fw     :10   Mean   : 290.3  
 #&gt;  Ab     : 8   3rd Qu.: 450.0  
 #&gt;  (Other):25   Max.   :1000.0  
-#&gt;  NA's   : 1                   </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span>(<span class='fu'>coordinates</span>(<span class='no'>meuse</span>), <span class='fu'>coordinates</span>(<span class='no'>meuse.utm</span>))</div><div class='output co'>#&gt;          x      y        x       y
+#&gt;  NA's   : 1                   </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/sp/man/coordinates.html'>coordinates</a></span><span class='op'>(</span><span class='va'>meuse</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/pkg/sp/man/coordinates.html'>coordinates</a></span><span class='op'>(</span><span class='va'>meuse.utm</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;          x      y        x       y
 #&gt; 1   181072 333611 272531.7 5653889
 #&gt; 2   181025 333558 272482.1 5653838
-#&gt; 3   181165 333537 272621.0 5653810
+#&gt; 3   181165 333537 272620.9 5653810
 #&gt; 4   181298 333484 272751.2 5653751
 #&gt; 5   181307 333330 272752.7 5653597
 #&gt; 6   181390 333260 272832.1 5653523
 #&gt; 7   181165 333370 272612.8 5653644
-#&gt; 8   181027 333363 272474.6 5653643
+#&gt; 8   181027 333363 272474.5 5653643
 #&gt; 9   181060 333231 272501.0 5653510
 #&gt; 10  181232 333168 272669.8 5653438
 #&gt; 11  181191 333115 272626.2 5653388
@@ -475,7 +489,7 @@ Note that warnings about different projections may be issued when the PROJ.4 lib
 #&gt; 28  180973 332687 272387.4 5652971
 #&gt; 29  180916 332753 272333.7 5653039
 #&gt; 30  181352 332946 272778.8 5653211
-#&gt; 31  181133 332570 272541.6 5652846
+#&gt; 31  181133 332570 272541.5 5652846
 #&gt; 32  180878 332489 272282.8 5652777
 #&gt; 33  180829 332450 272232.0 5652741
 #&gt; 34  180954 332399 272354.3 5652684
@@ -487,7 +501,7 @@ Note that warnings about different projections may be issued when the PROJ.4 lib
 #&gt; 41  180383 332476 271787.7 5652789
 #&gt; 42  180494 332330 271891.4 5652637
 #&gt; 43  180561 332193 271951.6 5652497
-#&gt; 44  180451 332175 271840.9 5652485
+#&gt; 44  180451 332175 271840.8 5652485
 #&gt; 45  180410 332031 271792.8 5652343
 #&gt; 46  180355 332299 271751.0 5652613
 #&gt; 47  180292 332157 271681.1 5652475
@@ -502,7 +516,7 @@ Note that warnings about different projections may be issued when the PROJ.4 lib
 #&gt; 56  179826 332217 271218.5 5652557
 #&gt; 57  179687 332161 271076.9 5652508
 #&gt; 58  179792 332035 271175.6 5652377
-#&gt; 59  179902 332113 271289.4 5652450
+#&gt; 59  179902 332113 271289.3 5652450
 #&gt; 60  180100 332213 271492.1 5652540
 #&gt; 61  179604 332059 270989.0 5652410
 #&gt; 62  179526 331936 270905.0 5652291
@@ -510,7 +524,7 @@ Note that warnings about different projections may be issued when the PROJ.4 lib
 #&gt; 64  179489 331633 270853.2 5651990
 #&gt; 65  179414 331494 270771.5 5651855
 #&gt; 66  179334 331366 270685.3 5651731
-#&gt; 67  179255 331264 270601.4 5651633
+#&gt; 67  179255 331264 270601.3 5651633
 #&gt; 69  179470 331125 270809.3 5651484
 #&gt; 75  179692 330933 271021.7 5651281
 #&gt; 76  179852 330801 271175.1 5651141
@@ -528,11 +542,11 @@ Note that warnings about different projections may be issued when the PROJ.4 lib
 #&gt; 90  179076 331005 270409.8 5651383
 #&gt; 123 180151 330353 271451.8 5650679
 #&gt; 160 179211 331175 270553.0 5651547
-#&gt; 163 181118 333214 272558.2 5653490
+#&gt; 163 181118 333214 272558.1 5653490
 #&gt; 70  179474 331304 270822.1 5651662
-#&gt; 71  179559 331423 270912.9 5651777
+#&gt; 71  179559 331423 270912.8 5651777
 #&gt; 91  179022 330873 270349.4 5651254
-#&gt; 92  178953 330742 270274.1 5651127
+#&gt; 92  178953 330742 270274.0 5651127
 #&gt; 93  178875 330516 270185.0 5650905
 #&gt; 94  178803 330349 270104.9 5650741
 #&gt; 95  179029 330394 270332.9 5650775
@@ -557,14 +571,14 @@ Note that warnings about different projections may be issued when the PROJ.4 lib
 #&gt; 115 179881 330912 271209.5 5651251
 #&gt; 116 179774 330921 271103.0 5651265
 #&gt; 117 179657 331150 270997.4 5651500
-#&gt; 118 179731 331245 271076.0 5651591
+#&gt; 118 179731 331245 271075.9 5651591
 #&gt; 119 179717 331441 271071.6 5651787
 #&gt; 120 179446 331422 270799.9 5651782
 #&gt; 121 179524 331565 270884.8 5651921
 #&gt; 122 179644 331730 271012.8 5652080
 #&gt; 124 180321 330366 271622.3 5650684
 #&gt; 125 180162 331837 271535.6 5652161
-#&gt; 126 180029 331720 271397.0 5652051
+#&gt; 126 180029 331720 271396.9 5652051
 #&gt; 127 179797 331919 271174.9 5652261
 #&gt; 128 179642 331955 271021.9 5652305
 #&gt; 129 179849 332142 271237.8 5652481
@@ -585,7 +599,7 @@ Note that warnings about different projections may be issued when the PROJ.4 lib
 #&gt; 143 179120 330578 270432.8 5650955
 #&gt; 144 179034 330561 270346.1 5650942
 #&gt; 145 179085 330433 270390.8 5650811
-#&gt; 146 179236 330046 270522.7 5650417
+#&gt; 146 179236 330046 270522.6 5650417
 #&gt; 147 179456 330072 270743.7 5650433
 #&gt; 148 179550 329940 270831.1 5650296
 #&gt; 149 179445 329807 270719.7 5650168
@@ -593,128 +607,148 @@ Note that warnings about different projections may be issued when the PROJ.4 lib
 #&gt; 151 179245 329714 270515.4 5650085
 #&gt; 152 179024 329733 270295.5 5650115
 #&gt; 153 178786 329822 270062.1 5650216
-#&gt; 154 179135 329890 270414.1 5650266
+#&gt; 154 179135 329890 270414.1 5650267
 #&gt; 155 179030 330082 270318.6 5650463
 #&gt; 156 179184 330182 270477.4 5650556
 #&gt; 157 179085 330292 270383.9 5650671
 #&gt; 158 178875 330311 270175.0 5650700
-#&gt; 159 179466 330381 270768.9 5650741
-#&gt; 164 180627 330190 271919.3 5650493</div><div class='input'><span class='no'>kiritimati_primary_roads</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='readOGR.html'>readOGR</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"vectors"</span>,
- <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"rgdal"</span>)[<span class='fl'>1</span>], <span class='st'>"kiritimati_primary_roads"</span>)</div><div class='output co'>#&gt; OGR data source with driver: ESRI Shapefile 
-#&gt; Source: "/tmp/RtmpAZ1IRZ/temp_libpath17c763a667796/rgdal/vectors", layer: "kiritimati_primary_roads"
+#&gt; 159 179466 330381 270768.8 5650741
+#&gt; 164 180627 330190 271919.3 5650493</div><div class='input'><span class='va'>kiritimati_primary_roads</span> <span class='op'>&lt;-</span> <span class='fu'><a href='readOGR.html'>readOGR</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"vectors"</span>,
+ package <span class='op'>=</span> <span class='st'>"rgdal"</span><span class='op'>)</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>, <span class='st'>"kiritimati_primary_roads"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; OGR data source with driver: ESRI Shapefile 
+#&gt; Source: "/tmp/Rtmp48CPqR/temp_libpath56868786764d9/rgdal/vectors", layer: "kiritimati_primary_roads"
 #&gt; with 35 features
-#&gt; It has 1 fields</div><div class='input'><span class='no'>kiritimati_primary_roads_ll</span> <span class='kw'>&lt;-</span> <span class='fu'>spTransform</span>(<span class='no'>kiritimati_primary_roads</span>,
- <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='st'>"+proj=longlat +datum=WGS84"</span>))
-<span class='no'>opar</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='kw'>mfrow</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>2</span>))
-<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>kiritimati_primary_roads</span>, <span class='kw'>axes</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>kiritimati_primary_roads_ll</span>, <span class='kw'>axes</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>las</span><span class='kw'>=</span><span class='fl'>1</span>)</div><div class='img'><img src='spTransform-methods-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='no'>opar</span>)
-<span class='no'>opar</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='kw'>mfrow</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>2</span>))
-<span class='no'>scot_BNG</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='readOGR.html'>readOGR</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"vectors"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"rgdal"</span>)[<span class='fl'>1</span>],
-   <span class='st'>"scot_BNG"</span>)</div><div class='output co'>#&gt; OGR data source with driver: ESRI Shapefile 
-#&gt; Source: "/tmp/RtmpAZ1IRZ/temp_libpath17c763a667796/rgdal/vectors", layer: "scot_BNG"
+#&gt; It has 1 fields</div><div class='input'><span class='va'>kiritimati_primary_roads_ll</span> <span class='op'>&lt;-</span> <span class='fu'>spTransform</span><span class='op'>(</span><span class='va'>kiritimati_primary_roads</span>,
+ <span class='fu'><a href='CRS-class.html'>CRS</a></span><span class='op'>(</span><span class='st'>"+proj=longlat +datum=WGS84"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>opar</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mfrow<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>kiritimati_primary_roads</span>, axes<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>kiritimati_primary_roads_ll</span>, axes<span class='op'>=</span><span class='cn'>TRUE</span>, las<span class='op'>=</span><span class='fl'>1</span><span class='op'>)</span>
+</div><div class='img'><img src='spTransform-methods-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span><span class='va'>opar</span><span class='op'>)</span>
+<span class='va'>opar</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mfrow<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>scot_BNG</span> <span class='op'>&lt;-</span> <span class='fu'><a href='readOGR.html'>readOGR</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"vectors"</span>, package <span class='op'>=</span> <span class='st'>"rgdal"</span><span class='op'>)</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>,
+   <span class='st'>"scot_BNG"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; OGR data source with driver: ESRI Shapefile 
+#&gt; Source: "/tmp/Rtmp48CPqR/temp_libpath56868786764d9/rgdal/vectors", layer: "scot_BNG"
 #&gt; with 56 features
-#&gt; It has 13 fields</div><div class='input'><span class='no'>scot_LL</span> <span class='kw'>&lt;-</span> <span class='fu'>spTransform</span>(<span class='no'>scot_BNG</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='st'>"+proj=longlat +datum=WGS84"</span>))
-<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>scot_LL</span>, <span class='kw'>axes</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
-<span class='no'>grdtxt_LL</span> <span class='kw'>&lt;-</span> <span class='fu'>gridat</span>(<span class='no'>scot_LL</span>)
-<span class='no'>grd_LL</span> <span class='kw'>&lt;-</span> <span class='fu'>gridlines</span>(<span class='no'>scot_LL</span>, <span class='kw'>ndiscr</span><span class='kw'>=</span><span class='fl'>100</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>grd_LL</span>)</div><div class='output co'>#&gt; Object of class SpatialLines
+#&gt; It has 13 fields</div><div class='input'><span class='va'>scot_LL</span> <span class='op'>&lt;-</span> <span class='fu'>spTransform</span><span class='op'>(</span><span class='va'>scot_BNG</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span><span class='op'>(</span><span class='st'>"+proj=longlat +datum=WGS84"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>scot_LL</span>, axes<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='va'>grdtxt_LL</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/sp/man/gridlines.html'>gridat</a></span><span class='op'>(</span><span class='va'>scot_LL</span><span class='op'>)</span>
+<span class='va'>grd_LL</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/sp/man/gridlines.html'>gridlines</a></span><span class='op'>(</span><span class='va'>scot_LL</span>, ndiscr<span class='op'>=</span><span class='fl'>100</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>grd_LL</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; Object of class SpatialLines
 #&gt; Coordinates:
 #&gt;         min        max
 #&gt; x -8.622158 -0.7550709
 #&gt; y 54.626633 60.8432318
 #&gt; Is projected: FALSE 
-#&gt; proj4string : [+proj=longlat +datum=WGS84 +no_defs]</div><div class='input'><span class='no'>target</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='fu'>proj4string</span>(<span class='no'>scot_BNG</span>))</div><div class='output co'>#&gt; <span class='warning'>Warning: CRS object has comment, which is lost in output</span></div><div class='input'><span class='no'>grd_BNG</span> <span class='kw'>&lt;-</span> <span class='fu'>spTransform</span>(<span class='no'>grd_LL</span>, <span class='no'>target</span>)
-<span class='no'>grdtxt_BNG</span> <span class='kw'>&lt;-</span> <span class='fu'>spTransform</span>(<span class='no'>grdtxt_LL</span>, <span class='no'>target</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>scot_BNG</span>, <span class='kw'>axes</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>las</span><span class='kw'>=</span><span class='fl'>1</span>)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>grd_BNG</span>, <span class='kw'>add</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>lty</span><span class='kw'>=</span><span class='fl'>2</span>)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/text.html'>text</a></span>(<span class='fu'>coordinates</span>(<span class='no'>grdtxt_BNG</span>),
-   <span class='kw'>labels</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/parse.html'>parse</a></span>(<span class='kw'>text</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span>(<span class='no'>grdtxt_BNG</span>$<span class='no'>labels</span>)))</div><div class='img'><img src='spTransform-methods-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='no'>opar</span>)
-<span class='no'>broke_proj</span> <span class='kw'>&lt;-</span> <span class='fl'>FALSE</span>
+#&gt; proj4string : [+proj=longlat +datum=WGS84 +no_defs]</div><div class='input'><span class='va'>target</span> <span class='op'>&lt;-</span> <span class='fu'><a href='CRS-class.html'>CRS</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/sp/man/is.projected.html'>proj4string</a></span><span class='op'>(</span><span class='va'>scot_BNG</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='warning'>Warning: CRS object has comment, which is lost in output</span></div><div class='input'><span class='va'>grd_BNG</span> <span class='op'>&lt;-</span> <span class='fu'>spTransform</span><span class='op'>(</span><span class='va'>grd_LL</span>, <span class='va'>target</span><span class='op'>)</span>
+<span class='va'>grdtxt_BNG</span> <span class='op'>&lt;-</span> <span class='fu'>spTransform</span><span class='op'>(</span><span class='va'>grdtxt_LL</span>, <span class='va'>target</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>scot_BNG</span>, axes<span class='op'>=</span><span class='cn'>TRUE</span>, las<span class='op'>=</span><span class='fl'>1</span><span class='op'>)</span>
+</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>grd_BNG</span>, add<span class='op'>=</span><span class='cn'>TRUE</span>, lty<span class='op'>=</span><span class='fl'>2</span><span class='op'>)</span>
+</div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/sp/man/gridlines.html'>text</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/sp/man/coordinates.html'>coordinates</a></span><span class='op'>(</span><span class='va'>grdtxt_BNG</span><span class='op'>)</span>,
+   labels<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/parse.html'>parse</a></span><span class='op'>(</span>text<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span><span class='op'>(</span><span class='va'>grdtxt_BNG</span><span class='op'>$</span><span class='va'>labels</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='img'><img src='spTransform-methods-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span><span class='va'>opar</span><span class='op'>)</span>
+<span class='va'>broke_proj</span> <span class='op'>&lt;-</span> <span class='cn'>FALSE</span>
 <span class='co'># https://github.com/OSGeo/PROJ/issues/1525</span>
-<span class='no'>pv</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/CallExternal.html'>.Call</a></span>(<span class='st'>"PROJ4VersionInfo"</span>, <span class='kw'>PACKAGE</span><span class='kw'>=</span><span class='st'>"rgdal"</span>)<span class='kw'>[[</span><span class='fl'>2</span>]]
-<span class='kw'>if</span> (<span class='no'>pv</span> <span class='kw'>&gt;=</span> <span class='fl'>600</span> <span class='kw'>&amp;&amp;</span> <span class='no'>pv</span> <span class='kw'>&lt;</span> <span class='fl'>620</span>) <span class='no'>broke_proj</span> <span class='kw'>&lt;-</span> <span class='fl'>TRUE</span>
-<span class='kw'>if</span> (!<span class='no'>broke_proj</span>) {
-<span class='no'>crds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='kw'>data</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>9.05</span>, <span class='fl'>48.52</span>), <span class='kw'>ncol</span><span class='kw'>=</span><span class='fl'>2</span>)
-<span class='no'>spPoint</span> <span class='kw'>&lt;-</span> <span class='fu'>SpatialPoints</span>(<span class='kw'>coords</span><span class='kw'>=</span><span class='no'>crds</span>,
- <span class='kw'>proj4string</span><span class='kw'>=</span><span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='st'>"+proj=longlat +ellps=sphere +no_defs"</span>))
-<span class='no'>ob_tran_def</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='st'>"+proj=ob_tran +o_proj=longlat"</span>,
- <span class='st'>"+o_lon_p=-162 +o_lat_p=39.25 +lon_0=180 +ellps=sphere +no_defs"</span>)
-<span class='no'>tg</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='no'>ob_tran_def</span>)
+<span class='va'>pv</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/CallExternal.html'>.Call</a></span><span class='op'>(</span><span class='st'>"PROJ4VersionInfo"</span>, PACKAGE<span class='op'>=</span><span class='st'>"rgdal"</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>2</span><span class='op'>]</span><span class='op'>]</span>
+<span class='kw'>if</span> <span class='op'>(</span><span class='va'>pv</span> <span class='op'>&gt;=</span> <span class='fl'>600</span> <span class='op'>&amp;&amp;</span> <span class='va'>pv</span> <span class='op'>&lt;</span> <span class='fl'>620</span><span class='op'>)</span> <span class='va'>broke_proj</span> <span class='op'>&lt;-</span> <span class='cn'>TRUE</span>
+<span class='kw'>if</span> <span class='op'>(</span><span class='op'>!</span><span class='va'>broke_proj</span><span class='op'>)</span> <span class='op'>{</span> 
+<span class='va'>crds</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span>data<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>9.05</span>, <span class='fl'>48.52</span><span class='op'>)</span>, ncol<span class='op'>=</span><span class='fl'>2</span><span class='op'>)</span>
+<span class='va'>spPoint</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/sp/man/SpatialPoints.html'>SpatialPoints</a></span><span class='op'>(</span>coords<span class='op'>=</span><span class='va'>crds</span>,
+ proj4string<span class='op'>=</span><span class='fu'><a href='CRS-class.html'>CRS</a></span><span class='op'>(</span><span class='st'>"+proj=longlat +ellps=sphere +no_defs"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>ob_tran_def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"+proj=ob_tran +o_proj=longlat"</span>,
+ <span class='st'>"+o_lon_p=-162 +o_lat_p=39.25 +lon_0=180 +ellps=sphere +no_defs"</span><span class='op'>)</span>
+<span class='va'>tg</span> <span class='op'>&lt;-</span> <span class='fu'><a href='CRS-class.html'>CRS</a></span><span class='op'>(</span><span class='va'>ob_tran_def</span><span class='op'>)</span>
 <span class='co'># proj4string not propagated in GDAL 3.0.0</span>
-<span class='no'>a</span> <span class='kw'>&lt;-</span> <span class='fu'>spTransform</span>(<span class='no'>spPoint</span>, <span class='no'>tg</span>, <span class='kw'>use_ob_tran</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
-<span class='no'>a</span>
-}</div><div class='output co'>#&gt; <span class='warning'>Warning: CRS object has comment, which is lost in output</span></div><div class='output co'>#&gt; SpatialPoints:
+<span class='va'>a</span> <span class='op'>&lt;-</span> <span class='fu'>spTransform</span><span class='op'>(</span><span class='va'>spPoint</span>, <span class='va'>tg</span>, use_ob_tran<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='va'>a</span>
+<span class='op'>}</span>
+</div><div class='output co'>#&gt; <span class='warning'>Warning: CRS object has comment, which is lost in output</span></div><div class='output co'>#&gt; SpatialPoints:
 #&gt;      coords.x1 coords.x2
 #&gt; [1,] -5.917698  -1.87195
 #&gt; Coordinate Reference System (CRS) arguments: +proj=ob_tran
 #&gt; +o_proj=longlat +o_lon_p=-162 +o_lat_p=39.25 +lon_0=180 +ellps=sphere
 #&gt; +no_defs </div><div class='input'><span class='co'>#should be (-5.917698, -1.87195)</span>
-<span class='kw'>if</span> (!<span class='no'>broke_proj</span>) {
-<span class='fu'>spTransform</span>(<span class='no'>a</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='st'>"+proj=longlat +ellps=sphere +no_defs"</span>),
- <span class='kw'>use_ob_tran</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
-}</div><div class='output co'>#&gt; <span class='warning'>Warning: CRS object has comment, which is lost in output</span></div><div class='output co'>#&gt; SpatialPoints:
+<span class='kw'>if</span> <span class='op'>(</span><span class='op'>!</span><span class='va'>broke_proj</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='fu'>spTransform</span><span class='op'>(</span><span class='va'>a</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span><span class='op'>(</span><span class='st'>"+proj=longlat +ellps=sphere +no_defs"</span><span class='op'>)</span>,
+ use_ob_tran<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='op'>}</span>
+</div><div class='output co'>#&gt; <span class='warning'>Warning: CRS object has comment, which is lost in output</span></div><div class='output co'>#&gt; SpatialPoints:
 #&gt;      coords.x1 coords.x2
 #&gt; [1,]      9.05     48.52
 #&gt; Coordinate Reference System (CRS) arguments: +proj=longlat
-#&gt; +ellps=sphere +no_defs </div><div class='input'><span class='kw'>if</span> (!<span class='no'>broke_proj</span>) {
-<span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='fu'>spTransform</span>(<span class='no'>a</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='st'>"+proj=tmerc +lat_0=0 +lon_0=9 +k=1"</span>,
-<span class='st'>"+x_0=3500000 +y_0=0 +ellps=bessel +units=m +no_defs"</span>)),
- <span class='kw'>use_ob_tran</span><span class='kw'>=</span><span class='fl'>TRUE</span>))
-}</div><div class='output co'>#&gt; <span class='warning'>Warning: CRS object has comment, which is lost in output</span></div><div class='output co'>#&gt; Error in spTransform(a, CRS(paste("+proj=tmerc +lat_0=0 +lon_0=9 +k=1",  : 
-#&gt;   Use ob_tran to or from unprojected objects only</div><div class='input'><span class='kw'>if</span> (!<span class='no'>broke_proj</span>) {
-<span class='fu'>spTransform</span>(<span class='no'>spPoint</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='st'>"+proj=tmerc +lat_0=0 +lon_0=9 +k=1"</span>,
-<span class='st'>"+x_0=3500000 +y_0=0 +ellps=bessel +units=m +no_defs"</span>)))
-}</div><div class='output co'>#&gt; SpatialPoints:
+#&gt; +ellps=sphere +no_defs </div><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='op'>!</span><span class='va'>broke_proj</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='kw'><a href='https://rdrr.io/r/base/try.html'>try</a></span><span class='op'>(</span><span class='fu'>spTransform</span><span class='op'>(</span><span class='va'>a</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"+proj=tmerc +lat_0=0 +lon_0=9 +k=1"</span>,
+<span class='st'>"+x_0=3500000 +y_0=0 +ellps=bessel +units=m +no_defs"</span><span class='op'>)</span><span class='op'>)</span>,
+ use_ob_tran<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span>
+<span class='op'>}</span>
+</div><div class='output co'>#&gt; <span class='warning'>Warning: CRS object has comment, which is lost in output</span></div><div class='output co'>#&gt; Error in spTransform(a, CRS(paste("+proj=tmerc +lat_0=0 +lon_0=9 +k=1",  : 
+#&gt;   Use ob_tran to or from unprojected objects only</div><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='op'>!</span><span class='va'>broke_proj</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='fu'>spTransform</span><span class='op'>(</span><span class='va'>spPoint</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"+proj=tmerc +lat_0=0 +lon_0=9 +k=1"</span>,
+<span class='st'>"+x_0=3500000 +y_0=0 +ellps=bessel +units=m +no_defs"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+<span class='op'>}</span>
+</div><div class='output co'>#&gt; SpatialPoints:
 #&gt;      coords.x1 coords.x2
 #&gt; [1,]   3503693   5375702
 #&gt; Coordinate Reference System (CRS) arguments: +proj=tmerc +lat_0=0
-#&gt; +lon_0=9 +k=1 +x_0=3500000 +y_0=0 +ellps=bessel +units=m +no_defs </div><div class='input'><span class='kw'>if</span> (!<span class='no'>broke_proj</span>) {
-<span class='fu'>spTransform</span>(<span class='fu'>spTransform</span>(<span class='no'>a</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='st'>"+proj=longlat +ellps=sphere +no_defs"</span>),
- <span class='kw'>use_ob_tran</span><span class='kw'>=</span><span class='fl'>TRUE</span>), <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='st'>"+proj=tmerc +lat_0=0 +lon_0=9 +k=1"</span>,
-<span class='st'>"+x_0=3500000 +y_0=0 +ellps=bessel +units=m +no_defs"</span>)))
-}</div><div class='output co'>#&gt; <span class='warning'>Warning: CRS object has comment, which is lost in output</span></div><div class='output co'>#&gt; SpatialPoints:
+#&gt; +lon_0=9 +k=1 +x_0=3500000 +y_0=0 +ellps=bessel +units=m +no_defs </div><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='op'>!</span><span class='va'>broke_proj</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='fu'>spTransform</span><span class='op'>(</span><span class='fu'>spTransform</span><span class='op'>(</span><span class='va'>a</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span><span class='op'>(</span><span class='st'>"+proj=longlat +ellps=sphere +no_defs"</span><span class='op'>)</span>,
+ use_ob_tran<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"+proj=tmerc +lat_0=0 +lon_0=9 +k=1"</span>,
+<span class='st'>"+x_0=3500000 +y_0=0 +ellps=bessel +units=m +no_defs"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+<span class='op'>}</span>
+</div><div class='output co'>#&gt; <span class='warning'>Warning: CRS object has comment, which is lost in output</span></div><div class='output co'>#&gt; SpatialPoints:
 #&gt;      coords.x1 coords.x2
 #&gt; [1,]   3503693   5375702
 #&gt; Coordinate Reference System (CRS) arguments: +proj=tmerc +lat_0=0
-#&gt; +lon_0=9 +k=1 +x_0=3500000 +y_0=0 +ellps=bessel +units=m +no_defs </div><div class='input'><span class='no'>crds1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='kw'>data</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>7</span>, <span class='fl'>51</span>, <span class='fl'>8</span>, <span class='fl'>52</span>, <span class='fl'>9</span>, <span class='fl'>52</span>, <span class='fl'>10</span>, <span class='fl'>51</span>, <span class='fl'>7</span>, <span class='fl'>51</span>), <span class='kw'>ncol</span><span class='kw'>=</span><span class='fl'>2</span>,
-<span class='kw'>byrow</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>dimnames</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>NULL</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"lon"</span>, <span class='st'>"lat"</span>)));
-<span class='no'>crds2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='kw'>data</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>8</span>, <span class='fl'>48</span>, <span class='fl'>9</span>, <span class='fl'>49</span>, <span class='fl'>11</span>, <span class='fl'>49</span>, <span class='fl'>9</span>, <span class='fl'>48</span>, <span class='fl'>8</span>, <span class='fl'>48</span>), <span class='kw'>ncol</span><span class='kw'>=</span><span class='fl'>2</span>,
-<span class='kw'>byrow</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>dimnames</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>NULL</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"lon"</span>, <span class='st'>"lat"</span>)));
-<span class='no'>crds3</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='kw'>data</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>6</span>, <span class='fl'>47</span>, <span class='fl'>6</span>, <span class='fl'>55</span>, <span class='fl'>15</span>, <span class='fl'>55</span>, <span class='fl'>15</span>, <span class='fl'>47</span>, <span class='fl'>6</span>, <span class='fl'>47</span>), <span class='kw'>ncol</span><span class='kw'>=</span><span class='fl'>2</span>,
-<span class='kw'>byrow</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>dimnames</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>NULL</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"lon"</span>, <span class='st'>"lat"</span>)));
-<span class='no'>spLines</span> <span class='kw'>&lt;-</span> <span class='fu'>SpatialLines</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fu'>Lines</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fu'>Line</span>(<span class='no'>crds1</span>), <span class='fu'>Line</span>(<span class='no'>crds2</span>),
-<span class='fu'>Line</span>(<span class='no'>crds3</span>)), <span class='kw'>ID</span><span class='kw'>=</span><span class='st'>"a"</span>)));
-<span class='fu'>slot</span>(<span class='no'>spLines</span>, <span class='st'>"proj4string"</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='st'>"+proj=longlat +ellps=sphere +no_defs"</span>);
-<span class='fu'>bbox</span>(<span class='no'>spLines</span>);</div><div class='output co'>#&gt;   min max
+#&gt; +lon_0=9 +k=1 +x_0=3500000 +y_0=0 +ellps=bessel +units=m +no_defs </div><div class='input'><span class='va'>crds1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span>data<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>7</span>, <span class='fl'>51</span>, <span class='fl'>8</span>, <span class='fl'>52</span>, <span class='fl'>9</span>, <span class='fl'>52</span>, <span class='fl'>10</span>, <span class='fl'>51</span>, <span class='fl'>7</span>, <span class='fl'>51</span><span class='op'>)</span>, ncol<span class='op'>=</span><span class='fl'>2</span>,
+byrow<span class='op'>=</span><span class='cn'>TRUE</span>, dimnames<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='cn'>NULL</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"lon"</span>, <span class='st'>"lat"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>;
+<span class='va'>crds2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span>data<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>8</span>, <span class='fl'>48</span>, <span class='fl'>9</span>, <span class='fl'>49</span>, <span class='fl'>11</span>, <span class='fl'>49</span>, <span class='fl'>9</span>, <span class='fl'>48</span>, <span class='fl'>8</span>, <span class='fl'>48</span><span class='op'>)</span>, ncol<span class='op'>=</span><span class='fl'>2</span>,
+byrow<span class='op'>=</span><span class='cn'>TRUE</span>, dimnames<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='cn'>NULL</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"lon"</span>, <span class='st'>"lat"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>;
+<span class='va'>crds3</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span>data<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>6</span>, <span class='fl'>47</span>, <span class='fl'>6</span>, <span class='fl'>55</span>, <span class='fl'>15</span>, <span class='fl'>55</span>, <span class='fl'>15</span>, <span class='fl'>47</span>, <span class='fl'>6</span>, <span class='fl'>47</span><span class='op'>)</span>, ncol<span class='op'>=</span><span class='fl'>2</span>,
+byrow<span class='op'>=</span><span class='cn'>TRUE</span>, dimnames<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='cn'>NULL</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"lon"</span>, <span class='st'>"lat"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>;
+<span class='va'>spLines</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/sp/man/SpatialLines.html'>SpatialLines</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/sp/man/Line.html'>Lines</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/sp/man/Line.html'>Line</a></span><span class='op'>(</span><span class='va'>crds1</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/pkg/sp/man/Line.html'>Line</a></span><span class='op'>(</span><span class='va'>crds2</span><span class='op'>)</span>,
+<span class='fu'><a href='https://rdrr.io/pkg/sp/man/Line.html'>Line</a></span><span class='op'>(</span><span class='va'>crds3</span><span class='op'>)</span><span class='op'>)</span>, ID<span class='op'>=</span><span class='st'>"a"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>;
+<span class='fu'>slot</span><span class='op'>(</span><span class='va'>spLines</span>, <span class='st'>"proj4string"</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'><a href='CRS-class.html'>CRS</a></span><span class='op'>(</span><span class='st'>"+proj=longlat +ellps=sphere +no_defs"</span><span class='op'>)</span>;
+<span class='fu'><a href='https://rdrr.io/pkg/sp/man/bbox.html'>bbox</a></span><span class='op'>(</span><span class='va'>spLines</span><span class='op'>)</span>;
+</div><div class='output co'>#&gt;   min max
 #&gt; x   6  15
-#&gt; y  47  55</div><div class='input'><span class='kw'>if</span> (!<span class='no'>broke_proj</span>) {
-<span class='no'>spLines_tr</span> <span class='kw'>&lt;-</span> <span class='fu'>spTransform</span>(<span class='no'>spLines</span>, <span class='no'>tg</span>, <span class='kw'>use_ob_tran</span><span class='kw'>=</span><span class='fl'>TRUE</span>);
-<span class='fu'>bbox</span>(<span class='no'>spLines_tr</span>)
-}</div><div class='output co'>#&gt; <span class='warning'>Warning: CRS object has comment, which is lost in output</span></div><div class='output co'>#&gt;         min       max
+#&gt; y  47  55</div><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='op'>!</span><span class='va'>broke_proj</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='va'>spLines_tr</span> <span class='op'>&lt;-</span> <span class='fu'>spTransform</span><span class='op'>(</span><span class='va'>spLines</span>, <span class='va'>tg</span>, use_ob_tran<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span>;
+<span class='fu'><a href='https://rdrr.io/pkg/sp/man/bbox.html'>bbox</a></span><span class='op'>(</span><span class='va'>spLines_tr</span><span class='op'>)</span>
+<span class='op'>}</span>
+</div><div class='output co'>#&gt; <span class='warning'>Warning: CRS object has comment, which is lost in output</span></div><div class='output co'>#&gt;         min       max
 #&gt; x -8.163685 -1.725025
-#&gt; y -3.708442  4.807871</div><div class='input'><span class='kw'>if</span> (!<span class='no'>broke_proj</span>) {
-<span class='fu'>bbox</span>(<span class='fu'>spTransform</span>(<span class='no'>spLines_tr</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='st'>"+proj=longlat +ellps=sphere"</span>),
- <span class='kw'>use_ob_tran</span><span class='kw'>=</span><span class='fl'>TRUE</span>))
-}</div><div class='output co'>#&gt; <span class='warning'>Warning: CRS object has comment, which is lost in output</span></div><div class='output co'>#&gt;   min max
+#&gt; y -3.708442  4.807871</div><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='op'>!</span><span class='va'>broke_proj</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='fu'><a href='https://rdrr.io/pkg/sp/man/bbox.html'>bbox</a></span><span class='op'>(</span><span class='fu'>spTransform</span><span class='op'>(</span><span class='va'>spLines_tr</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span><span class='op'>(</span><span class='st'>"+proj=longlat +ellps=sphere"</span><span class='op'>)</span>,
+ use_ob_tran<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span>
+<span class='op'>}</span>
+</div><div class='output co'>#&gt; <span class='warning'>Warning: CRS object has comment, which is lost in output</span></div><div class='output co'>#&gt;   min max
 #&gt; x   6  15
-#&gt; y  47  55</div><div class='input'><span class='kw'>if</span> (!<span class='no'>broke_proj</span>) {
-<span class='no'>spPolygons</span> <span class='kw'>&lt;-</span> <span class='fu'>SpatialPolygons</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fu'>Polygons</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fu'>Polygon</span>(<span class='no'>crds1</span>),
-<span class='fu'>Polygon</span>(<span class='no'>crds2</span>), <span class='fu'>Polygon</span>(<span class='no'>crds3</span>)), <span class='kw'>ID</span><span class='kw'>=</span><span class='st'>"a"</span>)));
-<span class='fu'>slot</span>(<span class='no'>spPolygons</span>, <span class='st'>"proj4string"</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='st'>"+proj=longlat +ellps=sphere +no_defs"</span>);
-<span class='fu'>bbox</span>(<span class='no'>spPolygons</span>);
-}</div><div class='output co'>#&gt;   min max
+#&gt; y  47  55</div><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='op'>!</span><span class='va'>broke_proj</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='va'>spPolygons</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/sp/man/SpatialPolygons.html'>SpatialPolygons</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/sp/man/SpatialPolygons.html'>Polygons</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/sp/man/SpatialPolygons.html'>Polygon</a></span><span class='op'>(</span><span class='va'>crds1</span><span class='op'>)</span>,
+<span class='fu'><a href='https://rdrr.io/pkg/sp/man/SpatialPolygons.html'>Polygon</a></span><span class='op'>(</span><span class='va'>crds2</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/pkg/sp/man/SpatialPolygons.html'>Polygon</a></span><span class='op'>(</span><span class='va'>crds3</span><span class='op'>)</span><span class='op'>)</span>, ID<span class='op'>=</span><span class='st'>"a"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>;
+<span class='fu'>slot</span><span class='op'>(</span><span class='va'>spPolygons</span>, <span class='st'>"proj4string"</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'><a href='CRS-class.html'>CRS</a></span><span class='op'>(</span><span class='st'>"+proj=longlat +ellps=sphere +no_defs"</span><span class='op'>)</span>;
+<span class='fu'><a href='https://rdrr.io/pkg/sp/man/bbox.html'>bbox</a></span><span class='op'>(</span><span class='va'>spPolygons</span><span class='op'>)</span>;
+<span class='op'>}</span>
+</div><div class='output co'>#&gt;   min max
 #&gt; x   6  15
-#&gt; y  47  55</div><div class='input'><span class='kw'>if</span> (!<span class='no'>broke_proj</span>) {
-<span class='no'>spPolygons_tr</span> <span class='kw'>&lt;-</span> <span class='fu'>spTransform</span>(<span class='no'>spPolygons</span>, <span class='no'>tg</span>, <span class='kw'>use_ob_tran</span><span class='kw'>=</span><span class='fl'>TRUE</span>);
-<span class='fu'>bbox</span>(<span class='no'>spPolygons_tr</span>)
-}</div><div class='output co'>#&gt; <span class='warning'>Warning: CRS object has comment, which is lost in output</span></div><div class='output co'>#&gt;         min       max
+#&gt; y  47  55</div><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='op'>!</span><span class='va'>broke_proj</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='va'>spPolygons_tr</span> <span class='op'>&lt;-</span> <span class='fu'>spTransform</span><span class='op'>(</span><span class='va'>spPolygons</span>, <span class='va'>tg</span>, use_ob_tran<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span>;
+<span class='fu'><a href='https://rdrr.io/pkg/sp/man/bbox.html'>bbox</a></span><span class='op'>(</span><span class='va'>spPolygons_tr</span><span class='op'>)</span>
+<span class='op'>}</span>
+</div><div class='output co'>#&gt; <span class='warning'>Warning: CRS object has comment, which is lost in output</span></div><div class='output co'>#&gt;         min       max
 #&gt; x -8.163685 -1.725025
-#&gt; y -3.708442  4.807871</div><div class='input'><span class='kw'>if</span> (!<span class='no'>broke_proj</span>) {
-<span class='fu'>bbox</span>(<span class='fu'>spTransform</span>(<span class='no'>spPolygons_tr</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='st'>"+proj=longlat +ellps=sphere"</span>),
- <span class='kw'>use_ob_tran</span><span class='kw'>=</span><span class='fl'>TRUE</span>))
-}</div><div class='output co'>#&gt; <span class='warning'>Warning: CRS object has comment, which is lost in output</span></div><div class='output co'>#&gt;   min max
+#&gt; y -3.708442  4.807871</div><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='op'>!</span><span class='va'>broke_proj</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='fu'><a href='https://rdrr.io/pkg/sp/man/bbox.html'>bbox</a></span><span class='op'>(</span><span class='fu'>spTransform</span><span class='op'>(</span><span class='va'>spPolygons_tr</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span><span class='op'>(</span><span class='st'>"+proj=longlat +ellps=sphere"</span><span class='op'>)</span>,
+ use_ob_tran<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span>
+<span class='op'>}</span>
+</div><div class='output co'>#&gt; <span class='warning'>Warning: CRS object has comment, which is lost in output</span></div><div class='output co'>#&gt;   min max
 #&gt; x   6  15
 #&gt; y  47  55</div><div class='input'><span class='co'>#added after posting by Martin Ivanov</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>nor2k</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>nor2k</span>)</div><div class='output co'>#&gt; Object of class SpatialPointsDataFrame
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>nor2k</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>nor2k</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; Object of class SpatialPointsDataFrame
 #&gt; Coordinates:
 #&gt;            min     max
 #&gt; East    404700  547250
@@ -731,8 +765,9 @@ Note that warnings about different projections may be issued when the PROJ.4 lib
 #&gt;  Median :150.50   Mode  :character   Mode  :character  
 #&gt;  Mean   :150.50                                        
 #&gt;  3rd Qu.:225.25                                        
-#&gt;  Max.   :300.00                                        </div><div class='input'><span class='no'>nor2kNGO</span> <span class='kw'>&lt;-</span> <span class='fu'>spTransform</span>(<span class='no'>nor2k</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='st'>"+init=epsg:4273"</span>))
-<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>nor2kNGO</span>)</div><div class='output co'>#&gt; Object of class SpatialPointsDataFrame
+#&gt;  Max.   :300.00                                        </div><div class='input'><span class='va'>nor2kNGO</span> <span class='op'>&lt;-</span> <span class='fu'>spTransform</span><span class='op'>(</span><span class='va'>nor2k</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span><span class='op'>(</span><span class='st'>"+init=epsg:4273"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>nor2kNGO</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; Object of class SpatialPointsDataFrame
 #&gt; Coordinates:
 #&gt;                min         max
 #&gt; East      7.199049    9.905515
@@ -749,47 +784,56 @@ Note that warnings about different projections may be issued when the PROJ.4 lib
 #&gt;  Median :150.50   Mode  :character   Mode  :character  
 #&gt;  Mean   :150.50                                        
 #&gt;  3rd Qu.:225.25                                        
-#&gt;  Max.   :300.00                                        </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/all.equal.html'>all.equal</a></span>(<span class='fu'>coordinates</span>(<span class='no'>nor2k</span>)[,<span class='fl'>3</span>], <span class='fu'>coordinates</span>(<span class='no'>nor2kNGO</span>)[,<span class='fl'>3</span>])</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='co'>#added after posting by Don MacQueen </span>
-<span class='no'>crds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(-<span class='fl'>121.524764291826</span>, -<span class='fl'>121.523480804667</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>37.6600366036405</span>, <span class='fl'>37.6543604613483</span>))
-<span class='no'>ref</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1703671.30566227</span>, <span class='fl'>1704020.20113366</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>424014.398045834</span>, <span class='fl'>421943.708664294</span>))
-<span class='no'>crs.step1.cf</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='st'>"+proj=lcc +lat_1=38.43333333333333"</span>,
+#&gt;  Max.   :300.00                                        </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/all.equal.html'>all.equal</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/sp/man/coordinates.html'>coordinates</a></span><span class='op'>(</span><span class='va'>nor2k</span><span class='op'>)</span><span class='op'>[</span>,<span class='fl'>3</span><span class='op'>]</span>, <span class='fu'><a href='https://rdrr.io/pkg/sp/man/coordinates.html'>coordinates</a></span><span class='op'>(</span><span class='va'>nor2kNGO</span><span class='op'>)</span><span class='op'>[</span>,<span class='fl'>3</span><span class='op'>]</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='co'>#added after posting by Don MacQueen </span>
+<span class='va'>crds</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>121.524764291826</span>, <span class='op'>-</span><span class='fl'>121.523480804667</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>37.6600366036405</span>, <span class='fl'>37.6543604613483</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>ref</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1703671.30566227</span>, <span class='fl'>1704020.20113366</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>424014.398045834</span>, <span class='fl'>421943.708664294</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>crs.step1.cf</span> <span class='op'>&lt;-</span> <span class='fu'><a href='CRS-class.html'>CRS</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"+proj=lcc +lat_1=38.43333333333333"</span>,
  <span class='st'>"+lat_2=37.06666666666667 +lat_0=36.5 +lon_0=-120.5"</span>,
  <span class='st'>"+x_0=2000000.0 +y_0=500000.0 +ellps=GRS80 +units=us-ft +no_defs"</span>,
- <span class='st'>"+towgs84=-0.991,1.9072,0.5129,0.025789908,0.0096501,0.0116599,0.0"</span>))
-<span class='no'>locs.step1.cf</span> <span class='kw'>&lt;-</span> <span class='fu'>spTransform</span>(<span class='fu'>SpatialPoints</span>(<span class='no'>crds</span>,
- <span class='kw'>proj4string</span><span class='kw'>=</span><span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='st'>"+proj=longlat +datum=WGS84"</span>)), <span class='no'>crs.step1.cf</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/warning.html'>suppressWarnings</a></span>(<span class='fu'>proj4string</span>(<span class='no'>locs.step1.cf</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='st'>"+proj=lcc"</span>,
+ <span class='st'>"+towgs84=-0.991,1.9072,0.5129,0.025789908,0.0096501,0.0116599,0.0"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>locs.step1.cf</span> <span class='op'>&lt;-</span> <span class='fu'>spTransform</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/sp/man/SpatialPoints.html'>SpatialPoints</a></span><span class='op'>(</span><span class='va'>crds</span>,
+ proj4string<span class='op'>=</span><span class='fu'><a href='CRS-class.html'>CRS</a></span><span class='op'>(</span><span class='st'>"+proj=longlat +datum=WGS84"</span><span class='op'>)</span><span class='op'>)</span>, <span class='va'>crs.step1.cf</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/warning.html'>suppressWarnings</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/sp/man/is.projected.html'>proj4string</a></span><span class='op'>(</span><span class='va'>locs.step1.cf</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'><a href='CRS-class.html'>CRS</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"+proj=lcc"</span>,
 <span class='st'>"+lat_1=38.43333333333333 +lat_2=37.06666666666667 +lat_0=36.5"</span>,
 <span class='st'>"+lon_0=-120.5 +x_0=2000000.0 +y_0=500000.0 +ellps=GRS80 +units=us-ft"</span>,
-<span class='st'>"+no_defs +nadgrids=@null"</span>)))
-<span class='no'>locs.step2.cfb</span> <span class='kw'>&lt;-</span> <span class='fu'>spTransform</span>(<span class='no'>locs.step1.cf</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='st'>"+init=epsg:26743"</span>))
-<span class='fu'>coordinates</span>(<span class='no'>locs.step2.cfb</span>) - <span class='no'>ref</span></div><div class='output co'>#&gt;      coords.x1 coords.x2
+<span class='st'>"+no_defs +nadgrids=@null"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>locs.step2.cfb</span> <span class='op'>&lt;-</span> <span class='fu'>spTransform</span><span class='op'>(</span><span class='va'>locs.step1.cf</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span><span class='op'>(</span><span class='st'>"+init=epsg:26743"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/pkg/sp/man/coordinates.html'>coordinates</a></span><span class='op'>(</span><span class='va'>locs.step2.cfb</span><span class='op'>)</span> <span class='op'>-</span> <span class='va'>ref</span>
+</div><div class='output co'>#&gt;      coords.x1 coords.x2
 #&gt; [1,] -309.9325 -20.05890
-#&gt; [2,] -309.9136 -20.03086</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/all.equal.html'>all.equal</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/unname.html'>unname</a></span>(<span class='fu'>coordinates</span>(<span class='no'>locs.step2.cfb</span>)), <span class='no'>ref</span>)</div><div class='output co'>#&gt; [1] "Mean relative difference: 0.0001551699"</div><div class='input'><span class='co'># Test for UTM == TMERC (&lt;= 4.9.2) or UTM == ETMERC (&gt; 4.9.2)</span>
-<span class='no'>nhh</span> <span class='kw'>&lt;-</span> <span class='fu'>SpatialPointsDataFrame</span>(<span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>5.304234</span>, <span class='fl'>60.422311</span>), <span class='kw'>ncol</span><span class='kw'>=</span><span class='fl'>2</span>),
- <span class='kw'>proj4string</span><span class='kw'>=</span><span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='st'>"+init=epsg:4326"</span>), <span class='kw'>data</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>office</span><span class='kw'>=</span><span class='st'>"RSB"</span>))
-<span class='no'>nhh_utm_32N_P4</span> <span class='kw'>&lt;-</span> <span class='fu'>spTransform</span>(<span class='no'>nhh</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='st'>"+init=epsg:3044"</span>))
-<span class='no'>nhh_tmerc_P4</span> <span class='kw'>&lt;-</span> <span class='fu'>spTransform</span>(<span class='no'>nhh</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='st'>"+proj=tmerc +k=0.9996"</span>,
- <span class='st'>"+lon_0=9 +x_0=500000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"</span>)))
-<span class='no'>nhh_etmerc_P4</span> <span class='kw'>&lt;-</span> <span class='fu'>spTransform</span>(<span class='no'>nhh</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='st'>"+proj=etmerc +k=0.9996"</span>,
- <span class='st'>"+lon_0=9 +x_0=500000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"</span>)))
-<span class='fu'><a href='https://rdrr.io/r/base/all.equal.html'>all.equal</a></span>(<span class='fu'>coordinates</span>(<span class='no'>nhh_utm_32N_P4</span>), <span class='fu'>coordinates</span>(<span class='no'>nhh_tmerc_P4</span>),
- <span class='kw'>tolerance</span><span class='kw'>=</span><span class='fl'>1e-9</span>, <span class='kw'>scale</span><span class='kw'>=</span><span class='fl'>1</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='co'># UTM == TMERC: PROJ4 &lt;=4.9.2</span>
-<span class='fu'><a href='https://rdrr.io/r/base/all.equal.html'>all.equal</a></span>(<span class='fu'>coordinates</span>(<span class='no'>nhh_utm_32N_P4</span>), <span class='fu'>coordinates</span>(<span class='no'>nhh_etmerc_P4</span>),
- <span class='kw'>tolerance</span><span class='kw'>=</span><span class='fl'>1e-9</span>, <span class='kw'>scale</span><span class='kw'>=</span><span class='fl'>1</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='co'># UTM == ETMERC: PROJ4 &gt; 4.9.2</span>
-<span class='no'>unis</span> <span class='kw'>&lt;-</span> <span class='fu'>SpatialPointsDataFrame</span>(<span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>15.653453</span>, <span class='fl'>78.222504</span>), <span class='kw'>ncol</span><span class='kw'>=</span><span class='fl'>2</span>),
- <span class='kw'>proj4string</span><span class='kw'>=</span><span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='st'>"+init=epsg:4326"</span>), <span class='kw'>data</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>office</span><span class='kw'>=</span><span class='st'>"UNIS"</span>))
-<span class='no'>unis_utm_33N_P4</span> <span class='kw'>&lt;-</span> <span class='fu'>spTransform</span>(<span class='no'>unis</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='st'>"+init=epsg:3045"</span>))
-<span class='no'>unis_tmerc_P4</span> <span class='kw'>&lt;-</span> <span class='fu'>spTransform</span>(<span class='no'>unis</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='st'>"+proj=tmerc +k=0.9996 +lon_0=15"</span>,
- <span class='st'>"+x_0=500000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"</span>)))
-<span class='no'>unis_etmerc_P4</span> <span class='kw'>&lt;-</span> <span class='fu'>spTransform</span>(<span class='no'>unis</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='st'>"+proj=etmerc +k=0.9996"</span>,
- <span class='st'>"+lon_0=15 +x_0=500000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"</span>)))
-<span class='fu'><a href='https://rdrr.io/r/base/all.equal.html'>all.equal</a></span>(<span class='fu'>coordinates</span>(<span class='no'>unis_utm_33N_P4</span>), <span class='fu'>coordinates</span>(<span class='no'>unis_tmerc_P4</span>),
- <span class='kw'>tolerance</span><span class='kw'>=</span><span class='fl'>1e-9</span>, <span class='kw'>scale</span><span class='kw'>=</span><span class='fl'>1</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='co'># UTM == TMERC: PROJ4 &lt;=4.9.2</span>
-<span class='fu'><a href='https://rdrr.io/r/base/all.equal.html'>all.equal</a></span>(<span class='fu'>coordinates</span>(<span class='no'>unis_utm_33N_P4</span>), <span class='fu'>coordinates</span>(<span class='no'>unis_etmerc_P4</span>),
- <span class='kw'>tolerance</span><span class='kw'>=</span><span class='fl'>1e-9</span>, <span class='kw'>scale</span><span class='kw'>=</span><span class='fl'>1</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'># UTM == ETMERC: PROJ4 &gt; 4.9.2
-
-</div></pre>
+#&gt; [2,] -309.9136 -20.03086</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/all.equal.html'>all.equal</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/unname.html'>unname</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/sp/man/coordinates.html'>coordinates</a></span><span class='op'>(</span><span class='va'>locs.step2.cfb</span><span class='op'>)</span><span class='op'>)</span>, <span class='va'>ref</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] "Mean relative difference: 0.0001551699"</div><div class='input'><span class='va'>run</span> <span class='op'>&lt;-</span> <span class='fu'><a href='projInfo.html'>new_proj_and_gdal</a></span><span class='op'>(</span><span class='op'>)</span>
+<span class='kw'>if</span> <span class='op'>(</span><span class='va'>run</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='co'># Test for UTM == TMERC (&lt;= 4.9.2) or UTM == ETMERC (&gt; 4.9.2)</span>
+<span class='va'>nhh</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/sp/man/SpatialPoints.html'>SpatialPointsDataFrame</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>5.304234</span>, <span class='fl'>60.422311</span><span class='op'>)</span>, ncol<span class='op'>=</span><span class='fl'>2</span><span class='op'>)</span>,
+ proj4string<span class='op'>=</span><span class='fu'><a href='CRS-class.html'>CRS</a></span><span class='op'>(</span>SRS_string<span class='op'>=</span><span class='st'>"OGC:CRS84"</span><span class='op'>)</span>, data<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>office<span class='op'>=</span><span class='st'>"RSB"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>nhh_utm_32N_P4</span> <span class='op'>&lt;-</span> <span class='fu'>spTransform</span><span class='op'>(</span><span class='va'>nhh</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span><span class='op'>(</span><span class='st'>"+init=epsg:3044"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>nhh_tmerc_P4</span> <span class='op'>&lt;-</span> <span class='fu'>spTransform</span><span class='op'>(</span><span class='va'>nhh</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"+proj=tmerc +k=0.9996"</span>,
+ <span class='st'>"+lon_0=9 +x_0=500000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>nhh_etmerc_P4</span> <span class='op'>&lt;-</span> <span class='fu'>spTransform</span><span class='op'>(</span><span class='va'>nhh</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"+proj=etmerc +k=0.9996"</span>,
+ <span class='st'>"+lon_0=9 +x_0=500000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/all.equal.html'>all.equal</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/sp/man/coordinates.html'>coordinates</a></span><span class='op'>(</span><span class='va'>nhh_utm_32N_P4</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/pkg/sp/man/coordinates.html'>coordinates</a></span><span class='op'>(</span><span class='va'>nhh_tmerc_P4</span><span class='op'>)</span>,
+ tolerance<span class='op'>=</span><span class='fl'>1e-9</span>, scale<span class='op'>=</span><span class='fl'>1</span><span class='op'>)</span>
+<span class='co'># UTM == TMERC: PROJ4 &lt;=4.9.2</span>
+<span class='fu'><a href='https://rdrr.io/r/base/all.equal.html'>all.equal</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/sp/man/coordinates.html'>coordinates</a></span><span class='op'>(</span><span class='va'>nhh_utm_32N_P4</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/pkg/sp/man/coordinates.html'>coordinates</a></span><span class='op'>(</span><span class='va'>nhh_etmerc_P4</span><span class='op'>)</span>,
+ tolerance<span class='op'>=</span><span class='fl'>1e-9</span>, scale<span class='op'>=</span><span class='fl'>1</span><span class='op'>)</span>
+<span class='co'># UTM == ETMERC: PROJ4 &gt; 4.9.2</span>
+<span class='va'>unis</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/sp/man/SpatialPoints.html'>SpatialPointsDataFrame</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>15.653453</span>, <span class='fl'>78.222504</span><span class='op'>)</span>, ncol<span class='op'>=</span><span class='fl'>2</span><span class='op'>)</span>,
+ proj4string<span class='op'>=</span><span class='fu'><a href='CRS-class.html'>CRS</a></span><span class='op'>(</span>SRS_string<span class='op'>=</span><span class='st'>"OGC:CRS84"</span><span class='op'>)</span>, data<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>office<span class='op'>=</span><span class='st'>"UNIS"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>unis_utm_33N_P4</span> <span class='op'>&lt;-</span> <span class='fu'>spTransform</span><span class='op'>(</span><span class='va'>unis</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span><span class='op'>(</span><span class='st'>"+init=epsg:3045"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>unis_tmerc_P4</span> <span class='op'>&lt;-</span> <span class='fu'>spTransform</span><span class='op'>(</span><span class='va'>unis</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"+proj=tmerc +k=0.9996 +lon_0=15"</span>,
+ <span class='st'>"+x_0=500000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>unis_etmerc_P4</span> <span class='op'>&lt;-</span> <span class='fu'>spTransform</span><span class='op'>(</span><span class='va'>unis</span>, <span class='fu'><a href='CRS-class.html'>CRS</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"+proj=etmerc +k=0.9996"</span>,
+ <span class='st'>"+lon_0=15 +x_0=500000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/all.equal.html'>all.equal</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/sp/man/coordinates.html'>coordinates</a></span><span class='op'>(</span><span class='va'>unis_utm_33N_P4</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/pkg/sp/man/coordinates.html'>coordinates</a></span><span class='op'>(</span><span class='va'>unis_tmerc_P4</span><span class='op'>)</span>,
+ tolerance<span class='op'>=</span><span class='fl'>1e-9</span>, scale<span class='op'>=</span><span class='fl'>1</span><span class='op'>)</span>
+<span class='co'># UTM == TMERC: PROJ4 &lt;=4.9.2</span>
+<span class='fu'><a href='https://rdrr.io/r/base/all.equal.html'>all.equal</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/sp/man/coordinates.html'>coordinates</a></span><span class='op'>(</span><span class='va'>unis_utm_33N_P4</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/pkg/sp/man/coordinates.html'>coordinates</a></span><span class='op'>(</span><span class='va'>unis_etmerc_P4</span><span class='op'>)</span>,
+ tolerance<span class='op'>=</span><span class='fl'>1e-9</span>, scale<span class='op'>=</span><span class='fl'>1</span><span class='op'>)</span>
+<span class='co'># UTM == ETMERC: PROJ4 &gt; 4.9.2</span>
+<span class='op'>}</span>
+</div><div class='output co'>#&gt; [1] TRUE</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -805,7 +849,7 @@ Note that warnings about different projections may be issued when the PROJ.4 lib
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

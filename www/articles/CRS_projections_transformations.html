@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgdal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5-17</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5-18</span>
       </span>
     </div>
 
@@ -60,6 +60,9 @@
       <a href="../articles/PROJ6_GDAL3.html">Migration to PROJ6/GDAL3</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right"></ul>
@@ -90,49 +93,55 @@
 <h1 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>Introduction</h1>
 <p>Changes in the representation of coordinate reference systems (CRS), and of operations on coordinates, that have been occurring over decades must now be implemented in the way spatial objects are handled in R packages. Up to the 1990s, most spatial data simply used the coordinates given by the local mapping authority; for example, the Meuse bank data set used a planar representation in metres, which turned out to be <code>EPSG:28992</code>, “Amersfoort / RD New”. A major resource for finding out why CRS were specified as they were are <a href="https://www.asprs.org/asprs-publications/grids-and-datums">Clifford J. Mugnier’s columns</a> in <em>Photogrammetric Engineering &amp; Remote Sensing</em>, references to which are available in <strong>rgdal</strong>; the Netherlands were covered in the February 2003 column:</p>
-<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="no">td</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html">tempfile</a></span>()
-<span class="fu"><a href="https://rdrr.io/r/base/files2.html">dir.create</a></span>(<span class="no">td</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html">Sys.setenv</a></span>(<span class="st">"PROJ_USER_WRITABLE_DIRECTORY"</span><span class="kw">=</span><span class="no">td</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">rgdal</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb1"><pre class="downlit">
+<span class="va">td</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html">tempfile</a></span><span class="op">(</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/files2.html">dir.create</a></span><span class="op">(</span><span class="va">td</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html">Sys.setenv</a></span><span class="op">(</span><span class="st">"PROJ_USER_WRITABLE_DIRECTORY"</span><span class="op">=</span><span class="va">td</span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://rgdal.r-forge.r-project.org">rgdal</a></span><span class="op">)</span></pre></div>
 <pre><code>## Loading required package: sp</code></pre>
-<pre><code>## rgdal: version: 1.5-17, (SVN revision 1051)
+<pre><code>## rgdal: version: 1.5-18, (SVN revision 1076)
 ## Geospatial Data Abstraction Library extensions to R successfully loaded
-## Loaded GDAL runtime: GDAL 3.1.2, released 2020/07/07
+## Loaded GDAL runtime: GDAL 3.2.0dev-b51dc28ab7, released 2020/10/09
 ## Path to GDAL shared files: /usr/local/share/gdal
 ## GDAL binary built with GEOS: TRUE 
-## Loaded PROJ runtime: Rel. 7.1.0, August 1st, 2020, [PJ_VERSION: 710]
-## Path to PROJ shared files: /tmp/RtmpzTkDoo/file1931c6f0a7f6f:/usr/local/share/proj:/usr/local/share/proj
+## Loaded PROJ runtime: Rel. 7.2.0, November 1st, 2020, [PJ_VERSION: 720]
+## Path to PROJ shared files: /tmp/RtmpSD4Dtj/file57784676ba262:/usr/local/share/proj:/usr/local/share/proj
 ## PROJ CDN enabled: FALSE
 ## Linking to sp version:1.4-4
 ## To mute warnings of possible GDAL/OSR exportToProj4() degradation,
 ## use options("rgdal_show_exportToProj4_warnings"="none") before loading rgdal.</code></pre>
-<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="st">"GridsDatums"</span>)
-<span class="no">GridsDatums</span>[<span class="fu"><a href="https://rdrr.io/r/base/grep.html">grep</a></span>(<span class="st">"Netherlands"</span>, <span class="no">GridsDatums</span>$<span class="no">country</span>),]</pre></body></html></div>
+<div class="sourceCode" id="cb4"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="st">"GridsDatums"</span><span class="op">)</span>
+<span class="va">GridsDatums</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html">grep</a></span><span class="op">(</span><span class="st">"Netherlands"</span>, <span class="va">GridsDatums</span><span class="op">$</span><span class="va">country</span><span class="op">)</span>,<span class="op">]</span></pre></div>
 <pre><code>##                               country      month year ISO
 ## 50 Aruba and the Netherlands Antilles     (July) 2002 ABW
 ## 57     The Kingdom of the Netherlands (February) 2003 NLD</code></pre>
 <p>While most national mapping agencies defined their own standard geographical and projected CRS, supranational bodies, such as military alliances and colonial administrations often imposed some regularity to facilitate operations across national boundaries. This also led to the creation of the European Petroleum Survey Group (EPSG), because maritime jurisdiction was not orderly, and mattered when countries sharing the same coastal shelf tried to assign conflicting exploration concessions. Experts from oil companies accumulated vast experience, which fed through to the International Standards Organization (ISO, especially TC 211) and the Open Geospatial Consortium (OGC).</p>
 <p>Defining the CRS became necessary when integrating other data with a different CRS, and for displaying on a web map background. Many legacy file formats, such as the ESRI Shapefile format, did not mandate the inclusion of the CRS of positional data. Most open source software then used PROJ.4 strings as a flexible representation, but as internationally accepted standards have been reached, in particular ISO 19111, and improved over time by iteration, it is really necessary to change to a modern text representation, known as WKT2 (2019). Now it looks as though almost all corporations and mapping agencies accommodate this representation, and it has been adopted by <strong>sp</strong> through <strong>rgdal</strong>, <strong>sf</strong> and other packages.</p>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/demo.html">demo</a></span>(<span class="no">meuse</span>, <span class="kw">ask</span><span class="kw">=</span><span class="fl">FALSE</span>, <span class="kw">package</span><span class="kw">=</span><span class="st">"sp"</span>, <span class="kw">echo</span><span class="kw">=</span><span class="fl">FALSE</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">mapview</span>)
-<span class="no">x</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/mapview/man/mapView.html">mapview</a></span>(<span class="no">meuse</span>, <span class="kw">zcol</span><span class="kw">=</span><span class="st">"zinc"</span>)
-<span class="fu"><a href="https://rdrr.io/pkg/mapview/man/mapshot.html">mapshot</a></span>(<span class="no">x</span>, <span class="kw">file</span><span class="kw">=</span><span class="st">"meuse.png"</span>)</pre></body></html></div>
-<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="kw pkg">knitr</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html">include_graphics</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"misc/meuse.png"</span>, <span class="kw">package</span><span class="kw">=</span><span class="st">"rgdal"</span>))</pre></body></html></div>
-<p><img src="../../../../../../lib/r_libs/rgdal/misc/meuse.png" width="496"></p>
+<div class="sourceCode" id="cb6"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/utils/demo.html">demo</a></span><span class="op">(</span><span class="va">meuse</span>, ask<span class="op">=</span><span class="cn">FALSE</span>, package<span class="op">=</span><span class="st">"sp"</span>, echo<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/r-spatial/mapview">mapview</a></span><span class="op">)</span>
+<span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/mapview/man/mapView.html">mapview</a></span><span class="op">(</span><span class="va">meuse</span>, zcol<span class="op">=</span><span class="st">"zinc"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/pkg/mapview/man/mapshot.html">mapshot</a></span><span class="op">(</span><span class="va">x</span>, file<span class="op">=</span><span class="st">"meuse.png"</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb7"><pre class="downlit">
+<span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"misc/meuse.png"</span>, package<span class="op">=</span><span class="st">"rgdal"</span><span class="op">)</span><span class="op">)</span></pre></div>
+<p><img src="../../../../../../../../tmp/Rtmp48CPqR/temp_libpath56868786764d9/rgdal/misc/meuse.png" width="496"></p>
 </div>
 <div id="coordinate-reference-system-representation" class="section level1">
 <h1 class="hasAnchor">
 <a href="#coordinate-reference-system-representation" class="anchor"></a>Coordinate reference system representation</h1>
 <p>The <strong>mapproj</strong> package provided coordinate reference system and projection support for the <strong>maps</strong> package. From <code>mapproj/src/map.h</code>, line 20, we can see that the eccentricity of the Earth is defined as <code>0.08227185422</code>, corrresponding to the Clark 1866 ellipsoid <span class="citation">(Iliffe and Lott <a href="#ref-iliffe" role="doc-biblioref">2008</a>)</span>:</p>
-<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="no">ellps</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/projInfo.html">projInfo</a></span>(<span class="st">"ellps"</span>)
-(<span class="no">clrk66</span> <span class="kw">&lt;-</span> <span class="no">ellps</span>[<span class="no">ellps</span>$<span class="no">name</span><span class="kw">==</span><span class="st">"clrk66"</span>,])</pre></body></html></div>
+<div class="sourceCode" id="cb8"><pre class="downlit">
+<span class="va">ellps</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/projInfo.html">projInfo</a></span><span class="op">(</span><span class="st">"ellps"</span><span class="op">)</span>
+<span class="op">(</span><span class="va">clrk66</span> <span class="op">&lt;-</span> <span class="va">ellps</span><span class="op">[</span><span class="va">ellps</span><span class="op">$</span><span class="va">name</span><span class="op">==</span><span class="st">"clrk66"</span>,<span class="op">]</span><span class="op">)</span></pre></div>
 <pre><code>##      name       major         ell description
 ## 16 clrk66 a=6378206.4 b=6356583.8 Clarke 1866</code></pre>
-<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="co">#eval(parse(text=clrk66$major))</span>
+<div class="sourceCode" id="cb10"><pre class="downlit">
+<span class="co">#eval(parse(text=clrk66$major))</span>
 <span class="co">#eval(parse(text=clrk66$ell))</span>
-<span class="no">a</span> <span class="kw">&lt;-</span> <span class="fl">6378206.4</span>
-<span class="no">b</span> <span class="kw">&lt;-</span> <span class="fl">6356583.8</span>
-<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>((<span class="no">a</span>^<span class="fl">2</span>-<span class="no">b</span>^<span class="fl">2</span>)/<span class="no">a</span>^<span class="fl">2</span>), <span class="kw">digits</span><span class="kw">=</span><span class="fl">10</span>)</pre></body></html></div>
+<span class="va">a</span> <span class="op">&lt;-</span> <span class="fl">6378206.4</span>
+<span class="va">b</span> <span class="op">&lt;-</span> <span class="fl">6356583.8</span>
+<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="op">(</span><span class="va">a</span><span class="op">^</span><span class="fl">2</span><span class="op">-</span><span class="va">b</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span><span class="op">/</span><span class="va">a</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span>, digits<span class="op">=</span><span class="fl">10</span><span class="op">)</span></pre></div>
 <pre><code>## [1] 0.08227185422</code></pre>
 <p>With a very few exceptions, projections included in <code><a href="https://rdrr.io/pkg/mapproj/man/mapproject.html">mapproj::mapproject()</a></code> use the Clarke 1866 ellipsoid, with the remainder using a sphere with the Clarke 1866 major axis radius. The function returns coordinates for visualization in an unknown metric; no inverse projections are available.</p>
 <p>Like many other free and open source software projects around 2000, R spatial development chose to use the best open source library and infrastructure then available, PROJ.4. Version 4.4 was published by Frank Warmerdam in 2000, based on Gerald Evenden’s earlier work. This earlier work was a library for forward and inverse projection using a key-value string interface to describe the required projection <span class="citation">(Evenden <a href="#ref-evenden:90" role="doc-biblioref">1990</a>)</span>. The key-value string is taken as <code>+key=value</code>, where <code>=value</code> could be omitted for some keys, and the definition of each projection is built up from space-separated key-value string, such as <code>+proj=utm +zone=25 +south</code> for Universal Transverse Mercator zone 25 in the southern hemisphere.</p>
@@ -148,12 +157,14 @@
 <h2 class="hasAnchor">
 <a href="#prphij" class="anchor"></a>PR<span class="math inline">\(\phi\)</span>J</h2>
 <p>Signalling changes, PROJ.4 changed its name to PR<span class="math inline">\(\phi\)</span>J, and began burning through major version numbers. PROJ 5 (2018) introduced transformation pipelines <span class="citation">(Knudsen and Evers <a href="#ref-knudsen+evers17" role="doc-biblioref">2017</a>; Evers and Knudsen <a href="#ref-evers+knudsen17" role="doc-biblioref">2017</a>)</span>, representing coordinate operations using a syntax similar to PROJ.4 strings, but showing the whole operation pipeline. PROJ 6 (2019) followed up by shifting from ad-hoc text files for holding coordinate reference system and coordinate operation metadata to an SQLite database. In an increasing number of cases, more accurate coordinate operations could be supported using open access transformation grids, and the grid files needed were now tabulated in the SQLite database. This database is distributed with PROJ, and kept in a directory on the PROJ search path, usually the only or final directory (<code><a href="../reference/is_proj_CDN_enabled.html">get_proj_search_paths()</a></code> returns a vector of current search paths).</p>
-<div class="sourceCode" id="cb12"><html><body><pre class="r">(<span class="no">shpr</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/is_proj_CDN_enabled.html">get_proj_search_paths</a></span>())</pre></body></html></div>
-<pre><code>## [1] "/tmp/RtmpzTkDoo/file1931c6f0a7f6f" "/usr/local/share/proj"            
+<div class="sourceCode" id="cb12"><pre class="downlit">
+<span class="op">(</span><span class="va">shpr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/is_proj_CDN_enabled.html">get_proj_search_paths</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></pre></div>
+<pre><code>## [1] "/tmp/RtmpSD4Dtj/file57784676ba262" "/usr/local/share/proj"            
 ## [3] "/usr/local/share/proj"</code></pre>
-<div class="sourceCode" id="cb14"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">RSQLite</span>)
-<span class="no">db</span> <span class="kw">&lt;-</span> <span class="fu">dbConnect</span>(<span class="fu"><a href="https://rsqlite.r-dbi.org/reference/SQLite.html">SQLite</a></span>(), <span class="kw">dbname</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="no">shpr</span>[<span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">shpr</span>)], <span class="st">"proj.db"</span>))
-<span class="fu">dbListTables</span>(<span class="no">db</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb14"><pre class="downlit">
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://rsqlite.r-dbi.org">RSQLite</a></span><span class="op">)</span>
+<span class="va">db</span> <span class="op">&lt;-</span> <span class="fu">dbConnect</span><span class="op">(</span><span class="fu"><a href="https://rsqlite.r-dbi.org/reference/SQLite.html">SQLite</a></span><span class="op">(</span><span class="op">)</span>, dbname<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">shpr</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">shpr</span><span class="op">)</span><span class="op">]</span>, <span class="st">"proj.db"</span><span class="op">)</span><span class="op">)</span>
+<span class="fu">dbListTables</span><span class="op">(</span><span class="va">db</span><span class="op">)</span></pre></div>
 <pre><code>##  [1] "alias_name"                               
 ##  [2] "area"                                     
 ##  [3] "authority_list"                           
@@ -191,10 +202,11 @@
 ## [35] "unit_of_measure"                          
 ## [36] "vertical_crs"                             
 ## [37] "vertical_datum"</code></pre>
-<div class="sourceCode" id="cb16"><html><body><pre class="r"><span class="fu">dbReadTable</span>(<span class="no">db</span>, <span class="st">"metadata"</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb16"><pre class="downlit">
+<span class="fu">dbReadTable</span><span class="op">(</span><span class="va">db</span>, <span class="st">"metadata"</span><span class="op">)</span></pre></div>
 <pre><code>##            key                                                    value
-## 1 EPSG.VERSION                                                  v9.8.12
-## 2    EPSG.DATE                                               2020-06-19
+## 1 EPSG.VERSION                                                     v9.9
+## 2    EPSG.DATE                                               2020-09-09
 ## 3 ESRI.VERSION                                            ArcMap 10.8.1
 ## 4    ESRI.DATE                                               2020-05-24
 ## 5  IGNF.SOURCE https://geodesie.ign.fr/contenu/fichiers/IGNF.v3.1.0.xml
@@ -205,31 +217,56 @@
 <p>“Use of this function is discouraged. Its behavior in GDAL &gt;= 3 / PROJ &gt;= 6 is significantly different from earlier versions. In particular +datum will only encode WGS84, NAD27 and NAD83, and +towgs84/+nadgrids terms will be missing most of the time. PROJ strings to encode CRS should be considered as a a legacy solution. Using a AUTHORITY:CODE or WKT representation is the recommended way” (<a href="https://gdal.org/api/ogrspatialref.html" class="uri">https://gdal.org/api/ogrspatialref.html</a>).</p>
 </blockquote>
 <p>For these reasons, <strong>sf</strong> and <strong>sp</strong> are changing from PROJ.4 strings representing coordinate reference systems to WKT2:2019 strings, as described in <a href="https://www.r-spatial.org/r/2020/03/17/wkt.html">this r-spatial blog</a>. Most users who had been relying on file reading to set the coordinate reference systems of objects will not notice much difference, and legacy PROJ.4 strings can still be used to create new, authority-free definitions if need be.</p>
+<p>It will be useful to know that in general <code>"OGC:CRS84"</code> should be used instead of <code>"EPSG:4326"</code>, because the latter presupposes that Latitude is always ordered before Longitude. <code>"OGC:CRS84"</code> is the standard representation used by GeoJSON, with coordinates always ordered Longitude before Latitude. This is also the standard GIS and visualization order:</p>
+<div class="sourceCode" id="cb18"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/sp/man/is.projected.html">wkt</a></span><span class="op">(</span><span class="fu"><a href="../reference/CRS-class.html">CRS</a></span><span class="op">(</span>SRS_string<span class="op">=</span><span class="st">"OGC:CRS84"</span><span class="op">)</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></pre></div>
+<pre><code>## GEOGCRS["WGS 84 (CRS84)",
+##     DATUM["World Geodetic System 1984",
+##         ELLIPSOID["WGS 84",6378137,298.257223563,
+##             LENGTHUNIT["metre",1]]],
+##     PRIMEM["Greenwich",0,
+##         ANGLEUNIT["degree",0.0174532925199433]],
+##     CS[ellipsoidal,2],
+##         AXIS["geodetic longitude (Lon)",east,
+##             ORDER[1],
+##             ANGLEUNIT["degree",0.0174532925199433]],
+##         AXIS["geodetic latitude (Lat)",north,
+##             ORDER[2],
+##             ANGLEUNIT["degree",0.0174532925199433]],
+##     USAGE[
+##         SCOPE["unknown"],
+##         AREA["World"],
+##         BBOX[-90,-180,90,180]],
+##     ID["OGC","CRS84"]]</code></pre>
+<p>Note that all <code>"GEOGCRS"</code> <code>"BBOX"</code> CRS bounding boxes are always specified latitude minimum, longitude minimum, latitude maximum, longitude maximum, even though the declared axis order is the opposite.</p>
 </div>
 </div>
 <div id="coordinate-operations" class="section level1">
 <h1 class="hasAnchor">
 <a href="#coordinate-operations" class="anchor"></a>Coordinate operations</h1>
-<p>The introduction of interactive mapping using <strong>mapview</strong> and <strong>tmap</strong> among other packages highlights the need to set the coordinate reference system (CRS) of objects correctly, so that zooming does not reveal embarrassing divergences. Using the location of the Broad Street pump disabled by Dr John Snow to stop a cholera epidemic in Soho, London, in 1854 <span class="citation">(Brody et al. <a href="#ref-brodyetal:00" role="doc-biblioref">2000</a>)</span>, we can start to see what steps are being taken. The point location of the pump is given in projected coordinates, defined in the British National Grid. The workflow used by <code><a href="https://rdrr.io/pkg/mapview/man/mapView.html">mapview::mapview()</a></code> is to transform first to WGS84 (EPSG:4326) using <code><a href="https://rdrr.io/pkg/sf/man/st_transform.html">sf::st_transform()</a></code> if need be, before permitting <strong>leaflet</strong> to project to Web Mercator (EPSG:3857) internally.</p>
-<div class="sourceCode" id="cb18"><html><body><pre class="r"><span class="no">b_pump</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/readOGR.html">readOGR</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"vectors/b_pump.gpkg"</span>, <span class="kw">package</span><span class="kw">=</span><span class="st">"rgdal"</span>))</pre></body></html></div>
+<p>The introduction of interactive mapping using <strong>mapview</strong> and <strong>tmap</strong> among other packages highlights the need to set the coordinate reference system (CRS) of objects correctly, so that zooming does not reveal embarrassing divergences. Using the location of the Broad Street pump disabled by Dr John Snow to stop a cholera epidemic in Soho, London, in 1854 <span class="citation">(Brody et al. <a href="#ref-brodyetal:00" role="doc-biblioref">2000</a>)</span>, we can start to see what steps are being taken. The point location of the pump is given in projected coordinates, defined in the British National Grid. The workflow used by <code><a href="https://rdrr.io/pkg/mapview/man/mapView.html">mapview::mapview()</a></code> is to transform first to WGS84 (OGC:CRS84) using <code><a href="https://r-spatial.github.io/sf/reference/st_transform.html">sf::st_transform()</a></code> if need be, before permitting <strong>leaflet</strong> to project to Web Mercator (EPSG:3857) internally.</p>
+<div class="sourceCode" id="cb20"><pre class="downlit">
+<span class="va">b_pump</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/readOGR.html">readOGR</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"vectors/b_pump.gpkg"</span>, package<span class="op">=</span><span class="st">"rgdal"</span><span class="op">)</span><span class="op">)</span></pre></div>
 <pre><code>## Warning in OGRSpatialRef(dsn, layer, morphFromESRI = morphFromESRI, dumpSRS =
 ## dumpSRS, : Discarded datum OSGB_1936 in CRS definition: +proj=tmerc +lat_0=49
 ## +lon_0=-2 +k=0.999601 +x_0=400000 +y_0=-100000 +ellps=airy +units=m +no_defs</code></pre>
 <pre><code>## OGR data source with driver: GPKG 
-## Source: "/home/rsb/lib/r_libs/rgdal/vectors/b_pump.gpkg", layer: "b_pump"
+## Source: "/tmp/Rtmp48CPqR/temp_libpath56868786764d9/rgdal/vectors/b_pump.gpkg", layer: "b_pump"
 ## with 1 features
 ## It has 1 fields
 ## Integer64 fields read as strings:  cat</code></pre>
 <p>Reading the file loses the PROJ.4 <code>+datum=</code> key-value pair, but the WKT2:2019 string is complete:</p>
-<div class="sourceCode" id="cb21"><html><body><pre class="r"><span class="fu">proj4string</span>(<span class="no">b_pump</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb23"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/pkg/sp/man/is.projected.html">proj4string</a></span><span class="op">(</span><span class="va">b_pump</span><span class="op">)</span></pre></div>
 <pre><code>## Warning in proj4string(b_pump): CRS object has comment, which is lost in output</code></pre>
 <pre><code>## [1] "+proj=tmerc +lat_0=49 +lon_0=-2 +k=0.999601 +x_0=400000 +y_0=-100000 +ellps=airy +units=m +no_defs"</code></pre>
-<div class="sourceCode" id="cb24"><html><body><pre class="r"><span class="kw">if</span> (<span class="fu"><a href="https://rdrr.io/r/utils/packageDescription.html">packageVersion</a></span>(<span class="st">"sp"</span>) <span class="kw">&gt;</span> <span class="st">"1.4.1"</span>) {
-  <span class="no">WKT</span> <span class="kw">&lt;-</span> <span class="fu">wkt</span>(<span class="no">b_pump</span>)
-} <span class="kw">else</span> {
-  <span class="no">WKT</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/comment.html">comment</a></span>(<span class="fu">slot</span>(<span class="no">b_pump</span>, <span class="st">"proj4string"</span>))
-}
-<span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span>(<span class="no">WKT</span>, <span class="st">"\n"</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb26"><pre class="downlit">
+<span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/packageDescription.html">packageVersion</a></span><span class="op">(</span><span class="st">"sp"</span><span class="op">)</span> <span class="op">&gt;</span> <span class="st">"1.4.1"</span><span class="op">)</span> <span class="op">{</span>
+  <span class="va">WKT</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/sp/man/is.projected.html">wkt</a></span><span class="op">(</span><span class="va">b_pump</span><span class="op">)</span>
+<span class="op">}</span> <span class="kw">else</span> <span class="op">{</span>
+  <span class="va">WKT</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/comment.html">comment</a></span><span class="op">(</span><span class="fu">slot</span><span class="op">(</span><span class="va">b_pump</span>, <span class="st">"proj4string"</span><span class="op">)</span><span class="op">)</span>
+<span class="op">}</span>
+<span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="va">WKT</span>, <span class="st">"\n"</span><span class="op">)</span></pre></div>
 <pre><code>## PROJCRS["Transverse_Mercator",
 ##     BASEGEOGCRS["GCS_OSGB 1936",
 ##         DATUM["OSGB 1936",
@@ -269,46 +306,48 @@
 <h2 class="hasAnchor">
 <a href="#pipelines" class="anchor"></a>Pipelines</h2>
 <p>PROJ.4 assumed that the from/source and to/target coordinate reference system definitions involved in coordinate operations each contained the specifications necessary to get from source to WGS84 and then on from WGS84 to target. PR<span class="math inline">\(\phi\)</span>J drops this assumption, searching among many candidate coordinate operations for viable pipelines. The search is conducted using the tables given in the <code>proj.db</code> SQLite database, which is now backed by authorities, and regularly updated at each release to the current upstream state. The tables are searched to find lists of candidates.</p>
-<div class="sourceCode" id="cb26"><html><body><pre class="r"><span class="no">cov</span> <span class="kw">&lt;-</span> <span class="fu">dbReadTable</span>(<span class="no">db</span>, <span class="st">"coordinate_operation_view"</span>)
-<span class="no">cov</span>[<span class="fu"><a href="https://rdrr.io/r/base/grep.html">grep</a></span>(<span class="st">"OSGB"</span>, <span class="no">cov</span>$<span class="no">name</span>), <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>, <span class="fl">3</span>, <span class="fl">4</span>, <span class="fl">9</span>, <span class="fl">16</span>)]</pre></body></html></div>
+<div class="sourceCode" id="cb28"><pre class="downlit">
+<span class="va">cov</span> <span class="op">&lt;-</span> <span class="fu">dbReadTable</span><span class="op">(</span><span class="va">db</span>, <span class="st">"coordinate_operation_view"</span><span class="op">)</span>
+<span class="va">cov</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html">grep</a></span><span class="op">(</span><span class="st">"OSGB"</span>, <span class="va">cov</span><span class="op">$</span><span class="va">name</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span>, <span class="fl">4</span>, <span class="fl">9</span>, <span class="fl">16</span><span class="op">)</span><span class="op">]</span></pre></div>
 <pre><code>##                  table_name   code                           name
 ## 162     grid_transformation   5338        OSGB 1936 to ETRS89 (1)
 ## 163     grid_transformation   5339        OSGB 1936 to WGS 84 (7)
 ## 213     grid_transformation   7709        OSGB 1936 to ETRS89 (2)
 ## 214     grid_transformation   7710        OSGB 1936 to WGS 84 (9)
-## 517     grid_transformation 108057  ETRS_1989_To_OSGB_1936_OSTN15
-## 518     grid_transformation 108058   WGS_1984_To_OSGB_1936_OSTN15
-## 519     grid_transformation 108059      OSGB_1936_To_Xrail84_NTv2
-## 720  helmert_transformation   1195        OSGB 1936 to WGS 84 (1)
-## 721  helmert_transformation   1196        OSGB 1936 to WGS 84 (2)
-## 722  helmert_transformation   1197        OSGB 1936 to WGS 84 (3)
-## 723  helmert_transformation   1198        OSGB 1936 to WGS 84 (4)
-## 724  helmert_transformation   1199        OSGB 1936 to WGS 84 (5)
-## 822  helmert_transformation   1314        OSGB 1936 to WGS 84 (6)
-## 823  helmert_transformation   1315      OSGB 1936 to ED50 (UKOOA)
-## 1377 helmert_transformation   5622        OSGB 1936 to WGS 84 (8)
-## 2094 helmert_transformation 108089 OSGB_1936_To_WGS_1984_8_BAD_DX
-## 2249 helmert_transformation 108336 OSGB_1936_To_WGS_1984_NGA_7PAR
+## 554     grid_transformation 108057  ETRS_1989_To_OSGB_1936_OSTN15
+## 555     grid_transformation 108058   WGS_1984_To_OSGB_1936_OSTN15
+## 556     grid_transformation 108059      OSGB_1936_To_Xrail84_NTv2
+## 757  helmert_transformation   1195        OSGB 1936 to WGS 84 (1)
+## 758  helmert_transformation   1196        OSGB 1936 to WGS 84 (2)
+## 759  helmert_transformation   1197        OSGB 1936 to WGS 84 (3)
+## 760  helmert_transformation   1198        OSGB 1936 to WGS 84 (4)
+## 761  helmert_transformation   1199        OSGB 1936 to WGS 84 (5)
+## 859  helmert_transformation   1314        OSGB 1936 to WGS 84 (6)
+## 860  helmert_transformation   1315      OSGB 1936 to ED50 (UKOOA)
+## 1414 helmert_transformation   5622        OSGB 1936 to WGS 84 (8)
+## 2147 helmert_transformation 108089 OSGB_1936_To_WGS_1984_8_BAD_DX
+## 2302 helmert_transformation 108336 OSGB_1936_To_WGS_1984_NGA_7PAR
 ##                                         method_name accuracy
 ## 162                                            NTv2     0.03
 ## 163                                            NTv2     1.00
 ## 213                                            NTv2     0.03
 ## 214                                            NTv2     1.00
-## 517                                            NTv2     0.03
-## 518                                            NTv2     1.00
-## 519                                            NTv2     0.50
-## 720         Geocentric translations (geog2D domain)    21.00
-## 721         Geocentric translations (geog2D domain)    10.00
-## 722         Geocentric translations (geog2D domain)    21.00
-## 723         Geocentric translations (geog2D domain)    18.00
-## 724         Geocentric translations (geog2D domain)    35.00
-## 822  Position Vector transformation (geog2D domain)     2.00
-## 823  Position Vector transformation (geog2D domain)     2.00
-## 1377        Geocentric translations (geog2D domain)     3.00
-## 2094        Geocentric translations (geog2D domain)     5.00
-## 2249      Coordinate Frame rotation (geog2D domain)    21.00</code></pre>
-<p>The same search can be conducted directly without using <strong>RSQLite</strong> to query the database tables, searching by source and target CRS, and in the near future also by area of interest. If we search using only the degraded PROJ.4 string, we only find a ballpark accuracy coordinate operation, yielding a pipeline with two steps, inverse projection to geographical coordinates in radians, and conversion from radians to degrees. Note that <code><a href="../reference/spTransform-methods.html">rgdal::spTransform()</a></code> and its wrapper <code><a href="https://rdrr.io/pkg/sp/man/spTransform.html">sp::spTransform()</a></code> use PROJ for coordinate operations:</p>
-<div class="sourceCode" id="cb28"><html><body><pre class="r"><span class="fu"><a href="../reference/list_coordOps.html">list_coordOps</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="fu">proj4string</span>(<span class="no">b_pump</span>), <span class="st">" +type=crs"</span>), <span class="st">"EPSG:4326"</span>)</pre></body></html></div>
+## 554                                            NTv2     0.03
+## 555                                            NTv2     1.00
+## 556                                            NTv2     0.50
+## 757         Geocentric translations (geog2D domain)    21.00
+## 758         Geocentric translations (geog2D domain)    10.00
+## 759         Geocentric translations (geog2D domain)    21.00
+## 760         Geocentric translations (geog2D domain)    18.00
+## 761         Geocentric translations (geog2D domain)    35.00
+## 859  Position Vector transformation (geog2D domain)     2.00
+## 860  Position Vector transformation (geog2D domain)     2.00
+## 1414        Geocentric translations (geog2D domain)     3.00
+## 2147        Geocentric translations (geog2D domain)     5.00
+## 2302      Coordinate Frame rotation (geog2D domain)    21.00</code></pre>
+<p>The same search can be conducted directly without using <strong>RSQLite</strong> to query the database tables, searching by source and target CRS, and in the near future also by area of interest. If we search using only the degraded PROJ.4 string, we only find a ballpark accuracy coordinate operation, yielding a pipeline with two steps, inverse projection to geographical coordinates in radians, and conversion from radians to degrees. Note that <code><a href="../reference/spTransform-methods.html">rgdal::spTransform()</a></code> and its wrapper <code><a href="https://rdrr.io/pkg/sp/man/spTransform.html">sp::spTransform()</a></code> use PROJ for coordinate operations. Here we will use <code>"EPSG:4326"</code> briefly for exposition:</p>
+<div class="sourceCode" id="cb30"><pre class="downlit">
+<span class="fu"><a href="../reference/list_coordOps.html">list_coordOps</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/sp/man/is.projected.html">proj4string</a></span><span class="op">(</span><span class="va">b_pump</span><span class="op">)</span>, <span class="st">" +type=crs"</span><span class="op">)</span>, <span class="st">"EPSG:4326"</span><span class="op">)</span></pre></div>
 <pre><code>## Warning in proj4string(b_pump): CRS object has comment, which is lost in output</code></pre>
 <pre><code>## Candidate coordinate operations found:  1 
 ## Strict containment:  FALSE 
@@ -323,18 +362,92 @@
 ##              +k=0.999601 +x_0=400000 +y_0=-100000 +ellps=airy
 ##              +step +proj=unitconvert +xy_in=rad +xy_out=deg</code></pre>
 <p>The description component “+ axis order change (2D)” refers to the <code>EPSG:4326</code> definition, which specifies Northings/Latitude as the first axis, and Eastings/Longitude as the second axis; in <strong>sp</strong>/<strong>rgdal</strong> workflows, it is assumed that GIS/visualization order with Eastings/Longitude as the first 2D axis and Northings/Latitude as the second axis is preferred. Because the input data are in GIS/visualization order already, the steps to swap axes to standards conformity and then back to GIS/visualization order cancel each other out.</p>
+<p>We can see what is happening if we unset enforcing GIS/visualization order, with an <code>axisswap</code> coming into play:</p>
+<div class="sourceCode" id="cb33"><pre class="downlit">
+<span class="fu"><a href="../reference/spTransform-methods.html">set_enforce_xy</a></span><span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span>
+<span class="fu"><a href="../reference/list_coordOps.html">list_coordOps</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/sp/man/is.projected.html">proj4string</a></span><span class="op">(</span><span class="va">b_pump</span><span class="op">)</span>, <span class="st">" +type=crs"</span><span class="op">)</span>, <span class="st">"EPSG:4326"</span><span class="op">)</span></pre></div>
+<pre><code>## Warning in proj4string(b_pump): CRS object has comment, which is lost in output</code></pre>
+<pre><code>## Candidate coordinate operations found:  1 
+## Strict containment:  FALSE 
+## Visualization order:  FALSE 
+## Source: +proj=tmerc +lat_0=49 +lon_0=-2 +k=0.999601 +x_0=400000
+##         +y_0=-100000 +ellps=airy +units=m +no_defs +type=crs
+## Target: EPSG:4326 
+## Best instantiable operation has only ballpark accuracy 
+## Description: Inverse of unknown + Ballpark geographic offset from unknown to
+##              WGS 84
+## Definition:  +proj=pipeline +step +inv +proj=tmerc +lat_0=49 +lon_0=-2
+##              +k=0.999601 +x_0=400000 +y_0=-100000 +ellps=airy
+##              +step +proj=unitconvert +xy_in=rad +xy_out=deg
+##              +step +proj=axisswap +order=2,1</code></pre>
+<div class="sourceCode" id="cb36"><pre class="downlit">
+<span class="fu"><a href="../reference/spTransform-methods.html">set_enforce_xy</a></span><span class="op">(</span><span class="cn">TRUE</span><span class="op">)</span></pre></div>
+<p>While <strong>rgdal</strong> tries to impose GIS/visualization axis order on the <code>"EPSG:4326"</code> specification, one may end up with a WKT2 string with Latitude first, followed by Longitude without wishing to do so. Using <code>"OGC:CRS84"</code> is more secure, because it does not require such ad-hoc re-specification.</p>
 <p>Setting the internal control option <code><a href="../reference/spTransform-methods.html">set_transform_wkt_comment()</a></code> to <code>FALSE</code>, we use only the degraded PROJ.4 string when transforming. <code><a href="../reference/spTransform-methods.html">spTransform()</a></code> undertakes the same search, chooses the best instantiable coordinate operation on its first pass, then uses that pipeline on all objects. The pipeline specification of the coordinate operation may be retrieved using <code><a href="../reference/spTransform-methods.html">get_last_coordOp()</a></code>:</p>
-<div class="sourceCode" id="cb31"><html><body><pre class="r"><span class="fu"><a href="../reference/spTransform-methods.html">set_transform_wkt_comment</a></span>(<span class="fl">FALSE</span>)
-<span class="no">isballpark</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/spTransform-methods.html">spTransform</a></span>(<span class="no">b_pump</span>, <span class="fu"><a href="../reference/CRS-class.html">CRS</a></span>(<span class="kw">SRS_string</span><span class="kw">=</span><span class="st">"EPSG:4326"</span>))
-<span class="fu"><a href="../reference/spTransform-methods.html">get_last_coordOp</a></span>()</pre></body></html></div>
+<div class="sourceCode" id="cb37"><pre class="downlit">
+<span class="fu"><a href="../reference/spTransform-methods.html">set_transform_wkt_comment</a></span><span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span>
+<span class="va">isballpark</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/spTransform-methods.html">spTransform</a></span><span class="op">(</span><span class="va">b_pump</span>, <span class="fu"><a href="../reference/CRS-class.html">CRS</a></span><span class="op">(</span>SRS_string<span class="op">=</span><span class="st">"OGC:CRS84"</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="../reference/spTransform-methods.html">get_last_coordOp</a></span><span class="op">(</span><span class="op">)</span></pre></div>
 <pre><code>## [1] "+proj=pipeline +step +inv +proj=tmerc +lat_0=49 +lon_0=-2 +k=0.999601 +x_0=400000 +y_0=-100000 +ellps=airy +step +proj=unitconvert +xy_in=rad +xy_out=deg"</code></pre>
 <p>The coordinate returned is unfortunately in Ingestre Place, not Broad Street.</p>
-<div class="sourceCode" id="cb33"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="fu">coordinates</span>(<span class="no">isballpark</span>), <span class="kw">digits</span><span class="kw">=</span><span class="fl">10</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb39"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/sp/man/coordinates.html">coordinates</a></span><span class="op">(</span><span class="va">isballpark</span><span class="op">)</span>, digits<span class="op">=</span><span class="fl">10</span><span class="op">)</span></pre></div>
 <pre><code>##          coords.x1  coords.x2
 ## [1,] -0.1351070464 51.5127926</code></pre>
 <p>Let us repeat the search using the WKT2 string; here we see that providing a well-specified CRS representation allows us to choose 2m accuracy for the coordinate operation. Further, we can also see that, had we had access to a named grid, we could have achieved 1m accuracy:</p>
-<div class="sourceCode" id="cb35"><html><body><pre class="r"><span class="fu"><a href="../reference/list_coordOps.html">list_coordOps</a></span>(<span class="no">WKT</span>, <span class="st">"EPSG:4326"</span>)</pre></body></html></div>
-<pre><code>## Candidate coordinate operations found:  8 
+<p>The Helmert transformation has parameters retrieved from the PROJ SQLite database (code 1314):</p>
+<div class="sourceCode" id="cb41"><pre class="downlit">
+<span class="va">helm</span> <span class="op">&lt;-</span> <span class="fu">dbReadTable</span><span class="op">(</span><span class="va">db</span>, <span class="st">"helmert_transformation_table"</span><span class="op">)</span>
+<span class="va">helm</span><span class="op">[</span><span class="va">helm</span><span class="op">$</span><span class="va">code</span> <span class="op">==</span> <span class="st">"1314"</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, <span class="fl">15</span><span class="op">:</span><span class="fl">17</span>, <span class="fl">20</span><span class="op">:</span><span class="fl">22</span>, <span class="fl">25</span><span class="op">)</span><span class="op">]</span></pre></div>
+<pre><code>##     auth_name code                    name      tx       ty     tz   rx    ry
+## 239      EPSG 1314 OSGB 1936 to WGS 84 (6) 446.448 -125.157 542.06 0.15 0.247
+##        rz scale_difference
+## 239 0.842          -20.489</code></pre>
+<div class="sourceCode" id="cb43"><pre class="downlit">
+<span class="fu">dbDisconnect</span><span class="op">(</span><span class="va">db</span><span class="op">)</span></pre></div>
+<p>Using the WKT2 CRS representation, we can achieve 2m accuracy (or as the table says in other fields: “Oil exploration. Accuracy better than 4m and generally better than 2m”:</p>
+<div class="sourceCode" id="cb44"><pre class="downlit">
+<span class="fu"><a href="../reference/spTransform-methods.html">set_transform_wkt_comment</a></span><span class="op">(</span><span class="cn">TRUE</span><span class="op">)</span>
+<span class="va">is2m</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/spTransform-methods.html">spTransform</a></span><span class="op">(</span><span class="va">b_pump</span>, <span class="fu"><a href="../reference/CRS-class.html">CRS</a></span><span class="op">(</span>SRS_string<span class="op">=</span><span class="st">"OGC:CRS84"</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="../reference/spTransform-methods.html">get_last_coordOp</a></span><span class="op">(</span><span class="op">)</span></pre></div>
+<pre><code>## [1] "+proj=pipeline +step +inv +proj=tmerc +lat_0=49 +lon_0=-2 +k=0.999601 +x_0=400000 +y_0=-100000 +ellps=airy +step +proj=push +v_3 +step +proj=cart +ellps=airy +step +proj=helmert +x=446.448 +y=-125.157 +z=542.06 +rx=0.15 +ry=0.247 +rz=0.842 +s=-20.489 +convention=position_vector +step +inv +proj=cart +ellps=WGS84 +step +proj=pop +v_3 +step +proj=unitconvert +xy_in=rad +xy_out=deg"</code></pre>
+<p>The output point is close to the Broad Street pump:</p>
+<div class="sourceCode" id="cb46"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/sp/man/coordinates.html">coordinates</a></span><span class="op">(</span><span class="va">is2m</span><span class="op">)</span>, digits<span class="op">=</span><span class="fl">10</span><span class="op">)</span></pre></div>
+<pre><code>##          coords.x1   coords.x2
+## [1,] -0.1367127374 51.51330218</code></pre>
+<p>It is over 100m West-North-West of the Ingestre Place position:</p>
+<div class="sourceCode" id="cb48"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/sp/man/spDistsN1.html">spDists</a></span><span class="op">(</span><span class="va">isballpark</span>, <span class="va">is2m</span><span class="op">)</span><span class="op">*</span><span class="fl">1000</span><span class="op">)</span></pre></div>
+<pre><code>## [1] 125.0577</code></pre>
+<div class="sourceCode" id="cb50"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu">maptools</span><span class="fu">::</span><span class="fu"><a href="http://maptools.r-forge.r-project.org/reference/gzAzimuth.html">gzAzimuth</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/sp/man/coordinates.html">coordinates</a></span><span class="op">(</span><span class="va">isballpark</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/pkg/sp/man/coordinates.html">coordinates</a></span><span class="op">(</span><span class="va">is2m</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></pre></div>
+<pre><code>## coords.x1 
+## -62.98022</code></pre>
+<p>This was about as good as one could get prior to PROJ 7 without downloading the missing grid file manually, and installing the downloaded file in a directory that would usually not be user-writable. The whole set of grids can be downloaded and installed manually for workgroups needing to be sure that the same grids are available to all users, as has been the case in the past as well.</p>
+<p>The <code><a href="../reference/project.html">rgdal::project()</a></code> uses the underlying geographical coordinate reference system, and does not transform, so using the degraded PROJ.4 string and WKT2 give the same output, and because the input is projected, we take the inverse:</p>
+<div class="sourceCode" id="cb52"><pre class="downlit">
+<span class="op">(</span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/project.html">project</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/sp/man/coordinates.html">coordinates</a></span><span class="op">(</span><span class="va">b_pump</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/pkg/sp/man/is.projected.html">proj4string</a></span><span class="op">(</span><span class="va">b_pump</span><span class="op">)</span>, inv<span class="op">=</span><span class="cn">TRUE</span>, verbose<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></pre></div>
+<pre><code>## Warning in proj4string(b_pump): CRS object has comment, which is lost in output</code></pre>
+<pre><code>## proj=pipeline step inv proj=tmerc lat_0=49 lon_0=-2 k=0.999601
+## x_0=400000 y_0=-100000 ellps=airy step proj=unitconvert xy_in=rad
+## xy_out=deg</code></pre>
+<pre><code>##      coords.x1 coords.x2
+## [1,] -0.135107  51.51279</code></pre>
+<div class="sourceCode" id="cb56"><pre class="downlit">
+<span class="op">(</span><span class="va">b</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/project.html">project</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/sp/man/coordinates.html">coordinates</a></span><span class="op">(</span><span class="va">b_pump</span><span class="op">)</span>, <span class="va">WKT</span>, inv<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></pre></div>
+<pre><code>##      coords.x1 coords.x2
+## [1,] -0.135107  51.51279</code></pre>
+<p>The projected points only inverse project the projected coordinates using the specified projection</p>
+<div class="sourceCode" id="cb58"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/base/all.equal.html">all.equal</a></span><span class="op">(</span><span class="va">a</span>, <span class="va">b</span><span class="op">)</span></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<div class="sourceCode" id="cb60"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/sp/man/spDistsN1.html">spDists</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/sp/man/coordinates.html">coordinates</a></span><span class="op">(</span><span class="va">isballpark</span><span class="op">)</span>, <span class="va">a</span><span class="op">)</span><span class="op">*</span><span class="fl">1000</span><span class="op">)</span></pre></div>
+<pre><code>## [1] 0</code></pre>
+<div class="sourceCode" id="cb62"><pre class="downlit">
+<span class="fu"><a href="../reference/list_coordOps.html">list_coordOps</a></span><span class="op">(</span><span class="va">WKT</span>, <span class="st">"OGC:CRS84"</span><span class="op">)</span></pre></div>
+<pre><code>## Candidate coordinate operations found:  9 
 ## Strict containment:  FALSE 
 ## Visualization order:  TRUE 
 ## Source: PROJCRS["Transverse_Mercator", BASEGEOGCRS["GCS_OSGB 1936",
@@ -357,7 +470,7 @@
 ##         LENGTHUNIT["metre", 1, ID["EPSG", 9001]]],
 ##         AXIS["northing", north, ORDER[2], LENGTHUNIT["metre",
 ##         1, ID["EPSG", 9001]]]]
-## Target: EPSG:4326 
+## Target: OGC:CRS84 
 ## Best instantiable operation has accuracy: 2 m
 ## Description: Inverse of unnamed + OSGB 1936 to WGS 84 (6) + axis order
 ##              change (2D)
@@ -369,65 +482,28 @@
 ##              +convention=position_vector +step +inv +proj=cart
 ##              +ellps=WGS84 +step +proj=pop +v_3 +step
 ##              +proj=unitconvert +xy_in=rad +xy_out=deg
-## Operation 7 is lacking 1 grid with accuracy 1 m
+## Operation 8 is lacking 1 grid with accuracy 1 m
 ## Missing grid: uk_os_OSTN15_NTv2_OSGBtoETRS.tif 
 ## URL: https://cdn.proj.org/uk_os_OSTN15_NTv2_OSGBtoETRS.tif</code></pre>
-<p>The Helmert transformation has parameters retrieved from the PROJ SQLite database (code 1314):</p>
-<div class="sourceCode" id="cb37"><html><body><pre class="r"><span class="no">helm</span> <span class="kw">&lt;-</span> <span class="fu">dbReadTable</span>(<span class="no">db</span>, <span class="st">"helmert_transformation_table"</span>)
-<span class="no">helm</span>[<span class="no">helm</span>$<span class="no">code</span> <span class="kw">==</span> <span class="st">"1314"</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>:<span class="fl">3</span>, <span class="fl">15</span>:<span class="fl">17</span>, <span class="fl">20</span>:<span class="fl">22</span>, <span class="fl">25</span>)]</pre></body></html></div>
-<pre><code>##     auth_name code                    name      tx       ty     tz   rx    ry
-## 239      EPSG 1314 OSGB 1936 to WGS 84 (6) 446.448 -125.157 542.06 0.15 0.247
-##        rz scale_difference
-## 239 0.842          -20.489</code></pre>
-<div class="sourceCode" id="cb39"><html><body><pre class="r"><span class="fu">dbDisconnect</span>(<span class="no">db</span>)</pre></body></html></div>
-<p>Using the WKT2 CRS representation, we can achieve 2m accuracy (or as the table says in other fields: “Oil exploration. Accuracy better than 4m and generally better than 2m”:</p>
-<div class="sourceCode" id="cb40"><html><body><pre class="r"><span class="fu"><a href="../reference/spTransform-methods.html">set_transform_wkt_comment</a></span>(<span class="fl">TRUE</span>)
-<span class="no">is2m</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/spTransform-methods.html">spTransform</a></span>(<span class="no">b_pump</span>, <span class="fu"><a href="../reference/CRS-class.html">CRS</a></span>(<span class="kw">SRS_string</span><span class="kw">=</span><span class="st">"EPSG:4326"</span>))
-<span class="fu"><a href="../reference/spTransform-methods.html">get_last_coordOp</a></span>()</pre></body></html></div>
-<pre><code>## [1] "+proj=pipeline +step +inv +proj=tmerc +lat_0=49 +lon_0=-2 +k=0.999601 +x_0=400000 +y_0=-100000 +ellps=airy +step +proj=push +v_3 +step +proj=cart +ellps=airy +step +proj=helmert +x=446.448 +y=-125.157 +z=542.06 +rx=0.15 +ry=0.247 +rz=0.842 +s=-20.489 +convention=position_vector +step +inv +proj=cart +ellps=WGS84 +step +proj=pop +v_3 +step +proj=unitconvert +xy_in=rad +xy_out=deg"</code></pre>
-<p>The output point is close to the Broad Street pump:</p>
-<div class="sourceCode" id="cb42"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="fu">coordinates</span>(<span class="no">is2m</span>), <span class="kw">digits</span><span class="kw">=</span><span class="fl">10</span>)</pre></body></html></div>
-<pre><code>##          coords.x1   coords.x2
-## [1,] -0.1367127374 51.51330218</code></pre>
-<p>It is over 100m West-North-West of the Ingestre Place position:</p>
-<div class="sourceCode" id="cb44"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fu">spDists</span>(<span class="no">isballpark</span>, <span class="no">is2m</span>)*<span class="fl">1000</span>)</pre></body></html></div>
-<pre><code>## [1] 125.0577</code></pre>
-<div class="sourceCode" id="cb46"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="kw pkg">maptools</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/maptools/man/gzAzimuth.html">gzAzimuth</a></span>(<span class="fu">coordinates</span>(<span class="no">isballpark</span>), <span class="fu">coordinates</span>(<span class="no">is2m</span>)))</pre></body></html></div>
-<pre><code>## coords.x1 
-## -62.98022</code></pre>
-<p>This was about as good as one could get prior to PROJ 7 without downloading the missing grid file manually, and installing the downloaded file in a directory that would usually not be user-writable. The whole set of grids can be downloaded and installed manually for workgroups needing to be sure that the same grids are available to all users, as has been the case in the past as well.</p>
-<p>The <code><a href="../reference/project.html">rgdal::project()</a></code> uses the underlying geographical coordinate reference system, and does not transform, so using the degraded PROJ.4 string and WKT2 give the same output, and because the input is projected, we take the inverse:</p>
-<div class="sourceCode" id="cb48"><html><body><pre class="r">(<span class="no">a</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/project.html">project</a></span>(<span class="fu">coordinates</span>(<span class="no">b_pump</span>), <span class="fu">proj4string</span>(<span class="no">b_pump</span>), <span class="kw">inv</span><span class="kw">=</span><span class="fl">TRUE</span>, <span class="kw">verbose</span><span class="kw">=</span><span class="fl">TRUE</span>))</pre></body></html></div>
-<pre><code>## Warning in proj4string(b_pump): CRS object has comment, which is lost in output</code></pre>
-<pre><code>## proj=pipeline step inv proj=tmerc lat_0=49 lon_0=-2 k=0.999601
-## x_0=400000 y_0=-100000 ellps=airy step proj=unitconvert xy_in=rad
-## xy_out=deg</code></pre>
-<pre><code>##      coords.x1 coords.x2
-## [1,] -0.135107  51.51279</code></pre>
-<div class="sourceCode" id="cb52"><html><body><pre class="r">(<span class="no">b</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/project.html">project</a></span>(<span class="fu">coordinates</span>(<span class="no">b_pump</span>), <span class="no">WKT</span>, <span class="kw">inv</span><span class="kw">=</span><span class="fl">TRUE</span>))</pre></body></html></div>
-<pre><code>##      coords.x1 coords.x2
-## [1,] -0.135107  51.51279</code></pre>
-<p>The projected points only inverse project the projected coordinates using the specified projection</p>
-<div class="sourceCode" id="cb54"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/all.equal.html">all.equal</a></span>(<span class="no">a</span>, <span class="no">b</span>)</pre></body></html></div>
-<pre><code>## [1] TRUE</code></pre>
-<div class="sourceCode" id="cb56"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fu">spDists</span>(<span class="fu">coordinates</span>(<span class="no">isballpark</span>), <span class="no">a</span>)*<span class="fl">1000</span>)</pre></body></html></div>
-<pre><code>## [1] 0</code></pre>
 <div id="areas-of-interest" class="section level3">
 <h3 class="hasAnchor">
 <a href="#areas-of-interest" class="anchor"></a>Areas of interest</h3>
 <p>The search for candidate coordinate operations may be expedited if the area of interest is provided. This is a vector of minumum longitude and latitude followed by maximum longitude and latitude, so we need to inverse project the bounding box of projected <strong>sp</strong> objects and coerce that matrix into the required order:</p>
-<div class="sourceCode" id="cb58"><html><body><pre class="r"><span class="kw">if</span> (<span class="fu">is.projected</span>(<span class="no">b_pump</span>)) {
-  <span class="no">o</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/project.html">project</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/class.html">unclass</a></span>(<span class="fu">bbox</span>(<span class="no">b_pump</span>))), <span class="fu">wkt</span>(<span class="no">b_pump</span>), <span class="kw">inv</span><span class="kw">=</span><span class="fl">TRUE</span>)
-} <span class="kw">else</span> {
-  <span class="no">o</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/class.html">unclass</a></span>(<span class="fu">bbox</span>(<span class="no">b_pump</span>)))
-}
-(<span class="no">aoi</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span>(<span class="no">o</span> + <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(-<span class="fl">0.1</span>, +<span class="fl">0.1</span>))))</pre></body></html></div>
+<div class="sourceCode" id="cb64"><pre class="downlit">
+<span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/sp/man/is.projected.html">is.projected</a></span><span class="op">(</span><span class="va">b_pump</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span> 
+  <span class="va">o</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/project.html">project</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/class.html">unclass</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/sp/man/bbox.html">bbox</a></span><span class="op">(</span><span class="va">b_pump</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/pkg/sp/man/is.projected.html">wkt</a></span><span class="op">(</span><span class="va">b_pump</span><span class="op">)</span>, inv<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>
+<span class="op">}</span> <span class="kw">else</span> <span class="op">{</span>
+  <span class="va">o</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/class.html">unclass</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/sp/man/bbox.html">bbox</a></span><span class="op">(</span><span class="va">b_pump</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+<span class="op">}</span>
+<span class="op">(</span><span class="va">aoi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="va">o</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.1</span>, <span class="op">+</span><span class="fl">0.1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></pre></div>
 <pre><code>## [1] -0.23510705 51.41279260 -0.03510705 51.61279260</code></pre>
 <p>Without an area of interest, the coordinate operation look-up found 8 candidate operations, with a given area of interest, only 5 are found with the <code>strict_containment=</code> argument taking its default value of <code>FALSE</code>, so that the candidates found do not have to contain the area of interest strictly:</p>
-<div class="sourceCode" id="cb60"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="fu"><a href="../reference/list_coordOps.html">list_coordOps</a></span>(<span class="no">WKT</span>, <span class="st">"EPSG:4326"</span>, <span class="kw">area_of_interest</span><span class="kw">=</span><span class="no">aoi</span>))</pre></body></html></div>
+<div class="sourceCode" id="cb66"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="fu"><a href="../reference/list_coordOps.html">list_coordOps</a></span><span class="op">(</span><span class="va">WKT</span>, <span class="st">"OGC:CRS84"</span>, area_of_interest<span class="op">=</span><span class="va">aoi</span><span class="op">)</span><span class="op">)</span></pre></div>
 <pre><code>## [1] 5</code></pre>
 <p>In this case, changing this argument to <code>TRUE</code> makes no further difference:</p>
-<div class="sourceCode" id="cb62"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="fu"><a href="../reference/list_coordOps.html">list_coordOps</a></span>(<span class="no">WKT</span>, <span class="st">"EPSG:4326"</span>, <span class="kw">strict_containment</span><span class="kw">=</span><span class="fl">TRUE</span>, <span class="kw">area_of_interest</span><span class="kw">=</span><span class="no">aoi</span>))</pre></body></html></div>
+<div class="sourceCode" id="cb68"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="fu"><a href="../reference/list_coordOps.html">list_coordOps</a></span><span class="op">(</span><span class="va">WKT</span>, <span class="st">"OGC:CRS84"</span>, strict_containment<span class="op">=</span><span class="cn">TRUE</span>, area_of_interest<span class="op">=</span><span class="va">aoi</span><span class="op">)</span><span class="op">)</span></pre></div>
 <pre><code>## [1] 5</code></pre>
 <p>Methods for projection and transformation use the area of interest implicit in the data object, controlled by an argument: <code>use_aoi</code>, default <code>TRUE</code>, for <code>+proj=ob_tran,</code>FALSE`.</p>
 </div>
@@ -436,25 +512,32 @@
 <h2 class="hasAnchor">
 <a href="#transformation-grid-files" class="anchor"></a>Transformation grid files</h2>
 <p>PROJ 7 introduced on-demand downloading of (chunks of) transformation grids from a content delivery network to a user-writable directory on the PROJ search path (usually the first path component). The status of the downloaded grids is stored in another SQLite database, <code>cache.db</code>. The PR<span class="math inline">\(\phi\)</span>J user-writable CDN directory is set as soon as the internal search path is queried, and for most uses, the default value will allow all programs using PR<span class="math inline">\(\phi\)</span>J such as R packages, QGIS, GRASS, etc., to access any downloaded grids. Grids are checked for staleness at regular intervals. This directory may be set to a non-default value with the <code>PROJ_USER_WRITABLE_DIRECTORY</code> environment variable <em>before</em> <strong>rgdal</strong> (and any other package using PR<span class="math inline">\(\phi\)</span>J) is loaded and attached, from PR<span class="math inline">\(\phi\)</span>J &gt;= 7.1.0. The code used at the beginning of this vignette is repeated here for convenience:</p>
-<div class="sourceCode" id="cb64"><html><body><pre class="r"><span class="no">td</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html">tempfile</a></span>()
-<span class="fu"><a href="https://rdrr.io/r/base/files2.html">dir.create</a></span>(<span class="no">td</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html">Sys.setenv</a></span>(<span class="st">"PROJ_USER_WRITABLE_DIRECTORY"</span><span class="kw">=</span><span class="no">td</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">rgdal</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb70"><pre class="downlit">
+<span class="va">td</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html">tempfile</a></span><span class="op">(</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/files2.html">dir.create</a></span><span class="op">(</span><span class="va">td</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html">Sys.setenv</a></span><span class="op">(</span><span class="st">"PROJ_USER_WRITABLE_DIRECTORY"</span><span class="op">=</span><span class="va">td</span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://rgdal.r-forge.r-project.org">rgdal</a></span><span class="op">)</span></pre></div>
 <p>Let us check that <strong>rgdal</strong> is running with on-demand downloading disabled:</p>
-<div class="sourceCode" id="cb65"><html><body><pre class="r"><span class="fu"><a href="../reference/is_proj_CDN_enabled.html">is_proj_CDN_enabled</a></span>()</pre></body></html></div>
+<div class="sourceCode" id="cb71"><pre class="downlit">
+<span class="fu"><a href="../reference/is_proj_CDN_enabled.html">is_proj_CDN_enabled</a></span><span class="op">(</span><span class="op">)</span></pre></div>
 <pre><code>## [1] FALSE</code></pre>
 <p>We can enable on-demand download using a function that reports the value of the PR<span class="math inline">\(\phi\)</span>J CDN user-writable directory; we see that with this setting, network download is enabled:</p>
-<div class="sourceCode" id="cb67"><html><body><pre class="r"><span class="fu"><a href="../reference/is_proj_CDN_enabled.html">enable_proj_CDN</a></span>()</pre></body></html></div>
-<pre><code>## [1] "Using: /tmp/RtmpzTkDoo/file1931c6f0a7f6f"</code></pre>
-<div class="sourceCode" id="cb69"><html><body><pre class="r"><span class="fu"><a href="../reference/is_proj_CDN_enabled.html">is_proj_CDN_enabled</a></span>()</pre></body></html></div>
+<div class="sourceCode" id="cb73"><pre class="downlit">
+<span class="fu"><a href="../reference/is_proj_CDN_enabled.html">enable_proj_CDN</a></span><span class="op">(</span><span class="op">)</span></pre></div>
+<pre><code>## [1] "Using: /tmp/RtmpSD4Dtj/file57784676ba262"</code></pre>
+<div class="sourceCode" id="cb75"><pre class="downlit">
+<span class="fu"><a href="../reference/is_proj_CDN_enabled.html">is_proj_CDN_enabled</a></span><span class="op">(</span><span class="op">)</span></pre></div>
 <pre><code>## [1] TRUE</code></pre>
 <p>The reader will recall that the search path was stored in <code>shpr</code> above, the first element being the user-writable directory; at this point no SQLite database has been created:</p>
-<div class="sourceCode" id="cb71"><html><body><pre class="r"><span class="no">shpr</span>[<span class="fl">1</span>]</pre></body></html></div>
-<pre><code>## [1] "/tmp/RtmpzTkDoo/file1931c6f0a7f6f"</code></pre>
-<div class="sourceCode" id="cb73"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/try.html">try</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/file.info.html">file.size</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="no">shpr</span>[<span class="fl">1</span>], <span class="st">"cache.db"</span>)))</pre></body></html></div>
+<div class="sourceCode" id="cb77"><pre class="downlit">
+<span class="va">shpr</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></pre></div>
+<pre><code>## [1] "/tmp/RtmpSD4Dtj/file57784676ba262"</code></pre>
+<div class="sourceCode" id="cb79"><pre class="downlit">
+<span class="kw"><a href="https://rdrr.io/r/base/try.html">try</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.info.html">file.size</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">shpr</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="st">"cache.db"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></pre></div>
 <pre><code>## [1] NA</code></pre>
 <p>When we then search for candidate coordinate operations, we see that the operation using an absent grid now sees that download is enabled, and proposes the 1m accuracy candidate, because the required grid can be downloaded (again using the area of interest):</p>
-<div class="sourceCode" id="cb75"><html><body><pre class="r"><span class="fu"><a href="../reference/list_coordOps.html">list_coordOps</a></span>(<span class="no">WKT</span>, <span class="st">"EPSG:4326"</span>, <span class="kw">area_of_interest</span><span class="kw">=</span><span class="no">aoi</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb81"><pre class="downlit">
+<span class="fu"><a href="../reference/list_coordOps.html">list_coordOps</a></span><span class="op">(</span><span class="va">WKT</span>, <span class="st">"OGC:CRS84"</span>, area_of_interest<span class="op">=</span><span class="va">aoi</span><span class="op">)</span></pre></div>
 <pre><code>## Candidate coordinate operations found:  5 
 ## Search specification: Area of interest:  -0.235107046388033, 51.4127925984147, -0.0351070463880326, 51.6127925984147 
 ## Strict containment:  FALSE 
@@ -479,7 +562,7 @@
 ##         LENGTHUNIT["metre", 1, ID["EPSG", 9001]]],
 ##         AXIS["northing", north, ORDER[2], LENGTHUNIT["metre",
 ##         1, ID["EPSG", 9001]]]]
-## Target: EPSG:4326 
+## Target: OGC:CRS84 
 ## Best instantiable operation has accuracy: 1 m
 ## Description: Inverse of unnamed + OSGB 1936 to WGS 84 (9) + axis order
 ##              change (2D)
@@ -489,34 +572,42 @@
 ##              +grids=uk_os_OSTN15_NTv2_OSGBtoETRS.tif +step
 ##              +proj=unitconvert +xy_in=rad +xy_out=deg</code></pre>
 <p>On making the transformation, we may see that the coordinate operation takes longer than expected, because on first pass the grid is downloaded from the network:</p>
-<div class="sourceCode" id="cb77"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span>(<span class="no">is1m</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/spTransform-methods.html">spTransform</a></span>(<span class="no">b_pump</span>, <span class="fu"><a href="../reference/CRS-class.html">CRS</a></span>(<span class="kw">SRS_string</span><span class="kw">=</span><span class="st">"EPSG:4326"</span>)))</pre></body></html></div>
+<div class="sourceCode" id="cb83"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span><span class="op">(</span><span class="va">is1m</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/spTransform-methods.html">spTransform</a></span><span class="op">(</span><span class="va">b_pump</span>, <span class="fu"><a href="../reference/CRS-class.html">CRS</a></span><span class="op">(</span>SRS_string<span class="op">=</span><span class="st">"OGC:CRS84"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></pre></div>
 <pre><code>##    user  system elapsed 
-##   0.073   0.011   0.274</code></pre>
+##   0.066   0.003   1.752</code></pre>
 <p>The coordinate operation used now specifies the grid in the pipeline:</p>
-<div class="sourceCode" id="cb79"><html><body><pre class="r"><span class="fu"><a href="../reference/spTransform-methods.html">get_last_coordOp</a></span>()</pre></body></html></div>
+<div class="sourceCode" id="cb85"><pre class="downlit">
+<span class="fu"><a href="../reference/spTransform-methods.html">get_last_coordOp</a></span><span class="op">(</span><span class="op">)</span></pre></div>
 <pre><code>## [1] "+proj=pipeline +step +inv +proj=tmerc +lat_0=49 +lon_0=-2 +k=0.999601 +x_0=400000 +y_0=-100000 +ellps=airy +step +proj=hgridshift +grids=uk_os_OSTN15_NTv2_OSGBtoETRS.tif +step +proj=unitconvert +xy_in=rad +xy_out=deg"</code></pre>
 <p>The coordinate values differ little from the 2m accuracy Helmert pipeline:</p>
-<div class="sourceCode" id="cb81"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="fu">coordinates</span>(<span class="no">is1m</span>), <span class="kw">digits</span><span class="kw">=</span><span class="fl">10</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb87"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/sp/man/coordinates.html">coordinates</a></span><span class="op">(</span><span class="va">is1m</span><span class="op">)</span>, digits<span class="op">=</span><span class="fl">10</span><span class="op">)</span></pre></div>
 <pre><code>##         coords.x1  coords.x2
 ## [1,] -0.136687626 51.5133037</code></pre>
 <p>as we can see, the 1m accuracy point is 1.7m from the 2m accuracy point, just to the West:</p>
-<div class="sourceCode" id="cb83"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fu">spDists</span>(<span class="no">is2m</span>, <span class="no">is1m</span>)*<span class="fl">1000</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb89"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/sp/man/spDistsN1.html">spDists</a></span><span class="op">(</span><span class="va">is2m</span>, <span class="va">is1m</span><span class="op">)</span><span class="op">*</span><span class="fl">1000</span><span class="op">)</span></pre></div>
 <pre><code>## [1] 1.751474</code></pre>
-<div class="sourceCode" id="cb85"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="kw pkg">maptools</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/maptools/man/gzAzimuth.html">gzAzimuth</a></span>(<span class="fu">coordinates</span>(<span class="no">is1m</span>), <span class="fu">coordinates</span>(<span class="no">is2m</span>)))</pre></body></html></div>
+<div class="sourceCode" id="cb91"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu">maptools</span><span class="fu">::</span><span class="fu"><a href="http://maptools.r-forge.r-project.org/reference/gzAzimuth.html">gzAzimuth</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/sp/man/coordinates.html">coordinates</a></span><span class="op">(</span><span class="va">is1m</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/pkg/sp/man/coordinates.html">coordinates</a></span><span class="op">(</span><span class="va">is2m</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></pre></div>
 <pre><code>## coords.x1 
 ## -95.57299</code></pre>
 <p>Now the SQLite grid cache database has been created and has grown in size:</p>
-<div class="sourceCode" id="cb87"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/try.html">try</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/file.info.html">file.size</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="no">shpr</span>[<span class="fl">1</span>], <span class="st">"cache.db"</span>)))</pre></body></html></div>
+<div class="sourceCode" id="cb93"><pre class="downlit">
+<span class="kw"><a href="https://rdrr.io/r/base/try.html">try</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.info.html">file.size</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">shpr</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="st">"cache.db"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></pre></div>
 <pre><code>## [1] 319488</code></pre>
 <p>If we look in the SQLite database of downloaded grids, we see that the grid components that were downloaded. Here we have not yet used the area of interest to limit the number of chunks involved:</p>
-<div class="sourceCode" id="cb89"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">RSQLite</span>)
-<span class="no">db</span> <span class="kw">&lt;-</span> <span class="fu">dbConnect</span>(<span class="fu"><a href="https://rsqlite.r-dbi.org/reference/SQLite.html">SQLite</a></span>(), <span class="kw">dbname</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="no">shpr</span>[<span class="fl">1</span>], <span class="st">"cache.db"</span>))
-<span class="fu">dbListTables</span>(<span class="no">db</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb95"><pre class="downlit">
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://rsqlite.r-dbi.org">RSQLite</a></span><span class="op">)</span>
+<span class="va">db</span> <span class="op">&lt;-</span> <span class="fu">dbConnect</span><span class="op">(</span><span class="fu"><a href="https://rsqlite.r-dbi.org/reference/SQLite.html">SQLite</a></span><span class="op">(</span><span class="op">)</span>, dbname<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">shpr</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="st">"cache.db"</span><span class="op">)</span><span class="op">)</span>
+<span class="fu">dbListTables</span><span class="op">(</span><span class="va">db</span><span class="op">)</span></pre></div>
 <pre><code>## [1] "chunk_data"                 "chunks"                    
 ## [3] "downloaded_file_properties" "linked_chunks"             
 ## [5] "linked_chunks_head_tail"    "properties"                
 ## [7] "sqlite_sequence"</code></pre>
-<div class="sourceCode" id="cb91"><html><body><pre class="r"><span class="fu">dbReadTable</span>(<span class="no">db</span>, <span class="st">"chunks"</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb97"><pre class="downlit">
+<span class="fu">dbReadTable</span><span class="op">(</span><span class="va">db</span>, <span class="st">"chunks"</span><span class="op">)</span></pre></div>
 <pre><code>##    id                                                   url  offset data_id
 ## 1   1 https://cdn.proj.org/uk_os_OSTN15_NTv2_OSGBtoETRS.tif       0       1
 ## 2   2 https://cdn.proj.org/uk_os_OSTN15_NTv2_OSGBtoETRS.tif 2621440       2
@@ -551,112 +642,87 @@
 ## 14     16384
 ## 15     16384
 ## 16     16384</code></pre>
-<div class="sourceCode" id="cb93"><html><body><pre class="r"><span class="fu">dbDisconnect</span>(<span class="no">db</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb99"><pre class="downlit">
+<span class="fu">dbDisconnect</span><span class="op">(</span><span class="va">db</span><span class="op">)</span></pre></div>
 <p>Finally, we disable grid download to return to the status existing when <strong>rgdal</strong> was attached; the cached grids in this case, using an R temporary directory, will be discarded, but in usual workflows, grids are downloaded once, used often and updated seldom when the server versions change.</p>
-<div class="sourceCode" id="cb94"><html><body><pre class="r"><span class="fu"><a href="../reference/is_proj_CDN_enabled.html">disable_proj_CDN</a></span>()
-<span class="fu"><a href="../reference/is_proj_CDN_enabled.html">is_proj_CDN_enabled</a></span>()</pre></body></html></div>
+<div class="sourceCode" id="cb100"><pre class="downlit">
+<span class="fu"><a href="../reference/is_proj_CDN_enabled.html">disable_proj_CDN</a></span><span class="op">(</span><span class="op">)</span>
+<span class="fu"><a href="../reference/is_proj_CDN_enabled.html">is_proj_CDN_enabled</a></span><span class="op">(</span><span class="op">)</span></pre></div>
 <pre><code>## [1] FALSE</code></pre>
 <p>The outcome positions are shown here; at zoom 18 we can see that the 1m accuracy green point matches the Open Street Map location of the pump very well:</p>
-<div class="sourceCode" id="cb96"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">mapview</span>)
-<span class="no">x</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/mapview/man/mapView.html">mapview</a></span>(<span class="no">is2m</span>, <span class="kw">map.type</span><span class="kw">=</span><span class="st">"OpenStreetMap"</span>, <span class="kw">legend</span><span class="kw">=</span><span class="fl">FALSE</span>) + <span class="fu"><a href="https://rdrr.io/pkg/mapview/man/mapView.html">mapview</a></span>(<span class="no">is1m</span>, <span class="kw">col.regions</span><span class="kw">=</span><span class="st">"green"</span>, <span class="kw">legend</span><span class="kw">=</span><span class="fl">FALSE</span>) + <span class="fu"><a href="https://rdrr.io/pkg/mapview/man/mapView.html">mapview</a></span>(<span class="no">isballpark</span>, <span class="kw">col.regions</span><span class="kw">=</span><span class="st">"red"</span>, <span class="kw">legend</span><span class="kw">=</span><span class="fl">FALSE</span>)
-<span class="fu"><a href="https://rdrr.io/pkg/mapview/man/mapshot.html">mapshot</a></span>(<span class="no">x</span>, <span class="kw">file</span><span class="kw">=</span><span class="st">"snow.png"</span>)</pre></body></html></div>
-<div class="sourceCode" id="cb97"><html><body><pre class="r"><span class="kw pkg">knitr</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html">include_graphics</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"misc/snow.png"</span>, <span class="kw">package</span><span class="kw">=</span><span class="st">"rgdal"</span>))</pre></body></html></div>
-<p><img src="../../../../../../lib/r_libs/rgdal/misc/snow.png" width="496"></p>
+<div class="sourceCode" id="cb102"><pre class="downlit">
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/r-spatial/mapview">mapview</a></span><span class="op">)</span>
+<span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/mapview/man/mapView.html">mapview</a></span><span class="op">(</span><span class="va">is2m</span>, map.type<span class="op">=</span><span class="st">"OpenStreetMap"</span>, legend<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/mapview/man/mapView.html">mapview</a></span><span class="op">(</span><span class="va">is1m</span>, col.regions<span class="op">=</span><span class="st">"green"</span>, legend<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/mapview/man/mapView.html">mapview</a></span><span class="op">(</span><span class="va">isballpark</span>, col.regions<span class="op">=</span><span class="st">"red"</span>, legend<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/pkg/mapview/man/mapshot.html">mapshot</a></span><span class="op">(</span><span class="va">x</span>, file<span class="op">=</span><span class="st">"snow.png"</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb103"><pre class="downlit">
+<span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html">include_graphics</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"misc/snow.png"</span>, package<span class="op">=</span><span class="st">"rgdal"</span><span class="op">)</span><span class="op">)</span></pre></div>
+<p><img src="../../../../../../../../tmp/Rtmp48CPqR/temp_libpath56868786764d9/rgdal/misc/snow.png" width="496"></p>
 </div>
 <div id="rebuilding-crs-objects" class="section level2">
 <h2 class="hasAnchor">
 <a href="#rebuilding-crs-objects" class="anchor"></a>Rebuilding CRS objects</h2>
 <p>Package authors of the almost 150 packages with <strong>sp</strong> objects with outdated <code>"CRS"</code> objects stored in <code>*.rda</code> or <code>*RData</code> files as data sets should update the <code>"proj4string"</code> slots of these objects and re-store. The <code>GGHB.IG</code> data set in the <strong>CARBayesdata</strong> package (version 2.1) can serve as an example.</p>
-<div class="sourceCode" id="cb98"><html><body><pre class="r"><span class="co"># library(CARBayesdata)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">sp</span>)
+<div class="sourceCode" id="cb104"><pre class="downlit">
+<span class="co"># library(CARBayesdata)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/edzer/sp/">sp</a></span><span class="op">)</span>
 <span class="co"># data(GGHB.IG)</span>
 <span class="co"># orig &lt;- slot(GGHB.IG, "proj4string")</span>
-(<span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"misc/GGHB.IG_CRS.rda"</span>, <span class="kw">package</span><span class="kw">=</span><span class="st">"rgdal"</span>)))</pre></body></html></div>
+<span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"misc/GGHB.IG_CRS.rda"</span>, package<span class="op">=</span><span class="st">"rgdal"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></pre></div>
 <pre><code>## [1] "orig"</code></pre>
-<div class="sourceCode" id="cb100"><html><body><pre class="r"><span class="no">orig</span></pre></body></html></div>
+<div class="sourceCode" id="cb106"><pre class="downlit">
+<span class="va">orig</span></pre></div>
 <pre><code>## CRS arguments:
 ##  +proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000
 ## +y_0=-100000 +datum=OSGB36 +units=m +no_defs +ellps=airy
 ## +towgs84=446.448,-125.157,542.060,0.1502,0.2470,0.8421,-20.4894</code></pre>
 <p>The original <code>"CRS"</code> object contains a <code>+datum=</code> key (deprecated in GDAL’s <code>exportToProj4()</code> from GDAL 3) and a <code>+towgs84=</code> key, the handling of which has varied in different releases of PROJ &gt;= 6 and GDAL 3. From <strong>rgdal</strong> 1.5-17 (development version), a PROJ function <code>proj_get_source_crs</code> is used by default, but may be avoided by setting the <code><a href="https://rdrr.io/pkg/sp/man/CRS-class.html">sp::CRS()</a></code> <code>get_source_if_boundcrs=</code> argument to FALSE. The function will return the source CRS of a <code>BOUNDCRS</code> object. In some versions of PROJ/GDAL, the inclusion of a <code>+towgs84=</code> key is taken as meaning that the user wishes to create an object with the given source CRS, but because a <code>+towgs84=</code> key is present, it is assumed that the target is <code>WGS 84</code> with the given transformation method. Proj4 strings with <code>+towgs84=</code> keys have no authority for the parameters given, and do not harmonise with the use of the EPSG database.</p>
 <p>To run the examples, we need the current development version of <strong>sp</strong> from <code>"rsbivand/sp"</code>:</p>
-<div class="sourceCode" id="cb102"><html><body><pre class="r"><span class="no">sp_version_ok</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/grep.html">grep</a></span>(<span class="st">"get_source_if_boundcrs"</span>, <span class="fu"><a href="https://rdrr.io/r/base/deparse.html">deparse</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/args.html">args</a></span>(<span class="kw pkg">sp</span><span class="kw ns">::</span><span class="no"><a href="https://rdrr.io/pkg/sp/man/CRS-class.html">CRS</a></span>)))) <span class="kw">&gt;</span> <span class="fl">0L</span></pre></body></html></div>
+<div class="sourceCode" id="cb108"><pre class="downlit">
+<span class="va">sp_version_ok</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html">grep</a></span><span class="op">(</span><span class="st">"get_source_if_boundcrs"</span>, <span class="fu"><a href="https://rdrr.io/r/base/deparse.html">deparse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/args.html">args</a></span><span class="op">(</span><span class="fu">sp</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/sp/man/CRS-class.html">CRS</a></span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0L</span></pre></div>
 <p>Running <code><a href="https://rdrr.io/pkg/sp/man/CRS-class.html">sp::CRS()</a></code> takes the original Proj4 key-value pairs, and converts them into a WKT2 representation as well as returning an (unused) Proj4 string. This is kept in place for packages still expecting to see/use it, but all <strong>rgdal</strong> functions and methods use the WKT2 representation. Here, we do not try to handle the <code>BOUNDCRS</code> special case, something that leads to difficulties with some versions of PROJ later in workflows. The <code>BOUNDCRS</code> contains a <code>SOURCECRS</code> and a <code>TARGETCRS</code> (which also has swapped axes), while really all that was needed was the contents of the <code>SOURCECRS</code>:</p>
-<div class="sourceCode" id="cb103"><html><body><pre class="r"><span class="no">orig1</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/CRS-class.html">CRS</a></span>(<span class="fu">slot</span>(<span class="no">orig</span>, <span class="st">"projargs"</span>), <span class="kw">get_source_if_boundcrs</span><span class="kw">=</span><span class="fl">FALSE</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span>(<span class="fu"><a href="https://rdrr.io/pkg/sp/man/is.projected.html">wkt</a></span>(<span class="no">orig1</span>), <span class="st">"\n"</span>)</pre></body></html></div>
-<pre><code>## BOUNDCRS[
-##     SOURCECRS[
-##         PROJCRS["unknown",
-##             BASEGEOGCRS["unknown",
-##                 DATUM["OSGB 1936",
-##                     ELLIPSOID["Airy 1830",6377563.396,299.3249646,
-##                         LENGTHUNIT["metre",1]],
-##                     ID["EPSG",6277]],
-##                 PRIMEM["Greenwich",0,
-##                     ANGLEUNIT["degree",0.0174532925199433],
-##                     ID["EPSG",8901]]],
-##             CONVERSION["unknown",
-##                 METHOD["Transverse Mercator",
-##                     ID["EPSG",9807]],
-##                 PARAMETER["Latitude of natural origin",49,
-##                     ANGLEUNIT["degree",0.0174532925199433],
-##                     ID["EPSG",8801]],
-##                 PARAMETER["Longitude of natural origin",-2,
-##                     ANGLEUNIT["degree",0.0174532925199433],
-##                     ID["EPSG",8802]],
-##                 PARAMETER["Scale factor at natural origin",0.9996012717,
-##                     SCALEUNIT["unity",1],
-##                     ID["EPSG",8805]],
-##                 PARAMETER["False easting",400000,
-##                     LENGTHUNIT["metre",1],
-##                     ID["EPSG",8806]],
-##                 PARAMETER["False northing",-100000,
-##                     LENGTHUNIT["metre",1],
-##                     ID["EPSG",8807]]],
-##             CS[Cartesian,2],
-##                 AXIS["(E)",east,
-##                     ORDER[1],
-##                     LENGTHUNIT["metre",1,
-##                         ID["EPSG",9001]]],
-##                 AXIS["(N)",north,
-##                     ORDER[2],
-##                     LENGTHUNIT["metre",1,
-##                         ID["EPSG",9001]]]]],
-##     TARGETCRS[
-##         GEOGCRS["WGS 84",
-##             DATUM["World Geodetic System 1984",
-##                 ELLIPSOID["WGS 84",6378137,298.257223563,
-##                     LENGTHUNIT["metre",1]]],
-##             PRIMEM["Greenwich",0,
-##                 ANGLEUNIT["degree",0.0174532925199433]],
-##             CS[ellipsoidal,2],
-##                 AXIS["latitude",north,
-##                     ORDER[1],
-##                     ANGLEUNIT["degree",0.0174532925199433]],
-##                 AXIS["longitude",east,
-##                     ORDER[2],
-##                     ANGLEUNIT["degree",0.0174532925199433]],
-##             ID["EPSG",4326]]],
-##     ABRIDGEDTRANSFORMATION["Transformation from unknown to WGS84",
-##         METHOD["Position Vector transformation (geog2D domain)",
-##             ID["EPSG",9606]],
-##         PARAMETER["X-axis translation",446.448,
-##             ID["EPSG",8605]],
-##         PARAMETER["Y-axis translation",-125.157,
-##             ID["EPSG",8606]],
-##         PARAMETER["Z-axis translation",542.06,
-##             ID["EPSG",8607]],
-##         PARAMETER["X-axis rotation",0.1502,
-##             ID["EPSG",8608]],
-##         PARAMETER["Y-axis rotation",0.247,
-##             ID["EPSG",8609]],
-##         PARAMETER["Z-axis rotation",0.8421,
-##             ID["EPSG",8610]],
-##         PARAMETER["Scale difference",0.9999795106,
-##             ID["EPSG",8611]]]]</code></pre>
-<p>Using the default setting to remove the unintended <code>BOUNDCRS</code> representation, we can get what was (probably) intended (when the <strong>sp</strong> version is as was before this work-around was added, the following two chunck yield <code>BOUNDCRS</code> for some versions of PROJ/GDAL:</p>
-<div class="sourceCode" id="cb105"><html><body><pre class="r"><span class="no">orig1a</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/CRS-class.html">CRS</a></span>(<span class="fu">slot</span>(<span class="no">orig</span>, <span class="st">"projargs"</span>))
-<span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span>(<span class="fu"><a href="https://rdrr.io/pkg/sp/man/is.projected.html">wkt</a></span>(<span class="no">orig1a</span>), <span class="st">"\n"</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb109"><pre class="downlit">
+<span class="va">orig1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CRS-class.html">CRS</a></span><span class="op">(</span><span class="fu">slot</span><span class="op">(</span><span class="va">orig</span>, <span class="st">"projargs"</span><span class="op">)</span>, get_source_if_boundcrs<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/sp/man/is.projected.html">wkt</a></span><span class="op">(</span><span class="va">orig1</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></pre></div>
+<pre><code>## PROJCRS["unknown",
+##     BASEGEOGCRS["unknown",
+##         DATUM["OSGB 1936",
+##             ELLIPSOID["Airy 1830",6377563.396,299.3249646,
+##                 LENGTHUNIT["metre",1]],
+##             ID["EPSG",6277]],
+##         PRIMEM["Greenwich",0,
+##             ANGLEUNIT["degree",0.0174532925199433],
+##             ID["EPSG",8901]]],
+##     CONVERSION["unknown",
+##         METHOD["Transverse Mercator",
+##             ID["EPSG",9807]],
+##         PARAMETER["Latitude of natural origin",49,
+##             ANGLEUNIT["degree",0.0174532925199433],
+##             ID["EPSG",8801]],
+##         PARAMETER["Longitude of natural origin",-2,
+##             ANGLEUNIT["degree",0.0174532925199433],
+##             ID["EPSG",8802]],
+##         PARAMETER["Scale factor at natural origin",0.9996012717,
+##             SCALEUNIT["unity",1],
+##             ID["EPSG",8805]],
+##         PARAMETER["False easting",400000,
+##             LENGTHUNIT["metre",1],
+##             ID["EPSG",8806]],
+##         PARAMETER["False northing",-100000,
+##             LENGTHUNIT["metre",1],
+##             ID["EPSG",8807]]],
+##     CS[Cartesian,2],
+##         AXIS["(E)",east,
+##             ORDER[1],
+##             LENGTHUNIT["metre",1,
+##                 ID["EPSG",9001]]],
+##         AXIS["(N)",north,
+##             ORDER[2],
+##             LENGTHUNIT["metre",1,
+##                 ID["EPSG",9001]]]]</code></pre>
+<p>Using the default setting to remove the unintended <code>BOUNDCRS</code> representation, we can get what was (probably) intended (when the <strong>sp</strong> version is as was before this work-around was added, the following two chunks yield <code>BOUNDCRS</code> for some versions of PROJ/GDAL:</p>
+<div class="sourceCode" id="cb111"><pre class="downlit">
+<span class="va">orig1a</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CRS-class.html">CRS</a></span><span class="op">(</span><span class="fu">slot</span><span class="op">(</span><span class="va">orig</span>, <span class="st">"projargs"</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/sp/man/is.projected.html">wkt</a></span><span class="op">(</span><span class="va">orig1a</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></pre></div>
 <pre><code>## PROJCRS["unknown",
 ##     BASEGEOGCRS["unknown",
 ##         DATUM["OSGB 1936",
@@ -694,8 +760,9 @@
 ##             LENGTHUNIT["metre",1,
 ##                 ID["EPSG",9001]]]]</code></pre>
 <p>The <code><a href="https://rdrr.io/pkg/sp/man/CRS-class.html">sp::rebuild_CRS()</a></code> method for <code>"CRS"</code> objects (and thus that for <code>"Spatial"</code> objects) can be used to do the same as using <code><a href="https://rdrr.io/pkg/sp/man/CRS-class.html">sp::CRS()</a></code> directly, with special treatment for a number of other objects inheriting from <code>"Spatial"</code>:</p>
-<div class="sourceCode" id="cb107"><html><body><pre class="r"><span class="no">orig1b</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/sp/man/CRS-class.html">rebuild_CRS</a></span>(<span class="no">orig</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span>(<span class="fu"><a href="https://rdrr.io/pkg/sp/man/is.projected.html">wkt</a></span>(<span class="no">orig1b</span>), <span class="st">"\n"</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb113"><pre class="downlit">
+<span class="va">orig1b</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/sp/man/CRS-class.html">rebuild_CRS</a></span><span class="op">(</span><span class="va">orig</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/sp/man/is.projected.html">wkt</a></span><span class="op">(</span><span class="va">orig1b</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></pre></div>
 <pre><code>## PROJCRS["unknown",
 ##     BASEGEOGCRS["unknown",
 ##         DATUM["OSGB 1936",
@@ -776,7 +843,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

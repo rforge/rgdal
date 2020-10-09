@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgdal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5-17</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5-18</span>
       </span>
     </div>
 
@@ -102,6 +102,9 @@
     </li>
   </ul>
 </li>
+<li>
+  <a href="../news/index.html">Changelog</a>
+</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         
@@ -127,8 +130,8 @@
     <p>This function converts a three-band SpatialGridDataFrame into a single band of colour indices and a colour look-up table using <code>RGB2PCT</code>. <code>vec2RGB</code> uses given breaks and colours (like <code>image</code>) to make a three column matrix of red, green, and blue values for a numeric vector.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>SGDF2PCT</span>(<span class='no'>x</span>, <span class='kw'>ncolors</span> <span class='kw'>=</span> <span class='fl'>256</span>, <span class='kw'>adjust.bands</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
-<span class='fu'>vec2RGB</span>(<span class='no'>vec</span>, <span class='no'>breaks</span>, <span class='no'>col</span>)</pre>
+    <pre class="usage"><span class='fu'>SGDF2PCT</span><span class='op'>(</span><span class='va'>x</span>, ncolors <span class='op'>=</span> <span class='fl'>256</span>, adjust.bands<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='fu'>vec2RGB</span><span class='op'>(</span><span class='va'>vec</span>, <span class='va'>breaks</span>, <span class='va'>col</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -168,47 +171,61 @@
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p><a href='https://gdal.org/'>https://gdal.org/</a></p>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Roger Bivand</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>logo</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"pictures/Rlogo.jpg"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"rgdal"</span>)[<span class='fl'>1</span>]
-<span class='no'>SGlogo</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='readGDAL.html'>readGDAL</a></span>(<span class='no'>logo</span>)</div><div class='output co'>#&gt; /tmp/RtmpAZ1IRZ/temp_libpath17c763a667796/rgdal/pictures/Rlogo.jpg has GDAL driver JPEG 
-#&gt; and has 175 rows and 200 columns</div><div class='output co'>#&gt; <span class='warning'>Warning: GeoTransform values not available</span></div><div class='input'><span class='no'>cols</span> <span class='kw'>&lt;-</span> <span class='fu'>SGDF2PCT</span>(<span class='no'>SGlogo</span>)
-<span class='no'>SGlogo</span>$<span class='no'>idx</span> <span class='kw'>&lt;-</span> <span class='no'>cols</span>$<span class='no'>idx</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/image.html'>image</a></span>(<span class='no'>SGlogo</span>, <span class='st'>"idx"</span>, <span class='kw'>col</span><span class='kw'>=</span><span class='no'>cols</span>$<span class='no'>ct</span>)</div><div class='img'><img src='SGDF2PCT-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='no'>SGlogo</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='readGDAL.html'>readGDAL</a></span>(<span class='no'>logo</span>)</div><div class='output co'>#&gt; /tmp/RtmpAZ1IRZ/temp_libpath17c763a667796/rgdal/pictures/Rlogo.jpg has GDAL driver JPEG 
-#&gt; and has 175 rows and 200 columns</div><div class='output co'>#&gt; <span class='warning'>Warning: GeoTransform values not available</span></div><div class='input'><span class='no'>cols</span> <span class='kw'>&lt;-</span> <span class='fu'>SGDF2PCT</span>(<span class='no'>SGlogo</span>, <span class='kw'>ncolors</span><span class='kw'>=</span><span class='fl'>64</span>)
-<span class='no'>SGlogo</span>$<span class='no'>idx</span> <span class='kw'>&lt;-</span> <span class='no'>cols</span>$<span class='no'>idx</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/image.html'>image</a></span>(<span class='no'>SGlogo</span>, <span class='st'>"idx"</span>, <span class='kw'>col</span><span class='kw'>=</span><span class='no'>cols</span>$<span class='no'>ct</span>)</div><div class='img'><img src='SGDF2PCT-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='no'>SGlogo</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='readGDAL.html'>readGDAL</a></span>(<span class='no'>logo</span>)</div><div class='output co'>#&gt; /tmp/RtmpAZ1IRZ/temp_libpath17c763a667796/rgdal/pictures/Rlogo.jpg has GDAL driver JPEG 
-#&gt; and has 175 rows and 200 columns</div><div class='output co'>#&gt; <span class='warning'>Warning: GeoTransform values not available</span></div><div class='input'><span class='no'>cols</span> <span class='kw'>&lt;-</span> <span class='fu'>SGDF2PCT</span>(<span class='no'>SGlogo</span>, <span class='kw'>ncolors</span><span class='kw'>=</span><span class='fl'>8</span>)
-<span class='no'>SGlogo</span>$<span class='no'>idx</span> <span class='kw'>&lt;-</span> <span class='no'>cols</span>$<span class='no'>idx</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/image.html'>image</a></span>(<span class='no'>SGlogo</span>, <span class='st'>"idx"</span>, <span class='kw'>col</span><span class='kw'>=</span><span class='no'>cols</span>$<span class='no'>ct</span>)</div><div class='img'><img src='SGDF2PCT-3.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>meuse.grid</span>)
-<span class='fu'>coordinates</span>(<span class='no'>meuse.grid</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"x"</span>, <span class='st'>"y"</span>)
-<span class='fu'>gridded</span>(<span class='no'>meuse.grid</span>) <span class='kw'>&lt;-</span> <span class='fl'>TRUE</span>
-<span class='fu'>fullgrid</span>(<span class='no'>meuse.grid</span>) <span class='kw'>&lt;-</span> <span class='fl'>TRUE</span>
-<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>meuse.grid</span>$<span class='no'>dist</span>)</div><div class='output co'>#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
-#&gt;   0.000   0.119   0.272   0.297   0.440   0.993    5009 </div><div class='input'><span class='no'>opar</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='kw'>no.readonly</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='kw'>mfrow</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>2</span>), <span class='kw'>mar</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span>)+<span class='fl'>0.1</span>)
-<span class='fu'><a href='https://rdrr.io/r/graphics/image.html'>image</a></span>(<span class='no'>meuse.grid</span>, <span class='st'>"dist"</span>, <span class='kw'>breaks</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='fl'>0</span>,<span class='fl'>1</span>,<span class='fl'>1</span>/<span class='fl'>10</span>), <span class='kw'>col</span><span class='kw'>=</span><span class='fu'>bpy.colors</span>(<span class='fl'>10</span>))
-<span class='no'>RGB</span> <span class='kw'>&lt;-</span> <span class='fu'>vec2RGB</span>(<span class='no'>meuse.grid</span>$<span class='no'>dist</span>, <span class='kw'>breaks</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='fl'>0</span>,<span class='fl'>1</span>,<span class='fl'>1</span>/<span class='fl'>10</span>), <span class='kw'>col</span><span class='kw'>=</span><span class='fu'>bpy.colors</span>(<span class='fl'>10</span>))
-<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>RGB</span>)</div><div class='output co'>#&gt;       red             green             blue      
+    <pre class="examples"><div class='input'><span class='va'>logo</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"pictures/Rlogo.jpg"</span>, package<span class='op'>=</span><span class='st'>"rgdal"</span><span class='op'>)</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>
+<span class='va'>SGlogo</span> <span class='op'>&lt;-</span> <span class='fu'><a href='readGDAL.html'>readGDAL</a></span><span class='op'>(</span><span class='va'>logo</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; /tmp/Rtmp48CPqR/temp_libpath56868786764d9/rgdal/pictures/Rlogo.jpg has GDAL driver JPEG 
+#&gt; and has 175 rows and 200 columns</div><div class='output co'>#&gt; <span class='warning'>Warning: GeoTransform values not available</span></div><div class='input'><span class='va'>cols</span> <span class='op'>&lt;-</span> <span class='fu'>SGDF2PCT</span><span class='op'>(</span><span class='va'>SGlogo</span><span class='op'>)</span>
+<span class='va'>SGlogo</span><span class='op'>$</span><span class='va'>idx</span> <span class='op'>&lt;-</span> <span class='va'>cols</span><span class='op'>$</span><span class='va'>idx</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/image.html'>image</a></span><span class='op'>(</span><span class='va'>SGlogo</span>, <span class='st'>"idx"</span>, col<span class='op'>=</span><span class='va'>cols</span><span class='op'>$</span><span class='va'>ct</span><span class='op'>)</span>
+</div><div class='img'><img src='SGDF2PCT-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='va'>SGlogo</span> <span class='op'>&lt;-</span> <span class='fu'><a href='readGDAL.html'>readGDAL</a></span><span class='op'>(</span><span class='va'>logo</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; /tmp/Rtmp48CPqR/temp_libpath56868786764d9/rgdal/pictures/Rlogo.jpg has GDAL driver JPEG 
+#&gt; and has 175 rows and 200 columns</div><div class='output co'>#&gt; <span class='warning'>Warning: GeoTransform values not available</span></div><div class='input'><span class='va'>cols</span> <span class='op'>&lt;-</span> <span class='fu'>SGDF2PCT</span><span class='op'>(</span><span class='va'>SGlogo</span>, ncolors<span class='op'>=</span><span class='fl'>64</span><span class='op'>)</span>
+<span class='va'>SGlogo</span><span class='op'>$</span><span class='va'>idx</span> <span class='op'>&lt;-</span> <span class='va'>cols</span><span class='op'>$</span><span class='va'>idx</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/image.html'>image</a></span><span class='op'>(</span><span class='va'>SGlogo</span>, <span class='st'>"idx"</span>, col<span class='op'>=</span><span class='va'>cols</span><span class='op'>$</span><span class='va'>ct</span><span class='op'>)</span>
+</div><div class='img'><img src='SGDF2PCT-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='va'>SGlogo</span> <span class='op'>&lt;-</span> <span class='fu'><a href='readGDAL.html'>readGDAL</a></span><span class='op'>(</span><span class='va'>logo</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; /tmp/Rtmp48CPqR/temp_libpath56868786764d9/rgdal/pictures/Rlogo.jpg has GDAL driver JPEG 
+#&gt; and has 175 rows and 200 columns</div><div class='output co'>#&gt; <span class='warning'>Warning: GeoTransform values not available</span></div><div class='input'><span class='va'>cols</span> <span class='op'>&lt;-</span> <span class='fu'>SGDF2PCT</span><span class='op'>(</span><span class='va'>SGlogo</span>, ncolors<span class='op'>=</span><span class='fl'>8</span><span class='op'>)</span>
+<span class='va'>SGlogo</span><span class='op'>$</span><span class='va'>idx</span> <span class='op'>&lt;-</span> <span class='va'>cols</span><span class='op'>$</span><span class='va'>idx</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/image.html'>image</a></span><span class='op'>(</span><span class='va'>SGlogo</span>, <span class='st'>"idx"</span>, col<span class='op'>=</span><span class='va'>cols</span><span class='op'>$</span><span class='va'>ct</span><span class='op'>)</span>
+</div><div class='img'><img src='SGDF2PCT-3.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>meuse.grid</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/pkg/sp/man/coordinates.html'>coordinates</a></span><span class='op'>(</span><span class='va'>meuse.grid</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"x"</span>, <span class='st'>"y"</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/pkg/sp/man/gridded-methods.html'>gridded</a></span><span class='op'>(</span><span class='va'>meuse.grid</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='cn'>TRUE</span>
+<span class='fu'><a href='https://rdrr.io/pkg/sp/man/gridded-methods.html'>fullgrid</a></span><span class='op'>(</span><span class='va'>meuse.grid</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='cn'>TRUE</span>
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>meuse.grid</span><span class='op'>$</span><span class='va'>dist</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+#&gt;   0.000   0.119   0.272   0.297   0.440   0.993    5009 </div><div class='input'><span class='va'>opar</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>no.readonly<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mfrow<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>2</span><span class='op'>)</span>, mar<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>+</span><span class='fl'>0.1</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/image.html'>image</a></span><span class='op'>(</span><span class='va'>meuse.grid</span>, <span class='st'>"dist"</span>, breaks<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>1</span>,<span class='fl'>1</span><span class='op'>/</span><span class='fl'>10</span><span class='op'>)</span>, col<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/pkg/sp/man/bpy.colors.html'>bpy.colors</a></span><span class='op'>(</span><span class='fl'>10</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>RGB</span> <span class='op'>&lt;-</span> <span class='fu'>vec2RGB</span><span class='op'>(</span><span class='va'>meuse.grid</span><span class='op'>$</span><span class='va'>dist</span>, breaks<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>1</span>,<span class='fl'>1</span><span class='op'>/</span><span class='fl'>10</span><span class='op'>)</span>, col<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/pkg/sp/man/bpy.colors.html'>bpy.colors</a></span><span class='op'>(</span><span class='fl'>10</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>RGB</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;       red             green             blue      
 #&gt;  Min.   :  0.00   Min.   :  0.00   Min.   : 36.0  
 #&gt;  1st Qu.:  0.00   1st Qu.:  0.00   1st Qu.: 87.0  
 #&gt;  Median :  0.00   Median :  0.00   Median :189.0  
 #&gt;  Mean   : 75.31   Mean   : 22.98   Mean   :171.1  
 #&gt;  3rd Qu.:159.00   3rd Qu.: 15.00   3rd Qu.:255.0  
 #&gt;  Max.   :255.00   Max.   :255.00   Max.   :255.0  
-#&gt;  NA's   :5009     NA's   :5009     NA's   :5009   </div><div class='input'><span class='no'>meuse.grid</span>$<span class='no'>red</span> <span class='kw'>&lt;-</span> <span class='no'>RGB</span>[,<span class='fl'>1</span>]
-<span class='no'>meuse.grid</span>$<span class='no'>green</span> <span class='kw'>&lt;-</span> <span class='no'>RGB</span>[,<span class='fl'>2</span>]
-<span class='no'>meuse.grid</span>$<span class='no'>blue</span> <span class='kw'>&lt;-</span> <span class='no'>RGB</span>[,<span class='fl'>3</span>]
-<span class='no'>cols</span> <span class='kw'>&lt;-</span> <span class='fu'>SGDF2PCT</span>(<span class='no'>meuse.grid</span>[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"red"</span>, <span class='st'>"green"</span>, <span class='st'>"blue"</span>)], <span class='kw'>ncolors</span><span class='kw'>=</span><span class='fl'>10</span>,
- <span class='kw'>adjust.bands</span><span class='kw'>=</span><span class='fl'>FALSE</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span>(<span class='no'>cols</span>$<span class='no'>idx</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span>(<span class='no'>meuse.grid</span>$<span class='no'>dist</span>)
-<span class='no'>meuse.grid</span>$<span class='no'>idx</span> <span class='kw'>&lt;-</span> <span class='no'>cols</span>$<span class='no'>idx</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/image.html'>image</a></span>(<span class='no'>meuse.grid</span>, <span class='st'>"idx"</span>, <span class='kw'>col</span><span class='kw'>=</span><span class='no'>cols</span>$<span class='no'>ct</span>)</div><div class='img'><img src='SGDF2PCT-4.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='no'>opar</span>)
+#&gt;  NA's   :5009     NA's   :5009     NA's   :5009   </div><div class='input'><span class='va'>meuse.grid</span><span class='op'>$</span><span class='va'>red</span> <span class='op'>&lt;-</span> <span class='va'>RGB</span><span class='op'>[</span>,<span class='fl'>1</span><span class='op'>]</span>
+<span class='va'>meuse.grid</span><span class='op'>$</span><span class='va'>green</span> <span class='op'>&lt;-</span> <span class='va'>RGB</span><span class='op'>[</span>,<span class='fl'>2</span><span class='op'>]</span>
+<span class='va'>meuse.grid</span><span class='op'>$</span><span class='va'>blue</span> <span class='op'>&lt;-</span> <span class='va'>RGB</span><span class='op'>[</span>,<span class='fl'>3</span><span class='op'>]</span>
+<span class='va'>cols</span> <span class='op'>&lt;-</span> <span class='fu'>SGDF2PCT</span><span class='op'>(</span><span class='va'>meuse.grid</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"red"</span>, <span class='st'>"green"</span>, <span class='st'>"blue"</span><span class='op'>)</span><span class='op'>]</span>, ncolors<span class='op'>=</span><span class='fl'>10</span>,
+ adjust.bands<span class='op'>=</span><span class='cn'>FALSE</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='va'>cols</span><span class='op'>$</span><span class='va'>idx</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='va'>meuse.grid</span><span class='op'>$</span><span class='va'>dist</span><span class='op'>)</span>
+<span class='va'>meuse.grid</span><span class='op'>$</span><span class='va'>idx</span> <span class='op'>&lt;-</span> <span class='va'>cols</span><span class='op'>$</span><span class='va'>idx</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/image.html'>image</a></span><span class='op'>(</span><span class='va'>meuse.grid</span>, <span class='st'>"idx"</span>, col<span class='op'>=</span><span class='va'>cols</span><span class='op'>$</span><span class='va'>ct</span><span class='op'>)</span>
+</div><div class='img'><img src='SGDF2PCT-4.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span><span class='va'>opar</span><span class='op'>)</span>
 <span class='co'># Note: only one wrongly classified pixel after NA handling/dropping</span>
 <span class='co'># The functions are not written to be reversible</span>
-<span class='fu'><a href='https://rdrr.io/r/base/sort.html'>sort</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/findInterval.html'>findInterval</a></span>(<span class='no'>meuse.grid</span>$<span class='no'>dist</span>, <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='fl'>0</span>,<span class='fl'>1</span>,<span class='fl'>1</span>/<span class='fl'>10</span>), <span class='kw'>all.inside</span><span class='kw'>=</span><span class='fl'>TRUE</span>)))</div><div class='output co'>#&gt; 
+<span class='fu'><a href='https://rdrr.io/r/base/sort.html'>sort</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/findInterval.html'>findInterval</a></span><span class='op'>(</span><span class='va'>meuse.grid</span><span class='op'>$</span><span class='va'>dist</span>, <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>1</span>,<span class='fl'>1</span><span class='op'>/</span><span class='fl'>10</span><span class='op'>)</span>, all.inside<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; 
 #&gt;  10   9   8   7   6   5   4   2   3   1 
-#&gt;  28  54  99 118 237 417 431 507 525 687 </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/sort.html'>sort</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span>(<span class='no'>cols</span>$<span class='no'>idx</span>))</div><div class='output co'>#&gt; 
+#&gt;  28  54  99 118 237 417 431 507 525 687 </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/sort.html'>sort</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span><span class='op'>(</span><span class='va'>cols</span><span class='op'>$</span><span class='va'>idx</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; 
 #&gt;  10   1   2   3   4   6   5   9   7 
 #&gt;  82  99 118 237 417 431 507 525 687 </div></pre>
   </div>
@@ -226,7 +243,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
