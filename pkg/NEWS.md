@@ -2,7 +2,7 @@
 
 * condition `tests/test_enforce_xy.R` on PROJ >= 6 and GDAL >= 3 (email BDR, I forgot to re-check with PROJ-5.2.0/GDAL-2.2.4).
 
-* Adaptation to EPSG 10 database format started (from PROJ 7.2)
+* Adaptation to EPSG 10 database format started (from PROJ 7.2); choose DB columns by name not number in vignette.
 
 # Version 1.5-17 (2020-10-08, rev. 1051-1070)
 

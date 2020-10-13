@@ -1,3 +1,26 @@
+2020-10-10 08:36  rsbivand
+
+	* [r1080] vignettes/CRS_projections_transformations.Rmd: adapt to
+	  EPSG v10
+
+2020-10-09 19:05  rsbivand
+
+	* [r1079] NEWS.md, vignettes/CRS_projections_transformations.Rmd:
+	  adapt to EPSG v10
+
+2020-10-09 15:12  rsbivand
+
+	* [r1078] DESCRIPTION, R/make_EPSG.R, man/make_EPSG.Rd,
+	  vignettes/CRS_projections_transformations.Rmd: adapt to EPSG v10
+
+2020-10-09 11:04  rsbivand
+
+	* [r1076] NEWS.md: add NEWS.md
+
+2020-10-09 10:51  rsbivand
+
+	* [r1075] ChangeLog, NEWS.md, inst/ChangeLog: add NEWS.md
+
 2020-10-08 13:10  rsbivand
 
 	* [r1074] ChangeLog, inst/ChangeLog: tidy
