@@ -22,7 +22,7 @@ make_EPSG(file)
   \item{prj_method}{extra character column from PROJ 6 showing the projection method}
   ...
 }
-\references{\url{https://epsg.org/home.html}.}
+\references{(unlinked because of certificate issues: https://epsg.org/home.html.}
 
 \author{Roger Bivand}
 \note{See also Clifford J. Mugnier's Grids \& Datums columns in Photogrammetric Engineering & Remote Sensing, \url{https://www.asprs.org/a/resources/grids/}, see also \code{\link{GridsDatums}}.}
