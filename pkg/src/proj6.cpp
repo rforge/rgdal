@@ -955,7 +955,7 @@ SEXP P6_SRID_proj(SEXP inSRID, SEXP format, SEXP multiline, SEXP in_format,
             error("crs not converted to visualization order");
         }
     }
-
+// FIXME PROJ 8.0 datum ensemble vulnerability
     PJ* dtm = proj_crs_get_datum(ctx, source_crs);
     if (dtm != NULL) {
         PROTECT(Datum = NEW_CHARACTER(1)); pc++;
