@@ -1,4 +1,4 @@
-/* Copyright (c) 2019 Roger Bivand */
+/* Copyright (c) 2019-20 Roger Bivand */
 
 
 #include <R.h>
@@ -900,10 +900,10 @@ SEXP project_ng(SEXP n, SEXP xlon, SEXP ylat, SEXP zz, SEXP inv, SEXP ob_tran, S
             NUMERIC_POINTER(VECTOR_ELT(res, 1))[i]=iylat;
         } else {
             a = proj_coord(ixlon, iylat, iz, 0);
-            if (!use_inv && is_ob_tran) {
+            /*if (!use_inv && is_ob_tran) {
                 if (PROJ_VERSION_MAJOR > 7 || (PROJ_VERSION_MAJOR == 7 && PROJ_VERSION_MINOR > 2) || (PROJ_VERSION_MAJOR == 7 && PROJ_VERSION_MINOR == 2 && PROJ_VERSION_PATCH >= 1)) b = proj_trans(pj_transform, PJ_FWD, a);
                 else b = proj_trans(pj_transform, PJ_INV, a);
-            } else b = proj_trans(pj_transform, PJ_FWD, a);
+            } else*/ b = proj_trans(pj_transform, PJ_FWD, a);
             if (b.uv.u == HUGE_VAL || ISNAN(b.uv.u) || b.uv.v == HUGE_VAL || 
                 ISNAN(b.uv.v)) {
                 nwarn++;
