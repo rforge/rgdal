@@ -1,4 +1,4 @@
-# Version 1.5-19 (development, rev. 1083-1089)
+# Version 1.5-19 (development, rev. 1083-1091)
 
 * Dan Baston: raster speedups 
 
