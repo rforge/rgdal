@@ -863,9 +863,8 @@ SEXP project_ng_coordOp(SEXP proj, SEXP inv, SEXP aoi, SEXP ob_tran
     return(res);
 }
 
-SEXP project_ng(SEXP n, SEXP xlon, SEXP ylat, SEXP zz, SEXP inv, SEXP ob_tran, SEXP coordOp) {
-    int i, nwarn=0, is_ob_tran=LOGICAL_POINTER(ob_tran)[0], 
-        nn=INTEGER_POINTER(n)[0], use_inv=LOGICAL_POINTER(inv)[0];
+SEXP project_ng(SEXP n, SEXP xlon, SEXP ylat, SEXP zz, SEXP coordOp) {
+    int i, nwarn=0, nn=INTEGER_POINTER(n)[0];
     SEXP res;
     //PJ_CONTEXT *ctx = proj_context_create();
     PJ* pj_transform = NULL;
@@ -900,10 +899,7 @@ SEXP project_ng(SEXP n, SEXP xlon, SEXP ylat, SEXP zz, SEXP inv, SEXP ob_tran, S
             NUMERIC_POINTER(VECTOR_ELT(res, 1))[i]=iylat;
         } else {
             a = proj_coord(ixlon, iylat, iz, 0);
-            /*if (!use_inv && is_ob_tran) {
-                if (PROJ_VERSION_MAJOR > 7 || (PROJ_VERSION_MAJOR == 7 && PROJ_VERSION_MINOR > 2) || (PROJ_VERSION_MAJOR == 7 && PROJ_VERSION_MINOR == 2 && PROJ_VERSION_PATCH >= 1)) b = proj_trans(pj_transform, PJ_FWD, a);
-                else b = proj_trans(pj_transform, PJ_INV, a);
-            } else*/ b = proj_trans(pj_transform, PJ_FWD, a);
+            b = proj_trans(pj_transform, PJ_FWD, a);
             if (b.uv.u == HUGE_VAL || ISNAN(b.uv.u) || b.uv.v == HUGE_VAL || 
                 ISNAN(b.uv.v)) {
                 nwarn++;
