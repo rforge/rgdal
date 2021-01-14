@@ -934,36 +934,36 @@ SEXP P6_SRID_proj(SEXP inSRID, SEXP format, SEXP multiline, SEXP in_format,
     else if (LOGICAL_POINTER(enforce_xy)[0] == 0) vis_order = 0;
     else vis_order = 0;
 
-    PJ_CONTEXT *ctx = proj_context_create();
+//    PJ_CONTEXT *ctx = proj_context_create();
     PJ *source_crs;
     PJ_TYPE type;
 
-    if ((source_crs = proj_create(ctx, CHAR(STRING_ELT(inSRID, 0)))) == NULL) {
-        const char *errstr = proj_errno_string(proj_context_errno(ctx));
-        proj_context_destroy(ctx);
+    if ((source_crs = proj_create(PJ_DEFAULT_CTX, CHAR(STRING_ELT(inSRID, 0)))) == NULL) {
+        const char *errstr = proj_errno_string(proj_context_errno(PJ_DEFAULT_CTX));
+//        proj_context_destroy(ctx);
 	error("source crs creation failed: %s", errstr);
     }
 
     type = proj_get_type(source_crs);
 
     if (type == PJ_TYPE_BOUND_CRS) {
-        source_crs = proj_get_source_crs(ctx, source_crs);
+        source_crs = proj_get_source_crs(PJ_DEFAULT_CTX, source_crs);
 
         if (source_crs == NULL) {
-            proj_context_destroy(ctx);
+//            proj_context_destroy(ctx);
             error("crs not converted to source only");
         }
     }
 
     if (vis_order) {
-        source_crs = proj_normalize_for_visualization(ctx, source_crs);
+        source_crs = proj_normalize_for_visualization(PJ_DEFAULT_CTX, source_crs);
         if (source_crs == NULL) {
-            proj_context_destroy(ctx);
+//            proj_context_destroy(ctx);
             error("crs not converted to visualization order");
         }
     }
 // FIXME PROJ 8.0 datum ensemble vulnerability
-    PJ* dtm = proj_crs_get_datum(ctx, source_crs);
+    PJ* dtm = proj_crs_get_datum(PJ_DEFAULT_CTX, source_crs);
     if (dtm != NULL) {
         PROTECT(Datum = NEW_CHARACTER(1)); pc++;
         SET_STRING_ELT(Datum, 0, COPY_TO_USER_STRING(proj_get_name(dtm)));
@@ -972,7 +972,7 @@ SEXP P6_SRID_proj(SEXP inSRID, SEXP format, SEXP multiline, SEXP in_format,
         Datum = R_NilValue;
     }
 
-    PJ* ellps = proj_get_ellipsoid(ctx, source_crs);
+    PJ* ellps = proj_get_ellipsoid(PJ_DEFAULT_CTX, source_crs);
     if (ellps != NULL) {
         PROTECT(Ellps = NEW_CHARACTER(1)); pc++;
         SET_STRING_ELT(Ellps, 0, COPY_TO_USER_STRING(proj_get_name(ellps)));
@@ -987,9 +987,9 @@ SEXP P6_SRID_proj(SEXP inSRID, SEXP format, SEXP multiline, SEXP in_format,
 
     if (INTEGER_POINTER(out_format)[0] == 1L) {
         
-        if ((pszSRS = proj_as_wkt(ctx, source_crs, PJ_WKT2_2019, NULL))
+        if ((pszSRS = proj_as_wkt(PJ_DEFAULT_CTX, source_crs, PJ_WKT2_2019, NULL))
             == NULL) {
-            const char *errstr = proj_errno_string(proj_context_errno(ctx));
+            const char *errstr = proj_errno_string(proj_context_errno(PJ_DEFAULT_CTX));
             warning("export to WKT2 failed: %s", errstr);
             SET_STRING_ELT(ans, 0, NA_STRING);
 	} else {
@@ -997,9 +997,9 @@ SEXP P6_SRID_proj(SEXP inSRID, SEXP format, SEXP multiline, SEXP in_format,
         }
     } else if (INTEGER_POINTER(out_format)[0] == 2L) {
         
-        if ((pszSRS = proj_as_proj_string(ctx, source_crs, PJ_PROJ_4, NULL)) 
+        if ((pszSRS = proj_as_proj_string(PJ_DEFAULT_CTX, source_crs, PJ_PROJ_4, NULL)) 
             == NULL) {
-            const char *errstr = proj_errno_string(proj_context_errno(ctx));
+            const char *errstr = proj_errno_string(proj_context_errno(PJ_DEFAULT_CTX));
             warning("export to PROJ failed: %s", errstr);
             SET_STRING_ELT(ans, 0, NA_STRING);
 	} else {
@@ -1007,7 +1007,7 @@ SEXP P6_SRID_proj(SEXP inSRID, SEXP format, SEXP multiline, SEXP in_format,
         }
     } else {
         proj_destroy(source_crs);
-        proj_context_destroy(ctx);
+//        proj_context_destroy(ctx);
         UNPROTECT(pc);
         error("unknown output format");
     }
@@ -1016,7 +1016,7 @@ SEXP P6_SRID_proj(SEXP inSRID, SEXP format, SEXP multiline, SEXP in_format,
 
 
     proj_destroy(source_crs);
-    proj_context_destroy(ctx);
+//    proj_context_destroy(ctx);
     UNPROTECT(pc);
 
     return(ans);

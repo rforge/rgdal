@@ -180,6 +180,7 @@ SEXP OSR_is_projected(SEXP inSRID) {
     is_proj = hSRS->IsProjected();
     PROTECT(ans = NEW_LOGICAL(1));
     LOGICAL_POINTER(ans)[0] = is_proj;
+    delete hSRS;
     UNPROTECT(1);
     return(ans);
 }
