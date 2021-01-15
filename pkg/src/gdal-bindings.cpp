@@ -264,7 +264,11 @@ SEXP
 RGDAL_Exit(void) {
 
 //  CPLPopErrorHandler();
- 
+// from sf CPL_gdal_cleanup_all()
+  OGRCleanupAll();
+  OSRCleanup();
+  GDALDestroyDriverManager();
+
   return(R_NilValue);
 
 }
