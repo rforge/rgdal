@@ -399,8 +399,11 @@ SEXP list_coordinate_ops(SEXP source, SEXP target, SEXP area_of_interest, SEXP s
 
     for (i=0; i<num_operations; i++) {
         pj_transform = proj_list_get(ctx, pj_operations, i);
-        if (LOGICAL_POINTER(vis_order)[0])
-            pj_transform = proj_normalize_for_visualization(ctx, pj_transform);
+        if (LOGICAL_POINTER(vis_order)[0]) {
+            PJ* pj_trans_orig = pj_transform;
+            pj_transform = proj_normalize_for_visualization(ctx, pj_trans_orig);
+            proj_destroy(pj_trans_orig);
+        }
         is_instantiable = proj_coordoperation_is_instantiable(ctx,
             pj_transform);
         is_ballpark = proj_coordoperation_has_ballpark_transformation(ctx,
@@ -611,7 +614,7 @@ SEXP transform_ng(SEXP fromargs, SEXP toargs, SEXP coordOp, SEXP npts, SEXP x, S
         }
 
 #else
-// valgrind 210119
+// valgrind 210120 fix by copying
         if ((pj_transform = proj_create_crs_to_crs_from_pj(PJ_DEFAULT_CTX, 
             source_crs, target_crs, area_of_interest, NULL)) == 0) {
 // FIXME >= 6.2.0
@@ -624,9 +627,11 @@ SEXP transform_ng(SEXP fromargs, SEXP toargs, SEXP coordOp, SEXP npts, SEXP x, S
         }
 #endif
 //Rprintf("%s\n", proj_pj_info(pj_transform).definition);
-        if (vis_order == 1) 
-            pj_transform = proj_normalize_for_visualization(PJ_DEFAULT_CTX, pj_transform);
-
+        if (vis_order == 1) {
+            PJ* pj_trans_orig = pj_transform;
+            pj_transform = proj_normalize_for_visualization(PJ_DEFAULT_CTX, pj_trans_orig);
+            proj_destroy(pj_trans_orig);
+        }
     }
 //Rprintf("%s\n", proj_pj_info(pj_transform).definition);
 //	if (proj_normalize_for_visualization(ctx, pj_transform) != NULL) // EJP
@@ -791,7 +796,7 @@ SEXP project_ng_coordOp(SEXP proj, SEXP inv, SEXP aoi, SEXP ob_tran
     
 
 //Rprintf("target crs input: %s\n", CHAR(STRING_ELT(proj, 0)));
-// valgrind 210119
+// valgrind 210120 fixed copy
     if ((target_crs = proj_create(PJ_DEFAULT_CTX, CHAR(STRING_ELT(proj, 0)))) == 0) {
         const char *errstr = proj_errno_string(proj_context_errno(PJ_DEFAULT_CTX));
         //proj_context_destroy(ctx);
@@ -833,10 +838,10 @@ SEXP project_ng_coordOp(SEXP proj, SEXP inv, SEXP aoi, SEXP ob_tran
         proj_as_wkt(PJ_DEFAULT_CTX, target_crs, PJ_WKT2_2018, NULL),
         area_of_interest);
 #else
-// valgrind 210119
+// valgrind 210120 fixed copy
     if (use_inv) pj_transform = proj_create_crs_to_crs_from_pj(PJ_DEFAULT_CTX, target_crs,
         source_crs, area_of_interest, NULL);
-// valgrind 210119
+// valgrind 210120 fixed copy
     else pj_transform = proj_create_crs_to_crs_from_pj(PJ_DEFAULT_CTX, source_crs,
         target_crs, area_of_interest, NULL);
 // FIXME >= 6.2.0
@@ -850,7 +855,9 @@ SEXP project_ng_coordOp(SEXP proj, SEXP inv, SEXP aoi, SEXP ob_tran
         error("coordinate operation creation failed: %s", errstr);
     }
 //Rprintf("%s\n", proj_pj_info(pj_transform).definition);
-    pj_transform = proj_normalize_for_visualization(PJ_DEFAULT_CTX, pj_transform);
+    PJ* pj_trans_orig = pj_transform;
+    pj_transform = proj_normalize_for_visualization(PJ_DEFAULT_CTX, pj_trans_orig);
+    proj_destroy(pj_trans_orig);
 //Rprintf("%s\n", proj_pj_info(pj_transform).definition);
 
     SEXP res;
