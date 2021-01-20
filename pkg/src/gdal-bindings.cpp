@@ -931,6 +931,7 @@ RGDAL_GetProjectionRef(SEXP sDataset, SEXP enforce_xy) {
 
     installErrorHandler();
     papszOptions = CSLAddString(papszOptions, "FORMAT=WKT2_2018");
+// valgrind 210119
     papszOptions = CSLAddString(papszOptions, "MULTILINE=YES");
     uninstallErrorHandlerAndTriggerError();
 

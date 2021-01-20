@@ -377,6 +377,7 @@ SEXP ogrP4S(SEXP ogrsourcename, SEXP Layer, SEXP morphFromESRI, SEXP dumpSRS) {
 #endif
     OGRLayer *poLayer;
 
+// valgrind 210119
     OGRSpatialReference *hSRS = new OGRSpatialReference;
     char *pszProj4 = NULL;
     SEXP ans, Datum, ToWGS84, Ellps;
@@ -450,6 +451,7 @@ SEXP ogrP4S(SEXP ogrsourcename, SEXP Layer, SEXP morphFromESRI, SEXP dumpSRS) {
         uninstallErrorHandlerAndTriggerError();
 
         installErrorHandler();
+// valgrind 210119
         if (hSRS->exportToWkt(&wkt2, papszOptions) != OGRERR_NONE) {
             SET_STRING_ELT(WKT2_2018, 0, NA_STRING);
         }
@@ -505,6 +507,7 @@ SEXP ogrP4S(SEXP ogrsourcename, SEXP Layer, SEXP morphFromESRI, SEXP dumpSRS) {
 
 
     installErrorHandler();
+//    delete hSRS;
     delete poDS;
     uninstallErrorHandlerAndTriggerError();
 
