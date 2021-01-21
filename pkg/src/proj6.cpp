@@ -306,7 +306,7 @@ SEXP list_coordinate_ops(SEXP source, SEXP target, SEXP area_of_interest, SEXP s
     PJ_OPERATION_FACTORY_CONTEXT* operation_factory_context = NULL;
     PJ_OBJ_LIST *pj_operations = NULL;
     PJ *source_crs, *target_crs;
-    PJ* pj_transform = NULL;
+//    PJ* pj_transform = NULL;
     SEXP ans, input;
     int num_operations, i, j, is_instantiable, is_ballpark, grid_count;
     int pc=0;
@@ -315,6 +315,7 @@ SEXP list_coordinate_ops(SEXP source, SEXP target, SEXP area_of_interest, SEXP s
     const char *out_short_name, *out_full_name, *out_package_name, *out_url;
     PJ_PROJ_INFO pjinfo;
 
+// valgrind 210120
     source_crs = proj_create(ctx, CHAR(STRING_ELT(source, 0)));
 
     if (source_crs == NULL) {
@@ -322,6 +323,7 @@ SEXP list_coordinate_ops(SEXP source, SEXP target, SEXP area_of_interest, SEXP s
         error("source crs not created");
     }
     
+// valgrind 210120
     target_crs = proj_create(ctx, CHAR(STRING_ELT(target, 0)));
 
     if (target_crs == NULL) {
@@ -359,6 +361,7 @@ SEXP list_coordinate_ops(SEXP source, SEXP target, SEXP area_of_interest, SEXP s
             ctx, operation_factory_context,
             PROJ_GRID_AVAILABILITY_USED_FOR_SORTING);
 
+// valgrind 210120
     pj_operations = proj_create_operations(ctx,
                 source_crs, target_crs, operation_factory_context);
     
@@ -398,7 +401,7 @@ SEXP list_coordinate_ops(SEXP source, SEXP target, SEXP area_of_interest, SEXP s
 
 
     for (i=0; i<num_operations; i++) {
-        pj_transform = proj_list_get(ctx, pj_operations, i);
+        PJ * pj_transform = proj_list_get(ctx, pj_operations, i);
         if (LOGICAL_POINTER(vis_order)[0]) {
             PJ* pj_trans_orig = pj_transform;
             pj_transform = proj_normalize_for_visualization(ctx, pj_trans_orig);
@@ -413,6 +416,7 @@ SEXP list_coordinate_ops(SEXP source, SEXP target, SEXP area_of_interest, SEXP s
         grid_count = proj_coordoperation_get_grid_used_count(ctx,
             pj_transform);
         pjinfo = proj_pj_info(pj_transform);
+
         SET_STRING_ELT(VECTOR_ELT(ans, 0), i,
             COPY_TO_USER_STRING(pjinfo.description));
         SET_STRING_ELT(VECTOR_ELT(ans, 1), i,
@@ -472,9 +476,12 @@ SEXP list_coordinate_ops(SEXP source, SEXP target, SEXP area_of_interest, SEXP s
                  } 
             }
         }
+        
+        proj_destroy(pj_transform);
+
     }
 
-    proj_destroy(pj_transform);
+//    proj_destroy(pj_transform);
     proj_list_destroy(pj_operations);
     proj_operation_factory_context_destroy(operation_factory_context);
     proj_destroy(source_crs); proj_destroy(target_crs);
@@ -879,11 +886,12 @@ SEXP project_ng(SEXP n, SEXP xlon, SEXP ylat, SEXP zz, SEXP coordOp) {
     SEXP res;
     //PJ_CONTEXT *ctx = proj_context_create();
     PJ* pj_transform = NULL;
-    PJ_COORD a, b;
+//    PJ_COORD a, b;
     double ixlon, iylat, iz=0.0;
 
     proj_log_func(PJ_DEFAULT_CTX, NULL, silent_logger);
 
+// valgrind 210120
     if ((pj_transform = proj_create(PJ_DEFAULT_CTX, CHAR(STRING_ELT(coordOp, 0)))) == 0) {
         const char *errstr = proj_errno_string(proj_context_errno(PJ_DEFAULT_CTX));
         //proj_context_destroy(ctx);
@@ -909,8 +917,9 @@ SEXP project_ng(SEXP n, SEXP xlon, SEXP ylat, SEXP zz, SEXP coordOp) {
             NUMERIC_POINTER(VECTOR_ELT(res, 0))[i]=ixlon;
             NUMERIC_POINTER(VECTOR_ELT(res, 1))[i]=iylat;
         } else {
-            a = proj_coord(ixlon, iylat, iz, 0);
-            b = proj_trans(pj_transform, PJ_FWD, a);
+            PJ_COORD a = proj_coord(ixlon, iylat, iz, 0);
+            PJ_COORD b = proj_trans(pj_transform, PJ_FWD, a);
+//            proj_destroy(a);
             if (b.uv.u == HUGE_VAL || ISNAN(b.uv.u) || b.uv.v == HUGE_VAL || 
                 ISNAN(b.uv.v)) {
                 nwarn++;
@@ -919,6 +928,7 @@ SEXP project_ng(SEXP n, SEXP xlon, SEXP ylat, SEXP zz, SEXP coordOp) {
             NUMERIC_POINTER(VECTOR_ELT(res, 1))[i]=b.uv.v;
             if (zz  != R_NilValue)
                 NUMERIC_POINTER(VECTOR_ELT(res, 2))[i]=b.uvw.w;
+//            proj_destroy(b);
         }
     }
     if (nwarn > 0) warning("%d projected point(s) not finite", nwarn);
@@ -950,6 +960,7 @@ SEXP P6_SRID_proj(SEXP inSRID, SEXP format, SEXP multiline, SEXP in_format,
     PJ_TYPE type;
 
 // valgrind 210115 resolved by copying EJP https://github.com/r-spatial/gstat/issues/82#issuecomment-762970800
+// valgrind 210120 rgdal-Ex.Rout
     if ((source_crs = proj_create(PJ_DEFAULT_CTX, CHAR(STRING_ELT(inSRID, 0)))) == NULL) {
         const char *errstr = proj_errno_string(proj_context_errno(PJ_DEFAULT_CTX));
 //        proj_context_destroy(ctx);
@@ -1072,15 +1083,19 @@ PROJcopyEPSG(SEXP tf) {
     }
     fprintf(fptf, "\"code\",\"note\",\"prj4\",\"prj_method\"\n");
 
-    PJ *pj = NULL;
+//    PJ *pj = NULL;
 // blocks error messages in this context
     proj_log_func(PJ_DEFAULT_CTX, NULL, proj_logger);
     for (i = 0; i < crs_cnt; i++) {
         const char *proj_definition;
 
-        pj = proj_create_from_database(PJ_DEFAULT_CTX, proj_crs_info[i]->auth_name,
-            proj_crs_info[i]->code, PJ_CATEGORY_CRS, 0, NULL);
-        proj_definition = proj_as_proj_string(PJ_DEFAULT_CTX, pj, PJ_PROJ_5, NULL);
+// valgrind 210120 OK leak fixed
+        PJ* pj = proj_create_from_database(PJ_DEFAULT_CTX,
+            proj_crs_info[i]->auth_name, proj_crs_info[i]->code,
+            PJ_CATEGORY_CRS, 0, NULL);
+        proj_definition = proj_as_proj_string(PJ_DEFAULT_CTX, pj,
+            PJ_PROJ_5, NULL);
+        proj_destroy(pj);
 
         fprintf(fptf, "%s,\"%s\",\"%s\",\"%s\"\n", proj_crs_info[i]->code,
   	    proj_crs_info[i]->name, proj_definition, 
@@ -1088,7 +1103,6 @@ PROJcopyEPSG(SEXP tf) {
     }
 
     fclose(fptf);
-    proj_destroy(pj);
     proj_crs_info_list_destroy(proj_crs_info);
     //proj_context_destroy(ctx);
     INTEGER_POINTER(ans)[0] = crs_cnt;

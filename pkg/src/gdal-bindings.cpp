@@ -925,14 +925,15 @@ RGDAL_GetProjectionRef(SEXP sDataset, SEXP enforce_xy) {
 
     SEXP WKT2_2018;
     char *wkt2=NULL;
-    char **papszOptions = NULL;
+//    char **papszOptions = NULL;
 
     PROTECT(WKT2_2018 = NEW_CHARACTER(1)); pc++;
 
     installErrorHandler();
-    papszOptions = CSLAddString(papszOptions, "FORMAT=WKT2_2018");
-// valgrind 210119
-    papszOptions = CSLAddString(papszOptions, "MULTILINE=YES");
+//    papszOptions = CSLAddString(papszOptions, "FORMAT=WKT2_2018");
+// valgrind 210120 leak fixed
+//    papszOptions = CSLAddString(papszOptions, "MULTILINE=YES");
+    const char* papszOptions[] = { "FORMAT=WKT2_2018", "MULTILINE=YES", nullptr };
     uninstallErrorHandlerAndTriggerError();
 
     installErrorHandler();

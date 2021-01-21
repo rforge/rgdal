@@ -377,8 +377,8 @@ SEXP ogrP4S(SEXP ogrsourcename, SEXP Layer, SEXP morphFromESRI, SEXP dumpSRS) {
 #endif
     OGRLayer *poLayer;
 
-// valgrind 210119
-    OGRSpatialReference *hSRS = new OGRSpatialReference;
+// valgrind 210120 leak maybe fixed
+    OGRSpatialReference *hSRS; // = new OGRSpatialReference;
     char *pszProj4 = NULL;
     SEXP ans, Datum, ToWGS84, Ellps;
     int i, pc=0;
@@ -442,21 +442,23 @@ SEXP ogrP4S(SEXP ogrsourcename, SEXP Layer, SEXP morphFromESRI, SEXP dumpSRS) {
 #if GDAL_VERSION_MAJOR >= 3
         SEXP WKT2_2018;
         char *wkt2=NULL;
-        char **papszOptions = NULL;
+//        char **papszOptions = NULL;
         PROTECT(WKT2_2018 = NEW_CHARACTER(1)); pc++;
 
         installErrorHandler();
-        papszOptions = CSLAddString(papszOptions, "FORMAT=WKT2_2018");
-        papszOptions = CSLAddString(papszOptions, "MULTILINE=YES");
+//        papszOptions = CSLAddString(papszOptions, "FORMAT=WKT2_2018");
+//        papszOptions = CSLAddString(papszOptions, "MULTILINE=YES");
+        const char* papszOptions[] = { "FORMAT=WKT2_2018", "MULTILINE=YES", nullptr };
         uninstallErrorHandlerAndTriggerError();
 
         installErrorHandler();
-// valgrind 210119
+// valgrind 210120 leak fixed
         if (hSRS->exportToWkt(&wkt2, papszOptions) != OGRERR_NONE) {
             SET_STRING_ELT(WKT2_2018, 0, NA_STRING);
         }
         SET_STRING_ELT(WKT2_2018, 0, COPY_TO_USER_STRING(wkt2));
-        CSLDestroy(papszOptions);
+        CPLFree( wkt2 ); // added
+//        CSLDestroy(papszOptions);
         uninstallErrorHandlerAndTriggerError();
         setAttrib(ans, install("WKT2_2018"), WKT2_2018);
 #endif

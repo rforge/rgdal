@@ -643,7 +643,7 @@ showSRID <- function(inSRID, format="WKT2", multiline="NO", enforce_xy=NULL, EPS
                 (length(grep("ellps|ELLIPSOID", c(res))) == 0L)) {
                 if (length(grep("datum|DATUM", c(res))) == 0L) {
                     msg <- paste0("Discarded ellps ", attr(res, "ellps"),
-                        " in CRS definition: ", c(res))
+                        " in Proj4 definition: ", c(res))
                 } else {
                     msg <- ""
                 }
@@ -662,12 +662,12 @@ showSRID <- function(inSRID, format="WKT2", multiline="NO", enforce_xy=NULL, EPS
                 }
             }
 #warning("Discarded ellps ", attr(res, "ellps"),
-#                    " in CRS definition")
+#                    " in Proj4 definition")
             if ((!is.null(attr(res, "datum"))) 
                 && (nchar(attr(res, "datum")) > 0L)
                 && (length(grep("datum|DATUM", c(res))) == 0L)) {
                 msg <- paste0("Discarded datum ", attr(res, "datum"),
-                    " in CRS definition")
+                    " in Proj4 definition")
                 if (!no_towgs84 && (length(grep("towgs84", c(res))) > 0L))
                     msg <- paste0(msg, ",\n but +towgs84= values preserved")
                 if (get_P6_datum_hard_fail()) stop(msg)
