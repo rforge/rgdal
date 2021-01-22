@@ -219,6 +219,7 @@ SEXP OGR_write(SEXP inp)
 
     if (!isNull(comment)) {
 //        Rprintf("CRS comment: %s\n", CHAR(STRING_ELT(comment, 0)));
+// valgrind 210122
         ppszInput = CSLAddString(ppszInput, CHAR(STRING_ELT(comment, 0)));//FIXME VG
 
 
@@ -813,7 +814,7 @@ SEXP OGR_write(SEXP inp)
 // use of organizePolygons 151030
                 OGRPolygon** papoPolygons = new OGRPolygon*[ Lns_l ];
                 for (k=0; k<Lns_l; k++) {
-// valgrind 210119
+// valgrind 210122
                     papoPolygons[k] = new OGRPolygon();
                     SEXP crds, dim;
                     crds = GET_SLOT(VECTOR_ELT(GET_SLOT(VECTOR_ELT(pls, i),
@@ -821,20 +822,18 @@ SEXP OGR_write(SEXP inp)
                     dim = getAttrib(crds, install("dim"));
                     int ncrds = INTEGER_POINTER(dim)[0];
 
-// valgrind 210119
+// valgrind 210122
                     OGRLinearRing *OGRlr = new OGRLinearRing;
 
                     for (j=0; j<ncrds; j++) 
-// valgrind 210119
+// valgrind 210122
                         OGRlr->setPoint( j, NUMERIC_POINTER(crds)[j],
                                     NUMERIC_POINTER(crds)[j+ncrds] );
 
                     papoPolygons[k]->addRingDirectly(OGRlr);
-//                    delete OGRlr; // 210120
-
                 } // k
                 int isValidGeometry;
-// valgrind 210119
+// valgrind 210122
                 poRet = OGRGeometryFactory::organizePolygons(
                     (OGRGeometry**)papoPolygons, Lns_l, &isValidGeometry );
                 if (!isValidGeometry) {
@@ -863,11 +862,11 @@ SEXP OGR_write(SEXP inp)
 
             } else {
                 int nExtRings = length(comms);
-// valgrind 210119
+// valgrind 210122
                 OGRMultiPolygon *poRet = new OGRMultiPolygon();//FIXME VG
                 SEXP PLSi = GET_SLOT(VECTOR_ELT(pls, i), install("Polygons"));
                 for (int iER=0; iER<nExtRings; iER++) {
-// valgrind 210119
+// valgrind 210122
                     OGRPolygon *OGRply = new OGRPolygon();//FIXME VG
                     int nthisiER = length(VECTOR_ELT(comms, iER));
 
@@ -885,7 +884,7 @@ SEXP OGR_write(SEXP inp)
                                    NUMERIC_POINTER(crds)[j+ncrds] );
                         OGRply->addRing( &OGRlr ); 
                     }
-// valgrind 210120
+// valgrind 2101222
                     poRet->addGeometry(OGRply);//FIXME VG
                     OGRply->empty();
                 }

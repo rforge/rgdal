@@ -860,6 +860,7 @@ RGDAL_GetRasterCount(SEXP sDataset) {
 SEXP
 RGDAL_GetProjectionRef(SEXP sDataset, SEXP enforce_xy) {
 
+// valgrind 210122
   OGRSpatialReference *oSRS = new OGRSpatialReference;
   char *pszSRS_WKT = NULL;
   SEXP ans, Datum, ToWGS84, Ellps;
@@ -925,14 +926,10 @@ RGDAL_GetProjectionRef(SEXP sDataset, SEXP enforce_xy) {
 
     SEXP WKT2_2018;
     char *wkt2=NULL;
-//    char **papszOptions = NULL;
 
     PROTECT(WKT2_2018 = NEW_CHARACTER(1)); pc++;
 
     installErrorHandler();
-//    papszOptions = CSLAddString(papszOptions, "FORMAT=WKT2_2018");
-// valgrind 210120 leak fixed
-//    papszOptions = CSLAddString(papszOptions, "MULTILINE=YES");
     const char* papszOptions[] = { "FORMAT=WKT2_2018", "MULTILINE=YES", nullptr };
     uninstallErrorHandlerAndTriggerError();
 
@@ -1834,13 +1831,14 @@ RGDAL_SetCategoryNames(SEXP sxpRasterBand, SEXP sxpNames) {
   int i;
   installErrorHandler();
   for (i = 0; i < length(sxpNames); ++i)
-    nameList = CSLAddString(nameList, asString(sxpNames, i));//FIXME VG
+    nameList = CSLAddString(nameList, asString(sxpNames, i));
   uninstallErrorHandlerAndTriggerError();
 
   installErrorHandler();
   CPLErr err = pRasterBand->SetCategoryNames(nameList);
 
   if (err == CE_Failure) warning("Failed to set category names");
+  CSLDestroy(nameList);
   uninstallErrorHandlerAndTriggerError();
 
   return(sxpRasterBand);
@@ -1859,7 +1857,7 @@ RGDAL_GetCategoryNames(SEXP sxpRasterBand) {
   if (pcCNames == NULL) return(R_NilValue);
 
   installErrorHandler();
-  pcCNames = CSLDuplicate(pcCNames);//FIXME VG
+  pcCNames = CSLDuplicate(pcCNames);
   uninstallErrorHandlerAndTriggerError();
 
   SEXP sxpCNames;
@@ -1878,6 +1876,7 @@ RGDAL_GetCategoryNames(SEXP sxpRasterBand) {
     SET_STRING_ELT(sxpCNames, i, mkChar(field));
 
   }
+  CSLDestroy(pcCNames);
   uninstallErrorHandlerAndTriggerError();
 
   UNPROTECT(1);
@@ -2001,7 +2000,7 @@ RGDAL_SetProject(SEXP sxpDataset, SEXP proj4string) {
 
   if (err == CE_Failure) 
 	warning("Failed to set projection\n");
-        delete oSRS;
+  delete oSRS;
   uninstallErrorHandlerAndTriggerError();
 
   return(sxpDataset);
@@ -2040,6 +2039,7 @@ RGDAL_SetProject_WKT2(SEXP sxpDataset, SEXP WKT2string, SEXP enforce_xy) {
 	warning("Failed to set projection\n");
         delete oSRS;
   }
+  delete oSRS;
   uninstallErrorHandlerAndTriggerError();
 
   return(sxpDataset);
@@ -2080,6 +2080,7 @@ SEXP RGDAL_SetRasterColorTable(SEXP raster, SEXP icT, SEXP ricT, SEXP cicT) {
         uninstallErrorHandlerAndTriggerError();
         warning("Unable to set color table");
     }
+    GDALDestroyColorTable(ctab);
     uninstallErrorHandlerAndTriggerError();
 
     return(raster);
