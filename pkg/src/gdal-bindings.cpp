@@ -856,33 +856,123 @@ RGDAL_GetRasterCount(SEXP sDataset) {
 
 }
 
-/* changed to return proj4 string 20060212 RSB */
 SEXP
-RGDAL_GetProjectionRef(SEXP sDataset, SEXP enforce_xy) {
+RGDAL_GetProjectionRef3(SEXP sDataset, SEXP enforce_xy);
 
-// valgrind 210122
-  OGRSpatialReference *oSRS = new OGRSpatialReference;
-  char *pszSRS_WKT = NULL;
+SEXP
+RGDAL_GetProjectionRef3(SEXP sDataset, SEXP enforce_xy) {
+
   SEXP ans, Datum, ToWGS84, Ellps;
   int i, pc=0;
   const char *datum, *towgs84, *ellps;
-/*  int vis_order;
+  OGRSpatialReference *oSRS;
+  int vis_order;
 
   if (enforce_xy == R_NilValue) vis_order = 0;
   else if (LOGICAL_POINTER(enforce_xy)[0] == 1) vis_order = 1;
   else if (LOGICAL_POINTER(enforce_xy)[0] == 0) vis_order = 0;
-  else vis_order = 0;*/
+  else vis_order = 0;
 
+  installErrorHandler();
   GDALDataset *pDataset = getGDALDatasetPtr(sDataset);
+  oSRS = (OGRSpatialReference*) pDataset->GetSpatialRef();
+  uninstallErrorHandlerAndTriggerError();
+
+  if (oSRS != NULL) {
+    installErrorHandler();
+    if (vis_order == 1) 
+    oSRS->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
+    uninstallErrorHandlerAndTriggerError();
+  }
+
+  PROTECT(ans = NEW_CHARACTER(1)); pc++;
+
+  if (oSRS != NULL) {
+
+    installErrorHandler();
+    datum = oSRS->GetAttrValue("DATUM");
+    uninstallErrorHandlerAndTriggerError();
+    PROTECT(Datum = NEW_CHARACTER(1)); pc++;
+    if (datum != NULL) {
+      SET_STRING_ELT(Datum, 0, COPY_TO_USER_STRING(datum));
+      setAttrib(ans, install("datum"), Datum);
+    }
+
+    installErrorHandler();
+    ellps = oSRS->GetAttrValue("DATUM|SPHEROID");
+    uninstallErrorHandlerAndTriggerError();
+    PROTECT(Ellps = NEW_CHARACTER(1)); pc++;
+    if (ellps != NULL) {
+      SET_STRING_ELT(Ellps, 0, COPY_TO_USER_STRING(ellps));
+      setAttrib(ans, install("ellps"), Ellps);
+    }
+
+    PROTECT(ToWGS84 = NEW_CHARACTER(7)); pc++;
+    installErrorHandler();
+    for (i=0; i<7; i++) {
+      towgs84 = oSRS->GetAttrValue("TOWGS84", i);
+      if (towgs84 != NULL) SET_STRING_ELT(ToWGS84, i,
+        COPY_TO_USER_STRING(towgs84));
+    }
+    setAttrib(ans, install("towgs84"), ToWGS84);
+    uninstallErrorHandlerAndTriggerError();
+
+    SEXP WKT2_2018;
+    char *wkt2=NULL;
+    PROTECT(WKT2_2018 = NEW_CHARACTER(1)); pc++;
+    const char* papszOptions[] = { "FORMAT=WKT2_2018", "MULTILINE=YES", nullptr };
+    installErrorHandler();
+    if (oSRS->exportToWkt(&wkt2, papszOptions) != OGRERR_NONE) {
+      SET_STRING_ELT(WKT2_2018, 0, NA_STRING);
+    } else {
+      SET_STRING_ELT(WKT2_2018, 0, COPY_TO_USER_STRING(wkt2));
+      CPLFree( wkt2 );
+    }
+    uninstallErrorHandlerAndTriggerError();
+    setAttrib(ans, install("WKT2_2018"), WKT2_2018);
+
+    installErrorHandler();
+    char *pszSRS_P4 = NULL;
+    if (oSRS->exportToProj4( &pszSRS_P4 ) != OGRERR_NONE) {
+      SET_STRING_ELT(ans, 0, NA_STRING);
+    } else {
+      SET_STRING_ELT(ans, 0, COPY_TO_USER_STRING(pszSRS_P4));
+      CPLFree( pszSRS_P4 );
+    }
+    uninstallErrorHandlerAndTriggerError();
+  } else SET_STRING_ELT(ans, 0, NA_STRING);
+
+
+  UNPROTECT(pc);
+  return(ans);
+
+}
+
+/* changed to return proj4 string 20060212 RSB */
+SEXP
+RGDAL_GetProjectionRef(SEXP sDataset, SEXP enforce_xy) {
+
+  if (GDAL_VERSION_MAJOR >= 3) {
+    return(RGDAL_GetProjectionRef3(sDataset, enforce_xy));
+  }
+
+// valgrind 210122
+  OGRSpatialReference *oSRS = new OGRSpatialReference;
+  char *pszSRS_WKT = NULL;
+  SEXP ans;
+  int pc=0;
   
   installErrorHandler();
+
+  GDALDataset *pDataset = getGDALDatasetPtr(sDataset);
+
   pszSRS_WKT = (char*) pDataset->GetProjectionRef();
   uninstallErrorHandlerAndTriggerError();
 
   PROTECT(ans = NEW_CHARACTER(1)); pc++;
 
   if (strlen(pszSRS_WKT) == 0) {
-    SET_STRING_ELT(ans, 0, COPY_TO_USER_STRING(""));
+    SET_STRING_ELT(ans, 0, NA_STRING);
     UNPROTECT(pc); 
     return(ans);
   }
@@ -897,58 +987,9 @@ RGDAL_GetProjectionRef(SEXP sDataset, SEXP enforce_xy) {
   uninstallErrorHandlerAndTriggerError();
 
   if (oSRS != NULL) {
-
-    installErrorHandler();
-    datum = oSRS->GetAttrValue("DATUM");
-    uninstallErrorHandlerAndTriggerError();
-    PROTECT(Datum = NEW_CHARACTER(1)); pc++;
-    if (datum != NULL) SET_STRING_ELT(Datum, 0, COPY_TO_USER_STRING(datum));
-
-    installErrorHandler();
-    ellps = oSRS->GetAttrValue("DATUM|SPHEROID");
-    uninstallErrorHandlerAndTriggerError();
-    PROTECT(Ellps = NEW_CHARACTER(1)); pc++;
-    if (ellps != NULL) SET_STRING_ELT(Ellps, 0, COPY_TO_USER_STRING(ellps));
-
-    PROTECT(ToWGS84 = NEW_CHARACTER(7)); pc++;
-    installErrorHandler();
-    for (i=0; i<7; i++) {
-      towgs84 = oSRS->GetAttrValue("TOWGS84", i);
-      if (towgs84 != NULL) SET_STRING_ELT(ToWGS84, i,
-        COPY_TO_USER_STRING(towgs84));
-    }
-    uninstallErrorHandlerAndTriggerError();
-
-#if GDAL_VERSION_MAJOR >= 3
-    installErrorHandler();
-        oSRS->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
-    uninstallErrorHandlerAndTriggerError();
-
-    SEXP WKT2_2018;
-    char *wkt2=NULL;
-
-    PROTECT(WKT2_2018 = NEW_CHARACTER(1)); pc++;
-
-    installErrorHandler();
-    const char* papszOptions[] = { "FORMAT=WKT2_2018", "MULTILINE=YES", nullptr };
-    uninstallErrorHandlerAndTriggerError();
-
-    installErrorHandler();
-    if (oSRS->exportToWkt(&wkt2, papszOptions) != OGRERR_NONE) {
-      SET_STRING_ELT(WKT2_2018, 0, NA_STRING);
-    } else {
-      SET_STRING_ELT(WKT2_2018, 0, COPY_TO_USER_STRING(wkt2));
-      CPLFree( wkt2 );
-    }
-    uninstallErrorHandlerAndTriggerError();
-    setAttrib(ans, install("WKT2_2018"), WKT2_2018);
-#endif
-  }
-
-  if (oSRS != NULL) {
     installErrorHandler();
     if (oSRS->exportToProj4( &pszSRS_WKT ) != OGRERR_NONE) {
-      SET_STRING_ELT(ans, 0, COPY_TO_USER_STRING(""));
+      SET_STRING_ELT(ans, 0, NA_STRING);
     } else {
       SET_STRING_ELT(ans, 0, COPY_TO_USER_STRING(pszSRS_WKT));
       CPLFree( pszSRS_WKT );
@@ -957,12 +998,7 @@ RGDAL_GetProjectionRef(SEXP sDataset, SEXP enforce_xy) {
   } else SET_STRING_ELT(ans, 0, COPY_TO_USER_STRING(""));
 
 
-  if (oSRS != NULL) {
-    setAttrib(ans, install("towgs84"), ToWGS84);
-    setAttrib(ans, install("datum"), Datum);
-    setAttrib(ans, install("ellps"), Ellps);
-  }
-  delete oSRS;
+//  delete oSRS;
 
   UNPROTECT(pc);
   return(ans);

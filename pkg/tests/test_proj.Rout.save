@@ -31,7 +31,7 @@ Warning message:
 In showSRID(uprojargs, format = "PROJ", multiline = "NO", prefer_proj = prefer_proj) :
   PROJ/GDAL PROJ string degradation in workflow
  repeated warnings suppressed
- Discarded datum Unknown based on Clarke 1866 ellipsoid in CRS definition
+ Discarded datum Unknown based on Clarke 1866 ellipsoid in Proj4 definition
 > state.ll83 <- spTransform(states, CRS("+proj=longlat +ellps=GRS80"))
 > state.ll <- spTransform(state.ll83, CRS("+proj=longlat +ellps=clrk66"))
 > stopifnot(isTRUE(all.equal(coordinates(states), coordinates(state.ll))))
@@ -75,4 +75,4 @@ Warning messages:
 > 
 > proc.time()
    user  system elapsed 
-  0.538   0.044   0.585 
+  0.489   0.040   0.526 

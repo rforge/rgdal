@@ -448,7 +448,7 @@ getProjectionRef <- function(dataset, OVERRIDE_PROJ_DATUM_WITH_TOWGS84=NULL, enf
     res <- .Call('RGDAL_GetProjectionRef', dataset, enforce_xy, PACKAGE="rgdal")
   }
   no_ellps <- FALSE
-  if (!(nchar(res) == 0L) && new_proj_and_gdal()) {
+  if (!(is.na(res)) && new_proj_and_gdal()) {
     no_towgs84 <- all(nchar(attr(res, "towgs84")) == 0)
     if ((length(grep("towgs84", c(res))) == 0L) && !no_towgs84)
       warning("TOWGS84 discarded")
