@@ -862,6 +862,8 @@ RGDAL_GetProjectionRef3(SEXP sDataset, SEXP enforce_xy);
 SEXP
 RGDAL_GetProjectionRef3(SEXP sDataset, SEXP enforce_xy) {
 
+#if GDAL_VERSION_MAJOR > 2
+
   SEXP ans, Datum, ToWGS84, Ellps;
   int i, pc=0;
   const char *datum, *towgs84, *ellps;
@@ -946,6 +948,12 @@ RGDAL_GetProjectionRef3(SEXP sDataset, SEXP enforce_xy) {
   UNPROTECT(pc);
   return(ans);
 
+#else
+
+  return(R_NilValue);
+
+#endif
+
 }
 
 /* changed to return proj4 string 20060212 RSB */
@@ -956,7 +964,6 @@ RGDAL_GetProjectionRef(SEXP sDataset, SEXP enforce_xy) {
     return(RGDAL_GetProjectionRef3(sDataset, enforce_xy));
   }
 
-// valgrind 210122
   OGRSpatialReference *oSRS = new OGRSpatialReference;
   char *pszSRS_WKT = NULL;
   SEXP ans;

@@ -1,3 +1,55 @@
+2021-01-24 17:32  rsbivand
+
+	* [r1100] configure: remaining valgrind leaks
+
+2021-01-24 17:31  rsbivand
+
+	* [r1099] DESCRIPTION, R/gdal.R, R/ogr_write.R, R/sgdf_gdal.R,
+	  R/sp_gdal.R, R/subs.R, src/OGR_write.cpp, src/gdal-bindings.cpp,
+	  tests/srs_rendering.Rout.save, tests/test_proj.Rout.save,
+	  tests/tripup.R, tests/tripup.Rout.save: remaining valgrind leaks
+
+2021-01-22 13:39  rsbivand
+
+	* [r1098] src/OGR_write.cpp, src/gdal-bindings.cpp,
+	  src/ogr_proj.cpp, src/proj6.cpp: ogr_proj.cpp remaining leaks fix
+
+2021-01-21 09:25  rsbivand
+
+	* [r1097] R/gdal.R, R/ogr.R, R/ogr_sp.R, src/OGR_write.cpp,
+	  src/gdal-bindings.cpp, src/ogr_proj.cpp, src/proj6.cpp: proj6.cpp
+	  remaining leaks fix
+
+2021-01-20 12:05  rsbivand
+
+	* [r1096] src/proj6.cpp: proj6.cpp remaining leaks fix
+
+2021-01-20 09:47  rsbivand
+
+	* [r1095] src/OGR_write.cpp, src/gdal-bindings.cpp,
+	  src/ogr_proj.cpp, src/proj6.cpp: proj6.cpp l. 946 leak fix
+
+2021-01-15 10:03  rsbivand
+
+	* [r1094] src/gdal-bindings.cpp: tidy
+
+2021-01-14 20:54  rsbivand
+
+	* [r1093] DESCRIPTION, man/writeOGR.Rd, src/ogr_proj.cpp,
+	  src/proj6.cpp: tidy
+
+2020-12-29 19:24  rsbivand
+
+	* [r1092] NEWS.md, tests/test_enforce_xy.Rout.save: tidy
+
+2020-12-29 19:10  rsbivand
+
+	* [r1091] ChangeLog, NEWS.md, inst/ChangeLog: tidy
+
+2020-12-29 19:08  rsbivand
+
+	* [r1090] ChangeLog, NEWS.md: ob_tran handling for 7.2.1
+
 2020-12-29 18:56  rsbivand
 
 	* [r1089] src/projectit.cpp, tests/srs_rendering.Rout.save,

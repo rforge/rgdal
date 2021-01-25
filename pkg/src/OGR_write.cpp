@@ -221,7 +221,7 @@ SEXP OGR_write(SEXP inp)
         installErrorHandler();
 #if GDAL_VERSION_MAJOR == 1 || ( GDAL_VERSION_MAJOR == 2 && GDAL_VERSION_MINOR <= 2 ) // thanks to Even Roualt https://github.com/OSGeo/gdal/issues/681
 //#if GDAL_VERSION_MAJOR <= 2 && GDAL_VERSION_MINOR <= 2
-        if (poSRS->importFromWkt((char *) CHAR(STRING_ELT(comment, 0))) != OGRERR_NONE) {
+        if (poSRS->importFromWkt((char **) CHAR(STRING_ELT(comment, 0))) != OGRERR_NONE) {
 #else
         if (poSRS->importFromWkt((const char *) CHAR(STRING_ELT(comment, 0))) != OGRERR_NONE) {
 #endif

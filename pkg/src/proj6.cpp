@@ -255,7 +255,12 @@ SEXP get_source_crs(SEXP source) {
 
     PROTECT(res = NEW_CHARACTER(1));
     SET_STRING_ELT(res, 0,
-        COPY_TO_USER_STRING(proj_as_wkt(ctx, target_crs, PJ_WKT2_2019, NULL)));
+#if PROJ_VERSION_MAJOR == 6  && PROJ_VERSION_MINOR < 3
+        COPY_TO_USER_STRING(proj_as_wkt(ctx, target_crs, PJ_WKT2_2018, NULL))
+#else
+        COPY_TO_USER_STRING(proj_as_wkt(ctx, target_crs, PJ_WKT2_2019, NULL))
+#endif
+    );
     UNPROTECT(1);
     proj_destroy(target_crs);
     proj_destroy(source_crs);
@@ -268,6 +273,11 @@ SEXP get_source_crs(SEXP source) {
 
 SEXP proj_vis_order(SEXP wkt2) {
 
+#if PROJ_VERSION_MAJOR == 6  && PROJ_VERSION_MINOR < 3
+    warning("no CRS normalization available before PROJ 6.3");
+    return(wkt2);
+#else
+
     PJ_CONTEXT *ctx = proj_context_create();
     PJ *source_crs, *target_crs;
     SEXP res;
@@ -278,9 +288,7 @@ SEXP proj_vis_order(SEXP wkt2) {
         proj_context_destroy(ctx);
         error("proj_vis_order: source crs not created");
     }
-
     target_crs = proj_normalize_for_visualization(ctx, source_crs);
-
     if (target_crs == NULL) {
         proj_context_destroy(ctx);
         error("proj_vis_order: target crs not created");
@@ -288,14 +296,19 @@ SEXP proj_vis_order(SEXP wkt2) {
 
     PROTECT(res = NEW_CHARACTER(1));
     SET_STRING_ELT(res, 0,
-        COPY_TO_USER_STRING(proj_as_wkt(ctx, target_crs, PJ_WKT2_2019, NULL)));
+#if PROJ_VERSION_MAJOR == 6  && PROJ_VERSION_MINOR < 3
+        COPY_TO_USER_STRING(proj_as_wkt(ctx, target_crs, PJ_WKT2_2018, NULL))
+#else
+        COPY_TO_USER_STRING(proj_as_wkt(ctx, target_crs, PJ_WKT2_2019, NULL))
+#endif
+    );
     UNPROTECT(1);
     proj_destroy(target_crs);
     proj_destroy(source_crs);
     proj_context_destroy(ctx);
 
     return(res);
-
+#endif
 }
 
 // unname(sapply(o[[2]], function(x) gsub(" ", " +", paste0("+", x))))
@@ -402,11 +415,15 @@ SEXP list_coordinate_ops(SEXP source, SEXP target, SEXP area_of_interest, SEXP s
 
     for (i=0; i<num_operations; i++) {
         PJ * pj_transform = proj_list_get(ctx, pj_operations, i);
+#if PROJ_VERSION_MAJOR == 6  && PROJ_VERSION_MINOR < 1
+        warning("no Coordinate Operation normalization available before PROJ 6.1");
+#else
         if (LOGICAL_POINTER(vis_order)[0]) {
             PJ* pj_trans_orig = pj_transform;
             pj_transform = proj_normalize_for_visualization(ctx, pj_trans_orig);
             proj_destroy(pj_trans_orig);
         }
+#endif
         is_instantiable = proj_coordoperation_is_instantiable(ctx,
             pj_transform);
         is_ballpark = proj_coordoperation_has_ballpark_transformation(ctx,
@@ -586,8 +603,6 @@ SEXP transform_ng(SEXP fromargs, SEXP toargs, SEXP coordOp, SEXP npts, SEXP x, S
             //proj_context_destroy(ctx);
 	    error("coordinate operation creation failed: %s", errstr);
         }
-//        pj_transform = proj_normalize_for_visualization(ctx, pj_transform);
-
     } else {
 //Rprintf("source crs input: %s\n", CHAR(STRING_ELT(fromargs, 0)));
     	if ((source_crs = proj_create(PJ_DEFAULT_CTX, CHAR(STRING_ELT(fromargs, 0)))) == NULL) {
@@ -621,7 +636,6 @@ SEXP transform_ng(SEXP fromargs, SEXP toargs, SEXP coordOp, SEXP npts, SEXP x, S
         }
 
 #else
-// valgrind 210120 fix by copying
         if ((pj_transform = proj_create_crs_to_crs_from_pj(PJ_DEFAULT_CTX, 
             source_crs, target_crs, area_of_interest, NULL)) == 0) {
 // FIXME >= 6.2.0
@@ -634,11 +648,15 @@ SEXP transform_ng(SEXP fromargs, SEXP toargs, SEXP coordOp, SEXP npts, SEXP x, S
         }
 #endif
 //Rprintf("%s\n", proj_pj_info(pj_transform).definition);
+#if PROJ_VERSION_MAJOR == 6  && PROJ_VERSION_MINOR < 1
+    warning("no Coordinate Operation normalization available before PROJ 6.1");
+#else
         if (vis_order == 1) {
             PJ* pj_trans_orig = pj_transform;
             pj_transform = proj_normalize_for_visualization(PJ_DEFAULT_CTX, pj_trans_orig);
             proj_destroy(pj_trans_orig);
         }
+#endif
     }
 //Rprintf("%s\n", proj_pj_info(pj_transform).definition);
 //	if (proj_normalize_for_visualization(ctx, pj_transform) != NULL) // EJP
@@ -803,7 +821,6 @@ SEXP project_ng_coordOp(SEXP proj, SEXP inv, SEXP aoi, SEXP ob_tran
     
 
 //Rprintf("target crs input: %s\n", CHAR(STRING_ELT(proj, 0)));
-// valgrind 210120 fixed copy
     if ((target_crs = proj_create(PJ_DEFAULT_CTX, CHAR(STRING_ELT(proj, 0)))) == 0) {
         const char *errstr = proj_errno_string(proj_context_errno(PJ_DEFAULT_CTX));
         //proj_context_destroy(ctx);
@@ -845,10 +862,8 @@ SEXP project_ng_coordOp(SEXP proj, SEXP inv, SEXP aoi, SEXP ob_tran
         proj_as_wkt(PJ_DEFAULT_CTX, target_crs, PJ_WKT2_2018, NULL),
         area_of_interest);
 #else
-// valgrind 210120 fixed copy
     if (use_inv) pj_transform = proj_create_crs_to_crs_from_pj(PJ_DEFAULT_CTX, target_crs,
         source_crs, area_of_interest, NULL);
-// valgrind 210120 fixed copy
     else pj_transform = proj_create_crs_to_crs_from_pj(PJ_DEFAULT_CTX, source_crs,
         target_crs, area_of_interest, NULL);
 // FIXME >= 6.2.0
@@ -862,9 +877,13 @@ SEXP project_ng_coordOp(SEXP proj, SEXP inv, SEXP aoi, SEXP ob_tran
         error("coordinate operation creation failed: %s", errstr);
     }
 //Rprintf("%s\n", proj_pj_info(pj_transform).definition);
+#if PROJ_VERSION_MAJOR == 6  && PROJ_VERSION_MINOR < 1
+    warning("no Coordinate Operation normalization available before PROJ 6.1");
+#else
     PJ* pj_trans_orig = pj_transform;
     pj_transform = proj_normalize_for_visualization(PJ_DEFAULT_CTX, pj_trans_orig);
     proj_destroy(pj_trans_orig);
+#endif
 //Rprintf("%s\n", proj_pj_info(pj_transform).definition);
 
     SEXP res;
@@ -885,7 +904,6 @@ SEXP project_ng(SEXP n, SEXP xlon, SEXP ylat, SEXP zz, SEXP coordOp) {
     int i, nwarn=0, nn=INTEGER_POINTER(n)[0];
     SEXP res;
 //    PJ_CONTEXT *ctx = proj_context_create();
-//    PJ* pj_transform;
     PJ_COORD a, b;
     double ixlon, iylat, iz=0.0;
 
@@ -938,7 +956,6 @@ SEXP project_ng(SEXP n, SEXP xlon, SEXP ylat, SEXP zz, SEXP coordOp) {
     }
     if (nwarn > 0) warning("%d projected point(s) not finite", nwarn);
 
-//    proj_destroy(pj_transform);
 //    proj_context_destroy(ctx);
 
     UNPROTECT(1);
@@ -960,18 +977,17 @@ SEXP P6_SRID_proj(SEXP inSRID, SEXP format, SEXP multiline, SEXP in_format,
     else if (LOGICAL_POINTER(enforce_xy)[0] == 0) vis_order = 0;
     else vis_order = 0;
 
-//    PJ_CONTEXT *ctx = proj_context_create();
-    PJ *source_crs;
-    PJ_TYPE type;
-
-// valgrind 210115 resolved by copying EJP https://github.com/r-spatial/gstat/issues/82#issuecomment-762970800
-// valgrind 210120 rgdal-Ex.Rout
-    if ((source_crs = proj_create(PJ_DEFAULT_CTX, CHAR(STRING_ELT(inSRID, 0)))) == NULL) {
+    PJ *source_crs = proj_create(PJ_DEFAULT_CTX, CHAR(STRING_ELT(inSRID, 0)));
+    // valgrind resolved by copying EJP 
+    // https://github.com/r-spatial/gstat/issues/82#issuecomment-762970800
+    if (source_crs == NULL) {
         const char *errstr = proj_errno_string(proj_context_errno(PJ_DEFAULT_CTX));
 //        proj_context_destroy(ctx);
 	error("source crs creation failed: %s", errstr);
     }
 
+#if (PROJ_VERSION_MAJOR > 6 || (PROJ_VERSION_MAJOR == 6 && PROJ_VERSION_MINOR >= 1))
+    PJ_TYPE type;
     type = proj_get_type(source_crs);
 
     if (type == PJ_TYPE_BOUND_CRS) {
@@ -983,7 +999,11 @@ SEXP P6_SRID_proj(SEXP inSRID, SEXP format, SEXP multiline, SEXP in_format,
             error("crs not converted to source only");
         }
     }
+#endif
 
+#if (PROJ_VERSION_MAJOR == 6  && PROJ_VERSION_MINOR < 3)
+    warning("no CRS normalization available before PROJ 6.3");
+#else
     if (vis_order) {
         PJ *orig_crs = source_crs;
         source_crs = proj_normalize_for_visualization(PJ_DEFAULT_CTX, orig_crs);
@@ -993,6 +1013,7 @@ SEXP P6_SRID_proj(SEXP inSRID, SEXP format, SEXP multiline, SEXP in_format,
             error("crs not converted to visualization order");
         }
     }
+#endif
 // FIXME PROJ 8.0 datum ensemble vulnerability
     PJ* dtm = proj_crs_get_datum(PJ_DEFAULT_CTX, source_crs);
     if (dtm != NULL) {
@@ -1018,8 +1039,13 @@ SEXP P6_SRID_proj(SEXP inSRID, SEXP format, SEXP multiline, SEXP in_format,
 
     if (INTEGER_POINTER(out_format)[0] == 1L) {
         
+#if PROJ_VERSION_MAJOR == 6  && PROJ_VERSION_MINOR < 3
+        if ((pszSRS = proj_as_wkt(PJ_DEFAULT_CTX, source_crs, PJ_WKT2_2018, NULL))
+            == NULL) {
+#else
         if ((pszSRS = proj_as_wkt(PJ_DEFAULT_CTX, source_crs, PJ_WKT2_2019, NULL))
             == NULL) {
+#endif
             const char *errstr = proj_errno_string(proj_context_errno(PJ_DEFAULT_CTX));
             warning("export to WKT2 failed: %s", errstr);
             SET_STRING_ELT(ans, 0, NA_STRING);
@@ -1094,7 +1120,6 @@ PROJcopyEPSG(SEXP tf) {
     for (i = 0; i < crs_cnt; i++) {
         const char *proj_definition;
 
-// valgrind 210120 OK leak fixed
         PJ* pj = proj_create_from_database(PJ_DEFAULT_CTX,
             proj_crs_info[i]->auth_name, proj_crs_info[i]->code,
             PJ_CATEGORY_CRS, 0, NULL);

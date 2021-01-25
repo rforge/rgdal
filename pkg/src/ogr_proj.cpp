@@ -277,15 +277,24 @@ SEXP wkt_to_p4s(SEXP wkt, SEXP esri) {
 
     installErrorHandler();
 #if GDAL_VERSION_MAJOR == 1 || ( GDAL_VERSION_MAJOR == 2 && GDAL_VERSION_MINOR <= 2 ) // thanks to Even Roualt https://github.com/OSGeo/gdal/issues/681
-    if (hSRS->importFromWkt(CHAR(STRING_ELT(wkt, 0))) != OGRERR_NONE) 
+    char **ppszInput = NULL;
+    ppszInput = CSLAddString(ppszInput, CHAR(STRING_ELT(wkt, 0)));
+    if (hSRS->importFromWkt(ppszInput) != OGRERR_NONE) 
+    {
+        delete hSRS;
+        CPLFree(ppszInput);
+        uninstallErrorHandlerAndTriggerError();
+	error("Can't parse WKT-style parameter string");
+    }
+    CPLFree(ppszInput);
 #else
     if (hSRS->importFromWkt((const char *) CHAR(STRING_ELT(wkt, 0))) != OGRERR_NONE) 
-#endif 
     {
         delete hSRS;
         uninstallErrorHandlerAndTriggerError();
 	error("Can't parse WKT-style parameter string");
     }
+#endif 
     uninstallErrorHandlerAndTriggerError();
 
 #if GDAL_VERSION_MAJOR >= 3

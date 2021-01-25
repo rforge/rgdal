@@ -1,4 +1,12 @@
-# Version 1.5-19 (development, rev. 1083-1092)
+# Version 1.5-20 (development, rev 1093-1102)
+
+* Suggest **rgeos** to write pre-SFS multipolygon objects to avoid unpleasant workaround.
+
+* Try to eliminate current valgrind leaks, starting from (https://github.com/r-spatial/gstat/issues/82).
+
+* Try to increase robustness to installation with early PROJ 6 versions, which often lack functionality found necessary later (for example visualization order); the code had assumed that this function always was available and behaved as it now does. There are now graceful failures when not available.
+
+# Version 1.5-19 (2021-01-05, rev. 1083-1092)
 
 * Dan Baston: raster speedups 
 
