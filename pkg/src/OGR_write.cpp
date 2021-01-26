@@ -787,8 +787,7 @@ SEXP OGR_write(SEXP inp)
             uninstallErrorHandlerAndTriggerError();
             error("number of objects mismatch");
         }
-        SEXP Lns;
-        int Lns_l;
+
         if (verbose) Rprintf("Writing %d wkbMultiPolygon objects\n", nobs);
         installErrorHandler();
 #ifdef GDALV2
