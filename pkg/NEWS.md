@@ -1,4 +1,7 @@
-# Version 1.5-21 (development, rev 1093-1103)
+# Version 1.5-22 (development, rev. 1106-)
+
+
+# Version 1.5-21 (development, rev. 1093-1105)
 
 * Suggest **rgeos** to write pre-SFS multipolygon objects to avoid unpleasant workaround.
 
