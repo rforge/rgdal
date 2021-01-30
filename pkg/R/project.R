@@ -250,6 +250,7 @@ OSRIsProjected <- function(obj) {
                 }
                 coordOp <- .Call("project_ng_coordOp", proj,
                     as.logical(inv), aoi, as.logical(use_ob_tran), PACKAGE="rgdal")
+                coordOp <- gsub(" ", " +", paste0("+", coordOp))
             }
             if (verbose) cat(strwrap(coordOp), sep="\n")
             res <- .Call("project_ng",
@@ -442,6 +443,7 @@ if (!isGeneric("spTransform"))
                         out_coordOp <- .Call("project_ng_coordOp", proj,
                             as.logical(inv), NULL, as.logical(use_ob_tran1),
                             PACKAGE="rgdal")
+                        out_coordOp <- gsub(" ", " +", paste0("+", out_coordOp))
                     }
                     res <- .Call("project_ng", as.integer(n), 
                         as.double(crds[,1]), as.double(crds[,2]), NULL,
@@ -483,6 +485,7 @@ if (!isGeneric("spTransform"))
                         out_coordOp <- .Call("project_ng_coordOp", proj,
                             as.logical(inv), NULL, as.logical(use_ob_tran1),
                             PACKAGE="rgdal")
+                        out_coordOp <- gsub(" ", " +", paste0("+", out_coordOp))
                     }
                     res <- .Call("project_ng", as.integer(n), 
                         as.double(crds[,1]), as.double(crds[,2]),
@@ -504,8 +507,12 @@ if (!isGeneric("spTransform"))
 	    crds[,1:3] <- cbind(res[[1]], res[[2]], res[[3]])
         }
 	# make sure coordinate names are set back:
-        if (new_proj_and_gdal()) assign(".last_coordOp", gsub(" ",
-            " +", paste0("+", out_coordOp)), envir=.RGDAL_CACHE)
+        if (new_proj_and_gdal()) {
+            if (substring(out_coordOp, 1, 1) != "+") {
+                out_coordOp <-  gsub(" ", " +", paste0("+", out_coordOp))
+            }
+            assign(".last_coordOp", out_coordOp, envir=.RGDAL_CACHE)
+        }
 	dimnames(crds)[[2]] <- crds.names
 	x <- SpatialPoints(coords=crds, proj4string=CRSobj)
 	x
@@ -575,6 +582,7 @@ setMethod("spTransform", signature("SpatialGridDataFrame", "CRS"),
                     coordOp <- .Call("project_ng_coordOp", proj,
                         as.logical(inv), NULL, as.logical(use_ob_tran1),
                         PACKAGE="rgdal")
+                    coordOp <- gsub(" ", " +", paste0("+", coordOp))
                 }
                 res <- .Call("project_ng", as.integer(n), 
                     as.double(crds[,1]), as.double(crds[,2]), NULL,
@@ -595,7 +603,13 @@ setMethod("spTransform", signature("SpatialGridDataFrame", "CRS"),
 	}
 	crds <- cbind(res[[1]], res[[2]])
 	x <- Line(coords=crds)
-        if (new_proj_and_gdal()) attr(x, "coordOp") <- out_coordOp
+        if (new_proj_and_gdal()) {
+            if (substring(out_coordOp, 1, 1) == "+") {
+                attr(x, "coordOp") <- out_coordOp
+            } else {
+                attr(x, "coordOp") <-  gsub(" ", " +", paste0("+", out_coordOp))
+            }
+        }
 	x
 }
 
@@ -614,8 +628,8 @@ setMethod("spTransform", signature("SpatialGridDataFrame", "CRS"),
                 use_ob_tran=use_ob_tran, coordOp=coordOp,
                 enforce_xy=enforce_xy, aoi=aoi)
             if (is.null(coordOp) && new_proj_and_gdal() && i == 1) {
-                out_coordOp <- attr(output[[i]], "coordOp")
-                coordOp <-  gsub(" ", " +", paste0("+", out_coordOp))
+                coordOp <- attr(output[[i]], "coordOp")
+#                coordOp <-  gsub(" ", " +", paste0("+", out_coordOp))
             }
             attr(output[[i]], "coordOp") <- NULL
         }
@@ -735,8 +749,8 @@ setMethod("spTransform", signature("SpatialGridDataFrame", "CRS"),
                 use_ob_tran=use_ob_tran, coordOp=coordOp,
                 enforce_xy=enforce_xy, aoi=aoi)
             if (is.null(coordOp) && new_proj_and_gdal() && i == 1) {
-                out_coordOp <- attr(output[[i]], "coordOp")
-                coordOp <-  gsub(" ", " +", paste0("+", out_coordOp))
+                coordOp <- attr(output[[i]], "coordOp")
+#                coordOp <-  gsub(" ", " +", paste0("+", out_coordOp))
             }
             attr(output[[i]], "coordOp") <- NULL
         }
@@ -787,6 +801,7 @@ setMethod("spTransform", signature("SpatialLinesDataFrame", "CRS"), spTransform.
                     coordOp <- .Call("project_ng_coordOp", proj,
                         as.logical(inv), NULL, as.logical(use_ob_tran1),
                         PACKAGE="rgdal")
+                    coordOp <- gsub(" ", " +", paste0("+", coordOp))
                 }
                 res <- .Call("project_ng", as.integer(n), 
                     as.double(crds[,1]), as.double(crds[,2]), NULL,
@@ -807,7 +822,13 @@ setMethod("spTransform", signature("SpatialLinesDataFrame", "CRS"), spTransform.
 	}
 	crds <- cbind(res[[1]], res[[2]])
 	x <- Polygon(coords=crds)
-        if (new_proj_and_gdal()) attr(x, "coordOp") <- out_coordOp
+        if (new_proj_and_gdal()) {
+            if (substring(out_coordOp, 1, 1) == "+") {
+                attr(x, "coordOp") <- out_coordOp
+            } else {
+                attr(x, "coordOp") <-  gsub(" ", " +", paste0("+", out_coordOp))
+            }
+        }
 	x
 }
 
@@ -825,14 +846,14 @@ setMethod("spTransform", signature("SpatialLinesDataFrame", "CRS"), spTransform.
                 use_ob_tran=use_ob_tran, coordOp=coordOp,
                 enforce_xy=enforce_xy, aoi=aoi)
             if (is.null(coordOp) && new_proj_and_gdal() && i == 1) {
-                out_coordOp <- attr(output[[i]], "coordOp")
-                coordOp <-  gsub(" ", " +", paste0("+", out_coordOp))
+                coordOp <- attr(output[[i]], "coordOp")
+#                coordOp <-  gsub(" ", " +", paste0("+", out_coordOp))
             }
             attr(output[[i]], "coordOp") <- NULL
         }
 	res <- Polygons(output, ID)
         if (!is.null(comment(x))) comment(res) <- comment(x)
-        if (new_proj_and_gdal()) attr(res, "coordOp") <- out_coordOp
+        if (new_proj_and_gdal()) attr(res, "coordOp") <- coordOp
 	res
 }
 
@@ -946,8 +967,8 @@ setMethod("spTransform", signature("SpatialLinesDataFrame", "CRS"), spTransform.
                 use_ob_tran=use_ob_tran, coordOp=coordOp,
                 enforce_xy=enforce_xy, aoi=aoi)
             if (is.null(coordOp) && new_proj_and_gdal() && i == 1) {
-                out_coordOp <- attr(output[[i]], "coordOp")
-                coordOp <-  gsub(" ", " +", paste0("+", out_coordOp))
+                coordOp <- attr(output[[i]], "coordOp")
+#                coordOp <-  gsub(" ", " +", paste0("+", out_coordOp))
             }
             attr(output[[i]], "coordOp") <- NULL
         }

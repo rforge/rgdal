@@ -1,5 +1,6 @@
 # Version 1.5-22 (development, rev. 1106-)
 
+* Attempt to remove further valgrind leak in proj6.cpp: PROJcopyEPSG()
 
 # Version 1.5-21 (development, rev. 1093-1105)
 
