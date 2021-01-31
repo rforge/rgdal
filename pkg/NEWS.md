@@ -1,8 +1,8 @@
-# Version 1.5-22 (development, rev. 1106-1111)
+# Version 1.5-22 (development, rev. 1106-1113)
 
-* Attempt to remove further valgrind leak in proj6.cpp: PROJcopyEPSG()
+* Attempt to remove further valgrind leak in proj6.cpp: PROJcopyEPSG() and in ogr_proj.cpp, both wrongly placed object destructors.
 
-# Version 1.5-21 (development, rev. 1093-1105)
+# Version 1.5-21 (2021-01-27, rev. 1093-1105)
 
 * Suggest **rgeos** to write pre-SFS multipolygon objects to avoid unpleasant workaround.
 

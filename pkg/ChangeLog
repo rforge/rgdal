@@ -1,3 +1,24 @@
+2021-01-31 14:25  rsbivand
+
+	* [r1112] src/ogr_proj.cpp, src/proj6.cpp: ogr_proj.cpp leak
+
+2021-01-30 14:05  rsbivand
+
+	* [r1111] NEWS.md, tests/test_proj.Rout.save,
+	  tests/tripup.Rout.save: tidy
+
+2021-01-30 12:57  rsbivand
+
+	* [r1110] NEWS.md: tidy
+
+2021-01-30 12:57  rsbivand
+
+	* [r1109] NEWS.md: tidy
+
+2021-01-30 12:56  rsbivand
+
+	* [r1108] ChangeLog, configure, inst/ChangeLog: tidy
+
 2021-01-30 12:54  rsbivand
 
 	* [r1107] DESCRIPTION, NEWS.md, R/make_EPSG.R, R/project.R,
