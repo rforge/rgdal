@@ -915,7 +915,7 @@ SEXP project_ng(SEXP n, SEXP xlon, SEXP ylat, SEXP zz, SEXP coordOp) {
         const char *errstr = proj_errno_string(proj_context_errno(ctx));
         proj_context_destroy(ctx);
         error("coordinate operation creation failed: %s", errstr);
-    }
+    } 
 
 //Rprintf("%s\n", proj_pj_info(pj_transform).definition);
     
@@ -938,7 +938,16 @@ SEXP project_ng(SEXP n, SEXP xlon, SEXP ylat, SEXP zz, SEXP coordOp) {
             NUMERIC_POINTER(VECTOR_ELT(res, 1))[i]=iylat;
         } else {
             a = proj_coord(ixlon, iylat, iz, 0);
+/*            PJ* pj_transform = NULL;
+            pj_transform = proj_create(ctx,
+                (const char*) CHAR(STRING_ELT(coordOp, 0)));
+            if (pj_transform == 0) {
+                const char *errstr = proj_errno_string(proj_context_errno(ctx));
+                proj_context_destroy(ctx);
+                error("coordinate operation creation failed: %s", errstr);
+            }*/
             b = proj_trans(pj_transform, PJ_FWD, a);
+//            proj_destroy(pj_transform);
             if (b.uv.u == HUGE_VAL || ISNAN(b.uv.u) || b.uv.v == HUGE_VAL || 
                 ISNAN(b.uv.v)) {
                 nwarn++;
