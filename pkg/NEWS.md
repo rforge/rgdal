@@ -2,6 +2,8 @@
 
 * Attempt to remove further valgrind leak in proj6.cpp: PROJcopyEPSG() and in ogr_proj.cpp, both wrongly placed object destructors.
 
+* Placed roundtripping all declared projections in ?project as dontrun because some provoke valgrind leakages; some listed projections are not projections.
+
 # Version 1.5-21 (2021-01-27, rev. 1093-1105)
 
 * Suggest **rgeos** to write pre-SFS multipolygon objects to avoid unpleasant workaround.

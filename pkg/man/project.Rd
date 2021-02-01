@@ -87,6 +87,7 @@ all.equal(unis_utm_33N_P4, unis_tmerc_P4, tolerance=1e-9, scale=1)
 # UTM == TMERC: PROJ4 <=4.9.2
 all.equal(unis_utm_33N_P4, unis_etmerc_P4, tolerance=1e-9, scale=1)
 # UTM == ETMERC: PROJ4 > 4.9.2
+\dontrun{ # valgrind leakages in some cases; many non-projection proj values added
 # available projections and their inverses if provided
 # For >=4.9.3 returns non-finite points rather than needing crash protection
 getPROJ4VersionInfo()
@@ -122,6 +123,7 @@ df[is.na(df$res),]
 df[!is.na(df$res) & !df$res,]
 # inverse equal to input
 row.names(df[!is.na(df$res) & df$res,])
+}
 # oce data representation with NAs
 ll <- structure(c(12.1823368669203, 11.9149630062421, 12.3186076188739, 
 12.6207597184845, 12.9955172054652, 12.6316117692658, 12.4680041846297, 

@@ -903,20 +903,18 @@ SEXP project_ng_coordOp(SEXP proj, SEXP inv, SEXP aoi, SEXP ob_tran
 SEXP project_ng(SEXP n, SEXP xlon, SEXP ylat, SEXP zz, SEXP coordOp) {
     int i, nwarn=0, nn=INTEGER_POINTER(n)[0];
     SEXP res;
-    PJ_CONTEXT *ctx = PJ_DEFAULT_CTX;//proj_context_create();
+    //PJ_CONTEXT *ctx = proj_context_create();
+    PJ* pj_transform = NULL;
     PJ_COORD a, b;
     double ixlon, iylat, iz=0.0;
 
-    proj_log_func(ctx, NULL, silent_logger);
-    PJ* pj_transform;
-// valgrind 210127
-    pj_transform = proj_create(ctx, (const char*) CHAR(STRING_ELT(coordOp, 0)));
-    if (pj_transform == 0) {
-        const char *errstr = proj_errno_string(proj_context_errno(ctx));
-        proj_context_destroy(ctx);
-        error("coordinate operation creation failed: %s", errstr);
-    } 
+    proj_log_func(PJ_DEFAULT_CTX, NULL, silent_logger);
 
+    if ((pj_transform = proj_create(PJ_DEFAULT_CTX, CHAR(STRING_ELT(coordOp, 0)))) == 0) {
+        const char *errstr = proj_errno_string(proj_context_errno(PJ_DEFAULT_CTX));
+        //proj_context_destroy(ctx);
+        error("coordinate operation creation failed: %s", errstr);
+    }
 //Rprintf("%s\n", proj_pj_info(pj_transform).definition);
     
     if (zz  != R_NilValue) {
@@ -938,16 +936,7 @@ SEXP project_ng(SEXP n, SEXP xlon, SEXP ylat, SEXP zz, SEXP coordOp) {
             NUMERIC_POINTER(VECTOR_ELT(res, 1))[i]=iylat;
         } else {
             a = proj_coord(ixlon, iylat, iz, 0);
-/*            PJ* pj_transform = NULL;
-            pj_transform = proj_create(ctx,
-                (const char*) CHAR(STRING_ELT(coordOp, 0)));
-            if (pj_transform == 0) {
-                const char *errstr = proj_errno_string(proj_context_errno(ctx));
-                proj_context_destroy(ctx);
-                error("coordinate operation creation failed: %s", errstr);
-            }*/
             b = proj_trans(pj_transform, PJ_FWD, a);
-//            proj_destroy(pj_transform);
             if (b.uv.u == HUGE_VAL || ISNAN(b.uv.u) || b.uv.v == HUGE_VAL || 
                 ISNAN(b.uv.v)) {
                 nwarn++;
@@ -961,7 +950,7 @@ SEXP project_ng(SEXP n, SEXP xlon, SEXP ylat, SEXP zz, SEXP coordOp) {
     if (nwarn > 0) warning("%d projected point(s) not finite", nwarn);
 
     proj_destroy(pj_transform);
-    proj_context_destroy(ctx);
+    //proj_context_destroy(ctx);
 
     UNPROTECT(1);
     return(res);
