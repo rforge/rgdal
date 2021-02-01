@@ -1,8 +1,8 @@
-# Version 1.5-22 (development, rev. 1106-1115)
+# Version 1.5-22 (development, rev. 1106-1117)
 
 * Attempt to remove further valgrind leak in proj6.cpp: PROJcopyEPSG() and in ogr_proj.cpp, both wrongly placed object destructors.
 
-* Placed roundtripping all declared projections in ?project as dontrun because some provoke valgrind leakages; some listed projections are not projections.
+* Placed roundtripping all declared projections in ?project examples as run only for PROJ < 5 because some for PROJ >= 5 provoke valgrind leakages; some listed projections are not projections.
 
 # Version 1.5-21 (2021-01-27, rev. 1093-1105)
 
