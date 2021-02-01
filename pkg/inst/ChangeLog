@@ -1,3 +1,12 @@
+2021-02-01 19:32  rsbivand
+
+	* [r1116] NEWS.md, man/project.Rd: convert stress-testing of
+	  project to PROJ < 5
+
+2021-02-01 15:08  rsbivand
+
+	* [r1115] ChangeLog, NEWS.md, inst/ChangeLog: tidy
+
 2021-02-01 15:06  rsbivand
 
 	* [r1114] NEWS.md, man/project.Rd, src/proj6.cpp: convert
