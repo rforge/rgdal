@@ -1,3 +1,12 @@
+2021-02-01 15:06  rsbivand
+
+	* [r1114] NEWS.md, man/project.Rd, src/proj6.cpp: convert
+	  stress-testing of project to dontrun
+
+2021-01-31 14:29  rsbivand
+
+	* [r1113] ChangeLog, NEWS.md, inst/ChangeLog: tidy
+
 2021-01-31 14:25  rsbivand
 
 	* [r1112] src/ogr_proj.cpp, src/proj6.cpp: ogr_proj.cpp leak
