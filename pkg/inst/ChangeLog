@@ -1,3 +1,13 @@
+2021-02-02 09:47  rsbivand
+
+	* [r1118] NEWS.md, R/project.R, man/project.Rd: revert condition on
+	  stress-testing of project but protect against bad values and
+	  empty CO strings
+
+2021-02-01 19:34  rsbivand
+
+	* [r1117] ChangeLog, inst/ChangeLog: tidy
+
 2021-02-01 19:32  rsbivand
 
 	* [r1116] NEWS.md, man/project.Rd: convert stress-testing of
