@@ -250,7 +250,9 @@ OSRIsProjected <- function(obj) {
                 }
                 coordOp <- .Call("project_ng_coordOp", proj,
                     as.logical(inv), aoi, as.logical(use_ob_tran), PACKAGE="rgdal")
-                coordOp <- gsub(" ", " +", paste0("+", coordOp))
+                s2t <- strsplit(coordOp, " ")[[1]]
+                if (length(s2t) == 0L) stop("malformed pipeline found")
+                coordOp <- paste("+", s2t, sep="", collapse=" ")
             }
             if (verbose) cat(strwrap(coordOp), sep="\n")
             res <- .Call("project_ng",
@@ -443,7 +445,9 @@ if (!isGeneric("spTransform"))
                         out_coordOp <- .Call("project_ng_coordOp", proj,
                             as.logical(inv), NULL, as.logical(use_ob_tran1),
                             PACKAGE="rgdal")
-                        out_coordOp <- gsub(" ", " +", paste0("+", out_coordOp))
+                        s2t <- strsplit(out_coordOp, " ")[[1]]
+                        if (length(s2t) == 0L) stop("malformed pipeline found")
+                        out_coordOp <- paste("+", s2t, sep="", collapse=" ")
                     }
                     res <- .Call("project_ng", as.integer(n), 
                         as.double(crds[,1]), as.double(crds[,2]), NULL,
@@ -485,7 +489,9 @@ if (!isGeneric("spTransform"))
                         out_coordOp <- .Call("project_ng_coordOp", proj,
                             as.logical(inv), NULL, as.logical(use_ob_tran1),
                             PACKAGE="rgdal")
-                        out_coordOp <- gsub(" ", " +", paste0("+", out_coordOp))
+                        s2t <- strsplit(out_coordOp, " ")[[1]]
+                        if (length(s2t) == 0L) stop("malformed pipeline found")
+                        out_coordOp <- paste("+", s2t, sep="", collapse=" ")
                     }
                     res <- .Call("project_ng", as.integer(n), 
                         as.double(crds[,1]), as.double(crds[,2]),
@@ -582,7 +588,9 @@ setMethod("spTransform", signature("SpatialGridDataFrame", "CRS"),
                     coordOp <- .Call("project_ng_coordOp", proj,
                         as.logical(inv), NULL, as.logical(use_ob_tran1),
                         PACKAGE="rgdal")
-                    coordOp <- gsub(" ", " +", paste0("+", coordOp))
+                    s2t <- strsplit(coordOp, " ")[[1]]
+                    if (length(s2t) == 0L) stop("malformed pipeline found")
+                    coordOp <- paste("+", s2t, sep="", collapse=" ")
                 }
                 res <- .Call("project_ng", as.integer(n), 
                     as.double(crds[,1]), as.double(crds[,2]), NULL,
@@ -801,7 +809,9 @@ setMethod("spTransform", signature("SpatialLinesDataFrame", "CRS"), spTransform.
                     coordOp <- .Call("project_ng_coordOp", proj,
                         as.logical(inv), NULL, as.logical(use_ob_tran1),
                         PACKAGE="rgdal")
-                    coordOp <- gsub(" ", " +", paste0("+", coordOp))
+                    s2t <- strsplit(coordOp, " ")[[1]]
+                    if (length(s2t) == 0L) stop("malformed pipeline found")
+                    coordOp <- paste("+", s2t, sep="", collapse=" ")
                 }
                 res <- .Call("project_ng", as.integer(n), 
                     as.double(crds[,1]), as.double(crds[,2]), NULL,
