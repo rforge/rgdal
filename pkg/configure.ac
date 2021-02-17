@@ -853,7 +853,7 @@ AC_MSG_NOTICE([Copy data for:])
   if test -n "${proj_lib}" ; then
     if test -d "${proj_lib}" ; then
       cp -r "${proj_lib}" "${R_PACKAGE_DIR}"
-      AC_MSG_NOTICE([  PROJ.4: ${proj_lib}])
+      AC_MSG_NOTICE([  PROJ: ${proj_lib}])
     else
       AC_MSG_ERROR([PROJ.4 data files not found; set environment variable PROJ_LIB=DIR or --with-proj-data=DIR.])
     fi
