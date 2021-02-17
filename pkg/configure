@@ -4012,7 +4012,7 @@ rm -f proj_conf_test3.c proj_conf_test3
 # Optional local copy of GDAL datadir and PROJ_LIB
 
 data_copy=no
-if test ${PROJ_GDAL_DATA_COPY = TRUE} ; then
+if test ${PROJ_GDAL_DATA_COPY} = TRUE ; then
     data_copy=yes
     { $as_echo "$as_me:${as_lineno-$LINENO}: \"PROJ_GDAL_DATA_COPY used.\"" >&5
 $as_echo "$as_me: \"PROJ_GDAL_DATA_COPY used.\"" >&6;}
