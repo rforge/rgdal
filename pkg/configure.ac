@@ -38,7 +38,7 @@ AC_ARG_ENABLE([loadflags],
 
 #echo "loadflags: $loadflags"
 
-if test [ "${loadflags}" == "no" ] ; then
+if test "${loadflags}" = "no" ; then
     LDFLAGS=""
     AC_MSG_NOTICE(value of R CMD config LDFLAGS not used for configure)
 fi

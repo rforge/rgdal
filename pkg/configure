@@ -2098,7 +2098,7 @@ fi
 
 #echo "loadflags: $loadflags"
 
-if test  "${loadflags}" == "no"  ; then
+if test "${loadflags}" = "no" ; then
     LDFLAGS=""
     { $as_echo "$as_me:${as_lineno-$LINENO}: value of R CMD config LDFLAGS not used for configure" >&5
 $as_echo "$as_me: value of R CMD config LDFLAGS not used for configure" >&6;}
