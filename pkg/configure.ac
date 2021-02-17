@@ -829,7 +829,7 @@ rm -f proj_conf_test3.c proj_conf_test3
 # Optional local copy of GDAL datadir and PROJ_LIB
 
 data_copy=no
-if test ${PROJ_GDAL_DATA_COPY} = TRUE ; then
+if test -n ${PROJ_GDAL_DATA_COPY} ; then
     data_copy=yes
     AC_MSG_NOTICE(["PROJ_GDAL_DATA_COPY used."])
 else
