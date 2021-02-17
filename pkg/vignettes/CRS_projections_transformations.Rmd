@@ -153,7 +153,7 @@ cat(WKT, "\n")
 
 ## Pipelines
 
-PROJ.4 assumed that the from/source and to/target coordinate reference system definitions involved in coordinate operations each contained the specifications necessary to get from source to WGS84 and then on from WGS84 to target. PR$\phi$J drops this assumption, searching among many candidate coordinate operations for viable pipelines. The search is conducted using the tables given in the `proj.db` SQLite database, which is now backed by authorities, and regularly updated at each release to the current upstream state. The tables are searched to find lists of candidates.
+PROJ.4 assumed that the from/source and to/target coordinate reference system definitions involved in coordinate operations each contained the specifications necessary to get from source to WGS84 and then on from WGS84 to target. PR$\phi$J drops this assumption, searching among many candidate coordinate operations for viable pipelines. The search is conducted using the tables given in the `proj.db` SQLite database, which is now backed by authorities, and regularly updated at each release to the current upstream state (see https://proj.org/operations/operations_computation.html for more details). The tables are searched to find lists of candidates.
 
 ```{r, eval=run && odd_run}
 cov <- dbReadTable(db, "coordinate_operation_view")
