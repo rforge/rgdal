@@ -1,4 +1,8 @@
-# Version 1.5-23 (development, rev. 1120-1121)
+# Version 1.5-24 (development, rev. 1122-)
+
+* Add environment variable access to --with-data-copy by PROJ_GDAL_DATA_COPY (https://github.com/r-spatial/sf/issues/1605)
+
+# Version 1.5-23 (2021-02-03, rev. 1120-1121)
 
 * Further fallout after removing valgrind issues.
 

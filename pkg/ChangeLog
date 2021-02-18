@@ -1,3 +1,37 @@
+2021-02-17 19:07  rsbivand
+
+	* [r1128] configure, configure.ac: use test -n
+
+2021-02-17 16:56  rsbivand
+
+	* [r1127] configure, configure.ac: use test -n
+
+2021-02-17 16:50  rsbivand
+
+	* [r1126] configure, configure.ac: use test -n
+
+2021-02-17 16:45  rsbivand
+
+	* [r1125] configure, configure.ac: use test -n
+
+2021-02-17 13:26  rsbivand
+
+	* [r1124] configure, configure.ac: try PROJ_GDAL_DATA_COPY
+
+2021-02-17 13:25  rsbivand
+
+	* [r1123] configure: try PROJ_GDAL_DATA_COPY
+
+2021-02-17 13:25  rsbivand
+
+	* [r1122] DESCRIPTION, configure.ac,
+	  vignettes/CRS_projections_transformations.Rmd: try
+	  PROJ_GDAL_DATA_COPY
+
+2021-02-02 20:38  rsbivand
+
+	* [r1121] ChangeLog, inst/ChangeLog: tidy
+
 2021-02-02 20:37  rsbivand
 
 	* [r1120] DESCRIPTION, NEWS.md, configure, src/proj6.cpp,
