@@ -665,7 +665,8 @@ showSRID <- function(inSRID, format="WKT2", multiline="NO", enforce_xy=NULL, EPS
 #                    " in Proj4 definition")
             if ((!is.null(attr(res, "datum"))) 
                 && (nchar(attr(res, "datum")) > 0L)
-                && (length(grep("datum|DATUM", c(res))) == 0L)) {
+# spatsoc tripped PROJ 8.0.0 ENSEMBLE 2021-02-22
+                && (length(grep("datum|DATUM|ENSEMBLE", c(res))) == 0L)) {
                 msg <- paste0("Discarded datum ", attr(res, "datum"),
                     " in Proj4 definition")
                 if (!no_towgs84 && (length(grep("towgs84", c(res))) > 0L))
