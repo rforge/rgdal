@@ -136,7 +136,9 @@ local_RGDAL_Init <- function() .Call('RGDAL_Init', PACKAGE="rgdal")
 }
 
 rgdal_extSoftVersion <- function() {
+  epsg_version <- EPSG_version()
   res <- c("GDAL"=strsplit(strsplit(getGDALVersionInfo(), ",")[[1]][1], " ")[[1]][2], "GDAL_with_GEOS"=as.character(getGDALwithGEOS()), "PROJ"=strsplit(strsplit(getPROJ4VersionInfo(), ",")[[1]][1], " ")[[1]][2], "sp"=version_sp_linkingTo())
+  if (!is.null(epsg_version)) res <- c(res, "EPSG"=epsg_version)
   res
 }
 
