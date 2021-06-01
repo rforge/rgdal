@@ -18,7 +18,7 @@ load_stuff <- function() {
   assign(".rgdal_old.GDAL_DATA", Sys.getenv("GDAL_DATA"), envir=.RGDAL_CACHE)
   assign(".rgdal_old.NEEDED", FALSE, envir=.RGDAL_CACHE)
   if (file.exists(system.file("proj/nad.lst", package = "rgdal")[1])) {
-  prj = system.file("proj", package = "rgdal")[1]
+    prj = system.file("proj", package = "rgdal")[1]
     if (PROJis6ormore() && 
       .Call("PROJ4VersionInfo", PACKAGE="rgdal")[[2]] < 700) {
       set_is <- set_proj_search_paths(prj)
